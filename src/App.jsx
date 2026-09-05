@@ -449,7 +449,7 @@ function App() {
 
         <MainContacts
           profile={profile}
-        /><br>
+        /><br/>
 
         {/* =========================
             MESSAGE
