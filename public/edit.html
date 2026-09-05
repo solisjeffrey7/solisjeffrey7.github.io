@@ -2,33 +2,311 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Profile.info Editor</title>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#111}
-.wrap{max-width:760px;margin:auto;padding:18px 14px 40px}
-h1{margin:0 0 5px;font-size:27px}.desc{margin:0 0 18px;color:#666}
-.box{background:#fff;padding:16px;border-radius:14px;margin:14px 0;box-shadow:0 2px 10px #0001}
-h2{font-size:19px;margin:0 0 12px}
-label{display:block;font-weight:700;font-size:14px;margin:10px 0 5px}
-input,textarea,select{width:100%;padding:11px;border:1px solid #ccd0d6;border-radius:9px;font:inherit;background:#fff}
-textarea{min-height:120px;resize:vertical}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-button{border:0;border-radius:9px;padding:11px 14px;margin-top:10px;font-weight:bold;font-size:15px;cursor:pointer}
-.primary{background:#111;color:#fff;width:100%}
-.github{background:#24292f;color:#fff;width:100%}
-.secondary,.add{background:#e5e7eb;width:100%}
-.remove{background:#eee;color:#b00020}
-.other{border:1px solid #ddd;padding:13px;border-radius:12px;margin-top:12px}
-.hint{font-size:13px;color:#777;line-height:1.45;margin-top:7px}
-.status{padding:11px;border-radius:9px;background:#f0f1f3;margin-top:12px;line-height:1.45}
-#output{min-height:320px;font-family:monospace;white-space:pre}
-.hidden{display:none}
-.profile-tabs{display:flex;gap:7px;overflow:auto;padding-bottom:4px}
-.profile-tabs button{white-space:nowrap;margin-top:0}
-@media(max-width:520px){.row{grid-template-columns:1fr}}
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  padding:20px;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f1f3f6;
+  color:#111;
+}
+
+.wrap{
+  width:100%;
+  max-width:900px;
+  margin:auto;
+}
+
+.box{
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:18px;
+  box-shadow:0 4px 18px rgba(0,0,0,.08);
+}
+
+h1{
+  margin:0 0 20px;
+  font-size:28px;
+}
+
+h2{
+  margin:0 0 15px;
+  font-size:21px;
+}
+
+h3{
+  margin:20px 0 12px;
+  font-size:18px;
+}
+
+h4{
+  margin:0;
+}
+
+label{
+  display:block;
+  font-weight:bold;
+  margin:12px 0 6px;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  padding:12px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  font-size:16px;
+  outline:none;
+  background:#fff;
+  color:#111;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:#111;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:12px 16px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+.primary{
+  background:#111;
+  color:#fff;
+}
+
+.secondary{
+  background:#e9ecef;
+  color:#111;
+}
+
+.add{
+  background:#16803c;
+  color:#fff;
+}
+
+.danger{
+  background:#c62828;
+  color:#fff;
+}
+
+.github{
+  background:#24292f;
+  color:#fff;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.actions button{
+  margin:0;
+}
+
+.status{
+  display:none;
+  padding:12px;
+  margin-top:15px;
+  border-radius:10px;
+  background:#eef5ff;
+  color:#174ea6;
+  white-space:pre-wrap;
+  line-height:1.5;
+}
+
+.profile-create{
+  margin-top:10px;
+}
+
+.profile-create button{
+  width:100%;
+}
+
+.profile-photo{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.photo-preview{
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#eee;
+  border:1px solid #ddd;
+  display:none;
+}
+
+.photo-buttons{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.photo-buttons button{
+  margin:0;
+  width:auto;
+}
+
+.file-name{
+  font-size:13px;
+  color:#666;
+  margin-top:8px;
+  word-break:break-word;
+}
+
+.other{
+  border:1px solid #ddd;
+  border-radius:14px;
+  padding:16px;
+  margin-top:14px;
+  background:#fafafa;
+}
+
+.other-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.other-remove{
+  background:#c62828;
+  color:#fff;
+  padding:8px 11px;
+  font-size:13px;
+  margin:0;
+  width:auto;
+}
+
+.other-upload{
+  background:#111;
+  color:#fff;
+  margin-top:8px;
+  width:auto;
+}
+
+.other-photo-preview{
+  width:80px;
+  height:80px;
+  object-fit:cover;
+  border-radius:50%;
+  border:1px solid #ddd;
+  background:#eee;
+  display:none;
+  margin-top:10px;
+}
+
+#editor{
+  display:none;
+}
+
+#output{
+  font-family:monospace;
+  min-height:350px;
+  white-space:pre;
+}
+
+.small{
+  color:#666;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.delete-box{
+  border:1px solid #f0b0b0;
+  background:#fff5f5;
+}
+
+@media(max-width:650px){
+
+  body{
+    padding:10px;
+  }
+
+  .box{
+    padding:15px;
+    border-radius:13px;
+  }
+
+  h1{
+    font-size:23px;
+  }
+
+  .row{
+    grid-template-columns:1fr;
+    gap:0;
+  }
+
+  button{
+    width:100%;
+  }
+
+  .actions{
+    flex-direction:column;
+  }
+
+  .actions button{
+    width:100%;
+  }
+
+  .photo-buttons{
+    width:100%;
+  }
+
+  .photo-buttons button{
+    flex:1;
+  }
+
+  .other-title{
+    align-items:flex-start;
+  }
+
+  .other-remove{
+    width:auto;
+  }
+
+  .other-upload{
+    width:auto;
+  }
+}
 </style>
 </head>
 
@@ -36,368 +314,956 @@ button{border:0;border-radius:9px;padding:11px 14px;margin-top:10px;font-weight:
 
 <div class="wrap">
 
-<h1>Profile.info Editor</h1>
+  <div class="box">
 
-<p class="desc">
-Basahin ang current Profile.info mula GitHub, i-edit, at i-save ulit.
-</p>
+    <h1>Profile.info Editor</h1>
 
-<div class="box">
+    <p class="small">
+      Create, edit and save multiple profiles in your
+      <b>Profile.info</b> file.
+    </p>
 
-<h2>GitHub Connection</h2>
+  </div>
 
-<label>GitHub Username</label>
-<input id="ghUser" value="solisjeffrey7">
 
-<label>Repository</label>
-<input id="ghRepo" value="solisjeffrey7.github.io">
+  <!-- GITHUB CONNECTION -->
+  <div class="box">
 
-<label>Branch</label>
-<input id="ghBranch" value="main">
+    <h2>GitHub Connection</h2>
 
-<label>GitHub Personal Access Token</label>
-<input
-  id="ghToken"
-  type="password"
-  placeholder="github_pat_...">
+    <label>GitHub Username</label>
 
-<div class="hint">
-Hindi ini-store ng page ang token. Ginagamit lang ito para sa GitHub API request.
-</div>
+    <input
+      id="ghUser"
+      type="text"
+      value="solisjeffrey7"
+      placeholder="GitHub username"
+    >
 
-<button
-  class="github"
-  onclick="loadFromGitHub()">
-  Read Current Profile.info
-</button>
 
-<div id="status" class="status">
-Ready.
-</div>
+    <label>Repository</label>
 
-</div>
+    <input
+      id="ghRepo"
+      type="text"
+      value="solisjeffrey7.github.io"
+      placeholder="Repository name"
+    >
 
 
-<div id="editor" class="hidden">
+    <label>Branch</label>
 
+    <input
+      id="ghBranch"
+      type="text"
+      value="main"
+      placeholder="main"
+    >
 
-<div class="box">
 
-<h2>Select Profile</h2>
+    <label>GitHub Personal Access Token</label>
 
-<select
-  id="profileSelect"
-  onchange="selectProfile()">
-</select>
+    <input
+      id="ghToken"
+      type="password"
+      placeholder="github_pat_..."
+    >
 
-</div>
 
+    <p class="small">
+      Your GitHub token is used only by this page to access your repository.
+      Do not share it with anyone.
+    </p>
 
-<div class="box">
 
-<h2>Main Profile</h2>
+    <button
+      class="github"
+      type="button"
+      onclick="loadFromGitHub()"
+    >
+      Read Current Profile.info
+    </button>
 
-<label>Profile ID / Name</label>
-<input id="profile" placeholder="jeffrey">
 
-<label>Name</label>
-<input id="name">
+    <div
+      id="status"
+      class="status"
+    ></div>
 
-<label>Subtitle</label>
-<input id="subtitle">
+  </div>
 
 
-<div class="row">
+  <!-- EDITOR -->
+  <div id="editor">
 
-<div>
-<label>Photo</label>
-<input id="photo">
-</div>
 
-<div>
-<label>Address</label>
-<input id="address">
-</div>
+    <!-- SELECT PROFILE -->
+    <div class="box">
 
-</div>
+      <h2>Select Profile</h2>
 
+      <select
+        id="profileSelect"
+        onchange="switchProfile()"
+      ></select>
 
-<label>City</label>
-<input id="city">
 
+      <div class="profile-create">
 
-<div class="row">
+        <button
+          type="button"
+          class="add"
+          onclick="createNewProfile()"
+        >
+          + Create New Profile
+        </button>
 
-<div>
-<label>Phone</label>
-<input id="phone">
-</div>
+      </div>
 
-<div>
-<label>SMS</label>
-<input id="sms">
-</div>
+    </div>
 
-</div>
 
+    <!-- MAIN PROFILE -->
+    <div class="box">
 
-<label>Messenger</label>
-<input id="messenger">
+      <h2>Main Profile</h2>
 
-<label>Facebook</label>
-<input id="facebook">
 
-<label>Email</label>
-<input id="email">
+      <label>Profile ID</label>
 
-<label>Google Maps</label>
-<input id="maps">
+      <input
+        id="profile"
+        type="text"
+        placeholder="jeffrey"
+      >
 
-<label>Message</label>
-<textarea id="message"></textarea>
 
-<div class="hint">
-Kapag nag-save, ang spaces at special characters ay automatic na ie-encode.
-</div>
+      <label>Name</label>
 
-</div>
+      <input
+        id="name"
+        type="text"
+        placeholder="Jeffrey Solis"
+      >
 
 
-<div class="box">
+      <label>Subtitle</label>
 
-<h2>Other People</h2>
+      <input
+        id="subtitle"
+        type="text"
+        placeholder="Personal Contact Profile"
+      >
 
-<div id="others"></div>
 
-<button
-  class="add"
-  onclick="addOther()">
-  + Add Other Person
-</button>
+      <!-- MAIN PHOTO -->
+      <label>Profile Photo</label>
 
-</div>
+      <div class="profile-photo">
 
+        <img
+          id="mainPhotoPreview"
+          class="photo-preview"
+          alt="Profile preview"
+        >
 
-<div class="box">
 
-<button
-  class="primary"
-  onclick="generate()">
-  Generate Profile.info
-</button>
+        <div class="photo-buttons">
 
-<button
-  class="github"
-  onclick="saveToGitHub()">
-  Save Changes to GitHub
-</button>
+          <input
+            id="mainPhoto"
+            type="file"
+            accept="image/*"
+            onchange="selectMainPhoto(event)"
+            hidden
+          >
 
-<button
-  class="secondary"
-  onclick="copyOutput()">
-  Copy
-</button>
 
-<button
-  class="secondary"
-  onclick="downloadFile()">
-  Download Profile.info
-</button>
+          <button
+            type="button"
+            class="primary"
+            onclick="document.getElementById('mainPhoto').click()"
+          >
+            📷 Upload Photo
+          </button>
 
-</div>
 
+          <button
+            type="button"
+            class="secondary"
+            onclick="clearMainPhoto()"
+          >
+            Remove Photo
+          </button>
 
-<div class="box">
+        </div>
 
-<h2>Generated Profile.info</h2>
+      </div>
 
-<textarea
-  id="output"
-  readonly></textarea>
 
-</div>
+      <div
+        id="mainPhotoName"
+        class="file-name"
+      ></div>
 
 
-</div>
+      <!-- LOCATION -->
+      <h3>Location</h3>
+
+
+      <label>Address</label>
+
+      <input
+        id="address"
+        type="text"
+        placeholder="Address"
+      >
+
+
+      <label>City</label>
+
+      <input
+        id="city"
+        type="text"
+        placeholder="City"
+      >
+
+
+      <!-- CONTACTS -->
+      <h3>Contacts</h3>
+
+
+      <div class="row">
+
+        <div>
+
+          <label>Phone</label>
+
+          <input
+            id="phone"
+            type="text"
+            placeholder="+639..."
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>SMS</label>
+
+          <input
+            id="sms"
+            type="text"
+            placeholder="+639..."
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>Messenger</label>
+
+          <input
+            id="messenger"
+            type="text"
+            placeholder="Messenger link"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>Facebook</label>
+
+          <input
+            id="facebook"
+            type="text"
+            placeholder="Facebook link"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>Email</label>
+
+          <input
+            id="email"
+            type="email"
+            placeholder="email@example.com"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>Maps</label>
+
+          <input
+            id="maps"
+            type="text"
+            placeholder="Google Maps link"
+          >
+
+        </div>
+
+      </div>
+
+
+      <!-- MESSAGE -->
+      <h3>Lost Message</h3>
+
+      <textarea
+        id="message"
+        placeholder="Message shown on the profile..."
+      ></textarea>
+
+    </div>
+
+
+    <!-- OTHER PEOPLE -->
+    <div class="box">
+
+      <h2>Other People</h2>
+
+      <p class="small">
+        Add additional people connected to this profile.
+      </p>
+
+
+      <div id="others"></div>
+
+
+      <button
+        type="button"
+        class="add"
+        onclick="addOther()"
+      >
+        + Add Other Person
+      </button>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+    <div class="box">
+
+      <h2>Actions</h2>
+
+
+      <div class="actions">
+
+        <button
+          type="button"
+          class="primary"
+          onclick="generate()"
+        >
+          Generate Profile.info
+        </button>
+
+
+        <button
+          type="button"
+          class="github"
+          onclick="saveToGitHub()"
+        >
+          Save Changes to GitHub
+        </button>
+
+
+        <button
+          type="button"
+          class="secondary"
+          onclick="copyOutput()"
+        >
+          Copy
+        </button>
+
+
+        <button
+          type="button"
+          class="secondary"
+          onclick="downloadFile()"
+        >
+          Download
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- DELETE -->
+    <div class="box delete-box">
+
+      <h2>Delete Profile</h2>
+
+      <p class="small">
+        This permanently removes the selected profile from the generated
+        Profile.info file when you save to GitHub.
+      </p>
+
+
+      <button
+        type="button"
+        class="danger"
+        onclick="deleteProfile()"
+      >
+        Delete Current Profile
+      </button>
+
+    </div>
+
+
+    <!-- OUTPUT -->
+    <div class="box">
+
+      <h2>Generated Profile.info</h2>
+
+      <textarea
+        id="output"
+        readonly
+      ></textarea>
+
+    </div>
+
+  </div>
+
 </div>
 
 
 <script>
 
 let data = {};
+
 let selectedProfile = "";
 
+let originalFileText = "";
+
+let mainPhotoFile = null;
+
+
 const fields = [
-  "name","subtitle","photo","address","city",
-  "phone","sms","messenger","facebook","email","maps"
+
+  "name",
+  "subtitle",
+  "photo",
+  "address",
+  "city",
+  "phone",
+  "sms",
+  "messenger",
+  "facebook",
+  "email",
+  "maps"
+
 ];
 
 
-function esc(v){
-  return v.replace(/&/g,"&amp;")
+// =====================================
+// ESCAPE
+// =====================================
+
+function esc(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#39;")
-    .replace(/ /g,"&nbsp;");
+    .replace(/'/g,"&#039;");
+
 }
 
 
-function decodeValue(v){
-  const ta=document.createElement("textarea");
-  ta.innerHTML=v;
-  return ta.value;
+// =====================================
+// HTML DECODE
+// =====================================
+
+function decodeValue(value){
+
+  const txt =
+    document.createElement("textarea");
+
+  txt.innerHTML =
+    value ?? "";
+
+  return txt.value;
+
 }
 
 
-function cleanProfile(v){
-  return v.trim().toLowerCase().replace(/[^a-z0-9_-]/g,"");
+// =====================================
+// CLEAN PROFILE ID
+// =====================================
+
+function cleanProfile(value){
+
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]+/g,"")
+    .replace(/^-+|-+$/g,"");
+
 }
 
 
-function line(a,k,v,m=false){
-  if(!v || !v.trim()) return;
+// =====================================
+// CLEAN FILE NAME
+// =====================================
 
-  if(m){
-    a.push(
-      k+"="+
-      v.split(/\r?\n/)
-       .map(esc)
-       .join("\n")
-    );
-  }else{
-    a.push(k+"="+esc(v));
-  }
+function cleanFileName(value){
+
+  return String(value ?? "")
+    .trim()
+    .replace(/[^a-zA-Z0-9._-]/g,"_");
+
 }
 
+
+// =====================================
+// LINE
+// =====================================
+
+function line(key,value){
+
+  return key +
+    "=" +
+    String(value ?? "");
+
+}
+
+
+// =====================================
+// PARSE PROFILE.INFO
+// =====================================
 
 function parseInfo(text){
 
-  const result={};
+  const result = {};
 
-  let current=null;
-  let currentKey=null;
+  let currentProfile = null;
 
-  const lines=text.split(/\r?\n/);
+  let currentOther = null;
 
-  for(const raw of lines){
-
-    const lineText=raw.trimEnd();
-
-    const section=
-      lineText.match(
-        /^\[([^\]]+)\](?:\[([^\]]+)\])?$/
-      );
-
-    if(section){
-
-      const p=
-        section[1].trim().toLowerCase();
-
-      const sub=
-        section[2]?.trim().toLowerCase();
+  let lastKey = null;
 
 
-      if(!result[p]){
-        result[p]={
-          main:{},
-          others:[]
-        };
-      }
+  const lines =
+    String(text || "")
+      .split(/\r?\n/);
 
 
-      if(sub==="other"){
+  for(
+    let raw of lines
+  ){
 
-        current={};
+    const lineText =
+      raw.trim();
 
-        result[p].others.push(
-          current
-        );
 
-      }else{
-
-        current=
-          result[p].main;
-
-      }
-
-      currentKey=null;
-
+    if(!lineText){
       continue;
     }
 
 
-    if(!current) continue;
+    if(
+      lineText.startsWith("#") ||
+      lineText.startsWith(";")
+    ){
+      continue;
+    }
 
 
-    const eq=
+    const otherMatch =
+      lineText.match(
+        /^\[([^\]]+)\]\[other\]$/
+      );
+
+
+    if(otherMatch){
+
+      currentProfile =
+        cleanProfile(
+          otherMatch[1]
+        );
+
+
+      if(
+        !result[currentProfile]
+      ){
+
+        result[currentProfile] = {
+
+          main:{},
+
+          others:[]
+
+        };
+
+      }
+
+
+      currentOther = {};
+
+
+      result[
+        currentProfile
+      ].others.push(
+        currentOther
+      );
+
+
+      lastKey = null;
+
+      continue;
+
+    }
+
+
+    const profileMatch =
+      lineText.match(
+        /^\[([^\]]+)\]$/
+      );
+
+
+    if(profileMatch){
+
+      currentProfile =
+        cleanProfile(
+          profileMatch[1]
+        );
+
+
+      if(
+        !result[currentProfile]
+      ){
+
+        result[currentProfile] = {
+
+          main:{},
+
+          others:[]
+
+        };
+
+      }
+
+
+      currentOther = null;
+
+      lastKey = null;
+
+      continue;
+
+    }
+
+
+    if(!currentProfile){
+      continue;
+    }
+
+
+    const equalIndex =
       lineText.indexOf("=");
 
 
-    if(eq>=0){
+    if(equalIndex === -1){
 
-      currentKey=
-        lineText
-          .slice(0,eq)
-          .trim()
-          .toLowerCase();
+      if(
+        lastKey === "message"
+      ){
 
-      current[currentKey]=
-        lineText.slice(eq+1);
+        if(currentOther){
 
-    }else if(
-      currentKey==="message" &&
-      lineText.trim()
-    ){
+          currentOther.message =
+            (
+              currentOther.message ||
+              ""
+            ) +
+            "\n" +
+            decodeValue(
+              lineText
+            );
 
-      current.message +=
-        "\n"+lineText;
+        }else{
+
+          result[
+            currentProfile
+          ].main.message =
+            (
+              result[
+                currentProfile
+              ].main.message ||
+              ""
+            ) +
+            "\n" +
+            decodeValue(
+              lineText
+            );
+
+        }
+
+      }
+
+      continue;
 
     }
+
+
+    const key =
+      lineText
+        .slice(0,equalIndex)
+        .trim()
+        .toLowerCase();
+
+
+    const value =
+      decodeValue(
+        lineText.slice(
+          equalIndex + 1
+        )
+      );
+
+
+    if(currentOther){
+
+      currentOther[key] =
+        value;
+
+    }else{
+
+      result[
+        currentProfile
+      ].main[key] =
+        value;
+
+    }
+
+
+    lastKey = key;
 
   }
 
 
-  // Decode HTML entities for editing.
-
-  Object.values(result).forEach(p=>{
-
-    [p.main,...p.others]
-      .forEach(o=>{
-
-        Object.keys(o)
-          .forEach(k=>{
-
-            o[k]=
-              decodeValue(o[k]);
-
-          });
-
-      });
-
-  });
-
-
   return result;
+
 }
 
+
+// =====================================
+// SET VALUE
+// =====================================
 
 function setValue(id,value){
 
-  const el=
+  const el =
     document.getElementById(id);
 
-  if(el)
-    el.value=value||"";
+
+  if(el){
+
+    el.value =
+      value || "";
+
+  }
+
 }
 
 
+// =====================================
+// CAPTURE CURRENT PROFILE
+// =====================================
+
+function captureCurrentProfile(){
+
+  if(!selectedProfile){
+    return;
+  }
+
+
+  if(!data[selectedProfile]){
+    return;
+  }
+
+
+  const oldProfile =
+    selectedProfile;
+
+
+  let newProfile =
+    cleanProfile(
+      document.getElementById(
+        "profile"
+      ).value
+    );
+
+
+  if(!newProfile){
+
+    newProfile =
+      oldProfile;
+
+  }
+
+
+  const main = {};
+
+
+  fields.forEach(
+    key => {
+
+      const el =
+        document.getElementById(
+          key
+        );
+
+
+      if(el){
+
+        main[key] =
+          el.value.trim();
+
+      }
+
+    }
+  );
+
+
+  main.message =
+    document.getElementById(
+      "message"
+    ).value;
+
+
+  if(mainPhotoFile){
+
+    main._photoFile =
+      mainPhotoFile;
+
+  }
+
+
+  const others = [];
+
+
+  document
+    .querySelectorAll(
+      ".other"
+    )
+    .forEach(
+      box => {
+
+        const person = {};
+
+
+        box
+          .querySelectorAll(
+            "[data-key]"
+          )
+          .forEach(
+            el => {
+
+              person[
+                el.dataset.key
+              ] =
+                el.value.trim();
+
+            }
+          );
+
+
+        const photoInput =
+          box.querySelector(
+            ".other-file"
+          );
+
+
+        if(
+          photoInput &&
+          photoInput.files &&
+          photoInput.files[0]
+        ){
+
+          person._photoFile =
+            photoInput.files[0];
+
+        }
+
+
+        if(
+          box.dataset.existingPhoto &&
+          !person.photo
+        ){
+
+          person.photo =
+            box.dataset.existingPhoto;
+
+        }
+
+
+        others.push(person);
+
+      }
+    );
+
+
+  if(
+    newProfile !== oldProfile
+  ){
+
+    if(data[newProfile]){
+
+      alert(
+        "Profile ID already exists."
+      );
+
+      return;
+
+    }
+
+
+    delete data[oldProfile];
+
+    selectedProfile =
+      newProfile;
+
+  }
+
+
+  data[selectedProfile] = {
+
+    main,
+
+    others
+
+  };
+
+}
+
+
+// =====================================
+// FILL MAIN PROFILE
+// =====================================
+
 function fillMain(){
 
-  const p=
+  const profile =
     data[selectedProfile];
 
-  if(!p) return;
+
+  if(!profile){
+    return;
+  }
+
+
+  const main =
+    profile.main || {};
 
 
   setValue(
@@ -406,1100 +1272,1877 @@ function fillMain(){
   );
 
 
-  fields.forEach(k=>
-    setValue(
-      k,
-      p.main[k]
-    )
+  fields.forEach(
+    key => {
+
+      if(key === "photo"){
+        return;
+      }
+
+
+      setValue(
+        key,
+        main[key] || ""
+      );
+
+    }
   );
 
 
   setValue(
     "message",
-    p.main.message
+    main.message || ""
   );
+
+
+  mainPhotoFile =
+    main._photoFile || null;
+
+
+  const input =
+    document.getElementById(
+      "mainPhoto"
+    );
+
+
+  if(input){
+    input.value = "";
+  }
+
+
+  const preview =
+    document.getElementById(
+      "mainPhotoPreview"
+    );
+
+
+  if(main.photo){
+
+    preview.src =
+      main.photo;
+
+    preview.style.display =
+      "block";
+
+  }else{
+
+    preview.removeAttribute(
+      "src"
+    );
+
+    preview.style.display =
+      "none";
+
+  }
 
 
   document.getElementById(
-    "others"
-  ).innerHTML="";
+    "mainPhotoName"
+  ).textContent =
+    mainPhotoFile
+      ? mainPhotoFile.name
+      : "";
 
 
-  p.others.forEach(
-    person=>addOther(person)
+  const othersContainer =
+    document.getElementById(
+      "others"
+    );
+
+
+  othersContainer.innerHTML =
+    "";
+
+
+  (
+    profile.others || []
+  ).forEach(
+    person => {
+
+      addOther(person);
+
+    }
   );
+
+
+  generate();
+
 }
 
 
-function selectProfile(){
+// =====================================
+// SWITCH PROFILE
+// =====================================
 
-  selectedProfile=
+function switchProfile(){
+
+  captureCurrentProfile();
+
+
+  selectedProfile =
     document.getElementById(
       "profileSelect"
     ).value;
 
+
   fillMain();
 
-  generate();
 }
 
 
+// =====================================
+// POPULATE PROFILE SELECT
+// =====================================
+
 function populateProfiles(){
 
-  const select=
+  const select =
     document.getElementById(
       "profileSelect"
     );
 
 
-  select.innerHTML="";
+  select.innerHTML =
+    "";
 
 
-  Object.keys(data).forEach(p=>{
-
-    const option=
-      document.createElement(
-        "option"
-      );
-
-    option.value=p;
-    option.textContent=p;
-
-    select.appendChild(option);
-
-  });
+  const profiles =
+    Object.keys(data);
 
 
-  if(!data[selectedProfile]){
+  if(
+    !selectedProfile ||
+    !data[selectedProfile]
+  ){
 
-    selectedProfile=
-      Object.keys(data)[0]||"";
+    selectedProfile =
+      profiles[0] || "";
 
   }
 
 
-  select.value=
-    selectedProfile;
+  profiles.forEach(
+    id => {
+
+      const option =
+        document.createElement(
+          "option"
+        );
 
 
-  fillMain();
+      option.value =
+        id;
+
+
+      option.textContent =
+        id;
+
+
+      if(
+        id === selectedProfile
+      ){
+
+        option.selected =
+          true;
+
+      }
+
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
+
+
+  document.getElementById(
+    "editor"
+  ).style.display =
+    profiles.length
+      ? "block"
+      : "none";
+
+
+  if(selectedProfile){
+
+    fillMain();
+
+  }
+
 }
 
 
-function addOther(person={}){
+// =====================================
+// CREATE NEW PROFILE
+// =====================================
 
-  const d=
-    document.createElement("div");
+function createNewProfile(){
 
-  d.className="other";
-
-
-  d.innerHTML=`
-
-    <b>Other Person</b>
-
-    <label>Name</label>
-    <input class="o-name">
-
-    <label>Subtitle</label>
-    <input class="o-subtitle">
-
-    <div class="row">
-
-      <div>
-        <label>Photo</label>
-        <input class="o-photo">
-      </div>
-
-      <div>
-        <label>Phone</label>
-        <input class="o-phone">
-      </div>
-
-    </div>
-
-    <label>SMS</label>
-    <input class="o-sms">
-
-    <label>Messenger</label>
-    <input class="o-messenger">
-
-    <label>Facebook</label>
-    <input class="o-facebook">
-
-    <label>Email</label>
-    <input class="o-email">
-
-    <label>Google Maps</label>
-    <input class="o-maps">
-
-    <button
-      class="remove"
-      onclick="this.parentElement.remove()">
-      Remove
-    </button>
-
-  `;
+  captureCurrentProfile();
 
 
-  const map={
+  let id =
+    prompt(
+      "Enter new Profile ID / Name:",
+      "newprofile"
+    );
 
-    name:".o-name",
-    subtitle:".o-subtitle",
-    photo:".o-photo",
-    phone:".o-phone",
-    sms:".o-sms",
-    messenger:".o-messenger",
-    facebook:".o-facebook",
-    email:".o-email",
-    maps:".o-maps"
+
+  if(id === null){
+    return;
+  }
+
+
+  id =
+    cleanProfile(id);
+
+
+  if(!id){
+
+    alert(
+      "Invalid Profile ID.\n\n" +
+      "Use letters, numbers, _ or - only."
+    );
+
+    return;
+
+  }
+
+
+  if(data[id]){
+
+    alert(
+      "Profile ID already exists.\n\n" +
+      "Please choose another ID."
+    );
+
+    return;
+
+  }
+
+
+  data[id] = {
+
+    main:{
+
+      name:"",
+      subtitle:"",
+      photo:"",
+      address:"",
+      city:"",
+      phone:"",
+      sms:"",
+      messenger:"",
+      facebook:"",
+      email:"",
+      maps:"",
+      message:""
+
+    },
+
+    others:[]
 
   };
 
 
-  Object.entries(map)
-    .forEach(([k,s])=>{
-
-      const el=
-        d.querySelector(s);
-
-      if(el)
-        el.value=
-          person[k]||"";
-
-    });
+  selectedProfile =
+    id;
 
 
-  document.getElementById(
-    "others"
-  ).appendChild(d);
+  populateProfiles();
+
+
+  setStatus(
+    "✅ New profile created: " +
+    id +
+    "\n\n" +
+    "I-edit ang fields at pindutin ang " +
+    "\"Save Changes to GitHub\" para ma-save."
+  );
+
 }
 
 
-function generate(){
+// =====================================
+// MAIN PHOTO SELECT
+// =====================================
 
-  let p=
-    cleanProfile(
-      document.getElementById(
-        "profile"
-      ).value
-    );
+function selectMainPhoto(event){
+
+  const file =
+    event.target.files[0];
 
 
-  if(!p){
-
-    alert(
-      "Maglagay muna ng Profile ID."
-    );
-
-    return "";
+  if(!file){
+    return;
   }
 
 
-  selectedProfile=p;
+  mainPhotoFile =
+    file;
 
 
-  if(!data[p]){
-
-    data[p]={
-      main:{},
-      others:[]
-    };
-
-  }
-
-
-  const a=[
-    "["+p+"]"
-  ];
-
-
-  fields.forEach(k=>{
-
-    line(
-      a,
-      k,
-      document.getElementById(k).value
-    );
-
-  });
-
-
-  line(
-    a,
-    "message",
+  const preview =
     document.getElementById(
-      "message"
-    ).value,
-    true
+      "mainPhotoPreview"
+    );
+
+
+  preview.src =
+    URL.createObjectURL(
+      file
+    );
+
+
+  preview.style.display =
+    "block";
+
+
+  document.getElementById(
+    "mainPhotoName"
+  ).textContent =
+    file.name;
+
+}
+
+
+// =====================================
+// REMOVE MAIN PHOTO
+// =====================================
+
+function clearMainPhoto(){
+
+  mainPhotoFile =
+    null;
+
+
+  const input =
+    document.getElementById(
+      "mainPhoto"
+    );
+
+
+  input.value =
+    "";
+
+
+  const preview =
+    document.getElementById(
+      "mainPhotoPreview"
+    );
+
+
+  preview.removeAttribute(
+    "src"
   );
 
 
-  document
-    .querySelectorAll(".other")
-    .forEach(d=>{
+  preview.style.display =
+    "none";
 
-      a.push("");
 
-      a.push(
-        "["+p+"][other]"
+  document.getElementById(
+    "mainPhotoName"
+  ).textContent =
+    "";
+
+
+  if(data[selectedProfile]){
+
+    data[
+      selectedProfile
+    ].main.photo =
+      "";
+
+    delete data[
+      selectedProfile
+    ].main._photoFile;
+
+  }
+
+}
+
+
+// =====================================
+// ADD OTHER PERSON
+// =====================================
+
+function addOther(person = {}){
+
+  const container =
+    document.getElementById(
+      "others"
+    );
+
+
+  const box =
+    document.createElement(
+      "div"
+    );
+
+
+  box.className =
+    "other";
+
+
+  if(person.photo){
+
+    box.dataset.existingPhoto =
+      person.photo;
+
+  }
+
+
+  const index =
+    container.children.length;
+
+
+  box.innerHTML = `
+
+    <div class="other-title">
+
+      <h4>
+        Other Person ${index + 1}
+      </h4>
+
+      <button
+        type="button"
+        class="other-remove"
+        onclick="this.closest('.other').remove()"
+      >
+        Remove
+      </button>
+
+    </div>
+
+
+    <label>Name</label>
+
+    <input
+      type="text"
+      data-key="name"
+      value="${esc(person.name || "")}"
+      placeholder="Name"
+    >
+
+
+    <label>Subtitle</label>
+
+    <input
+      type="text"
+      data-key="subtitle"
+      value="${esc(person.subtitle || "")}"
+      placeholder="Subtitle"
+    >
+
+
+    <label>Photo</label>
+
+
+    <input
+      class="other-file"
+      type="file"
+      accept="image/*"
+      hidden
+      onchange="previewOtherPhoto(event)"
+    >
+
+
+    <button
+      type="button"
+      class="other-upload"
+      onclick="this.previousElementSibling.click()"
+    >
+      📷 Upload Photo
+    </button>
+
+
+    <img
+      class="other-photo-preview"
+      alt="Photo preview"
+    >
+
+
+    <label>Phone</label>
+
+    <input
+      type="text"
+      data-key="phone"
+      value="${esc(person.phone || "")}"
+      placeholder="+639..."
+    >
+
+
+    <label>SMS</label>
+
+    <input
+      type="text"
+      data-key="sms"
+      value="${esc(person.sms || "")}"
+      placeholder="+639..."
+    >
+
+
+    <label>Messenger</label>
+
+    <input
+      type="text"
+      data-key="messenger"
+      value="${esc(person.messenger || "")}"
+      placeholder="Messenger link"
+    >
+
+
+    <label>Facebook</label>
+
+    <input
+      type="text"
+      data-key="facebook"
+      value="${esc(person.facebook || "")}"
+      placeholder="Facebook link"
+    >
+
+
+    <label>Email</label>
+
+    <input
+      type="email"
+      data-key="email"
+      value="${esc(person.email || "")}"
+      placeholder="email@example.com"
+    >
+
+
+    <label>Maps</label>
+
+    <input
+      type="text"
+      data-key="maps"
+      value="${esc(person.maps || "")}"
+      placeholder="Google Maps link"
+    >
+
+  `;
+
+
+  container.appendChild(
+    box
+  );
+
+
+  if(person.photo){
+
+    const preview =
+      box.querySelector(
+        ".other-photo-preview"
       );
 
 
-      const map={
-
-        name:".o-name",
-        subtitle:".o-subtitle",
-        photo:".o-photo",
-        phone:".o-phone",
-        sms:".o-sms",
-        messenger:".o-messenger",
-        facebook:".o-facebook",
-        email:".o-email",
-        maps:".o-maps"
-
-      };
+    preview.src =
+      person.photo;
 
 
-      Object.entries(map)
-        .forEach(([k,s])=>{
+    preview.style.display =
+      "block";
 
-          const el=
-            d.querySelector(s);
+  }
 
-          if(el)
-            line(
-              a,
-              k,
-              el.value
-            );
-
-        });
-
-    });
+}
 
 
-  const result=
-    a.join("\n");
+// =====================================
+// OTHER PHOTO PREVIEW
+// =====================================
+
+function previewOtherPhoto(event){
+
+  const file =
+    event.target.files[0];
+
+
+  if(!file){
+    return;
+  }
+
+
+  const box =
+    event.target.closest(
+      ".other"
+    );
+
+
+  const preview =
+    box.querySelector(
+      ".other-photo-preview"
+    );
+
+
+  preview.src =
+    URL.createObjectURL(
+      file
+    );
+
+
+  preview.style.display =
+    "block";
+
+}
+
+
+// =====================================
+// DELETE PROFILE
+// =====================================
+
+function deleteProfile(){
+
+  captureCurrentProfile();
+
+
+  const profiles =
+    Object.keys(data);
+
+
+  if(profiles.length <= 1){
+
+    alert(
+      "Hindi puwedeng i-delete ang last profile."
+    );
+
+    return;
+
+  }
+
+
+  if(!selectedProfile){
+    return;
+  }
+
+
+  if(
+    !confirm(
+      "Delete profile \"" +
+      selectedProfile +
+      "\"?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    !confirm(
+      "Sigurado ka?\n\n" +
+      "Mawawala ang profile na \"" +
+      selectedProfile +
+      "\" kapag nag-save ka sa GitHub."
+    )
+  ){
+
+    return;
+
+  }
+
+
+  delete data[
+    selectedProfile
+  ];
+
+
+  selectedProfile =
+    Object.keys(data)[0] || "";
+
+
+  populateProfiles();
+
+
+  setStatus(
+    "🗑️ Profile deleted locally.\n\n" +
+    "Pindutin ang Save Changes to GitHub para ma-save ang deletion."
+  );
+
+}
+
+
+// =====================================
+// GENERATE CURRENT PROFILE
+// =====================================
+
+function generate(){
+
+  captureCurrentProfile();
+
+
+  if(!selectedProfile){
+    return;
+  }
+
+
+  const profile =
+    data[selectedProfile];
+
+
+  if(!profile){
+    return;
+  }
+
+
+  const main =
+    profile.main || {};
+
+
+  let output =
+    "";
+
+
+  output +=
+    "[" +
+    selectedProfile +
+    "]\n";
+
+
+  fields.forEach(
+    key => {
+
+      const value =
+        main[key] || "";
+
+
+      if(value !== ""){
+
+        output +=
+          line(key,value) +
+          "\n";
+
+      }
+
+    }
+  );
+
+
+  if(
+    main.message !== undefined &&
+    main.message !== ""
+  ){
+
+    output +=
+      "message=" +
+      main.message +
+      "\n";
+
+  }
+
+
+  (
+    profile.others || []
+  ).forEach(
+    person => {
+
+      output +=
+        "\n[" +
+        selectedProfile +
+        "][other]\n";
+
+
+      Object.keys(person)
+        .forEach(
+          key => {
+
+            if(
+              key === "_photoFile"
+            ){
+
+              return;
+
+            }
+
+
+            const value =
+              person[key] || "";
+
+
+            if(value !== ""){
+
+              output +=
+                line(key,value) +
+                "\n";
+
+            }
+
+          }
+        );
+
+    }
+  );
 
 
   document.getElementById(
     "output"
-  ).value=result;
+  ).value =
+    output;
 
-
-  return result;
 }
 
+
+// =====================================
+// BUILD COMPLETE FILE
+// =====================================
 
 function buildCompleteFile(){
 
-  generate();
-
-
-  const current=
-    selectedProfile;
-
-
-  const sections=[];
+  let output =
+    "";
 
 
   Object.keys(data)
-    .forEach(p=>{
+    .forEach(
+      profileId => {
 
-      if(p!==current){
-
-        const old=
-          data[p];
-
-        const a=[
-          "["+p+"]"
-        ];
+        const profile =
+          data[profileId];
 
 
-        fields.forEach(k=>
-          line(
-            a,
-            k,
-            old.main[k]
-          )
+        const main =
+          profile.main || {};
+
+
+        output +=
+          "[" +
+          profileId +
+          "]\n";
+
+
+        fields.forEach(
+          key => {
+
+            const value =
+              main[key] || "";
+
+
+            if(value !== ""){
+
+              output +=
+                line(
+                  key,
+                  value
+                ) +
+                "\n";
+
+            }
+
+          }
         );
 
 
-        line(
-          a,
-          "message",
-          old.main.message,
-          true
+        if(
+          main.message !== undefined &&
+          main.message !== ""
+        ){
+
+          output +=
+            "message=" +
+            main.message +
+            "\n";
+
+        }
+
+
+        (
+          profile.others || []
+        ).forEach(
+          person => {
+
+            output +=
+              "\n[" +
+              profileId +
+              "][other]\n";
+
+
+            Object.keys(person)
+              .forEach(
+                key => {
+
+                  if(
+                    key === "_photoFile"
+                  ){
+
+                    return;
+
+                  }
+
+
+                  const value =
+                    person[key] || "";
+
+
+                  if(value !== ""){
+
+                    output +=
+                      line(
+                        key,
+                        value
+                      ) +
+                      "\n";
+
+                  }
+
+                }
+              );
+
+          }
         );
 
 
-        old.others
-          .forEach(person=>{
-
-            a.push("");
-
-            a.push(
-              "["+p+"][other]"
-            );
-
-
-            [
-              "name",
-              "subtitle",
-              "photo",
-              "phone",
-              "sms",
-              "messenger",
-              "facebook",
-              "email",
-              "maps"
-            ]
-            .forEach(k=>
-              line(
-                a,
-                k,
-                person[k]
-              )
-            );
-
-          });
-
-
-        sections.push(
-          a.join("\n")
-        );
+        output +=
+          "\n";
 
       }
-
-    });
-
-
-  sections.push(
-    document.getElementById(
-      "output"
-    ).value
-  );
+    );
 
 
-  return sections
-    .filter(Boolean)
-    .join("\n\n");
+  return output.trim() +
+    "\n";
+
 }
 
+
+// =====================================
+// BASE64
+// =====================================
 
 function base64Encode(str){
 
-  const bytes=
-    new TextEncoder().encode(str);
+  return btoa(
+    unescape(
+      encodeURIComponent(str)
+    )
+  );
 
-  let binary="";
-
-  const chunk=0x8000;
-
-
-  for(
-    let i=0;
-    i<bytes.length;
-    i+=chunk
-  ){
-
-    binary +=
-      String.fromCharCode(
-        ...bytes.subarray(
-          i,
-          i+chunk
-        )
-      );
-
-  }
-
-
-  return btoa(binary);
 }
 
 
+// =====================================
+// FILE TO BASE64
+// =====================================
+
+function fileToBase64(file){
+
+  return new Promise(
+    (resolve,reject) => {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        () => {
+
+          const result =
+            reader.result;
+
+
+          resolve(
+            result.split(",")[1]
+          );
+
+        };
+
+
+      reader.onerror =
+        reject;
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+// =====================================
+// GITHUB REQUEST
+// =====================================
+
 async function githubRequest(
-  url,
-  options={}
+  path,
+  options = {}
 ){
 
-  const token=
+  const user =
+    document.getElementById(
+      "ghUser"
+    ).value.trim();
+
+
+  const repo =
+    document.getElementById(
+      "ghRepo"
+    ).value.trim();
+
+
+  const token =
     document.getElementById(
       "ghToken"
     ).value.trim();
 
 
-  const headers={
-
-    "Accept":
-      "application/vnd.github+json",
-
-    "X-GitHub-Api-Version":
-      "2022-11-28",
-
-    ...(options.headers||{})
-
-  };
-
-
-  if(token)
-    headers.Authorization=
-      "Bearer "+token;
-
-
-  return fetch(
-    url,
-    {
-      ...options,
-      headers
-    }
-  );
-}
-
-
-function setStatus(t){
-
-  document.getElementById(
-    "status"
-  ).textContent=t;
-}
-
-
-/* =========================================================
-   NEW: PHOTO CLEANUP HELPERS
-   ========================================================= */
-
-
-/*
-  Converts a photo= value into a comparable
-  GitHub path.
-
-  Examples:
-
-  /jeffrey.jpg
-  jeffrey.jpg
-  /public/jeffrey.jpg
-
-  all become:
-
-  jeffrey.jpg
-*/
-
-function normalizePhotoPath(value){
-
-  if(!value)
-    return "";
-
-
-  let v=
-    String(value)
-      .trim();
-
-
-  if(!v)
-    return "";
-
-
-  /*
-    If it's a full URL, use only its pathname.
-  */
-
-  if(/^https?:\/\//i.test(v)){
-
-    try{
-
-      v=
-        new URL(v).pathname;
-
-    }catch(e){
-
-      return "";
-
-    }
-
-  }
-
-
-  v=
-    v.split("?")[0]
-     .split("#")[0];
-
-
-  v=
-    v.replace(/^\/+/,"");
+  const branch =
+    document.getElementById(
+      "ghBranch"
+    ).value.trim() ||
+    "main";
 
 
   if(
-    v.toLowerCase()
-      .startsWith("public/")
+    !user ||
+    !repo ||
+    !token
   ){
-
-    v=
-      v.slice(7);
-
-  }
-
-
-  return decodeURIComponent(v);
-}
-
-
-/*
-  Get all photo= references from Profile.info.
-*/
-
-function getPhotoReferences(text){
-
-  const refs=
-    new Set();
-
-
-  String(text||"")
-    .split(/\r?\n/)
-    .forEach(raw=>{
-
-      const match=
-        raw.match(
-          /^\s*photo\s*=\s*(.*?)\s*$/i
-        );
-
-
-      if(!match)
-        return;
-
-
-      const photo=
-        normalizePhotoPath(
-          decodeValue(
-            match[1]
-          )
-        );
-
-
-      if(photo)
-        refs.add(photo);
-
-    });
-
-
-  return refs;
-}
-
-
-/*
-  Delete a photo from GitHub.
-
-  IMPORTANT:
-  This is only called for photos that
-  were previously referenced by Profile.info
-  but are no longer referenced.
-*/
-
-async function deleteUnusedPhoto(
-  photoPath,
-  user,
-  repo,
-  branch
-){
-
-  const cleanPath=
-    normalizePhotoPath(
-      photoPath
-    );
-
-
-  if(!cleanPath)
-    return;
-
-
-  /*
-    Protect against path traversal.
-  */
-
-  if(
-    cleanPath.includes("..")
-  ){
-    return;
-  }
-
-
-  /*
-    This editor's original Profile.info
-    and photo fields use root-relative paths.
-
-    Example:
-    photo=/jeffrey.jpg
-
-    GitHub path:
-    /contents/jeffrey.jpg
-  */
-
-  const api=
-    `https://api.github.com/repos/` +
-    `${encodeURIComponent(user)}/` +
-    `${encodeURIComponent(repo)}/` +
-    `contents/${cleanPath}` +
-    `?ref=${encodeURIComponent(branch)}`;
-
-
-  const get=
-    await githubRequest(api);
-
-
-  if(get.status===404){
-
-    /*
-      Already gone.
-    */
-
-    return;
-
-  }
-
-
-  const old=
-    await get.json();
-
-
-  if(!get.ok){
 
     throw new Error(
-      old.message ||
-      ("GitHub error "+get.status)
+      "Please enter GitHub username, repository and token."
     );
 
   }
 
 
-  if(!old.sha)
-    return;
+  const url =
+    "https://api.github.com/repos/" +
+    encodeURIComponent(user) +
+    "/" +
+    encodeURIComponent(repo) +
+    path +
+    (
+      path.includes("?")
+        ? "&"
+        : "?"
+    ) +
+    "ref=" +
+    encodeURIComponent(branch);
 
 
-  const deleteApi=
-    `https://api.github.com/repos/` +
-    `${encodeURIComponent(user)}/` +
-    `${encodeURIComponent(repo)}/` +
-    `contents/${cleanPath}`;
-
-
-  const del=
-    await githubRequest(
-      deleteApi,
+  const response =
+    await fetch(
+      url,
       {
 
-        method:"DELETE",
+        ...options,
 
         headers:{
-          "Content-Type":
-            "application/json"
-        },
 
-        body:JSON.stringify({
+          "Accept":
+            "application/vnd.github+json",
 
-          message:
-            "Remove unused profile photo " +
-            cleanPath,
+          "Authorization":
+            "Bearer " +
+            token,
 
-          sha:
-            old.sha,
+          "X-GitHub-Api-Version":
+            "2022-11-28",
 
-          branch:
-            branch
+          ...(options.headers || {})
 
-        })
+        }
 
       }
     );
 
 
-  const result=
-    await del.json().catch(
-      ()=>({})
-    );
+  const text =
+    await response.text();
 
 
-  if(!del.ok){
+  let result =
+    {};
+
+
+  try{
+
+    result =
+      text
+        ? JSON.parse(text)
+        : {};
+
+  }catch{
+
+    result = {};
+
+  }
+
+
+  if(!response.ok){
 
     throw new Error(
       result.message ||
-      ("GitHub delete error "+
-       del.status)
+      "GitHub request failed: " +
+      response.status
     );
 
   }
 
+
+  return result;
+
 }
 
 
-/*
-  Compare old and new Profile.info.
+// =====================================
+// GITHUB PATH
+// =====================================
 
-  ONLY photos that were previously linked
-  and are now no longer linked will be deleted.
-*/
+function githubApiPath(){
 
-async function cleanupUnusedProfilePhotos(
-  oldText,
-  newText,
-  user,
-  repo,
-  branch
+  return "/contents/public/Profile.info";
+
+}
+
+
+// =====================================
+// STATUS
+// =====================================
+
+function setStatus(message){
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  status.textContent =
+    message;
+
+
+  status.style.display =
+    "block";
+
+}
+
+
+// =====================================
+// UPLOAD PHOTO TO GITHUB
+// =====================================
+
+async function uploadPhotoToGitHub(
+  file,
+  preferredName
 ){
 
-  const oldPhotos=
-    getPhotoReferences(
-      oldText
+  if(!file){
+    return "";
+  }
+
+
+  const safeName =
+    cleanFileName(
+      preferredName ||
+      file.name
     );
 
 
-  const newPhotos=
-    getPhotoReferences(
-      newText
+  const path =
+    "/contents/public/" +
+    safeName;
+
+
+  let sha =
+    null;
+
+
+  try{
+
+    const existing =
+      await githubRequest(
+        path
+      );
+
+
+    sha =
+      existing.sha || null;
+
+  }catch(error){
+
+    /*
+     * File doesn't exist yet.
+     */
+
+  }
+
+
+  const content =
+    await fileToBase64(
+      file
     );
 
 
-  const unused=[];
+  const body = {
+
+    message:
+      "Update profile photo " +
+      safeName,
+
+    content
+
+  };
 
 
-  oldPhotos.forEach(photo=>{
+  if(sha){
 
-    if(!newPhotos.has(photo)){
+    body.sha =
+      sha;
 
-      unused.push(photo);
+  }
+
+
+  await githubRequest(
+    path,
+    {
+
+      method:"PUT",
+
+      headers:{
+        "Content-Type":
+          "application/json"
+      },
+
+      body:
+        JSON.stringify(body)
+
+    }
+  );
+
+
+  return "/" +
+    safeName;
+
+}
+
+
+// =====================================
+// GET DECLARED PHOTOS
+// =====================================
+
+function normalizePhotoPath(value){
+
+  let path =
+    String(value || "")
+      .trim();
+
+
+  if(!path){
+    return "";
+  }
+
+
+  path =
+    path.split("?")[0]
+        .split("#")[0];
+
+
+  try{
+
+    if(
+      path.startsWith("http://") ||
+      path.startsWith("https://")
+    ){
+
+      path =
+        new URL(path).pathname;
 
     }
 
-  });
+  }catch{
+
+  }
 
 
-  if(!unused.length){
+  try{
+
+    path =
+      decodeURIComponent(path);
+
+  }catch{
+
+  }
+
+
+  path =
+    path.replace(/^\/+/,"");
+
+
+  if(
+    path.startsWith("public/")
+  ){
+
+    return path;
+
+  }
+
+
+  return "public/" + path;
+
+}
+
+
+// =====================================
+// FIND PHOTO REFERENCES
+// =====================================
+
+function getDeclaredPhotos(profileText){
+
+  const declared =
+    new Set();
+
+
+  const lines =
+    String(profileText || "")
+      .split(/\r?\n/);
+
+
+  lines.forEach(
+    raw => {
+
+      const text =
+        raw.trim();
+
+
+      if(
+        !/^photo\s*=/i.test(text)
+      ){
+
+        return;
+
+      }
+
+
+      const value =
+        text
+          .replace(
+            /^photo\s*=/i,
+            ""
+          )
+          .trim();
+
+
+      if(!value){
+        return;
+      }
+
+
+      const normalized =
+        normalizePhotoPath(
+          value
+        );
+
+
+      if(normalized){
+
+        declared.add(
+          normalized
+        );
+
+      }
+
+    }
+  );
+
+
+  return declared;
+
+}
+
+
+// =====================================
+// GET ALL IMAGES FROM PUBLIC
+// =====================================
+
+async function getAllRepositoryImages(){
+
+  const branch =
+    document.getElementById(
+      "ghBranch"
+    ).value.trim() ||
+    "main";
+
+
+  const result =
+    await githubRequest(
+      "/git/trees/" +
+      encodeURIComponent(branch) +
+      "?recursive=1"
+    );
+
+
+  if(
+    !result.tree ||
+    !Array.isArray(result.tree)
+  ){
 
     return [];
 
   }
 
 
-  const deleted=[];
+  const imageExtensions =
+    [
+
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".gif",
+      ".webp",
+      ".svg",
+      ".avif",
+      ".bmp",
+      ".ico"
+
+    ];
+
+
+  return result.tree
+    .filter(
+      item => {
+
+        if(
+          item.type !== "blob"
+        ){
+
+          return false;
+
+        }
+
+
+        if(
+          !item.path.startsWith(
+            "public/"
+          )
+        ){
+
+          return false;
+
+        }
+
+
+        const lower =
+          item.path.toLowerCase();
+
+
+        return imageExtensions.some(
+          ext =>
+            lower.endsWith(ext)
+        );
+
+      }
+    )
+    .map(
+      item => ({
+
+        path:item.path,
+
+        sha:item.sha
+
+      })
+    );
+
+}
+
+
+// =====================================
+// DELETE IMAGE FROM GITHUB
+// =====================================
+
+async function deleteImageFromGitHub(
+  imagePath,
+  sha
+){
+
+  await githubRequest(
+    "/contents/" +
+    imagePath,
+    {
+
+      method:"DELETE",
+
+      headers:{
+        "Content-Type":
+          "application/json"
+      },
+
+      body:
+        JSON.stringify({
+
+          message:
+            "Remove unused image " +
+            imagePath,
+
+          sha
+
+        })
+
+    }
+  );
+
+}
+
+
+// =====================================
+// CLEAN UNUSED IMAGES
+// =====================================
+
+async function cleanupUnusedImages(
+  profileText
+){
+
+  const declared =
+    getDeclaredPhotos(
+      profileText
+    );
+
+
+  const images =
+    await getAllRepositoryImages();
+
+
+  const unused =
+    images.filter(
+      image => {
+
+        return !declared.has(
+          image.path
+        );
+
+      }
+    );
+
+
+  if(!unused.length){
+
+    return {
+
+      deleted:[],
+
+      skipped:0
+
+    };
+
+  }
+
+
+  const deleted = [];
 
 
   for(
-    const photo of unused
+    const image of unused
   ){
 
-    await deleteUnusedPhoto(
-      photo,
-      user,
-      repo,
-      branch
-    );
+    try{
+
+      await deleteImageFromGitHub(
+        image.path,
+        image.sha
+      );
 
 
-    deleted.push(photo);
+      deleted.push(
+        image.path
+      );
+
+    }catch(error){
+
+      console.error(
+        "Failed to delete:",
+        image.path,
+        error
+      );
+
+    }
 
   }
 
 
-  return deleted;
+  return {
+
+    deleted,
+
+    skipped:
+      unused.length -
+      deleted.length
+
+  };
+
 }
 
 
-/* =========================================================
-   LOAD FROM GITHUB
-   ========================================================= */
+// =====================================
+// LOAD FROM GITHUB
+// =====================================
 
 async function loadFromGitHub(){
 
-  const user=
-    document.getElementById(
-      "ghUser"
-    ).value.trim();
-
-
-  const repo=
-    document.getElementById(
-      "ghRepo"
-    ).value.trim();
-
-
-  const branch=
-    document.getElementById(
-      "ghBranch"
-    ).value.trim() ||
-    "main";
-
-
-  const token=
-    document.getElementById(
-      "ghToken"
-    ).value.trim();
-
-
-  if(
-    !user ||
-    !repo ||
-    !token
-  ){
-
-    setStatus(
-      "❌ Ilagay ang username, repository at token."
-    );
-
-    return;
-  }
-
-
-  setStatus(
-    "Reading current Profile.info..."
-  );
-
-
   try{
 
-    const url=
-      `https://api.github.com/repos/` +
-      `${encodeURIComponent(user)}/` +
-      `${encodeURIComponent(repo)}/` +
-      `contents/Profile.info?ref=` +
-      `${encodeURIComponent(branch)}`;
-
-
-    const res=
-      await githubRequest(url);
-
-
-    const obj=
-      await res.json();
-
-
-    if(!res.ok)
-
-      throw new Error(
-        obj.message ||
-        ("GitHub error "+res.status)
-      );
-
-
-    if(!obj.content)
-
-      throw new Error(
-        "Walang file content na nakuha."
-      );
-
-
-    const binary=
-      atob(
-        obj.content.replace(/\n/g,"")
-      );
-
-
-    const bytes=
-      Uint8Array.from(
-        binary,
-        c=>c.charCodeAt(0)
-      );
-
-
-    const text=
-      new TextDecoder().decode(
-        bytes
-      );
-
-
-    data=
-      parseInfo(text);
-
-
-    selectedProfile=
-      Object.keys(data)[0] ||
-      "";
-
-
-    if(!selectedProfile)
-
-      throw new Error(
-        "Walang profile section sa Profile.info."
-      );
-
-
-    document.getElementById(
-      "editor"
-    ).classList.remove("hidden");
-
-
-    populateProfiles();
-
-
-    document.getElementById(
-      "output"
-    ).value=text;
-
-
     setStatus(
-      "✅ Current Profile.info loaded. Puwede mo nang i-edit."
+      "⏳ Reading Profile.info from GitHub..."
     );
 
 
-  }catch(e){
-
-    console.error(e);
-
-    setStatus(
-      "❌ Error: "+e.message
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   SAVE TO GITHUB
-   ONLY CHANGE: PHOTO CLEANUP
-   ========================================================= */
-
-async function saveToGitHub(){
-
-  /*
-    Build the NEW Profile.info.
-  */
-
-  const content=
-    buildCompleteFile();
-
-
-  const user=
-    document.getElementById(
-      "ghUser"
-    ).value.trim();
-
-
-  const repo=
-    document.getElementById(
-      "ghRepo"
-    ).value.trim();
-
-
-  const branch=
-    document.getElementById(
-      "ghBranch"
-    ).value.trim() ||
-    "main";
-
-
-  const token=
-    document.getElementById(
-      "ghToken"
-    ).value.trim();
-
-
-  if(
-    !user ||
-    !repo ||
-    !token
-  ){
-
-    setStatus(
-      "❌ Ilagay ang username, repository at token."
-    );
-
-    return;
-  }
-
-
-  setStatus(
-    "Saving changes to GitHub..."
-  );
-
-
-  const api=
-    `https://api.github.com/repos/` +
-    `${encodeURIComponent(user)}/` +
-    `${encodeURIComponent(repo)}/` +
-    `contents/Profile.info`;
-
-
-  try{
-
-    /*
-      Get CURRENT Profile.info first.
-
-      We need its old photo= references
-      so we know which old photos became unused.
-    */
-
-    const get=
+    const result =
       await githubRequest(
-        api +
-        "?ref=" +
-        encodeURIComponent(branch)
+        githubApiPath()
       );
 
 
-    let sha=null;
-    let oldProfileInfo="";
-
-
-    if(get.ok){
-
-      const old=
-        await get.json();
-
-
-      sha=
-        old.sha;
-
-
-      if(old.content){
-
-        const binary=
-          atob(
-            old.content.replace(
-              /\n/g,
-              ""
-            )
-          );
-
-
-        const bytes=
-          Uint8Array.from(
-            binary,
-            c=>c.charCodeAt(0)
-          );
-
-
-        oldProfileInfo=
-          new TextDecoder().decode(
-            bytes
-          );
-
-      }
-
-    }else if(
-      get.status!==404
-    ){
-
-      const err=
-        await get.json()
-          .catch(
-            ()=>({})
-          );
-
+    if(!result.content){
 
       throw new Error(
-        err.message ||
-        ("GitHub GET error "+
-         get.status)
+        "Profile.info has no content."
       );
 
     }
 
 
-    /*
-      Save the NEW Profile.info.
-    */
+    const decoded =
+      decodeURIComponent(
+        escape(
+          atob(
+            result.content.replace(
+              /\n/g,
+              ""
+            )
+          )
+        )
+      );
 
-    const body={
+
+    originalFileText =
+      decoded;
+
+
+    data =
+      parseInfo(
+        decoded
+      );
+
+
+    if(
+      !Object.keys(data).length
+    ){
+
+      throw new Error(
+        "No profiles found in Profile.info."
+      );
+
+    }
+
+
+    selectedProfile =
+      Object.keys(data)[0];
+
+
+    populateProfiles();
+
+
+    setStatus(
+      "✅ Profile.info loaded successfully.\n\n" +
+      "Profiles: " +
+      Object.keys(data).join(", ")
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+
+    setStatus(
+      "❌ Error:\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+// =====================================
+// SAVE TO GITHUB
+// =====================================
+
+async function saveToGitHub(){
+
+  try{
+
+    captureCurrentProfile();
+
+
+    if(
+      !Object.keys(data).length
+    ){
+
+      throw new Error(
+        "No profiles to save."
+      );
+
+    }
+
+
+    setStatus(
+      "⏳ Preparing profiles..."
+    );
+
+
+    /*
+     * MAIN PHOTOS
+     */
+    for(
+      const profileId of Object.keys(data)
+    ){
+
+      const profile =
+        data[profileId];
+
+
+      if(
+        profile.main &&
+        profile.main._photoFile
+      ){
+
+        const file =
+          profile.main._photoFile;
+
+
+        const ext =
+          file.name
+            .split(".")
+            .pop() ||
+          "jpg";
+
+
+        const fileName =
+          profileId +
+          "-profile." +
+          ext;
+
+
+        await uploadPhotoToGitHub(
+          file,
+          fileName
+        );
+
+
+        profile.main.photo =
+          "/" +
+          fileName;
+
+
+        delete profile.main._photoFile;
+
+      }
+
+
+      /*
+       * OTHER PHOTOS
+       */
+      for(
+        let i = 0;
+        i < (
+          profile.others || []
+        ).length;
+        i++
+      ){
+
+        const person =
+          profile.others[i];
+
+
+        if(person._photoFile){
+
+          const file =
+            person._photoFile;
+
+
+          const ext =
+            file.name
+              .split(".")
+              .pop() ||
+            "jpg";
+
+
+          const fileName =
+            profileId +
+            "-other-" +
+            (i + 1) +
+            "." +
+            ext;
+
+
+          await uploadPhotoToGitHub(
+            file,
+            fileName
+          );
+
+
+          person.photo =
+            "/" +
+            fileName;
+
+
+          delete person._photoFile;
+
+        }
+
+      }
+
+    }
+
+
+    /*
+     * COMPLETE PROFILE.INFO
+     */
+    const content =
+      buildCompleteFile();
+
+
+    document.getElementById(
+      "output"
+    ).value =
+      content;
+
+
+    setStatus(
+      "⏳ Saving Profile.info to GitHub..."
+    );
+
+
+    let sha =
+      null;
+
+
+    try{
+
+      const existing =
+        await githubRequest(
+          githubApiPath()
+        );
+
+
+      sha =
+        existing.sha || null;
+
+    }catch(error){
+
+      /*
+       * Profile.info may not exist.
+       */
+
+    }
+
+
+    const body = {
 
       message:
         "Update Profile.info",
@@ -1507,136 +3150,121 @@ async function saveToGitHub(){
       content:
         base64Encode(
           content
-        ),
-
-      branch:
-        branch
+        )
 
     };
 
 
-    if(sha)
-      body.sha=sha;
+    if(sha){
 
-
-    const put=
-      await githubRequest(
-        api,
-        {
-
-          method:"PUT",
-
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify(body)
-
-        }
-      );
-
-
-    const result=
-      await put.json();
-
-
-    if(!put.ok){
-
-      throw new Error(
-        result.message ||
-        ("GitHub error "+
-         put.status)
-      );
+      body.sha =
+        sha;
 
     }
 
 
-    /*
-      NEW:
-      Clean photos that were linked
-      before but are no longer linked.
-    */
+    await githubRequest(
+      githubApiPath(),
+      {
 
-    let deletedPhotos=[];
+        method:"PUT",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify(body)
+
+      }
+    );
+
+
+    /*
+     * =================================
+     * CLEAN UNUSED IMAGES
+     * =================================
+     */
+
+    setStatus(
+      "⏳ Checking unused images..."
+    );
+
+
+    let cleanupResult = {
+
+      deleted:[],
+
+      skipped:0
+
+    };
 
 
     try{
 
-      setStatus(
-        "Cleaning unused profile photos..."
-      );
-
-
-      deletedPhotos=
-        await cleanupUnusedProfilePhotos(
-          oldProfileInfo,
-          content,
-          user,
-          repo,
-          branch
+      cleanupResult =
+        await cleanupUnusedImages(
+          content
         );
 
-    }catch(cleanError){
-
-      /*
-        Profile.info is already saved.
-
-        If cleanup fails, don't report
-        the entire save as failed.
-      */
+    }catch(error){
 
       console.error(
-        "Photo cleanup error:",
-        cleanError
+        "Image cleanup failed:",
+        error
       );
-
-
-      setStatus(
-        "✅ Profile.info saved, but photo cleanup failed:\n\n" +
-        cleanError.message
-      );
-
-
-      return;
 
     }
 
 
-    /*
-      Final status.
-    */
+    let cleanupMessage =
+      "";
 
-    if(deletedPhotos.length){
 
-      setStatus(
-        "✅ Saved!\n\n" +
-        "GitHub Pages will deploy the updated Profile.info automatically.\n\n" +
-        "🗑 Deleted unused photos:\n" +
-        deletedPhotos
-          .map(
-            p=>"• "+p
-          )
-          .join("\n")
-      );
+    if(
+      cleanupResult.deleted.length
+    ){
+
+      cleanupMessage =
+        "\n\n🗑️ Deleted unused images:\n" +
+        cleanupResult.deleted.join("\n");
 
     }else{
 
-      setStatus(
-        "✅ Saved! GitHub Pages will deploy the updated Profile.info automatically.\n\n" +
-        "📷 No unused profile photos."
-      );
+      cleanupMessage =
+        "\n\n🖼️ No unused images found.";
 
     }
 
 
-  }catch(e){
+    if(
+      cleanupResult.skipped
+    ){
 
-    console.error(e);
+      cleanupMessage +=
+        "\n\n⚠️ Failed to delete: " +
+        cleanupResult.skipped;
+
+    }
+
 
     setStatus(
-      "❌ Error: "+e.message
+      "✅ Successfully saved to GitHub!\n\n" +
+      "Profiles:\n" +
+      Object.keys(data).join("\n") +
+      cleanupMessage
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+
+    setStatus(
+      "❌ Save failed:\n" +
+      error.message
     );
 
   }
@@ -1644,81 +3272,125 @@ async function saveToGitHub(){
 }
 
 
+// =====================================
+// COPY
+// =====================================
+
 async function copyOutput(){
 
-  const v=
+  const output =
+    document.getElementById(
+      "output"
+    );
+
+
+  if(!output.value){
+
     generate();
 
-
-  if(!v)
-    return;
+  }
 
 
   try{
 
-    await navigator.clipboard.writeText(v);
-
-    setStatus("Copied.");
-
-  }catch(e){
-
-    const o=
-      document.getElementById(
-        "output"
-      );
+    await navigator.clipboard.writeText(
+      output.value
+    );
 
 
-    o.select();
+    setStatus(
+      "✅ Profile.info copied to clipboard."
+    );
+
+  }catch(error){
+
+    output.select();
 
     document.execCommand(
       "copy"
     );
 
 
-    setStatus("Copied.");
+    setStatus(
+      "✅ Profile.info copied."
+    );
 
   }
+
 }
 
 
+// =====================================
+// DOWNLOAD
+// =====================================
+
 function downloadFile(){
 
-  const v=
-    buildCompleteFile();
-
-
-  if(!v)
-    return;
-
-
-  const u=
-    URL.createObjectURL(
-
-      new Blob(
-        [v],
-        {
-          type:
-            "text/plain;charset=utf-8"
-        }
-      )
-
+  const output =
+    document.getElementById(
+      "output"
     );
 
 
-  const a=
-    document.createElement("a");
+  if(!output.value){
+
+    generate();
+
+  }
 
 
-  a.href=u;
+  const blob =
+    new Blob(
+      [
+        output.value
+      ],
+      {
+        type:
+          "text/plain;charset=utf-8"
+      }
+    );
 
-  a.download=
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const a =
+    document.createElement(
+      "a"
+    );
+
+
+  a.href =
+    url;
+
+
+  a.download =
     "Profile.info";
+
+
+  document.body.appendChild(
+    a
+  );
 
 
   a.click();
 
 
-  URL.revokeObjectURL(u);
+  a.remove();
+
+
+  URL.revokeObjectURL(
+    url
+  );
+
+
+  setStatus(
+    "✅ Profile.info downloaded."
+  );
+
 }
 
 </script>
