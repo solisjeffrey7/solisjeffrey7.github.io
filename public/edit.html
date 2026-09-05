@@ -1141,6 +1141,10 @@ function captureCurrentProfile(){
     ).value;
 
 
+  /*
+   * Keep currently selected
+   * main photo file.
+   */
   if(mainPhotoFile){
 
     main._photoFile =
@@ -1196,6 +1200,9 @@ function captureCurrentProfile(){
         }
 
 
+        /*
+         * Keep existing photo.
+         */
         if(
           box.dataset.existingPhoto &&
           !person.photo
@@ -1213,6 +1220,9 @@ function captureCurrentProfile(){
     );
 
 
+  /*
+   * Profile ID changed.
+   */
   if(
     newProfile !== oldProfile
   ){
@@ -1479,6 +1489,9 @@ function populateProfiles(){
 
 function createNewProfile(){
 
+  /*
+   * Save any current edits first.
+   */
   captureCurrentProfile();
 
 
@@ -1522,6 +1535,9 @@ function createNewProfile(){
   }
 
 
+  /*
+   * Create blank profile.
+   */
   data[id] = {
 
     main:{
@@ -2524,76 +2540,10 @@ async function uploadPhotoToGitHub(
 
 
 // =====================================
-// GET DECLARED PHOTOS
+// GET PHOTO FILENAMES FROM PROFILE.INFO
 // =====================================
 
-function normalizePhotoPath(value){
-
-  let path =
-    String(value || "")
-      .trim();
-
-
-  if(!path){
-    return "";
-  }
-
-
-  path =
-    path.split("?")[0]
-        .split("#")[0];
-
-
-  try{
-
-    if(
-      path.startsWith("http://") ||
-      path.startsWith("https://")
-    ){
-
-      path =
-        new URL(path).pathname;
-
-    }
-
-  }catch{
-
-  }
-
-
-  try{
-
-    path =
-      decodeURIComponent(path);
-
-  }catch{
-
-  }
-
-
-  path =
-    path.replace(/^\/+/,"");
-
-
-  if(
-    path.startsWith("public/")
-  ){
-
-    return path;
-
-  }
-
-
-  return "public/" + path;
-
-}
-
-
-// =====================================
-// FIND PHOTO REFERENCES
-// =====================================
-
-function getDeclaredPhotos(profileText){
+function getDeclaredPhotoNames(profileText){
 
   const declared =
     new Set();
@@ -2611,22 +2561,24 @@ function getDeclaredPhotos(profileText){
         raw.trim();
 
 
-      if(
-        !/^photo\s*=/i.test(text)
-      ){
+      /*
+       * Find every:
+       *
+       * photo=value
+       */
+      const match =
+        text.match(
+          /^photo\s*=\s*(.+)$/i
+        );
 
+
+      if(!match){
         return;
-
       }
 
 
-      const value =
-        text
-          .replace(
-            /^photo\s*=/i,
-            ""
-          )
-          .trim();
+      let value =
+        match[1].trim();
 
 
       if(!value){
@@ -2634,16 +2586,76 @@ function getDeclaredPhotos(profileText){
       }
 
 
-      const normalized =
-        normalizePhotoPath(
-          value
+      /*
+       * Remove query string
+       * and hash.
+       */
+      value =
+        value
+          .split("?")[0]
+          .split("#")[0];
+
+
+      /*
+       * If value is a full URL,
+       * use only pathname.
+       */
+      try{
+
+        if(
+          value.startsWith(
+            "http://"
+          ) ||
+          value.startsWith(
+            "https://"
+          )
+        ){
+
+          value =
+            new URL(
+              value
+            ).pathname;
+
+        }
+
+      }catch(error){
+
+      }
+
+
+      /*
+       * Normalize slashes.
+       */
+      value =
+        value.replace(
+          /\\/g,
+          "/"
         );
 
 
-      if(normalized){
+      /*
+       * ONLY FILENAME
+       *
+       * /public/jeffrey.jpg
+       * /jeffrey.jpg
+       * public/jeffrey.jpg
+       * jeffrey.jpg
+       *
+       * all become:
+       *
+       * jeffrey.jpg
+       */
+      value =
+        value
+          .split("/")
+          .pop()
+          .trim();
+
+
+      if(value){
 
         declared.add(
-          normalized
+          value.toLowerCase()
         );
 
       }
@@ -2688,26 +2700,28 @@ async function getAllRepositoryImages(){
   }
 
 
-  const imageExtensions =
-    [
+  const imageExtensions = [
 
-      ".jpg",
-      ".jpeg",
-      ".png",
-      ".gif",
-      ".webp",
-      ".svg",
-      ".avif",
-      ".bmp",
-      ".ico"
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+    ".webp",
+    ".svg",
+    ".avif",
+    ".bmp",
+    ".ico"
 
-    ];
+  ];
 
 
   return result.tree
     .filter(
       item => {
 
+        /*
+         * Only files.
+         */
         if(
           item.type !== "blob"
         ){
@@ -2717,6 +2731,9 @@ async function getAllRepositoryImages(){
         }
 
 
+        /*
+         * ONLY images inside public/
+         */
         if(
           !item.path.startsWith(
             "public/"
@@ -2740,13 +2757,35 @@ async function getAllRepositoryImages(){
       }
     )
     .map(
-      item => ({
+      item => {
 
-        path:item.path,
+        /*
+         * Extract filename ONLY.
+         */
+        const name =
+          item.path
+            .replace(
+              /\\/g,
+              "/"
+            )
+            .split("/")
+            .pop()
+            .toLowerCase();
 
-        sha:item.sha
 
-      })
+        return {
+
+          path:
+            item.path,
+
+          name,
+
+          sha:
+            item.sha
+
+        };
+
+      }
     );
 
 }
@@ -2777,7 +2816,7 @@ async function deleteImageFromGitHub(
         JSON.stringify({
 
           message:
-            "Remove unused image " +
+            "Delete unused image " +
             imagePath,
 
           sha
@@ -2798,22 +2837,37 @@ async function cleanupUnusedImages(
   profileText
 ){
 
+  /*
+   * Get all photo filenames
+   * declared in Profile.info.
+   */
   const declared =
-    getDeclaredPhotos(
+    getDeclaredPhotoNames(
       profileText
     );
 
 
+  /*
+   * Get all image files
+   * from public/.
+   */
   const images =
     await getAllRepositoryImages();
 
 
+  /*
+   * Compare filename ONLY.
+   *
+   * If image filename is NOT
+   * inside photo= declarations,
+   * it will be deleted.
+   */
   const unused =
     images.filter(
       image => {
 
         return !declared.has(
-          image.path
+          image.name
         );
 
       }
@@ -2826,7 +2880,13 @@ async function cleanupUnusedImages(
 
       deleted:[],
 
-      skipped:0
+      skipped:0,
+
+      found:
+        declared.size,
+
+      scanned:
+        images.length
 
     };
 
@@ -2835,7 +2895,12 @@ async function cleanupUnusedImages(
 
   const deleted = [];
 
+  let skipped = 0;
 
+
+  /*
+   * Delete unused images.
+   */
   for(
     const image of unused
   ){
@@ -2854,6 +2919,9 @@ async function cleanupUnusedImages(
 
     }catch(error){
 
+      skipped++;
+
+
       console.error(
         "Failed to delete:",
         image.path,
@@ -2869,9 +2937,13 @@ async function cleanupUnusedImages(
 
     deleted,
 
-    skipped:
-      unused.length -
-      deleted.length
+    skipped,
+
+    found:
+      declared.size,
+
+    scanned:
+      images.length
 
   };
 
@@ -3188,7 +3260,7 @@ async function saveToGitHub(){
      */
 
     setStatus(
-      "⏳ Checking unused images..."
+      "⏳ Scanning images..."
     );
 
 
@@ -3196,7 +3268,11 @@ async function saveToGitHub(){
 
       deleted:[],
 
-      skipped:0
+      skipped:0,
+
+      found:0,
+
+      scanned:0
 
     };
 
@@ -3218,22 +3294,31 @@ async function saveToGitHub(){
     }
 
 
+    /*
+     * SHOW CLEANUP RESULT
+     */
     let cleanupMessage =
-      "";
+      "\n\n🖼️ Image Scan" +
+      "\nDeclared photos: " +
+      cleanupResult.found +
+      "\nImages scanned: " +
+      cleanupResult.scanned;
 
 
     if(
       cleanupResult.deleted.length
     ){
 
-      cleanupMessage =
-        "\n\n🗑️ Deleted unused images:\n" +
-        cleanupResult.deleted.join("\n");
+      cleanupMessage +=
+        "\n\n🗑️ Deleted:\n" +
+        cleanupResult.deleted.join(
+          "\n"
+        );
 
     }else{
 
-      cleanupMessage =
-        "\n\n🖼️ No unused images found.";
+      cleanupMessage +=
+        "\n\n✅ No unused images.";
 
     }
 
