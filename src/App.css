@@ -1,214 +1,187 @@
-body {
+.profile-page {
   min-height: 100vh;
-  background: #f2f3f5;
-  color: #17191c;
-  padding: 16px 10px;
-}
-
-.container {
   width: 100%;
-  max-width: 390px;
-  margin: auto;
-}
+  box-sizing: border-box;
 
-.profile-card {
-  background: #fff;
-  border-radius: 20px;
-  padding: 25px 18px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, .08);
-}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-.profile {
+  padding: 45px 20px;
+
   text-align: center;
 }
 
 .profile-photo {
-  width: 92px;
-  height: 92px;
-  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+
   object-fit: cover;
-  display: block;
-  margin: 0 auto 11px;
-  border: 2px solid #eee;
-  background: #eee;
+  border-radius: 50%;
+
+  margin-bottom: 20px;
 }
 
-.name {
-  font-size: 27px;
-  font-weight: 700;
+.profile-page h1 {
+  margin: 0;
+
+  font-size: 36px;
   line-height: 1.2;
+
+  font-weight: 700;
 }
 
 .subtitle {
-  margin-top: 4px;
-  color: #777;
-  font-size: 13px;
+  margin: 8px 0 20px;
+
+  font-size: 21px;
+  font-weight: 500;
 }
 
-.section {
-  margin-top: 21px;
+.location {
+  margin: 0 0 30px;
+
+  font-size: 18px;
+  line-height: 1.6;
 }
 
-.section-title {
-  font-size: 11px;
-  font-weight: 700;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  margin-bottom: 9px;
-}
+.contacts {
+  width: 100%;
+  max-width: 500px;
 
-.address-box {
   display: flex;
-  align-items: center;
-  gap: 11px;
-  background: #f7f7f8;
-  border-radius: 12px;
-  padding: 12px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.address-icon {
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
+.contacts a {
+  width: 100%;
+  box-sizing: border-box;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #e9eaec;
-  border-radius: 50%;
-  font-size: 16px;
-}
+  gap: 14px;
 
-.address-text {
-  font-size: 14px;
-  line-height: 1.45;
-}
+  padding: 16px 20px;
 
-.icon-buttons {
-  display: flex;
-  gap: 9px;
-  flex-wrap: wrap;
-}
-
-.icon-button {
-  width: 45px;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  color: #fff;
   text-decoration: none;
-  font-size: 17px;
-  transition: transform .15s, filter .15s;
+
+  font-size: 20px;
+  font-weight: 600;
+
+  border-radius: 12px;
+
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
-.icon-button:active {
-  transform: scale(.92);
+.contacts a:active {
+  transform: scale(0.97);
+  opacity: 0.8;
 }
 
-.icon-button:hover {
-  filter: brightness(1.08);
-}
-
-.call { background: #22a447; }
-.sms { background: #1976d2; }
-.messenger { background: #4267b2; }
-.facebook { background: #1877f2; }
-.email { background: #6b7280; }
-.maps { background: #d14b3f; }
-
-.message {
-  margin-top: 19px;
-  padding-top: 15px;
-  border-top: 1px solid #eee;
-  text-align: center;
-  color: #777;
-  font-size: 11px;
-  line-height: 1.55;
-}
-
-.footer {
-  text-align: center;
-  margin-top: 11px;
-  color: #aaa;
-  font-size: 10px;
+.contacts i {
+  font-size: 23px;
 }
 
 .loading,
-.not-found {
-  min-height: 90vh;
+.error {
+  min-height: 100vh;
+
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+
+  padding: 20px;
+
   text-align: center;
-  gap: 10px;
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #101214;
-    color: #f1f1f1;
-  }
+.error h1 {
+  font-size: 30px;
+}
 
-  .profile-card {
-    background: #191c20;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, .3);
+.error p {
+  font-size: 18px;
+}
+
+/* Dark mode */
+
+@media (prefers-color-scheme: dark) {
+  .profile-page {
+    background: #111318;
+    color: #ffffff;
   }
 
   .subtitle,
-  .section-title,
-  .message {
-    color: #92979d;
+  .location {
+    color: #c8cbd1;
   }
 
-  .address-box {
-    background: #22262b;
+  .contacts a {
+    background: #1d2027;
+    color: #ffffff;
   }
 
-  .address-icon {
-    background: #2c3137;
-  }
-
-  .address-text {
-    color: #f1f1f1;
-  }
-
-  .message {
-    border-color: #30343a;
-  }
-
-  .footer {
-    color: #62676d;
-  }
-
-  .profile-photo {
-    border-color: #30343a;
+  .loading,
+  .error {
+    background: #111318;
+    color: #ffffff;
   }
 }
 
-@media (max-width: 360px) {
-  body {
-    padding: 8px;
+/* Light mode */
+
+@media (prefers-color-scheme: light) {
+  .profile-page {
+    background: #ffffff;
+    color: #111111;
   }
 
-  .profile-card {
-    padding: 21px 14px;
+  .subtitle,
+  .location {
+    color: #555555;
+  }
+
+  .contacts a {
+    background: #f1f2f4;
+    color: #111111;
+  }
+
+  .loading,
+  .error {
+    background: #ffffff;
+    color: #111111;
+  }
+}
+
+/* Small phones */
+
+@media (max-width: 390px) {
+  .profile-page {
+    padding: 35px 16px;
   }
 
   .profile-photo {
-    width: 84px;
-    height: 84px;
+    width: 125px;
+    height: 125px;
   }
 
-  .name {
-    font-size: 24px;
+  .profile-page h1 {
+    font-size: 31px;
   }
 
-  .icon-button {
-    width: 42px;
-    height: 42px;
-    font-size: 16px;
+  .subtitle {
+    font-size: 19px;
+  }
+
+  .location {
+    font-size: 17px;
+  }
+
+  .contacts a {
+    font-size: 19px;
+    padding: 15px;
   }
 }
