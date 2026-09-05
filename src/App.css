@@ -7,6 +7,7 @@ body,
 #root {
   margin: 0;
   padding: 0;
+
   width: 100%;
   min-height: 100%;
 }
@@ -18,6 +19,7 @@ body {
     sans-serif;
 
   -webkit-font-smoothing: antialiased;
+
   text-rendering: optimizeLegibility;
 }
 
@@ -31,6 +33,7 @@ a {
 
 .profile-page {
   min-height: 100vh;
+
   width: 100%;
 
   padding:
@@ -47,6 +50,7 @@ a {
 
 .main-profile {
   width: 100%;
+
   max-width: 500px;
 
   margin: 0 auto;
@@ -70,6 +74,7 @@ a {
 
 .default-profile {
   background: #d9dce1;
+
   color: #777;
 
   font-size: 75px;
@@ -79,6 +84,7 @@ a {
   margin: 0;
 
   font-size: 40px;
+
   line-height: 1.2;
 
   font-weight: 700;
@@ -96,6 +102,7 @@ a {
 
 .location {
   margin-top: 18px;
+
   margin-bottom: 28px;
 
   font-size: 19px;
@@ -115,31 +122,71 @@ a {
   width: 100%;
 
   margin-top: 10px;
+
+  overflow: hidden;
 }
 
-/* BIG CALL BUTTON */
-
-.call-button {
+.main-contact-row {
   width: 100%;
-
-  min-height: 62px;
 
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
-  gap: 14px;
+  gap: clamp(4px, 1.8vw, 10px);
 
-  padding: 16px 20px;
+  flex-wrap: nowrap;
+
+  max-width: 100%;
+
+  overflow: hidden;
+}
+
+/* =========================
+   CALL BUTTON
+========================= */
+
+.call-button {
+  width: auto;
+
+  min-width: 0;
+
+  max-width: 100px;
+
+  height: 48px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  padding:
+    0
+    14px;
+
+  border-radius: 13px;
 
   text-decoration: none;
 
-  font-size: 22px;
+  font-size: 18px;
 
   font-weight: 700;
 
-  border-radius: 14px;
+  flex:
+    0
+    1
+    auto;
+
+  flex-shrink: 1;
+
+  white-space: nowrap;
+
+  overflow: hidden;
 
   transition:
     transform 0.15s ease,
@@ -147,46 +194,51 @@ a {
 }
 
 .call-button i {
-  font-size: 25px;
+  font-size: 19px;
+
+  flex-shrink: 0;
+}
+
+.call-label {
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: clip;
 }
 
 .call-button:active {
-  transform: scale(0.97);
+  transform: scale(0.94);
 
   opacity: 0.75;
 }
 
-/* ICON CONTACTS */
-
-.icon-contacts {
-  width: 100%;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  flex-wrap: wrap;
-
-  gap: 12px;
-
-  margin-top: 14px;
-}
+/* =========================
+   MAIN ICON BUTTONS
+========================= */
 
 .main-icon-button {
   width: 48px;
   height: 48px;
 
-  display: flex;
+  display: inline-flex;
 
   align-items: center;
+
   justify-content: center;
 
   border-radius: 50%;
 
   text-decoration: none;
 
-  font-size: 21px;
+  font-size: 20px;
+
+  flex:
+    0
+    1
+    auto;
+
+  flex-shrink: 1;
 
   transition:
     transform 0.15s ease,
@@ -200,14 +252,205 @@ a {
 }
 
 /* =========================
+   AUTO FIT
+========================= */
+
+@media (max-width: 430px) {
+
+  .main-contact-row {
+    gap: 5px;
+  }
+
+  .call-button {
+    max-width: 88px;
+
+    height: 44px;
+
+    padding:
+      0
+      12px;
+
+    font-size: 17px;
+
+    gap: 7px;
+  }
+
+  .call-button i {
+    font-size: 18px;
+  }
+
+  .main-icon-button {
+    width: 43px;
+    height: 43px;
+
+    font-size: 18px;
+  }
+}
+
+/* =========================
+   SMALL PHONE
+========================= */
+
+@media (max-width: 390px) {
+
+  .profile-page {
+    padding:
+      30px
+      10px
+      50px;
+  }
+
+  .profile-photo {
+    width: 150px;
+    height: 150px;
+  }
+
+  .default-profile {
+    font-size: 62px;
+  }
+
+  .profile-page h1 {
+    font-size: 34px;
+  }
+
+  .subtitle {
+    font-size: 20px;
+  }
+
+  .location {
+    font-size: 17px;
+
+    margin-top: 16px;
+
+    margin-bottom: 25px;
+  }
+
+  .main-contact-row {
+    gap: 4px;
+  }
+
+  .call-button {
+    max-width: 82px;
+
+    height: 42px;
+
+    padding:
+      0
+      10px;
+
+    font-size: 16px;
+
+    gap: 6px;
+  }
+
+  .call-button i {
+    font-size: 17px;
+  }
+
+  .main-icon-button {
+    width: 40px;
+    height: 40px;
+
+    font-size: 17px;
+  }
+}
+
+/* =========================
+   VERY SMALL PHONE
+========================= */
+
+@media (max-width: 365px) {
+
+  .main-contact-row {
+    gap: 3px;
+  }
+
+  /*
+     Call text removed automatically.
+     Phone icon remains.
+  */
+
+  .call-button {
+    width: 39px;
+
+    min-width: 39px;
+
+    max-width: 39px;
+
+    height: 39px;
+
+    padding: 0;
+
+    gap: 0;
+  }
+
+  .call-label {
+    display: none;
+  }
+
+  .call-button i {
+    font-size: 16px;
+  }
+
+  .main-icon-button {
+    width: 39px;
+    height: 39px;
+
+    font-size: 16px;
+  }
+}
+
+/* =========================
+   EXTRA SMALL PHONE
+========================= */
+
+@media (max-width: 320px) {
+
+  .profile-page {
+    padding-left: 6px;
+
+    padding-right: 6px;
+  }
+
+  .main-contact-row {
+    gap: 2px;
+  }
+
+  .call-button {
+    width: 36px;
+
+    min-width: 36px;
+
+    max-width: 36px;
+
+    height: 36px;
+  }
+
+  .call-button i {
+    font-size: 15px;
+  }
+
+  .main-icon-button {
+    width: 36px;
+    height: 36px;
+
+    font-size: 15px;
+  }
+}
+
+/* =========================
    OTHER PEOPLE
 ========================= */
 
 .other-section {
   width: 100%;
+
   max-width: 500px;
 
-  margin: 50px auto 0;
+  margin:
+    50px
+    auto
+    0;
 
   text-align: left;
 }
@@ -255,6 +498,7 @@ a {
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 
   gap: 8px;
@@ -273,6 +517,7 @@ a {
   display: inline-flex;
 
   align-items: center;
+
   justify-content: center;
 }
 
@@ -332,6 +577,7 @@ a {
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   flex-wrap: wrap;
@@ -348,6 +594,7 @@ a {
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   flex-shrink: 0;
@@ -370,7 +617,7 @@ a {
 }
 
 /* =========================
-   LOADING / ERROR
+   LOADING
 ========================= */
 
 .loading {
@@ -379,12 +626,17 @@ a {
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   padding: 20px;
 
   font-size: 22px;
 }
+
+/* =========================
+   ERROR
+========================= */
 
 .error {
   min-height: 100vh;
@@ -394,6 +646,7 @@ a {
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 
   padding: 20px;
@@ -440,7 +693,7 @@ a {
     background: #272b34;
   }
 
-  /* ICON BUTTONS */
+  /* MAIN ICONS */
 
   .main-icon-button {
     background: #292d36;
@@ -522,7 +775,7 @@ a {
     background: #e5e7eb;
   }
 
-  /* ICON BUTTONS */
+  /* MAIN ICONS */
 
   .main-icon-button {
     background: #e1e3e7;
@@ -568,161 +821,5 @@ a {
     background: #ffffff;
 
     color: #111111;
-  }
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 390px) {
-
-  .profile-page {
-    padding:
-      30px
-      14px
-      50px;
-  }
-
-  .profile-photo {
-    width: 150px;
-    height: 150px;
-  }
-
-  .default-profile {
-    font-size: 62px;
-  }
-
-  .profile-page h1 {
-    font-size: 34px;
-  }
-
-  .subtitle {
-    font-size: 20px;
-  }
-
-  .location {
-    font-size: 17px;
-
-    margin-top: 16px;
-
-    margin-bottom: 25px;
-  }
-
-  /* CALL */
-
-  .call-button {
-    min-height: 58px;
-
-    padding:
-      14px
-      15px;
-
-    font-size: 21px;
-  }
-
-  .call-button i {
-    font-size: 23px;
-  }
-
-  /* ICONS */
-
-  .icon-contacts {
-    gap: 10px;
-
-    margin-top: 13px;
-  }
-
-  .main-icon-button {
-    width: 44px;
-    height: 44px;
-
-    font-size: 19px;
-  }
-
-  /* OTHER */
-
-  .other-section {
-    margin-top: 45px;
-  }
-
-  .other-section h2 {
-    font-size: 21px;
-
-    margin-bottom: 15px;
-  }
-
-  .other-profile {
-    padding:
-      16px
-      12px;
-  }
-
-  .other-photo {
-    width: 60px;
-    height: 60px;
-  }
-
-  .default-other-profile {
-    font-size: 27px;
-  }
-
-  .other-name {
-    font-size: 18px;
-
-    line-height: 1.35;
-  }
-
-  .other-subtitle {
-    font-size: 14px;
-  }
-
-  .other-actions {
-    gap: 8px;
-
-    margin-top: 11px;
-  }
-
-  .other-contact-button {
-    width: 38px;
-    height: 38px;
-
-    font-size: 17px;
-  }
-}
-
-/* =========================
-   VERY SMALL SCREEN
-========================= */
-
-@media (max-width: 330px) {
-
-  .profile-page {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .profile-page h1 {
-    font-size: 30px;
-  }
-
-  .call-button {
-    font-size: 19px;
-  }
-
-  .main-icon-button {
-    width: 42px;
-    height: 42px;
-
-    font-size: 18px;
-  }
-
-  .other-name {
-    font-size: 17px;
-  }
-
-  .other-contact-button {
-    width: 36px;
-    height: 36px;
   }
 }
