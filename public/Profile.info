@@ -1,32 +1,34 @@
 [jeffrey]
-name=Jeffrey&nbsp;Solis
-subtitle=Contact&nbsp;Profile
+name=Jeffrey Solis
+subtitle=Contact Profile
 photo=profile.jpg
-address=Jose&nbsp;Panganiban
-city=Camarines&nbsp;Norte,&nbsp;Philippines
+address=Jose Panganiban
+city=Camarines Norte, Philippines
 phone=+639XXXXXXXXX
 sms=+639XXXXXXXXX
 messenger=https://m.me/YOUR_FACEBOOK_USERNAME
 facebook=https://www.facebook.com/YOUR_FACEBOOK_USERNAME
 email=your@email.com
 maps=https://www.google.com/maps/search/?api=1&amp;query=Jose+Panganiban+Camarines+Norte
-message=Kung&nbsp;sakaling&nbsp;napulot&nbsp;ninyo&nbsp;ang&nbsp;item&nbsp;na&nbsp;ito,&nbsp;pakiusap&nbsp;po&nbsp;na&nbsp;kontakin&nbsp;ako&nbsp;gamit&nbsp;ang&nbsp;mga&nbsp;contact&nbsp;button&nbsp;sa&nbsp;page&nbsp;na&nbsp;ito.&nbsp;Malaking&nbsp;tulong&nbsp;po&nbsp;ang&nbsp;inyong&nbsp;kabutihan&nbsp;upang&nbsp;maibalik&nbsp;ito&nbsp;sa&nbsp;akin.&nbsp;Maraming&nbsp;salamat&nbsp;po&nbsp;sa&nbsp;inyong&nbsp;tulong&nbsp;at&nbsp;katapatan.6
+message=Kung sakaling napulot ninyo ang item na ito, pakiusap po na kontakin ako gamit ang mga contact button sa page na ito. Malaking tulong po ang inyong kabutihan upang maibalik ito sa akin. Maraming salamat po sa inyong tulong at katapatan.6
+
 
 
 [jeffrey][other]
-name=Juan&nbsp;Solis
+name=Juan Solis
 subtitle=Brother
+photo=23160.jpg
 phone=+639XXXXXXXXX
 sms=+639XXXXXXXXX
 messenger=https://m.me/JUAN_FACEBOOK
 facebook=https://facebook.com/JUAN_FACEBOOK
 
 [rovelyn]
-name=Rovelyn&nbsp;Solis
-subtitle=Contact&nbsp;Profile
+name=Rovelyn Solis
+subtitle=Contact Profile
 photo=rovelyn.jpg
-address=Jose&nbsp;Panganiban
-city=Camarines&nbsp;Norte,&nbsp;Philippines
+address=Jose Panganiban
+city=Camarines Norte, Philippines
 phone=+639XXXXXXXXX
 sms=+639XXXXXXXXX
 messenger=https://m.me/ROVELYN_FACEBOOK
@@ -35,7 +37,7 @@ email=your@email.com
 maps=https://www.google.com/maps/search/?api=1&amp;query=Jose+Panganiban+Camarines+Norte
 
 [rovelyn][other]
-name=Jeffrey&nbsp;Solis
+name=Jeffrey Solis
 subtitle=Husband
 photo=profile.jpg
 phone=+639XXXXXXXXX
@@ -44,7 +46,7 @@ messenger=https://m.me/YOUR_FACEBOOK_USERNAME
 facebook=https://www.facebook.com/YOUR_FACEBOOK_USERNAME
 
 [rovelyn][other]
-name=Juan&nbsp;Solis
+name=Juan Solis
 subtitle=Brother
 photo=juan.jpg
 phone=+639XXXXXXXXX
