@@ -40,9 +40,17 @@ facebook=https://www.facebook.com/share/1D6Qt165gp/
 photo=/jeffrey-other-1.jpg
 
 [jeffrey][other]
-name=Jethro cuya solis
+name=Jethro Cuya Solis
 subtitle=Brother
 phone=+639519663531
 sms=+639519663531
 facebook=https://www.facebook.com/share/1EeTuJgdBt/
 photo=/jeffrey-other-2.jpg
+
+[jeffrey][other]
+name=Jayson Cuya Solis
+subtitle=Brother
+
+[jeffrey][other]
+name=Quiezel Anne Cuya Solis
+subtitle=Sister
