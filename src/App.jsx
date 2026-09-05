@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from "react";
+import "./App.css";
 
 /* =========================================================
-   HTML ENTITY DECODER
+   DECODE HTML
 ========================================================= */
 
 function decodeHtml(value = "") {
-  if (typeof document === "undefined") {
-    return value;
-  }
-
   const textarea = document.createElement("textarea");
   textarea.innerHTML = value;
-
   return textarea.value;
 }
 
 
 /* =========================================================
-   PROFILE.INFO PARSER
+   PARSE PROFILE.INFO
 ========================================================= */
 
 function parseInfo(text) {
+
   const profiles = {};
 
   let currentProfile = null;
@@ -29,48 +26,79 @@ function parseInfo(text) {
   const lines = text.split(/\r?\n/);
 
   for (let rawLine of lines) {
+
     let line = rawLine.trim();
 
     if (!line) continue;
 
-    if (line.startsWith("#") || line.startsWith(";")) {
+    /* Comments */
+    if (
+      line.startsWith("#") ||
+      line.startsWith(";")
+    ) {
       continue;
     }
 
-    /* -----------------------------------------------
-       [profile][other]
-       IMPORTANT: check this BEFORE [profile]
-    ----------------------------------------------- */
 
-    let otherMatch = line.match(
-      /^\[([^\]]+)\]\[([^\]]+)\]$/i
-    );
+    /* =====================================================
+       [profile]
+    ===================================================== */
+
+    const profileMatch =
+      line.match(/^\[([^\]]+)\]$/);
+
+    if (profileMatch) {
+
+      const profileName =
+        profileMatch[1].trim();
+
+      currentProfile = {
+        name: profileName,
+        data: {},
+        others: []
+      };
+
+      profiles[profileName] =
+        currentProfile;
+
+      currentOther = null;
+
+      continue;
+    }
+
+
+    /* =====================================================
+       [profile][other]
+    ===================================================== */
+
+    const otherMatch =
+      line.match(
+        /^\[([^\]]+)\]\[([^\]]+)\]$/
+      );
 
     if (otherMatch) {
-      const profileName = decodeHtml(
-        otherMatch[1].trim()
-      );
 
-      const otherSection = decodeHtml(
-        otherMatch[2].trim()
-      );
+      const profileName =
+        otherMatch[1].trim();
 
-      const profileKey =
-        profileName.toLowerCase();
+      const otherName =
+        otherMatch[2].trim();
 
-      if (!profiles[profileKey]) {
-        profiles[profileKey] = {
+      if (!profiles[profileName]) {
+
+        profiles[profileName] = {
           name: profileName,
           data: {},
           others: []
         };
+
       }
 
       currentProfile =
-        profiles[profileKey];
+        profiles[profileName];
 
       currentOther = {
-        section: otherSection,
+        name: otherName,
         data: {}
       };
 
@@ -82,42 +110,9 @@ function parseInfo(text) {
     }
 
 
-    /* -----------------------------------------------
-       [profile]
-    ----------------------------------------------- */
-
-    let sectionMatch = line.match(
-      /^\[([^\]]+)\]$/i
-    );
-
-    if (sectionMatch) {
-      const profileName = decodeHtml(
-        sectionMatch[1].trim()
-      );
-
-      const key =
-        profileName.toLowerCase();
-
-      if (!profiles[key]) {
-        profiles[key] = {
-          name: profileName,
-          data: {},
-          others: []
-        };
-      }
-
-      currentProfile =
-        profiles[key];
-
-      currentOther = null;
-
-      continue;
-    }
-
-
-    /* -----------------------------------------------
-       key=value
-    ----------------------------------------------- */
+    /* =====================================================
+       KEY = VALUE
+    ===================================================== */
 
     const equalIndex =
       line.indexOf("=");
@@ -126,28 +121,29 @@ function parseInfo(text) {
       continue;
     }
 
-    const key = line
-      .slice(0, equalIndex)
-      .trim()
-      .toLowerCase();
+    const key =
+      line
+        .slice(0, equalIndex)
+        .trim();
 
-    const value = line
-      .slice(equalIndex + 1)
-      .trim();
+    const value =
+      line
+        .slice(equalIndex + 1)
+        .trim();
 
-    if (!key) {
-      continue;
-    }
+    if (!key) continue;
 
-    const decodedValue =
-      decodeHtml(value);
 
     if (currentOther) {
+
       currentOther.data[key] =
-        decodedValue;
+        decodeHtml(value);
+
     } else if (currentProfile) {
+
       currentProfile.data[key] =
-        decodedValue;
+        decodeHtml(value);
+
     }
   }
 
@@ -162,355 +158,351 @@ function parseInfo(text) {
 function ContactButton({
   type,
   value,
+  label,
   main = false
 }) {
+
   if (!value) {
     return null;
   }
 
   let href = value;
-  let icon = "";
-  let label = "";
 
-  switch (type) {
+  let icon =
+    "fa-solid fa-link";
 
-    case "phone":
-      href = `tel:${value}`;
-      icon = "fa-solid fa-phone";
-      label = "Call";
-      break;
+  let buttonClass =
+    main
+      ? "main-icon-button"
+      : "other-contact-button";
 
-    case "sms":
-      href = `sms:${value}`;
-      icon = "fa-solid fa-comment-sms";
-      break;
 
-    case "messenger":
-      href = value;
-      icon =
-        "fa-brands fa-facebook-messenger";
-      break;
+  /* PHONE */
+  if (type === "phone") {
 
-    case "facebook":
-      href = value;
-      icon =
-        "fa-brands fa-facebook";
-      break;
+    href =
+      `tel:${value}`;
 
-    case "email":
-      href = value.startsWith("mailto:")
-        ? value
-        : `mailto:${value}`;
-      icon = "fa-solid fa-envelope";
-      break;
-
-    case "maps":
-      href = value;
-      icon =
-        "fa-solid fa-location-dot";
-      break;
-
-    default:
-      return null;
+    icon =
+      "fa-solid fa-phone";
   }
 
 
-  /* Main Call button */
+  /* SMS */
+  else if (type === "sms") {
+
+    href =
+      `sms:${value}`;
+
+    icon =
+      "fa-solid fa-comment-sms";
+  }
+
+
+  /* MESSENGER */
+  else if (type === "messenger") {
+
+    if (
+      value.startsWith("http://") ||
+      value.startsWith("https://")
+    ) {
+
+      href = value;
+
+    } else {
+
+      href =
+        `https://m.me/${value}`;
+    }
+
+    icon =
+      "fa-brands fa-facebook-messenger";
+  }
+
+
+  /* FACEBOOK */
+  else if (type === "facebook") {
+
+    href = value;
+
+    icon =
+      "fa-brands fa-facebook";
+  }
+
+
+  /* EMAIL */
+  else if (type === "email") {
+
+    href =
+      `mailto:${value}`;
+
+    icon =
+      "fa-solid fa-envelope";
+  }
+
+
+  /* MAPS */
+  else if (type === "maps") {
+
+    if (
+      value.startsWith("http://") ||
+      value.startsWith("https://")
+    ) {
+
+      href = value;
+
+    } else {
+
+      href =
+        `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+          value
+        )}`;
+    }
+
+    icon =
+      "fa-solid fa-location-dot";
+  }
+
+
+  /* OTHER TYPES */
+  else if (type === "website") {
+
+    href =
+      value.startsWith("http://") ||
+      value.startsWith("https://")
+        ? value
+        : `https://${value}`;
+
+    icon =
+      "fa-solid fa-globe";
+  }
+
+
+  /* =====================================================
+     CALL BUTTON
+  ===================================================== */
 
   if (main && type === "phone") {
+
     return (
       <a
-        className="call-button"
         href={href}
+        className="call-button"
         aria-label="Call"
       >
+
         <i className={icon}></i>
 
         <span className="call-label">
-          {label}
+          {label || "Call"}
         </span>
+
       </a>
     );
   }
 
 
-  /* Main icon buttons */
-
-  if (main) {
-    return (
-      <a
-        className="main-icon-button"
-        href={href}
-        target={
-          type === "messenger" ||
-          type === "facebook" ||
-          type === "maps"
-            ? "_blank"
-            : undefined
-        }
-        rel={
-          type === "messenger" ||
-          type === "facebook" ||
-          type === "maps"
-            ? "noopener noreferrer"
-            : undefined
-        }
-        aria-label={type}
-      >
-        <i className={icon}></i>
-      </a>
-    );
-  }
-
-
-  /* Other People buttons */
+  /* =====================================================
+     NORMAL ICON BUTTON
+  ===================================================== */
 
   return (
     <a
-      className="other-contact-button"
       href={href}
+      className={buttonClass}
+      aria-label={label || type}
       target={
         type === "messenger" ||
         type === "facebook" ||
-        type === "maps"
+        type === "maps" ||
+        type === "website"
           ? "_blank"
           : undefined
       }
       rel={
         type === "messenger" ||
         type === "facebook" ||
-        type === "maps"
+        type === "maps" ||
+        type === "website"
           ? "noopener noreferrer"
           : undefined
       }
-      aria-label={type}
     >
+
       <i className={icon}></i>
+
     </a>
   );
 }
 
 
 /* =========================================================
-   MAIN PROFILE CONTACTS
+   MAIN CONTACTS
 ========================================================= */
 
-function MainContacts({ profile }) {
+function MainContacts({ data }) {
 
-  const data = profile.data;
+  const contacts = [
+    {
+      type: "phone",
+      value: data.phone,
+      label: "Call"
+    },
+    {
+      type: "sms",
+      value: data.sms
+    },
+    {
+      type: "messenger",
+      value: data.messenger
+    },
+    {
+      type: "facebook",
+      value: data.facebook
+    },
+    {
+      type: "email",
+      value: data.email
+    },
+    {
+      type: "maps",
+      value:
+        data.maps ||
+        data.location
+    }
+  ];
+
 
   return (
-    <section className="main-contacts">
+    <div className="main-contacts">
 
       <div className="main-contact-row">
 
-        <ContactButton
-          type="phone"
-          value={data.phone}
-          main
-        />
+        {contacts.map(
+          (contact, index) => (
 
-        <ContactButton
-          type="sms"
-          value={data.sms}
-          main
-        />
-
-        <ContactButton
-          type="messenger"
-          value={data.messenger}
-          main
-        />
-
-        <ContactButton
-          type="facebook"
-          value={data.facebook}
-          main
-        />
-
-        <ContactButton
-          type="email"
-          value={data.email}
-          main
-        />
-
-        <ContactButton
-          type="maps"
-          value={data.maps}
-          main
-        />
-
-      </div>
-
-    </section>
-  );
-}
-
-
-/* =========================================================
-   OTHER PEOPLE CONTACTS
-========================================================= */
-
-function OtherContacts({ data }) {
-
-  return (
-    <div className="other-actions">
-
-      <ContactButton
-        type="phone"
-        value={data.phone}
-      />
-
-      <ContactButton
-        type="sms"
-        value={data.sms}
-      />
-
-      <ContactButton
-        type="messenger"
-        value={data.messenger}
-      />
-
-      <ContactButton
-        type="facebook"
-        value={data.facebook}
-      />
-
-      <ContactButton
-        type="email"
-        value={data.email}
-      />
-
-      <ContactButton
-        type="maps"
-        value={data.maps}
-      />
-
-    </div>
-  );
-}
-
-
-/* =========================================================
-   OTHER PERSON
-========================================================= */
-
-function OtherPerson({ person }) {
-
-  const data = person.data;
-
-  const photo =
-    data.photo?.trim();
-
-  return (
-    <div className="other-profile">
-
-      <div className="other-info">
-
-        {photo ? (
-
-          <img
-            className="other-photo"
-            src={photo}
-            alt={data.name || "Profile"}
-          />
-
-        ) : (
-
-          <div className="default-other-profile">
-            <i className="fa-solid fa-user"></i>
-          </div>
-
-        )}
-
-
-        <div className="other-text">
-
-          <div className="other-name">
-            {data.name || "Unknown"}
-          </div>
-
-          {data.subtitle && (
-            <div className="other-subtitle">
-              {data.subtitle}
-            </div>
-          )}
-
-        </div>
-
-      </div>
-
-
-      <OtherContacts
-        data={data}
-      />
-
-    </div>
-  );
-}
-
-
-/* =========================================================
-   MESSAGE
-========================================================= */
-
-function LostMessage({ message }) {
-
-  if (
-    !message ||
-    !message.trim()
-  ) {
-    return null;
-  }
-
-  const lines =
-    message.split(/\r?\n/);
-
-  return (
-    <section className="lost-message">
-
-      <div className="lost-message-title">
-
-        <i className="fa-solid fa-message"></i>
-
-        <span style={{ marginLeft: "8px" }}>
-          Message
-        </span>
-
-      </div>
-
-
-      <div className="lost-message-text">
-
-        {lines.map(
-          (line, index) => (
-
-            <React.Fragment
-              key={index}
-            >
-
-              {line}
-
-              {index <
-                lines.length - 1 && (
-                <br />
-              )}
-
-            </React.Fragment>
+            <ContactButton
+              key={
+                `${contact.type}-${index}`
+              }
+              {...contact}
+              main
+            />
 
           )
         )}
 
       </div>
 
-    </section>
+    </div>
   );
 }
 
 
 /* =========================================================
-   QR CODE BUTTON + POPUP
-   QR LANG ANG BINAGO
+   OTHER CONTACTS
+========================================================= */
+
+function OtherContacts({ data }) {
+
+  const contacts = [
+    {
+      type: "phone",
+      value: data.phone
+    },
+    {
+      type: "sms",
+      value: data.sms
+    },
+    {
+      type: "messenger",
+      value: data.messenger
+    },
+    {
+      type: "facebook",
+      value: data.facebook
+    },
+    {
+      type: "email",
+      value: data.email
+    },
+    {
+      type: "maps",
+      value:
+        data.maps ||
+        data.location
+    }
+  ];
+
+
+  return (
+    <div className="other-actions">
+
+      {contacts.map(
+        (contact, index) => (
+
+          <ContactButton
+            key={
+              `${contact.type}-${index}`
+            }
+            {...contact}
+          />
+
+        )
+      )}
+
+    </div>
+  );
+}
+
+
+/* =========================================================
+   LOST MESSAGE
+========================================================= */
+
+function LostMessage({ message }) {
+
+  if (!message) {
+    return null;
+  }
+
+  return (
+    <div className="lost-message">
+
+      <div className="lost-message-title">
+
+        <i className="fa-solid fa-circle-info"></i>
+
+        Message
+
+      </div>
+
+      <div className="lost-message-text">
+
+        {message
+          .split(/\r?\n/)
+          .map((line, index) => (
+            <React.Fragment key={index}>
+
+              {line}
+
+              {index <
+                message.split(/\r?\n/).length - 1 && (
+                <br />
+              )}
+
+            </React.Fragment>
+          ))}
+
+      </div>
+
+    </div>
+  );
+}
+
+
+/* =========================================================
+   QR BUTTON + POPUP
 ========================================================= */
 
 function QRButton() {
@@ -518,46 +510,21 @@ function QRButton() {
   const [showQR, setShowQR] =
     useState(false);
 
-  const [imageLoaded, setImageLoaded] =
-    useState(false);
-
-
-  /* -----------------------------------------------
-     CURRENT URL
-  ----------------------------------------------- */
-
   const currentUrl =
     typeof window !== "undefined"
       ? window.location.href
       : "";
 
 
-  /* -----------------------------------------------
-     QR API
-  ----------------------------------------------- */
-
   const qrUrl =
-    `https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=10&data=${encodeURIComponent(
+    `https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=20&data=${encodeURIComponent(
       currentUrl
     )}`;
 
 
-  /* -----------------------------------------------
-     RESET
-  ----------------------------------------------- */
-
-  useEffect(() => {
-
-    if (showQR) {
-      setImageLoaded(false);
-    }
-
-  }, [showQR]);
-
-
-  /* -----------------------------------------------
-     DOWNLOAD
-  ----------------------------------------------- */
+  /* =====================================================
+     DOWNLOAD QR
+  ===================================================== */
 
   async function downloadQR() {
 
@@ -630,7 +597,6 @@ function QRButton() {
           height: "44px",
 
           padding: 0,
-          margin: 0,
 
           display: "flex",
           alignItems: "center",
@@ -639,20 +605,17 @@ function QRButton() {
           border: "none",
           borderRadius: "50%",
 
-          background: "#ffffff",
-          color: "#111111",
+          background:
+            "var(--qr-button-bg, #e1e3e7)",
+
+          color:
+            "var(--qr-button-color, #111)",
 
           fontSize: "20px",
 
-          zIndex: 2147483647,
-
           cursor: "pointer",
 
-          boxShadow:
-            "0 2px 10px rgba(0,0,0,.25)",
-
-          WebkitTapHighlightColor:
-            "transparent"
+          zIndex: 9999
         }}
       >
 
@@ -662,7 +625,7 @@ function QRButton() {
 
 
       {/* =================================================
-          QR POPUP
+          QR OVERLAY
       ================================================= */}
 
       {showQR && (
@@ -676,36 +639,29 @@ function QRButton() {
           style={{
             position: "fixed",
 
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
+            inset: 0,
 
             width: "100vw",
             height: "100vh",
-
-            margin: 0,
-            padding: "20px",
 
             display: "flex",
 
             alignItems: "center",
             justifyContent: "center",
 
+            padding: "15px",
+
             background:
-              "rgba(0,0,0,0.80)",
+              "rgba(0,0,0,0.65)",
 
-            zIndex: 2147483646,
-
-            overflowY: "auto",
-
-            isolation: "isolate"
+            zIndex: 99999
           }}
         >
 
-          {/* =================================================
-              MODAL
-          ================================================= */}
+
+          {/* =============================================
+              QR MODAL
+          ============================================= */}
 
           <div
 
@@ -717,32 +673,33 @@ function QRButton() {
               position: "relative",
 
               width: "280px",
-              maxWidth: "90vw",
 
-              margin: "auto",
+              maxWidth: "90vw",
 
               padding:
                 "18px 12px 14px",
 
               borderRadius: "18px",
 
-              background: "#ffffff",
-              color: "#111111",
+              background:
+                "var(--qr-modal-bg, #ffffff)",
+
+              color:
+                "var(--qr-modal-color, #111111)",
 
               textAlign: "center",
 
               boxShadow:
-                "0 20px 60px rgba(0,0,0,.6)",
+                "0 15px 50px rgba(0,0,0,0.4)",
 
-              overflow: "hidden",
-
-              flexShrink: 0
+              overflow: "hidden"
             }}
           >
 
-            {/* =================================================
+
+            {/* =========================================
                 CLOSE
-            ================================================= */}
+            ========================================= */}
 
             <button
 
@@ -757,13 +714,12 @@ function QRButton() {
               style={{
                 position: "absolute",
 
-                top: "8px",
-                right: "8px",
+                top: "7px",
+                right: "7px",
 
                 width: "30px",
                 height: "30px",
 
-                margin: 0,
                 padding: 0,
 
                 display: "flex",
@@ -772,19 +728,19 @@ function QRButton() {
                 justifyContent: "center",
 
                 border: "none",
-
                 borderRadius: "50%",
 
-                background: "#e1e3e7",
-                color: "#111111",
+                background:
+                  "#e1e3e7",
 
-                fontSize: "16px",
+                color:
+                  "#111111",
 
-                lineHeight: 1,
+                fontSize: "15px",
 
                 cursor: "pointer",
 
-                zIndex: 5
+                zIndex: 2
               }}
             >
 
@@ -793,16 +749,16 @@ function QRButton() {
             </button>
 
 
-            {/* =================================================
+            {/* =========================================
                 TITLE
-            ================================================= */}
+            ========================================= */}
 
             <div
+
               style={{
                 width: "100%",
 
-                margin:
-                  "0 0 10px",
+                marginBottom: "10px",
 
                 padding:
                   "0 30px",
@@ -810,18 +766,15 @@ function QRButton() {
                 display: "flex",
 
                 alignItems: "center",
-
                 justifyContent: "center",
 
-                gap: "6px",
+                gap: "7px",
 
                 fontSize: "16px",
 
-                fontWeight: "700",
+                fontWeight: 700,
 
-                lineHeight: "1.3",
-
-                whiteSpace: "nowrap"
+                lineHeight: 1.3
               }}
             >
 
@@ -834,36 +787,11 @@ function QRButton() {
             </div>
 
 
-            {/* =================================================
-                LOADING
-            ================================================= */}
-
-            {!imageLoaded && (
-
-              <div
-                style={{
-                  width: "160px",
-                  height: "160px",
-
-                  margin: "0 auto",
-
-                  display: "flex",
-
-                  alignItems: "center",
-                  justifyContent: "center",
-
-                  fontSize: "13px"
-                }}
-              >
-                Loading QR...
-              </div>
-
-            )}
-
-
-            {/* =================================================
+            {/* =========================================
                 QR IMAGE
-            ================================================= */}
+
+                FIXED 160x160
+            ========================================= */}
 
             <img
 
@@ -871,15 +799,8 @@ function QRButton() {
 
               alt="Profile QR Code"
 
-              onLoad={() =>
-                setImageLoaded(true)
-              }
-
               style={{
-                display:
-                  imageLoaded
-                    ? "block"
-                    : "none",
+                display: "block",
 
                 width: "160px",
                 height: "160px",
@@ -890,48 +811,46 @@ function QRButton() {
                 maxWidth: "160px",
                 maxHeight: "160px",
 
-                margin: "0 auto",
+                margin:
+                  "0 auto",
 
                 padding: 0,
 
-                border: 0,
-
-                borderRadius: 0,
-
                 objectFit: "contain",
 
-                flex: "none"
+                background:
+                  "#ffffff",
+
+                borderRadius: "4px"
               }}
-
-              width="160"
-
-              height="160"
-
             />
 
 
-            {/* =================================================
-                CURRENT URL
-            ================================================= */}
+            {/* =========================================
+                URL
+            ========================================= */}
 
             <div
+
               style={{
                 width: "100%",
 
                 marginTop: "9px",
 
                 padding:
-                  "6px 7px",
+                  "7px 8px",
 
-                borderRadius: "7px",
+                borderRadius: "8px",
 
-                background: "#f1f2f4",
+                background:
+                  "var(--qr-url-bg, #f1f2f4)",
 
-                color: "#555555",
+                color:
+                  "var(--qr-url-color, #555)",
 
                 fontSize: "9px",
 
-                lineHeight: "1.3",
+                lineHeight: 1.3,
 
                 textAlign: "center",
 
@@ -940,7 +859,7 @@ function QRButton() {
                 overflowWrap:
                   "anywhere",
 
-                maxHeight: "38px",
+                maxHeight: "40px",
 
                 overflow: "hidden"
               }}
@@ -951,9 +870,9 @@ function QRButton() {
             </div>
 
 
-            {/* =================================================
+            {/* =========================================
                 DOWNLOAD
-            ================================================= */}
+            ========================================= */}
 
             <button
 
@@ -982,14 +901,15 @@ function QRButton() {
 
                 borderRadius: "9px",
 
-                background: "#111111",
-                color: "#ffffff",
+                background:
+                  "var(--qr-download-bg, #111111)",
+
+                color:
+                  "var(--qr-download-color, #ffffff)",
 
                 fontSize: "13px",
 
-                fontWeight: "700",
-
-                lineHeight: 1,
+                fontWeight: 700,
 
                 cursor: "pointer"
               }}
@@ -1003,6 +923,7 @@ function QRButton() {
 
             </button>
 
+
           </div>
 
         </div>
@@ -1015,62 +936,34 @@ function QRButton() {
 
 
 /* =========================================================
-   MAIN PROFILE
+   OTHER PERSON
 ========================================================= */
 
-function MainProfile({
-  profile
-}) {
+function OtherPerson({ person }) {
 
-  const data = profile.data;
-
-  const photo =
-    data.photo?.trim();
-
-
-  /* -----------------------------------------------
-     LOCATION
-  ----------------------------------------------- */
-
-  const addressParts = [];
-
-  if (data.address?.trim()) {
-    addressParts.push(
-      data.address.trim()
-    );
-  }
-
-  if (data.city?.trim()) {
-    addressParts.push(
-      data.city.trim()
-    );
-  }
-
-  const location =
-    addressParts.join(", ");
+  const data =
+    person.data || {};
 
 
   return (
-    <>
+    <div className="other-profile">
 
-      {/* MAIN PROFILE */}
+      <div className="other-info">
 
-      <section className="main-profile">
 
-        {photo ? (
+        {/* PHOTO */}
+
+        {data.photo ? (
 
           <img
-            className="profile-photo"
-            src={photo}
-            alt={
-              data.name ||
-              "Profile"
-            }
+            src={data.photo}
+            alt={person.name}
+            className="other-photo"
           />
 
         ) : (
 
-          <div className="default-profile">
+          <div className="other-photo default-other-profile">
 
             <i className="fa-solid fa-user"></i>
 
@@ -1079,81 +972,190 @@ function MainProfile({
         )}
 
 
-        <h1>
-          {data.name ||
-            profile.name}
-        </h1>
+        {/* TEXT */}
+
+        <div className="other-text">
+
+          <h3 className="other-name">
+
+            {data.name ||
+              person.name}
+
+          </h3>
 
 
-        {data.subtitle && (
+          {data.subtitle && (
 
-          <div className="subtitle">
-            {data.subtitle}
+            <div className="other-subtitle">
+
+              {data.subtitle}
+
+            </div>
+
+          )}
+
+        </div>
+
+
+        {/* CONTACTS */}
+
+        <OtherContacts
+          data={data}
+        />
+
+
+      </div>
+
+    </div>
+  );
+}
+
+
+/* =========================================================
+   MAIN PROFILE
+========================================================= */
+
+function MainProfile({ profile }) {
+
+  if (!profile) {
+    return null;
+  }
+
+  const data =
+    profile.data || {};
+
+
+  return (
+    <div className="profile-page">
+
+
+      {/* =================================================
+          QR BUTTON
+      ================================================= */}
+
+      <QRButton />
+
+
+      {/* =================================================
+          MAIN PROFILE
+      ================================================= */}
+
+      <main className="main-profile">
+
+
+        {/* PHOTO */}
+
+        {data.photo ? (
+
+          <img
+            src={data.photo}
+            alt={data.name || profile.name}
+            className="profile-photo"
+          />
+
+        ) : (
+
+          <div className="profile-photo default-profile">
+
+            <i className="fa-solid fa-user"></i>
+
           </div>
 
         )}
 
 
-        {location && (
+        {/* NAME */}
+
+        <h1>
+
+          {data.name ||
+            profile.name}
+
+        </h1>
+
+
+        {/* SUBTITLE */}
+
+        {data.subtitle && (
+
+          <div className="subtitle">
+
+            {data.subtitle}
+
+          </div>
+
+        )}
+
+
+        {/* LOCATION */}
+
+        {data.location && (
 
           <div className="location">
 
             <i className="fa-solid fa-location-dot"></i>
 
-            {location}
+            {data.location}
 
           </div>
 
         )}
 
-      </section>
+
+        {/* CONTACTS */}
+
+        <MainContacts
+          data={data}
+        />
 
 
-      {/* CONTACT BUTTONS */}
+        {/* MESSAGE */}
 
-      <MainContacts
-        profile={profile}
-      />
-
-
-      {/* MESSAGE */}
-
-      <LostMessage
-        message={data.message}
-      />
+        <LostMessage
+          message={
+            data.message ||
+            data.lostmessage ||
+            data.lost_message
+          }
+        />
 
 
-      {/* OTHER CONTACTS */}
+        {/* =================================================
+            OTHER PEOPLE
+        ================================================= */}
 
-      {profile.others.length > 0 && (
+        {profile.others &&
+          profile.others.length > 0 && (
 
-        <section className="other-section">
+            <section className="other-section">
 
-          <h2>
-            Other Contacts
-          </h2>
+              <h2>
+                Other Contacts
+              </h2>
 
 
-          <div className="other-list">
+              <div className="other-list">
 
-            {profile.others.map(
-              (person, index) => (
+                {profile.others.map(
+                  (person, index) => (
 
-                <OtherPerson
-                  key={index}
-                  person={person}
-                />
+                    <OtherPerson
+                      key={index}
+                      person={person}
+                    />
 
-              )
-            )}
+                  )
+                )}
 
-          </div>
+              </div>
 
-        </section>
+            </section>
 
-      )}
+          )}
 
-    </>
+      </main>
+
+    </div>
   );
 }
 
@@ -1165,17 +1167,10 @@ function MainProfile({
 export default function App() {
 
   const [profiles, setProfiles] =
-    useState({});
-
-  const [selectedProfile,
-    setSelectedProfile] =
     useState(null);
 
-  const [loading, setLoading] =
-    useState(true);
-
   const [error, setError] =
-    useState("");
+    useState(null);
 
 
   /* =====================================================
@@ -1184,148 +1179,40 @@ export default function App() {
 
   useEffect(() => {
 
-    async function loadProfileInfo() {
+    fetch("/Profile.info")
 
-      try {
-
-        setLoading(true);
-
-        setError("");
-
-
-        const response =
-          await fetch(
-            "/Profile.info",
-            {
-              cache: "no-cache"
-            }
-          );
-
+      .then((response) => {
 
         if (!response.ok) {
 
           throw new Error(
-            `HTTP ${response.status}`
+            "Unable to load Profile.info"
           );
 
         }
 
+        return response.text();
 
-        const text =
-          await response.text();
+      })
 
+      .then((text) => {
 
         const parsed =
           parseInfo(text);
 
-
         setProfiles(parsed);
 
+      })
 
-        /* -----------------------------------------
-           GET ?profile=
-        ----------------------------------------- */
-
-        const params =
-          new URLSearchParams(
-            window.location.search
-          );
-
-
-        const requestedProfile =
-          params.get("profile");
-
-
-        let profileToShow =
-          null;
-
-
-        /* -----------------------------------------
-           Requested profile
-        ----------------------------------------- */
-
-        if (requestedProfile) {
-
-          const requestedKey =
-            requestedProfile
-              .trim()
-              .toLowerCase();
-
-
-          profileToShow =
-            parsed[
-              requestedKey
-            ] || null;
-
-        }
-
-
-        /* -----------------------------------------
-           DEFAULT PROFILE = JEFFREY
-        ----------------------------------------- */
-
-        if (!profileToShow) {
-
-          profileToShow =
-            parsed["jeffrey"] ||
-            null;
-
-        }
-
-
-        /* -----------------------------------------
-           If Jeffrey doesn't exist,
-           use first profile
-        ----------------------------------------- */
-
-        if (!profileToShow) {
-
-          const firstKey =
-            Object.keys(parsed)[0];
-
-
-          if (firstKey) {
-
-            profileToShow =
-              parsed[firstKey];
-
-          }
-
-        }
-
-
-        if (!profileToShow) {
-
-          throw new Error(
-            "No profile found in Profile.info"
-          );
-
-        }
-
-
-        setSelectedProfile(
-          profileToShow
-        );
-
-      } catch (err) {
+      .catch((err) => {
 
         console.error(err);
 
         setError(
-          err?.message ||
           "Unable to load profile."
         );
 
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    }
-
-
-    loadProfileInfo();
+      });
 
   }, []);
 
@@ -1334,69 +1221,117 @@ export default function App() {
      LOADING
   ===================================================== */
 
-  if (loading) {
+  if (!profiles) {
+
+    if (error) {
+
+      return (
+        <div className="error">
+
+          <h1>
+            Error
+          </h1>
+
+          <p>
+            {error}
+          </p>
+
+        </div>
+      );
+
+    }
+
 
     return (
       <div className="loading">
+
         Loading...
+
       </div>
     );
+  }
+
+
+  /* =====================================================
+     PROFILE QUERY
+  ===================================================== */
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const requestedProfile =
+    params.get("profile");
+
+
+  let profileToShow =
+    requestedProfile
+      ? profiles[requestedProfile]
+      : null;
+
+
+  /* =====================================================
+     DEFAULT PROFILE = JEFFREY
+  ===================================================== */
+
+  if (!profileToShow) {
+
+    profileToShow =
+      profiles["jeffrey"] ||
+      null;
 
   }
 
 
   /* =====================================================
-     ERROR
+     FALLBACK = FIRST PROFILE
   ===================================================== */
 
-  if (error) {
+  if (!profileToShow) {
+
+    const firstKey =
+      Object.keys(profiles)[0];
+
+    if (firstKey) {
+
+      profileToShow =
+        profiles[firstKey];
+
+    }
+  }
+
+
+  /* =====================================================
+     NO PROFILE
+  ===================================================== */
+
+  if (!profileToShow) {
 
     return (
       <div className="error">
-        {error}
+
+        <h1>
+          Profile Not Found
+        </h1>
+
+        <p>
+          No profile is available.
+        </p>
+
       </div>
-
     );
-
   }
 
 
   /* =====================================================
-     PROFILE
-  ===================================================== */
-
-  if (!selectedProfile) {
-
-    return (
-      <div className="error">
-        Profile not found.
-      </div>
-
-    );
-
-  }
-
-
-  /* =====================================================
-     PAGE
+     DISPLAY
   ===================================================== */
 
   return (
-
-    <main className="profile-page">
-
-      {/* QR BUTTON */}
-
-      <QRButton />
-
-
-      {/* PROFILE */}
-
-      <MainProfile
-        profile={selectedProfile}
-      />
-
-    </main>
-
+    <MainProfile
+      profile={profileToShow}
+    />
   );
 }
