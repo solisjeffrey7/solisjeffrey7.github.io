@@ -1,106 +1,987 @@
-/* =========================================================
-   GLOBAL INDEX CSS
-========================================================= */
-
-html {
-  margin: 0;
-  padding: 0;
-
-  width: 100%;
-  min-height: 100%;
-
-  background: #111318;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-
-  width: 100%;
-  min-height: 100%;
-
-  background: #111318;
-}
-
-#root {
-  width: 100%;
-  min-height: 100vh;
-}
-
-
-/* =========================================================
-   BOX SIZING
-========================================================= */
-
-*,
-*::before,
-*::after {
+* {
   box-sizing: border-box;
 }
 
-
-/* =========================================================
-   REMOVE DEFAULT IMAGE GAP
-========================================================= */
-
-img {
-  display: block;
-  max-width: 100%;
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
 }
 
+body {
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
-/* =========================================================
-   LINKS
-========================================================= */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
 
 a {
-  color: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* =========================
+   PAGE
+========================= */
 
-/* =========================================================
-   BUTTONS
-========================================================= */
+.profile-page {
+  min-height: 100vh;
+  width: 100%;
 
-button,
-input,
-textarea,
-select {
-  font: inherit;
+  padding:
+    35px
+    18px
+    60px;
+
+  text-align: center;
 }
 
+/* =========================
+   MAIN PROFILE
+========================= */
 
-/* =========================================================
-   MOBILE SAFETY
-========================================================= */
-
-html,
-body {
-  overflow-x: hidden;
+.main-profile {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
+.profile-photo {
+  width: 180px;
+  height: 180px;
 
-/* =========================================================
-   DARK MODE BROWSER
-========================================================= */
+  object-fit: cover;
+  border-radius: 50%;
 
-@media (prefers-color-scheme: dark) {
+  margin-bottom: 20px;
 
-  html,
-  body {
-    background: #111318;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.default-profile {
+  background: #d9dce1;
+  color: #777;
+
+  font-size: 75px;
+}
+
+.profile-page h1 {
+  margin: 0;
+
+  font-size: 40px;
+  line-height: 1.2;
+
+  font-weight: 700;
+
+  word-break: normal;
+}
+
+.subtitle {
+  margin-top: 8px;
+
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.location {
+  margin-top: 18px;
+  margin-bottom: 28px;
+
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.location i {
+  margin-right: 4px;
+}
+
+/* =========================
+   LOST ITEM MESSAGE
+========================= */
+
+.lost-message {
+  width: 100%;
+
+  margin:
+    0
+    auto
+    25px;
+
+  padding:
+    17px
+    18px;
+
+  border-radius: 15px;
+
+  text-align: center;
+
+  overflow: hidden;
+}
+
+.lost-message-title {
+  font-size: 17px;
+  font-weight: 700;
+
+  margin-bottom: 9px;
+
+  overflow-wrap: anywhere;
+}
+
+.lost-message-title i {
+  margin-right: 7px;
+}
+
+.lost-message-text {
+  width: 100%;
+
+  font-size: 16px;
+  line-height: 1.55;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* =========================
+   MAIN CONTACTS
+========================= */
+
+.main-contacts {
+  width: 100%;
+
+  margin-top: 10px;
+
+  overflow: hidden;
+}
+
+.main-contact-row {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: clamp(4px, 1.8vw, 10px);
+
+  flex-wrap: nowrap;
+
+  max-width: 100%;
+
+  overflow: hidden;
+}
+
+/* =========================
+   CALL BUTTON
+========================= */
+
+.call-button {
+  width: auto;
+
+  min-width: 0;
+  max-width: 100px;
+
+  height: 48px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding:
+    0
+    14px;
+
+  border-radius: 13px;
+
+  text-decoration: none;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  flex:
+    0
+    1
+    auto;
+
+  flex-shrink: 1;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.call-button i {
+  font-size: 19px;
+  flex-shrink: 0;
+}
+
+.call-label {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.call-button:active {
+  transform: scale(0.94);
+  opacity: 0.75;
+}
+
+/* =========================
+   MAIN ICON BUTTONS
+========================= */
+
+.main-icon-button {
+  width: 48px;
+  height: 48px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  text-decoration: none;
+
+  font-size: 20px;
+
+  flex:
+    0
+    1
+    auto;
+
+  flex-shrink: 1;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.main-icon-button:active {
+  transform: scale(0.9);
+  opacity: 0.7;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 430px) {
+
+  .main-contact-row {
+    gap: 5px;
+  }
+
+  .call-button {
+    max-width: 88px;
+
+    height: 44px;
+
+    padding:
+      0
+      12px;
+
+    font-size: 17px;
+
+    gap: 7px;
+  }
+
+  .call-button i {
+    font-size: 18px;
+  }
+
+  .main-icon-button {
+    width: 43px;
+    height: 43px;
+
+    font-size: 18px;
   }
 }
 
+/* =========================
+   SMALL PHONE
+========================= */
 
-/* =========================================================
-   LIGHT MODE BROWSER
-========================================================= */
+@media (max-width: 390px) {
+
+  .profile-page {
+    padding:
+      30px
+      10px
+      50px;
+  }
+
+  .profile-photo {
+    width: 150px;
+    height: 150px;
+  }
+
+  .default-profile {
+    font-size: 62px;
+  }
+
+  .profile-page h1 {
+    font-size: 34px;
+  }
+
+  .subtitle {
+    font-size: 20px;
+  }
+
+  .location {
+    font-size: 17px;
+
+    margin-top: 16px;
+    margin-bottom: 25px;
+  }
+
+  .lost-message {
+    padding:
+      15px
+      14px;
+
+    margin-bottom: 22px;
+  }
+
+  .lost-message-title {
+    font-size: 16px;
+  }
+
+  .lost-message-text {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .main-contact-row {
+    gap: 4px;
+  }
+
+  .call-button {
+    max-width: 82px;
+
+    height: 42px;
+
+    padding:
+      0
+      10px;
+
+    font-size: 16px;
+
+    gap: 6px;
+  }
+
+  .call-button i {
+    font-size: 17px;
+  }
+
+  .main-icon-button {
+    width: 40px;
+    height: 40px;
+
+    font-size: 17px;
+  }
+}
+
+/* =========================
+   VERY SMALL PHONE
+========================= */
+
+@media (max-width: 365px) {
+
+  .main-contact-row {
+    gap: 3px;
+  }
+
+  .call-button {
+    width: 39px;
+
+    min-width: 39px;
+    max-width: 39px;
+
+    height: 39px;
+
+    padding: 0;
+    gap: 0;
+  }
+
+  .call-label {
+    display: none;
+  }
+
+  .call-button i {
+    font-size: 16px;
+  }
+
+  .main-icon-button {
+    width: 39px;
+    height: 39px;
+
+    font-size: 16px;
+  }
+}
+
+/* =========================
+   EXTRA SMALL PHONE
+========================= */
+
+@media (max-width: 320px) {
+
+  .profile-page {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .main-contact-row {
+    gap: 2px;
+  }
+
+  .call-button {
+    width: 36px;
+
+    min-width: 36px;
+    max-width: 36px;
+
+    height: 36px;
+  }
+
+  .call-button i {
+    font-size: 15px;
+  }
+
+  .main-icon-button {
+    width: 36px;
+    height: 36px;
+
+    font-size: 15px;
+  }
+}
+
+/* ==================================================
+   OTHER PEOPLE
+================================================== */
+
+.other-section {
+  width: 100%;
+
+  max-width: 500px;
+
+  margin:
+    50px
+    auto
+    0;
+
+  text-align: left;
+}
+
+.other-section h2 {
+  margin:
+    0
+    0
+    18px;
+
+  font-size: 23px;
+  line-height: 1.3;
+
+  text-align: center;
+}
+
+.other-list {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+/* =========================
+   OTHER PROFILE CARD
+========================= */
+
+.other-profile {
+  width: 100%;
+
+  padding:
+    16px
+    15px;
+
+  border-radius: 14px;
+
+  text-align: left;
+
+  overflow: hidden;
+}
+
+/* =========================
+   PROFILE PIC + RIGHT CONTENT
+========================= */
+
+.other-info {
+  width: 100%;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 14px;
+}
+
+/* =========================
+   OTHER PROFILE PHOTO
+========================= */
+
+.other-photo {
+  width: 68px;
+  height: 68px;
+
+  flex:
+    0
+    0
+    68px;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.default-other-profile {
+  background: #d9dce1;
+
+  color: #777;
+
+  font-size: 30px;
+}
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.other-text {
+  flex: 1;
+
+  min-width: 0;
+
+  text-align: left;
+
+  overflow: hidden;
+}
+
+/* =========================
+   NAME + SUBTITLE
+========================= */
+
+.other-name {
+  display: inline;
+
+  margin: 0;
+
+  font-size: 19px;
+
+  line-height: 1.4;
+
+  font-weight: 700;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+
+  word-break: break-word;
+}
+
+.other-subtitle {
+  display: inline;
+
+  margin-left: 5px;
+
+  font-size: 15px;
+
+  line-height: 1.4;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+
+  word-break: break-word;
+}
+
+/* =========================
+   CONTACT ICONS
+   UNDER NAME / SUBTITLE
+========================= */
+
+.other-actions {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-start;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top: 10px;
+}
+
+.other-contact-button {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex:
+    0
+    0
+    40px;
+
+  border-radius: 50%;
+
+  text-decoration: none;
+
+  font-size: 18px;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.other-contact-button:active {
+  transform: scale(0.9);
+
+  opacity: 0.7;
+}
+
+/* =========================
+   OTHER CONTACT MOBILE
+========================= */
+
+@media (max-width: 390px) {
+
+  .other-profile {
+    padding:
+      15px
+      13px;
+  }
+
+  .other-info {
+    gap: 12px;
+  }
+
+  .other-photo {
+    width: 60px;
+    height: 60px;
+
+    flex-basis: 60px;
+  }
+
+  .default-other-profile {
+    font-size: 27px;
+  }
+
+  .other-name {
+    font-size: 18px;
+  }
+
+  .other-subtitle {
+    font-size: 14px;
+  }
+
+  .other-actions {
+    gap: 7px;
+
+    margin-top: 9px;
+  }
+
+  .other-contact-button {
+    width: 37px;
+    height: 37px;
+
+    flex-basis: 37px;
+
+    font-size: 17px;
+  }
+}
+
+/* =========================
+   EXTRA SMALL
+========================= */
+
+@media (max-width: 320px) {
+
+  .other-profile {
+    padding:
+      13px
+      10px;
+  }
+
+  .other-info {
+    gap: 10px;
+  }
+
+  .other-photo {
+    width: 55px;
+    height: 55px;
+
+    flex-basis: 55px;
+  }
+
+  .default-other-profile {
+    font-size: 24px;
+  }
+
+  .other-name {
+    font-size: 17px;
+  }
+
+  .other-subtitle {
+    font-size: 13px;
+  }
+
+  .other-actions {
+    gap: 6px;
+  }
+
+  .other-contact-button {
+    width: 35px;
+    height: 35px;
+
+    flex-basis: 35px;
+
+    font-size: 16px;
+  }
+}
+
+/* =========================
+   LOADING
+========================= */
+
+.loading {
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  font-size: 22px;
+}
+
+/* =========================
+   ERROR
+========================= */
+
+.error {
+  min-height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  text-align: center;
+}
+
+.error h1 {
+  margin-bottom: 8px;
+
+  font-size: 32px;
+}
+
+.error p {
+  font-size: 18px;
+}
+
+/* ==================================================
+   DARK MODE
+================================================== */
+
+@media (prefers-color-scheme: dark) {
+
+  .profile-page {
+    background: #111318;
+    color: #ffffff;
+  }
+
+  .subtitle,
+  .location {
+    color: #c8cbd1;
+  }
+
+  .call-button {
+    background: #1d2027;
+    color: #ffffff;
+  }
+
+  .call-button:hover {
+    background: #272b34;
+  }
+
+  .main-icon-button {
+    background: #292d36;
+    color: #ffffff;
+  }
+
+  .main-icon-button:hover {
+    background: #343944;
+  }
+
+  .lost-message {
+    background: #1d2027;
+  }
+
+  .lost-message-title {
+    color: #ffffff;
+  }
+
+  .lost-message-text {
+    color: #c8cbd1;
+  }
+
+  .other-section h2 {
+    color: #ffffff;
+  }
+
+  .other-profile {
+    background: #1d2027;
+  }
+
+  .other-name {
+    color: #ffffff;
+  }
+
+  .other-subtitle {
+    color: #bfc3ca;
+  }
+
+  .other-contact-button {
+    background: #292d36;
+    color: #ffffff;
+  }
+
+  .other-contact-button:hover {
+    background: #343944;
+  }
+
+  .default-profile,
+  .default-other-profile {
+    background: #2b2e35;
+    color: #9da2aa;
+  }
+
+  .loading,
+  .error {
+    background: #111318;
+    color: #ffffff;
+  }
+}
+
+/* ==================================================
+   LIGHT MODE
+================================================== */
 
 @media (prefers-color-scheme: light) {
 
-  html,
-  body {
+  .profile-page {
     background: #ffffff;
+    color: #111111;
+  }
+
+  .subtitle,
+  .location {
+    color: #555555;
+  }
+
+  .call-button {
+    background: #f1f2f4;
+    color: #111111;
+  }
+
+  .call-button:hover {
+    background: #e5e7eb;
+  }
+
+  .main-icon-button {
+    background: #e1e3e7;
+    color: #111111;
+  }
+
+  .main-icon-button:hover {
+    background: #d5d7db;
+  }
+
+  .lost-message {
+    background: #f1f2f4;
+  }
+
+  .lost-message-title {
+    color: #111111;
+  }
+
+  .lost-message-text {
+    color: #555555;
+  }
+
+  .other-profile {
+    background: #f1f2f4;
+  }
+
+  .other-name {
+    color: #111111;
+  }
+
+  .other-subtitle {
+    color: #666666;
+  }
+
+  .other-contact-button {
+    background: #e1e3e7;
+    color: #111111;
+  }
+
+  .other-contact-button:hover {
+    background: #d5d7db;
+  }
+
+  .default-profile,
+  .default-other-profile {
+    background: #d9dce1;
+    color: #777777;
+  }
+
+  .loading,
+  .error {
+    background: #ffffff;
+    color: #111111;
   }
 }
