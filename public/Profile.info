@@ -1,26 +1,3 @@
-[jeffrey]
-name=Jeffrey Cuya Solis
-subtitle=Contact Profile
-photo=profile.jpg
-address=PUROK 2 Salvacion
-city=Jose Panganiban
-phone=+639481138565
-sms=+639481138565
-messenger=https://m.me/solisjeffrey7
-email=solisjeffrey7@gmail.com
-maps=https://www.google.com/maps/search/?api=1&amp;query=Jose+Panganiban+Camarines+Norte
-message=&lt;h1&gt;Kung &lt;/h1&gt;sakaling napulot ninyo ang item na ito, pakiusap po na kontakin ako gamit ang mga contact button sa page na ito. Malaking tulong po ang inyong kabutihan upang maibalik ito sa akin. Maraming salamat po sa inyong tulong at katapatan
-
-
-
-
-[jeffrey][other]
-name=Rovelyn Solis
-subtitle=Wife
-photo=23160.jpg
-phone=+639XXXXXXXXX
-sms=+639XXXXXXXXX
-
 [rovelyn]
 name=Rovelyn Solis
 subtitle=Contact Profile
@@ -40,3 +17,26 @@ subtitle=Husband
 photo=profile.jpg
 phone=+639481138565
 sms=+639481138565
+
+[jeffrey2]
+name=Jeffrey Cuya Solis
+subtitle=Contact Profile
+photo=profile.jpg
+address=PUROK 2 Salvacion
+city=Jose Panganiban
+phone=+639481138565
+sms=+639481138565
+messenger=https://m.me/solisjeffrey7
+email=solisjeffrey7@gmail.com
+maps=https://www.google.com/maps/search/?api=1&amp;query=Jose+Panganiban+Camarines+Norte
+message=&lt;h1&gt;Kung &lt;/h1&gt;sakaling napulot ninyo ang item na ito, pakiusap po na kontakin ako gamit ang mga contact button sa page na ito. Malaking tulong po ang inyong kabutihan upang maibalik ito sa akin. Maraming salamat po sa inyong tulong at katapatan
+
+
+
+
+[jeffrey2][other]
+name=Rovelyn Solis
+subtitle=Wife
+photo=23160.jpg
+phone=+639XXXXXXXXX
+sms=+639XXXXXXXXX
