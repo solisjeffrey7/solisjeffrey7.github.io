@@ -880,3 +880,421 @@ a {
     color: #111111;
   }
 }
+
+
+/* =========================
+   QR BUTTON
+========================= */
+
+.qr-button {
+  position: fixed;
+
+  top: 16px;
+  right: 16px;
+
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  z-index: 1000;
+
+  font-size: 22px;
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.qr-button:active {
+  transform: scale(0.9);
+  opacity: 0.7;
+}
+
+
+/* =========================
+   QR OVERLAY
+========================= */
+
+.qr-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 2000;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    rgba(0, 0, 0, 0.65);
+
+  backdrop-filter: blur(5px);
+
+  -webkit-backdrop-filter: blur(5px);
+}
+
+
+/* =========================
+   QR MODAL
+========================= */
+
+.qr-modal {
+  position: relative;
+
+  width: 100%;
+
+  max-width: 390px;
+
+  padding:
+    25px
+    20px
+    22px;
+
+  border-radius: 22px;
+
+  text-align: center;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0, 0, 0, 0.35);
+
+  animation:
+    qrModalIn
+    0.18s
+    ease-out;
+}
+
+@keyframes qrModalIn {
+
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+}
+
+
+/* =========================
+   CLOSE
+========================= */
+
+.qr-close {
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  font-size: 19px;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.qr-title {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  margin-bottom: 20px;
+
+  font-size: 21px;
+
+  font-weight: 700;
+}
+
+
+/* =========================
+   QR IMAGE
+========================= */
+
+.qr-image {
+  width: min(75vw, 300px);
+
+  height: min(75vw, 300px);
+
+  margin: 0 auto;
+
+  object-fit: contain;
+
+  border-radius: 8px;
+}
+
+
+/* =========================
+   QR LOADING
+========================= */
+
+.qr-loading {
+  width: min(75vw, 300px);
+
+  height: min(75vw, 300px);
+
+  margin: 0 auto;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  font-size: 15px;
+}
+
+
+/* =========================
+   CURRENT URL
+========================= */
+
+.qr-url {
+  width: 100%;
+
+  margin-top: 16px;
+
+  padding:
+    10px
+    12px;
+
+  border-radius: 10px;
+
+  font-size: 13px;
+
+  line-height: 1.4;
+
+  word-break: break-all;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+.qr-download {
+  width: 100%;
+
+  height: 48px;
+
+  margin-top: 15px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  border: 0;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.qr-download:active {
+  transform: scale(0.97);
+
+  opacity: 0.75;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+@media (prefers-color-scheme: dark) {
+
+  .qr-button {
+    background: #292d36;
+
+    color: #ffffff;
+
+    box-shadow:
+      0 4px 15px
+      rgba(0, 0, 0, 0.3);
+  }
+
+  .qr-button:hover {
+    background: #343944;
+  }
+
+  .qr-modal {
+    background: #1d2027;
+
+    color: #ffffff;
+  }
+
+  .qr-close {
+    background: #292d36;
+
+    color: #ffffff;
+  }
+
+  .qr-close:hover {
+    background: #343944;
+  }
+
+  .qr-loading {
+    background: #292d36;
+
+    color: #bfc3ca;
+  }
+
+  .qr-url {
+    background: #292d36;
+
+    color: #bfc3ca;
+  }
+
+  .qr-download {
+    background: #ffffff;
+
+    color: #111111;
+  }
+
+}
+
+
+/* =========================
+   LIGHT MODE
+========================= */
+
+@media (prefers-color-scheme: light) {
+
+  .qr-button {
+    background: #e1e3e7;
+
+    color: #111111;
+
+    box-shadow:
+      0 4px 15px
+      rgba(0, 0, 0, 0.12);
+  }
+
+  .qr-button:hover {
+    background: #d5d7db;
+  }
+
+  .qr-modal {
+    background: #ffffff;
+
+    color: #111111;
+  }
+
+  .qr-close {
+    background: #e1e3e7;
+
+    color: #111111;
+  }
+
+  .qr-close:hover {
+    background: #d5d7db;
+  }
+
+  .qr-loading {
+    background: #f1f2f4;
+
+    color: #555555;
+  }
+
+  .qr-url {
+    background: #f1f2f4;
+
+    color: #555555;
+  }
+
+  .qr-download {
+    background: #111111;
+
+    color: #ffffff;
+  }
+
+}
+
+
+/* =========================
+   SMALL PHONE
+========================= */
+
+@media (max-width: 390px) {
+
+  .qr-button {
+    top: 12px;
+    right: 12px;
+
+    width: 44px;
+    height: 44px;
+
+    font-size: 20px;
+  }
+
+  .qr-modal {
+    padding:
+      23px
+      15px
+      18px;
+
+    border-radius: 19px;
+  }
+
+  .qr-image,
+  .qr-loading {
+    width: min(75vw, 270px);
+
+    height: min(75vw, 270px);
+  }
+
+  .qr-title {
+    font-size: 19px;
+  }
+
+}
