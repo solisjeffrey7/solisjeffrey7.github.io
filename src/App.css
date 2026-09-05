@@ -7,7 +7,6 @@ body,
 #root {
   margin: 0;
   padding: 0;
-
   width: 100%;
   min-height: 100%;
 }
@@ -115,6 +114,45 @@ a {
 }
 
 /* =========================
+   LOST ITEM MESSAGE
+========================= */
+
+.lost-message {
+  width: 100%;
+
+  margin:
+    0
+    auto
+    25px;
+
+  padding:
+    17px
+    18px;
+
+  border-radius: 15px;
+
+  text-align: center;
+}
+
+.lost-message-title {
+  font-size: 17px;
+
+  font-weight: 700;
+
+  margin-bottom: 9px;
+}
+
+.lost-message-title i {
+  margin-right: 7px;
+}
+
+.lost-message-text {
+  font-size: 16px;
+
+  line-height: 1.55;
+}
+
+/* =========================
    MAIN CONTACTS
 ========================= */
 
@@ -203,8 +241,6 @@ a {
   white-space: nowrap;
 
   overflow: hidden;
-
-  text-overflow: clip;
 }
 
 .call-button:active {
@@ -252,7 +288,7 @@ a {
 }
 
 /* =========================
-   AUTO FIT
+   MOBILE
 ========================= */
 
 @media (max-width: 430px) {
@@ -325,6 +361,24 @@ a {
     margin-bottom: 25px;
   }
 
+  .lost-message {
+    padding:
+      15px
+      14px;
+
+    margin-bottom: 22px;
+  }
+
+  .lost-message-title {
+    font-size: 16px;
+  }
+
+  .lost-message-text {
+    font-size: 15px;
+
+    line-height: 1.5;
+  }
+
   .main-contact-row {
     gap: 4px;
   }
@@ -364,11 +418,6 @@ a {
   .main-contact-row {
     gap: 3px;
   }
-
-  /*
-     Call text removed automatically.
-     Phone icon remains.
-  */
 
   .call-button {
     width: 39px;
@@ -681,8 +730,6 @@ a {
     color: #c8cbd1;
   }
 
-  /* CALL */
-
   .call-button {
     background: #1d2027;
 
@@ -692,8 +739,6 @@ a {
   .call-button:hover {
     background: #272b34;
   }
-
-  /* MAIN ICONS */
 
   .main-icon-button {
     background: #292d36;
@@ -705,7 +750,17 @@ a {
     background: #343944;
   }
 
-  /* OTHER */
+  .lost-message {
+    background: #1d2027;
+  }
+
+  .lost-message-title {
+    color: #ffffff;
+  }
+
+  .lost-message-text {
+    color: #c8cbd1;
+  }
 
   .other-section h2 {
     color: #ffffff;
@@ -728,8 +783,6 @@ a {
   .other-contact-button:hover {
     background: #343944;
   }
-
-  /* DEFAULT PHOTO */
 
   .default-profile,
   .default-other-profile {
@@ -763,8 +816,6 @@ a {
     color: #555555;
   }
 
-  /* CALL */
-
   .call-button {
     background: #f1f2f4;
 
@@ -774,8 +825,6 @@ a {
   .call-button:hover {
     background: #e5e7eb;
   }
-
-  /* MAIN ICONS */
 
   .main-icon-button {
     background: #e1e3e7;
@@ -787,7 +836,17 @@ a {
     background: #d5d7db;
   }
 
-  /* OTHER */
+  .lost-message {
+    background: #f1f2f4;
+  }
+
+  .lost-message-title {
+    color: #111111;
+  }
+
+  .lost-message-text {
+    color: #555555;
+  }
 
   .other-profile {
     background: #f1f2f4;
@@ -807,8 +866,6 @@ a {
     background: #d5d7db;
   }
 
-  /* DEFAULT PHOTO */
-
   .default-profile,
   .default-other-profile {
     background: #d9dce1;
@@ -821,78 +878,5 @@ a {
     background: #ffffff;
 
     color: #111111;
-  }
-}
-
-/* =========================
-   LOST ITEM MESSAGE
-========================= */
-
-.lost-message {
-  width: 100%;
-
-  margin:
-    0
-    auto
-    25px;
-
-  padding:
-    17px
-    18px;
-
-  border-radius: 15px;
-
-  text-align: center;
-}
-
-.lost-message-title {
-  font-size: 17px;
-
-  font-weight: 700;
-
-  margin-bottom: 9px;
-}
-
-.lost-message-title i {
-  margin-right: 7px;
-}
-
-.lost-message-text {
-  font-size: 16px;
-
-  line-height: 1.55;
-}
-
-/* DARK MODE */
-
-@media (prefers-color-scheme: dark) {
-
-  .lost-message {
-    background: #1d2027;
-  }
-
-  .lost-message-title {
-    color: #ffffff;
-  }
-
-  .lost-message-text {
-    color: #c8cbd1;
-  }
-}
-
-/* LIGHT MODE */
-
-@media (prefers-color-scheme: light) {
-
-  .lost-message {
-    background: #f1f2f4;
-  }
-
-  .lost-message-title {
-    color: #111111;
-  }
-
-  .lost-message-text {
-    color: #555555;
   }
 }
