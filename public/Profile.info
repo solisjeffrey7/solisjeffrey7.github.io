@@ -1,10 +1,4 @@
-# Profile database
-# URL examples:
-# /profile=jeffrey
-# /profile=rovelyn
-# /profile=juan
-
-
+id="gpfib3"
 
 [jeffrey]
 name=Jeffrey Solis
@@ -19,6 +13,23 @@ facebook=https://www.facebook.com/YOUR_FACEBOOK_USERNAME
 email=your@email.com
 maps=https://www.google.com/maps/search/?api=1&query=Jose+Panganiban+Camarines+Norte
 
+[jeffrey][other]
+name=Rovelyn Solis
+subtitle=Wife
+photo=rovelyn.jpg
+phone=+639XXXXXXXXX
+sms=+639XXXXXXXXX
+messenger=https://m.me/ROVELYN_FACEBOOK
+facebook=https://www.facebook.com/ROVELYN_FACEBOOK
+
+[jeffrey][other]
+name=Juan Solis
+subtitle=Brother
+photo=juan.jpg
+phone=+639XXXXXXXXX
+sms=+639XXXXXXXXX
+messenger=https://m.me/JUAN_FACEBOOK
+facebook=https://facebook.com/JUAN_FACEBOOK
 
 
 [rovelyn]
@@ -30,6 +41,28 @@ city=Camarines Norte, Philippines
 phone=+639XXXXXXXXX
 sms=+639XXXXXXXXX
 messenger=https://m.me/ROVELYN_FACEBOOK
+facebook=https://www.facebook.com/ROVELYN_FACEBOOK
+email=your@email.com
+maps=https://www.google.com/maps/search/?api=1&query=Jose+Panganiban+Camarines+Norte
+
+[rovelyn][other]
+name=Jeffrey Solis
+subtitle=Husband
+photo=profile.jpg
+phone=+639XXXXXXXXX
+sms=+639XXXXXXXXX
+messenger=https://m.me/YOUR_FACEBOOK_USERNAME
+facebook=https://www.facebook.com/YOUR_FACEBOOK_USERNAME
+
+[rovelyn][other]
+name=Juan Solis
+subtitle=Brother
+photo=juan.jpg
+phone=+639XXXXXXXXX
+sms=+639XXXXXXXXX
+messenger=https://m.me/JUAN_FACEBOOK
+facebook=https://facebook.com/JUAN_FACEBOOK
+
 
 [juan]
 name=Juan Solis
@@ -40,3 +73,22 @@ city=Camarines Norte, Philippines
 phone=+639XXXXXXXXX
 sms=+639XXXXXXXXX
 messenger=https://m.me/JUAN_FACEBOOK
+facebook=https://www.facebook.com/JUAN_FACEBOOK
+
+[juan][other]
+name=Jeffrey Solis
+subtitle=Brother
+photo=profile.jpg
+phone=+639XXXXXXXXX
+sms=+639XXXXXXXXX
+messenger=https://m.me/YOUR_FACEBOOK_USERNAME
+facebook=https://www.facebook.com/YOUR_FACEBOOK_USERNAME
+
+[juan][other]
+name=Rovelyn Solis
+subtitle=Sister-in-law
+photo=rovelyn.jpg
+phone=+639XXXXXXXXX
+sms=+639XXXXXXXXX
+messenger=https://m.me/ROVELYN_FACEBOOK
+facebook=https://www.facebook.com/ROVELYN_FACEBOOK
