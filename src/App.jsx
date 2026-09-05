@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
 
-const DEFAULT_MESSAGE = `PAUMANHIN AT PAKIUSAP
-
-Kung hindi po kayo agad nasagot sa tawag o mensahe, maaaring nasa trabaho, natutulog, nagmamaneho, o hindi namin napapansin ang notification.
-
-Pakiiwan na lamang po ang inyong mensahe at babalikan namin kayo sa lalong madaling panahon. Maraming salamat po sa inyong pang-unawa.`;
-
 function parseProfileInfo(text) {
   const profiles = {};
   let currentSection = null;
@@ -19,7 +13,9 @@ function parseProfileInfo(text) {
       continue;
     }
 
-    const sectionMatch = line.match(/^\[([^\]]+)\](?:\[([^\]]+)\])?$/);
+    const sectionMatch = line.match(
+      /^\[([^\]]+)\](?:\[([^\]]+)\])?$/
+    );
 
     if (sectionMatch) {
       const profileName = sectionMatch[1].trim().toLowerCase();
@@ -39,7 +35,9 @@ function parseProfileInfo(text) {
           data: {},
         };
 
-        profiles[profileName].others.push(currentSection.data);
+        profiles[profileName].others.push(
+          currentSection.data
+        );
       } else {
         currentSection = {
           type: "main",
@@ -73,12 +71,19 @@ function parseProfileInfo(text) {
 }
 
 function getProfileName() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("profile")?.trim() || "jeffrey";
+  const params = new URLSearchParams(
+    window.location.search
+  );
+
+  return (
+    params.get("profile")?.trim() || "jeffrey"
+  );
 }
 
 function getPhoto(photo) {
-  if (!photo) return null;
+  if (!photo) {
+    return null;
+  }
 
   if (
     photo.startsWith("http://") ||
@@ -91,15 +96,34 @@ function getPhoto(photo) {
   return `/${photo}`;
 }
 
-function ContactButton({ href, icon, label, main = false }) {
-  if (!href) return null;
+function ContactButton({
+  href,
+  icon,
+  label,
+  main = false,
+}) {
+  if (!href) {
+    return null;
+  }
 
   return (
     <a
-      className={main ? "main-icon-button" : "other-contact-button"}
+      className={
+        main
+          ? "main-icon-button"
+          : "other-contact-button"
+      }
       href={href}
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+      target={
+        href.startsWith("http")
+          ? "_blank"
+          : undefined
+      }
+      rel={
+        href.startsWith("http")
+          ? "noopener noreferrer"
+          : undefined
+      }
       aria-label={label}
       title={label}
     >
@@ -112,17 +136,24 @@ function MainContacts({ profile }) {
   return (
     <section className="main-contacts">
       <div className="main-contact-row">
+
+        {/* CALL */}
         {profile.phone && (
           <a
             className="call-button"
             href={`tel:${profile.phone}`}
             aria-label="Call"
+            title="Call"
           >
             <i className="fa-solid fa-phone"></i>
-            <span className="call-label">Call</span>
+
+            <span className="call-label">
+              Call
+            </span>
           </a>
         )}
 
+        {/* SMS */}
         {profile.sms && (
           <ContactButton
             href={`sms:${profile.sms}`}
@@ -132,6 +163,7 @@ function MainContacts({ profile }) {
           />
         )}
 
+        {/* MESSENGER */}
         {profile.messenger && (
           <ContactButton
             href={profile.messenger}
@@ -141,6 +173,7 @@ function MainContacts({ profile }) {
           />
         )}
 
+        {/* FACEBOOK */}
         {profile.facebook && (
           <ContactButton
             href={profile.facebook}
@@ -150,6 +183,7 @@ function MainContacts({ profile }) {
           />
         )}
 
+        {/* EMAIL */}
         {profile.email && (
           <ContactButton
             href={`mailto:${profile.email}`}
@@ -159,6 +193,7 @@ function MainContacts({ profile }) {
           />
         )}
 
+        {/* GOOGLE MAPS */}
         {profile.maps && (
           <ContactButton
             href={profile.maps}
@@ -167,6 +202,7 @@ function MainContacts({ profile }) {
             main
           />
         )}
+
       </div>
     </section>
   );
@@ -177,12 +213,17 @@ function OtherProfile({ person }) {
 
   return (
     <div className="other-profile">
+
       <div className="other-info">
+
+        {/* PHOTO */}
         {photo ? (
           <img
             className="other-photo"
             src={photo}
-            alt={person.name || "Profile"}
+            alt={
+              person.name || "Profile"
+            }
           />
         ) : (
           <div className="other-photo default-other-profile">
@@ -190,9 +231,12 @@ function OtherProfile({ person }) {
           </div>
         )}
 
+        {/* NAME + SUBTITLE */}
         <div className="other-text">
+
           <h3 className="other-name">
-            {person.name || "Unnamed Profile"}
+            {person.name ||
+              "Unnamed Profile"}
           </h3>
 
           {person.subtitle && (
@@ -200,10 +244,13 @@ function OtherProfile({ person }) {
               {person.subtitle}
             </div>
           )}
+
         </div>
       </div>
 
+      {/* OTHER CONTACT BUTTONS */}
       <div className="other-actions">
+
         {person.phone && (
           <ContactButton
             href={`tel:${person.phone}`}
@@ -251,6 +298,7 @@ function OtherProfile({ person }) {
             label="Google Maps"
           />
         )}
+
       </div>
     </div>
   );
@@ -266,20 +314,36 @@ function App() {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Profile.info not found");
+          throw new Error(
+            "Profile.info not found"
+          );
         }
 
         return response.text();
       })
       .then((text) => {
-        setProfiles(parseProfileInfo(text));
+        setProfiles(
+          parseProfileInfo(text)
+        );
       })
       .catch((err) => {
         console.error(err);
-        setError("Hindi ma-load ang Profile.info.");
+        setError(
+          "Hindi ma-load ang Profile.info."
+        );
       });
   }, []);
 
+  {/* LOADING */}
+  if (!profiles && !error) {
+    return (
+      <div className="loading">
+        Loading...
+      </div>
+    );
+  }
+
+  {/* ERROR */}
   if (error) {
     return (
       <div className="error">
@@ -289,40 +353,61 @@ function App() {
     );
   }
 
-  if (!profiles) {
-    return <div className="loading">Loading...</div>;
-  }
+  const profileName =
+    getProfileName().toLowerCase();
 
-  const profileName = getProfileName().toLowerCase();
-  const profile = profiles[profileName]?.main;
-  const others = profiles[profileName]?.others || [];
+  const profile =
+    profiles[profileName]?.main;
 
+  const others =
+    profiles[profileName]?.others || [];
+
+  {/* PROFILE NOT FOUND */}
   if (!profile) {
     return (
       <div className="error">
         <h1>Profile Not Found</h1>
+
         <p>
-          Walang profile na <strong>{getProfileName()}</strong>.
+          Walang profile na{" "}
+          <strong>
+            {getProfileName()}
+          </strong>
+          .
         </p>
       </div>
     );
   }
 
-  const photo = getPhoto(profile.photo);
+  const photo =
+    getPhoto(profile.photo);
 
+  /*
+   * IMPORTANT:
+   * WALA NANG DEFAULT MESSAGE.
+   * Lalabas lang ang Message section
+   * kapag may message= sa Profile.info.
+   */
   const message =
-    profile.message?.trim() || DEFAULT_MESSAGE;
+    profile.message?.trim();
 
   return (
     <main className="profile-page">
+
       <div className="main-profile">
 
-        {/* PROFILE */}
+        {/* =========================
+            PROFILE
+        ========================== */}
+
         {photo ? (
           <img
             className="profile-photo"
             src={photo}
-            alt={profile.name || "Profile"}
+            alt={
+              profile.name ||
+              "Profile"
+            }
           />
         ) : (
           <div className="profile-photo default-profile">
@@ -331,7 +416,8 @@ function App() {
         )}
 
         <h1>
-          {profile.name || "Unnamed Profile"}
+          {profile.name ||
+            "Unnamed Profile"}
         </h1>
 
         {profile.subtitle && (
@@ -340,54 +426,103 @@ function App() {
           </div>
         )}
 
-        {(profile.address || profile.city) && (
+        {(profile.address ||
+          profile.city) && (
           <div className="location">
+
             <i className="fa-solid fa-location-dot"></i>{" "}
-            {[profile.address, profile.city]
+
+            {[
+              profile.address,
+              profile.city,
+            ]
               .filter(Boolean)
               .join(", ")}
+
           </div>
         )}
 
-        {/* CONTACT — MAUNA */}
-        <MainContacts profile={profile} />
+        {/* =========================
+            CONTACT
+            MAUNA
+        ========================== */}
 
-        {/* MESSAGE — SUNOD SA CONTACT */}
-        <section className="lost-message">
-          <div className="lost-message-title">
-            <i className="fa-solid fa-message"></i>
-            PAUMANHIN AT PAKIUSAP
-          </div>
+        <MainContacts
+          profile={profile}
+        />
 
-          <div className="lost-message-text">
-            {message.split(/\r?\n/).map((line, index) => (
-              <span key={index}>
-                {line}
-                {index < message.split(/\r?\n/).length - 1 && (
-                  <br />
+        {/* =========================
+            MESSAGE
+            SUNOD SA CONTACT
+            LALABAS LANG KUNG MAY
+            message=
+        ========================== */}
+
+        {message && (
+          <section className="lost-message">
+
+            <div className="lost-message-title">
+
+              <i className="fa-solid fa-message"></i>
+
+              PAUMANHIN AT PAKIUSAP
+
+            </div>
+
+            <div className="lost-message-text">
+
+              {message
+                .split(/\r?\n/)
+                .map(
+                  (line, index, lines) => (
+                    <span key={index}>
+
+                      {line}
+
+                      {index <
+                        lines.length - 1 && (
+                        <br />
+                      )}
+
+                    </span>
+                  )
                 )}
-              </span>
-            ))}
-          </div>
-        </section>
 
-        {/* OTHER PEOPLE — HULI */}
+            </div>
+
+          </section>
+        )}
+
+        {/* =========================
+            OTHER PEOPLE
+            HULI
+        ========================== */}
+
         {others.length > 0 && (
           <section className="other-section">
-            <h2>Other People</h2>
+
+            <h2>
+              Other People
+            </h2>
 
             <div className="other-list">
-              {others.map((person, index) => (
-                <OtherProfile
-                  key={index}
-                  person={person}
-                />
-              ))}
+
+              {others.map(
+                (person, index) => (
+                  <OtherProfile
+                    key={index}
+                    person={person}
+                  />
+                )
+              )}
+
             </div>
+
           </section>
         )}
 
       </div>
+
     </main>
   );
 }
