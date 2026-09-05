@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Facebook Share Resolver</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f1f3f5;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 25px;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.12);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 24px;
+    }
+
+    .description {
+      margin-bottom: 20px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      font-size: 16px;
+    }
+
+    input:focus {
+      border-color: #1877f2;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 12px;
+      padding: 13px;
+      border: 0;
+      border-radius: 8px;
+      background: #1877f2;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .result {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .success {
+      background: #e8f5e9;
+    }
+
+    .error {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .info {
+      background: #fff8e1;
+      color: #795548;
+    }
+
+    .username {
+      margin-top: 10px;
+      padding: 12px;
+      background: white;
+      border-radius: 7px;
+      font-size: 18px;
+      font-weight: bold;
+      word-break: break-all;
+    }
+
+    .url {
+      margin-top: 10px;
+      font-size: 13px;
+      word-break: break-all;
+    }
+
+    code {
+      word-break: break-all;
+    }
+
+    #copyButton {
+      display: none;
+      background: #333;
+    }
+
+    #openButton {
+      display: none;
+      background: #1877f2;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 15px;
+      text-align: center;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Facebook Share Resolver</h1>
+
+  <div class="description">
+    Paste a Facebook profile or share link and try to
+    detect the final Facebook username.
+  </div>
+
+  <label for="facebookUrl">
+    Facebook URL
+  </label>
+
+  <input
+    type="text"
+    id="facebookUrl"
+    placeholder="https://www.facebook.com/share/..."
+    autocomplete="off"
+  >
+
+  <button
+    id="resolveButton"
+    onclick="resolveFacebook()"
+  >
+    Get Facebook Username
+  </button>
+
+  <div
+    id="loading"
+    class="loading"
+  >
+    Resolving Facebook link...
+  </div>
+
+  <div
+    id="result"
+    class="result"
+  ></div>
+
+  <button
+    id="copyButton"
+    onclick="copyUsername()"
+  >
+    Copy Username
+  </button>
+
+  <button
+    id="openButton"
+    onclick="openFacebook()"
+  >
+    Open Facebook Link
+  </button>
+
+</div>
+
+
+<script>
+
+let foundUsername = "";
+let finalFacebookUrl = "";
+
+
+/* ================================
+   MAIN
+================================ */
+
+async function resolveFacebook() {
+
+  const input =
+    document.getElementById("facebookUrl");
+
+  const button =
+    document.getElementById("resolveButton");
+
+  const loading =
+    document.getElementById("loading");
+
+  const result =
+    document.getElementById("result");
+
+  const copyButton =
+    document.getElementById("copyButton");
+
+  const openButton =
+    document.getElementById("openButton");
+
+  const originalUrl =
+    input.value.trim();
+
+
+  foundUsername = "";
+  finalFacebookUrl = "";
+
+  result.style.display = "none";
+  copyButton.style.display = "none";
+  openButton.style.display = "none";
+
+
+  if (!originalUrl) {
+
+    showResult(
+      "error",
+      "Please paste a Facebook URL."
+    );
+
+    return;
+  }
+
+
+  let url;
+
+  try {
+
+    url = new URL(originalUrl);
+
+  } catch {
+
+    showResult(
+      "error",
+      "Invalid URL."
+    );
+
+    return;
+  }
+
+
+  /*
+    Check Facebook domain
+  */
+
+  if (!isFacebookDomain(url.hostname)) {
+
+    showResult(
+      "error",
+      "This is not a Facebook URL."
+    );
+
+    return;
+  }
+
+
+  /*
+    Direct profile first
+  */
+
+  const direct =
+    extractUsername(url);
+
+  if (direct) {
+
+    foundUsername = direct;
+    finalFacebookUrl = url.href;
+
+    showSuccess(
+      direct,
+      url.href
+    );
+
+    return;
+  }
+
+
+  /*
+    Try fetch redirect
+  */
+
+  button.disabled = true;
+  loading.style.display = "block";
+
+  try {
+
+    const response =
+      await fetch(originalUrl, {
+        method: "GET",
+        redirect: "follow",
+        credentials: "omit"
+      });
+
+
+    /*
+      If browser allows reading
+      the redirected response
+    */
+
+    const finalUrl =
+      response.url;
+
+
+    if (finalUrl) {
+
+      const parsed =
+        new URL(finalUrl);
+
+      const username =
+        extractUsername(parsed);
+
+
+      if (username) {
+
+        foundUsername = username;
+        finalFacebookUrl = finalUrl;
+
+        loading.style.display = "none";
+        button.disabled = false;
+
+        showSuccess(
+          username,
+          finalUrl
+        );
+
+        return;
+      }
+    }
+
+
+    /*
+      Fetch worked but username
+      wasn't found
+    */
+
+    loading.style.display = "none";
+    button.disabled = false;
+
+    showInfo(
+      "Facebook redirected the link, " +
+      "but the browser could not expose " +
+      "the final profile username."
+    );
+
+
+    openButton.style.display = "block";
+
+  } catch (error) {
+
+    /*
+      Usually CORS will reach here.
+    */
+
+    console.log(
+      "Fetch failed:",
+      error
+    );
+
+
+    loading.style.display = "none";
+    button.disabled = false;
+
+
+    showInfo(
+      "Facebook blocked browser access to " +
+      "the redirect (CORS/security restriction)."
+    );
+
+
+    openButton.style.display = "block";
+  }
+
+}
+
+
+/* ================================
+   FACEBOOK DOMAIN
+================================ */
+
+function isFacebookDomain(hostname) {
+
+  hostname =
+    hostname.toLowerCase();
+
+  return (
+    hostname === "facebook.com" ||
+    hostname === "www.facebook.com" ||
+    hostname === "m.facebook.com" ||
+    hostname === "mbasic.facebook.com"
+  );
+}
+
+
+/* ================================
+   EXTRACT USERNAME
+================================ */
+
+function extractUsername(url) {
+
+  const pathname =
+    url.pathname
+      .split("/")
+      .filter(Boolean);
+
+
+  /*
+    profile.php?id=...
+  */
+
+  if (
+    url.pathname
+      .toLowerCase()
+      .includes("profile.php")
+  ) {
+
+    const id =
+      url.searchParams.get("id");
+
+    if (id) {
+      return id;
+    }
+  }
+
+
+  /*
+    Special Facebook paths
+  */
+
+  const ignored = [
+
+    "share",
+    "sharer",
+    "watch",
+    "reel",
+    "reels",
+    "stories",
+    "story",
+    "groups",
+    "pages",
+    "marketplace",
+    "events",
+    "photo",
+    "photos",
+    "video",
+    "videos",
+    "gaming",
+    "messages",
+    "friends",
+    "notifications",
+    "settings",
+    "help",
+    "login",
+    "logout",
+    "home"
+
+  ];
+
+
+  /*
+    /username
+  */
+
+  if (pathname.length === 1) {
+
+    const username =
+      pathname[0];
+
+    if (
+      !ignored.includes(
+        username.toLowerCase()
+      )
+    ) {
+
+      return username;
+    }
+  }
+
+
+  return null;
+}
+
+
+/* ================================
+   SUCCESS
+================================ */
+
+function showSuccess(
+  username,
+  url
+) {
+
+  const result =
+    document.getElementById("result");
+
+  const copyButton =
+    document.getElementById("copyButton");
+
+  result.className =
+    "result success";
+
+  result.innerHTML = `
+    <strong>Facebook Username Found</strong>
+
+    <div class="username">
+      ${escapeHtml(username)}
+    </div>
+
+    <div class="url">
+      Final URL:<br>
+      <code>${escapeHtml(url)}</code>
+    </div>
+  `;
+
+  result.style.display = "block";
+
+  copyButton.style.display =
+    "block";
+}
+
+
+/* ================================
+   INFO
+================================ */
+
+function showInfo(message) {
+
+  const result =
+    document.getElementById("result");
+
+  result.className =
+    "result info";
+
+  result.innerHTML =
+    escapeHtml(message);
+
+  result.style.display =
+    "block";
+}
+
+
+/* ================================
+   RESULT
+================================ */
+
+function showResult(
+  type,
+  message
+) {
+
+  const result =
+    document.getElementById("result");
+
+  result.className =
+    "result " + type;
+
+  result.innerHTML =
+    escapeHtml(message);
+
+  result.style.display =
+    "block";
+}
+
+
+/* ================================
+   COPY
+================================ */
+
+async function copyUsername() {
+
+  if (!foundUsername) {
+    return;
+  }
+
+  try {
+
+    await navigator.clipboard.writeText(
+      foundUsername
+    );
+
+    const button =
+      document.getElementById("copyButton");
+
+    const old =
+      button.textContent;
+
+    button.textContent =
+      "Copied!";
+
+    setTimeout(() => {
+
+      button.textContent =
+        old;
+
+    }, 1500);
+
+  } catch {
+
+    alert(
+      "Unable to copy username."
+    );
+  }
+}
+
+
+/* ================================
+   OPEN FACEBOOK
+================================ */
+
+function openFacebook() {
+
+  const input =
+    document.getElementById("facebookUrl");
+
+  const url =
+    input.value.trim();
+
+  if (!url) {
+    return;
+  }
+
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
+  );
+}
+
+
+/* ================================
+   ESCAPE HTML
+================================ */
+
+function escapeHtml(text) {
+
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+/* ================================
+   ENTER KEY
+================================ */
+
+document
+  .getElementById("facebookUrl")
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+
+        resolveFacebook();
+
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
