@@ -1043,97 +1043,332 @@ a {
 }
 
 
-/* =========================
-   QR IMAGE
-========================= */
+    /* =========================================================
+   QR CODE BUTTON
+========================================================= */
 
-.qr-image {
-  width: min(75vw, 300px);
+.qr-button {
+  position: fixed;
 
-  height: min(75vw, 300px);
+  top: 16px;
+  right: 16px;
 
-  margin: 0 auto;
+  width: 46px;
+  height: 46px;
 
-  object-fit: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  border-radius: 8px;
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  z-index: 1000;
+
+  font-size: 21px;
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.qr-button:active {
+  transform: scale(0.90);
+  opacity: 0.7;
 }
 
 
-/* =========================
-   QR LOADING
-========================= */
+/* =========================================================
+   QR OVERLAY
+========================================================= */
 
-.qr-loading {
-  width: min(75vw, 300px);
+.qr-overlay {
+  position: fixed;
 
-  height: min(75vw, 300px);
+  inset: 0;
 
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
 
-  border-radius: 8px;
+  padding: 16px;
 
-  font-size: 15px;
+  z-index: 2000;
+
+  background: rgba(0, 0, 0, 0.60);
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 
-/* =========================
+/* =========================================================
+   QR POPUP
+========================================================= */
+
+.qr-modal {
+  position: relative;
+
+  width: 100%;
+
+  max-width: 330px;
+
+  max-height: 90vh;
+
+  padding:
+    20px
+    15px
+    17px;
+
+  border-radius: 20px;
+
+  text-align: center;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 15px 50px
+    rgba(0, 0, 0, 0.35);
+
+  animation:
+    qrModalIn
+    0.18s
+    ease-out;
+}
+
+
+/* =========================================================
+   POPUP ANIMATION
+========================================================= */
+
+@keyframes qrModalIn {
+
+  from {
+    opacity: 0;
+
+    transform:
+      scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      scale(1);
+  }
+
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.qr-close {
+  position: absolute;
+
+  top: 9px;
+  right: 9px;
+
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  font-size: 17px;
+
+  z-index: 2;
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.qr-close:active {
+  transform: scale(0.88);
+
+  opacity: 0.7;
+}
+
+
+/* =========================================================
+   QR TITLE
+========================================================= */
+
+.qr-title {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  margin:
+    2px
+    0
+    14px;
+
+  padding:
+    0
+    35px;
+
+  font-size: 18px;
+
+  line-height: 1.3;
+
+  font-weight: 700;
+}
+
+.qr-title i {
+  font-size: 19px;
+}
+
+
+/* =========================================================
+   QR IMAGE
+========================================================= */
+
+.qr-image {
+  display: block;
+
+  width: 210px;
+  height: 210px;
+
+  max-width: 68vw;
+  max-height: 68vw;
+
+  margin:
+    0
+    auto;
+
+  padding: 0;
+
+  object-fit: contain;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   QR LOADING
+========================================================= */
+
+.qr-loading {
+  width: 210px;
+  height: 210px;
+
+  max-width: 68vw;
+  max-height: 68vw;
+
+  margin:
+    0
+    auto;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
    CURRENT URL
-========================= */
+========================================================= */
 
 .qr-url {
   width: 100%;
 
-  margin-top: 16px;
+  margin:
+    13px
+    0
+    0;
 
   padding:
-    10px
-    12px;
+    8px
+    10px;
 
-  border-radius: 10px;
+  border-radius: 9px;
 
-  font-size: 13px;
+  font-size: 11px;
 
   line-height: 1.4;
+
+  text-align: center;
 
   word-break: break-all;
 
   overflow-wrap: anywhere;
+
+  max-height: 48px;
+
+  overflow: auto;
 }
 
 
-/* =========================
-   DOWNLOAD
-========================= */
+/* =========================================================
+   DOWNLOAD BUTTON
+========================================================= */
 
 .qr-download {
   width: 100%;
 
-  height: 48px;
+  height: 44px;
 
-  margin-top: 15px;
+  margin-top: 12px;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
 
-  gap: 9px;
+  gap: 8px;
 
-  border: 0;
+  padding:
+    0
+    12px;
 
-  border-radius: 12px;
+  border: none;
+
+  border-radius: 11px;
 
   cursor: pointer;
 
-  font-size: 16px;
+  font-size: 15px;
 
   font-weight: 700;
+
+  -webkit-tap-highlight-color: transparent;
 
   transition:
     transform 0.15s ease,
@@ -1146,10 +1381,14 @@ a {
   opacity: 0.75;
 }
 
+.qr-download i {
+  font-size: 15px;
+}
 
-/* =========================
+
+/* =========================================================
    DARK MODE
-========================= */
+========================================================= */
 
 @media (prefers-color-scheme: dark) {
 
@@ -1160,18 +1399,20 @@ a {
 
     box-shadow:
       0 4px 15px
-      rgba(0, 0, 0, 0.3);
+      rgba(0, 0, 0, 0.30);
   }
 
   .qr-button:hover {
     background: #343944;
   }
 
+
   .qr-modal {
     background: #1d2027;
 
     color: #ffffff;
   }
+
 
   .qr-close {
     background: #292d36;
@@ -1183,11 +1424,13 @@ a {
     background: #343944;
   }
 
+
   .qr-loading {
     background: #292d36;
 
     color: #bfc3ca;
   }
+
 
   .qr-url {
     background: #292d36;
@@ -1195,18 +1438,23 @@ a {
     color: #bfc3ca;
   }
 
+
   .qr-download {
     background: #ffffff;
 
     color: #111111;
   }
 
+  .qr-download:hover {
+    background: #e5e7eb;
+  }
+
 }
 
 
-/* =========================
+/* =========================================================
    LIGHT MODE
-========================= */
+========================================================= */
 
 @media (prefers-color-scheme: light) {
 
@@ -1224,11 +1472,13 @@ a {
     background: #d5d7db;
   }
 
+
   .qr-modal {
     background: #ffffff;
 
     color: #111111;
   }
+
 
   .qr-close {
     background: #e1e3e7;
@@ -1240,11 +1490,13 @@ a {
     background: #d5d7db;
   }
 
+
   .qr-loading {
     background: #f1f2f4;
 
     color: #555555;
   }
+
 
   .qr-url {
     background: #f1f2f4;
@@ -1252,20 +1504,25 @@ a {
     color: #555555;
   }
 
+
   .qr-download {
     background: #111111;
 
     color: #ffffff;
   }
 
+  .qr-download:hover {
+    background: #272727;
+  }
+
 }
 
 
-/* =========================
-   SMALL PHONE
-========================= */
+/* =========================================================
+   MOBILE
+========================================================= */
 
-@media (max-width: 390px) {
+@media (max-width: 430px) {
 
   .qr-button {
     top: 12px;
@@ -1277,24 +1534,199 @@ a {
     font-size: 20px;
   }
 
-  .qr-modal {
-    padding:
-      23px
-      15px
-      18px;
 
-    border-radius: 19px;
+  .qr-overlay {
+    padding: 14px;
   }
+
+
+  .qr-modal {
+    width: 92vw;
+
+    max-width: 320px;
+
+    padding:
+      19px
+      13px
+      15px;
+
+    border-radius: 18px;
+  }
+
+
+  .qr-title {
+    font-size: 17px;
+
+    margin-bottom: 12px;
+  }
+
+
+  .qr-title i {
+    font-size: 18px;
+  }
+
 
   .qr-image,
   .qr-loading {
-    width: min(75vw, 270px);
+    width: 195px;
+    height: 195px;
 
-    height: min(75vw, 270px);
+    max-width: 65vw;
+    max-height: 65vw;
   }
 
+
+  .qr-url {
+    font-size: 10px;
+
+    margin-top: 11px;
+
+    padding:
+      7px
+      8px;
+  }
+
+
+  .qr-download {
+    height: 43px;
+
+    margin-top: 10px;
+
+    font-size: 14px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL PHONE
+========================================================= */
+
+@media (max-width: 365px) {
+
+  .qr-button {
+    top: 10px;
+    right: 10px;
+
+    width: 40px;
+    height: 40px;
+
+    font-size: 18px;
+  }
+
+
+  .qr-modal {
+    width: 94vw;
+
+    max-width: 300px;
+
+    padding:
+      17px
+      11px
+      13px;
+  }
+
+
   .qr-title {
-    font-size: 19px;
+    font-size: 16px;
+
+    margin-bottom: 10px;
+  }
+
+
+  .qr-image,
+  .qr-loading {
+    width: 175px;
+    height: 175px;
+
+    max-width: 62vw;
+    max-height: 62vw;
+  }
+
+
+  .qr-url {
+    font-size: 9px;
+
+    max-height: 43px;
+  }
+
+
+  .qr-download {
+    height: 40px;
+
+    font-size: 13px;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONE
+========================================================= */
+
+@media (max-width: 320px) {
+
+  .qr-overlay {
+    padding: 10px;
+  }
+
+
+  .qr-modal {
+    width: 94vw;
+
+    max-width: 285px;
+
+    padding:
+      15px
+      10px
+      12px;
+
+    border-radius: 16px;
+  }
+
+
+  .qr-title {
+    font-size: 15px;
+
+    margin-bottom: 9px;
+  }
+
+
+  .qr-image,
+  .qr-loading {
+    width: 160px;
+    height: 160px;
+
+    max-width: 60vw;
+    max-height: 60vw;
+  }
+
+
+  .qr-url {
+    margin-top: 9px;
+
+    font-size: 8px;
+
+    max-height: 38px;
+  }
+
+
+  .qr-download {
+    height: 38px;
+
+    margin-top: 9px;
+
+    font-size: 12px;
+
+    border-radius: 9px;
+  }
+
+
+  .qr-close {
+    width: 30px;
+    height: 30px;
+
+    font-size: 15px;
   }
 
 }
