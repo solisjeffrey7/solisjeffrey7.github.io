@@ -29,6 +29,7 @@ function parseProfileInfo(text) {
 
     if (otherMatch) {
       current = {};
+
       currentParent =
         otherMatch[1].trim().toLowerCase();
 
@@ -37,6 +38,7 @@ function parseProfileInfo(text) {
       }
 
       others[currentParent].push(current);
+
       continue;
     }
 
@@ -52,6 +54,7 @@ function parseProfileInfo(text) {
       currentParent = key;
 
       profiles[key] = current;
+
       continue;
     }
 
@@ -158,29 +161,32 @@ function MainProfile({ profile }) {
       )}
 
       {/* =========================
-          RESPONSIVE CONTACT ROW
+          MESSAGE / LOST ITEM
       ========================= */}
 
+      {profile.message && (
+        <div className="lost-message">
 
-{profile.message && (
-  <div className="lost-message">
-    <div className="lost-message-title">
-      <i className="fa-solid fa-hand-holding-heart"></i>
-      PAUMANHIN AT PAKIUSAP
-    </div>
+          <div className="lost-message-title">
+            <i className="fa-solid fa-hand-holding-heart"></i>
 
-    <div className="lost-message-text">
-      {profile.message}
-    </div>
-  </div>
-)}
+            PAUMANHIN AT PAKIUSAP
+          </div>
 
+          <div className="lost-message-text">
+            {profile.message}
+          </div>
+
+        </div>
+      )}
+
+      {/* =========================
+          MAIN CONTACTS
+      ========================= */}
 
       <div className="main-contacts">
 
         <div className="main-contact-row">
-
-          {/* CALL */}
 
           {profile.phone && (
             <a
@@ -197,8 +203,6 @@ function MainProfile({ profile }) {
             </a>
           )}
 
-          {/* SMS */}
-
           {profile.sms && (
             <a
               className="main-icon-button"
@@ -209,8 +213,6 @@ function MainProfile({ profile }) {
               <i className="fa-solid fa-comment-sms"></i>
             </a>
           )}
-
-          {/* MESSENGER */}
 
           {profile.messenger && (
             <a
@@ -225,8 +227,6 @@ function MainProfile({ profile }) {
             </a>
           )}
 
-          {/* FACEBOOK */}
-
           {profile.facebook && (
             <a
               className="main-icon-button"
@@ -240,8 +240,6 @@ function MainProfile({ profile }) {
             </a>
           )}
 
-          {/* EMAIL */}
-
           {profile.email && (
             <a
               className="main-icon-button"
@@ -252,8 +250,6 @@ function MainProfile({ profile }) {
               <i className="fa-solid fa-envelope"></i>
             </a>
           )}
-
-          {/* MAPS */}
 
           {profile.maps && (
             <a
@@ -413,6 +409,7 @@ export default function App() {
   useEffect(() => {
     fetch("/Profile.info")
       .then((response) => {
+
         if (!response.ok) {
           throw new Error(
             "Profile.info not found"
@@ -422,19 +419,27 @@ export default function App() {
         return response.text();
       })
       .then((text) => {
+
         const parsed =
           parseProfileInfo(text);
 
         setData(parsed);
+
       })
       .catch((err) => {
+
         console.error(err);
 
         setError(
           "Hindi ma-load ang Profile.info"
         );
+
       });
   }, []);
+
+  /* =========================
+     LOADING
+  ========================= */
 
   if (!data && !error) {
     return (
@@ -444,17 +449,31 @@ export default function App() {
     );
   }
 
+  /* =========================
+     ERROR
+  ========================= */
+
   if (error) {
     return (
       <div className="error">
-        <h1>Error</h1>
+
+        <h1>
+          Error
+        </h1>
 
         <p>
           {error}
         </p>
+
       </div>
     );
   }
+
+  /* =========================
+     GET PROFILE FROM URL
+     
+     ?profile=jeffrey
+========================= */
 
   const params =
     new URLSearchParams(
@@ -472,6 +491,10 @@ export default function App() {
     data.profiles[
       requestedProfile
     ];
+
+  /* =========================
+     PROFILE NOT FOUND
+========================= */
 
   if (!profile) {
     return (
@@ -492,10 +515,18 @@ export default function App() {
     );
   }
 
+  /* =========================
+     OTHER PEOPLE
+========================= */
+
   const profileOthers =
     data.others[
       requestedProfile
     ] || [];
+
+  /* =========================
+     RENDER
+========================= */
 
   return (
     <main className="profile-page">
