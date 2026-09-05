@@ -1,5 +1,5 @@
 /* =========================================================
-   GLOBAL
+   RESET
 ========================================================= */
 
 * {
@@ -7,7 +7,8 @@
 }
 
 html,
-body {
+body,
+#root {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -15,10 +16,13 @@ body {
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #e9e9e9;
-  color: #111;
-  overflow-x: hidden;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 button,
@@ -28,27 +32,19 @@ a {
 
 
 /* =========================================================
-   WHOLE PROFILE = ONE BIG CARD
+   PAGE
 ========================================================= */
 
 .profile-page {
-  width: calc(100% - 32px);
-  max-width: 500px;
+  min-height: 100vh;
+  width: 100%;
 
-  margin: 30px auto;
+  padding:
+    35px
+    18px
+    60px;
 
-  padding: 24px 20px 30px;
-
-  background: #fff;
-
-  border-radius: 24px;
-
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.12);
-
-  box-sizing: border-box;
-
-  overflow: visible;
+  text-align: center;
 }
 
 
@@ -58,108 +54,122 @@ a {
 
 .main-profile {
   width: 100%;
-  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
 }
-
-
-/* =========================================================
-   MAIN PROFILE PHOTO
-========================================================= */
 
 .profile-photo {
-  width: 240px;
-  height: 240px;
-
-  max-width: 100%;
-
-  display: block;
-
-  margin: 0 auto 18px;
-
-  border-radius: 50%;
+  width: 180px;
+  height: 180px;
 
   object-fit: cover;
-  object-position: center;
-
-  overflow: hidden;
-}
-
-
-/* =========================================================
-   DEFAULT MAIN PROFILE
-========================================================= */
-
-.default-profile {
-  width: 240px;
-  height: 240px;
-
-  max-width: 100%;
-
-  margin: 0 auto 18px;
 
   border-radius: 50%;
 
-  display: flex;
+  margin-bottom: 20px;
+
+  display: inline-flex;
+
   align-items: center;
   justify-content: center;
+}
 
-  background: #ddd;
+.default-profile {
+  width: 180px;
+  height: 180px;
+
+  background: #d9dce1;
   color: #777;
 
-  font-size: 90px;
+  font-size: 75px;
+
+  border-radius: 50%;
+
+  margin: 0 auto 20px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
 }
-
-
-/* =========================================================
-   NAME
-========================================================= */
 
 .profile-page h1 {
-  width: 100%;
-
   margin: 0;
 
-  font-size: 32px;
-  line-height: 1.15;
+  font-size: 40px;
+
+  line-height: 1.2;
+
   font-weight: 700;
 
-  overflow-wrap: break-word;
   word-break: normal;
 }
-
-
-/* =========================================================
-   SUBTITLE
-========================================================= */
 
 .subtitle {
-  width: 100%;
+  margin-top: 8px;
 
-  margin-top: 7px;
+  font-size: 22px;
+
+  font-weight: 500;
+}
+
+.location {
+  margin-top: 18px;
+  margin-bottom: 28px;
 
   font-size: 19px;
-  line-height: 1.4;
 
-  opacity: 0.75;
+  line-height: 1.6;
+}
 
-  overflow-wrap: break-word;
+.location i {
+  margin-right: 4px;
 }
 
 
 /* =========================================================
-   LOCATION
+   LOST MESSAGE
 ========================================================= */
 
-.location {
+.lost-message {
   width: 100%;
+  max-width: 630px;
 
-  margin-top: 10px;
+  margin:
+    25px
+    auto;
 
+  padding:
+    17px
+    18px;
+
+  border-radius: 15px;
+
+  text-align: left;
+}
+
+.lost-message-title {
   font-size: 17px;
-  line-height: 1.5;
+
+  font-weight: 700;
+
+  margin-bottom: 9px;
+}
+
+.lost-message-title i {
+  margin-right: 0;
+}
+
+.lost-message-text {
+  font-size: 16px;
+
+  line-height: 1.55;
+
+  white-space: normal;
+
+  word-break: normal;
 
   overflow-wrap: anywhere;
-  word-break: normal;
 }
 
 
@@ -170,7 +180,9 @@ a {
 .main-contacts {
   width: 100%;
 
-  margin-top: 22px;
+  margin-top: 10px;
+
+  overflow: hidden;
 }
 
 .main-contact-row {
@@ -178,191 +190,161 @@ a {
 
   display: flex;
 
-  justify-content: center;
   align-items: center;
 
-  gap: 10px;
+  justify-content: center;
 
-  flex-wrap: wrap;
+  gap: clamp(4px, 1.8vw, 10px);
+
+  flex-wrap: nowrap;
+
+  max-width: 100%;
+
+  overflow: hidden;
 }
 
 
 /* =========================================================
-   CONTACT BUTTONS
+   CALL BUTTON
 ========================================================= */
 
-.call-button,
-.main-icon-button {
-  min-height: 52px;
+.call-button {
+  width: auto;
 
-  border: none;
+  min-width: 0;
 
-  border-radius: 14px;
+  max-width: 100px;
+
+  height: 48px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  padding:
+    0
+    14px;
+
+  border-radius: 13px;
 
   text-decoration: none;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 18px;
 
-  cursor: pointer;
+  font-weight: 700;
+
+  flex:
+    0
+    1
+    auto;
+
+  flex-shrink: 1;
+
+  white-space: nowrap;
+
+  overflow: hidden;
 
   transition:
     transform 0.15s ease,
     opacity 0.15s ease;
 }
 
+.call-button i {
+  font-size: 19px;
 
-/* CALL */
-
-.call-button {
-  padding: 0 20px;
-
-  gap: 9px;
-
-  font-size: 18px;
-  font-weight: 700;
-
-  background: #111;
-  color: #fff;
+  flex-shrink: 0;
 }
 
 .call-label {
-  display: inline;
+  white-space: nowrap;
+
+  overflow: hidden;
 }
 
-
-/* MAIN ICON */
-
-.main-icon-button {
-  width: 52px;
-
-  font-size: 21px;
-
-  background: #e9e9e9;
-  color: #111;
-}
-
-
-/* PRESS EFFECT */
-
-.call-button:active,
-.main-icon-button:active,
-.other-contact-button:active {
+.call-button:active {
   transform: scale(0.94);
+
+  opacity: 0.75;
 }
 
 
 /* =========================================================
-   LOST MESSAGE
+   MAIN ICON BUTTONS
 ========================================================= */
 
-.lost-message {
-  width: 100%;
-  max-width: 100%;
+.main-icon-button {
+  width: 48px;
+  height: 48px;
 
-  height: auto;
-  min-height: 0;
+  display: inline-flex;
 
-  margin-top: 22px;
+  align-items: center;
+  justify-content: center;
 
-  padding: 16px;
+  border-radius: 50%;
 
-  border-radius: 16px;
+  text-decoration: none;
 
-  background: #f3f3f3;
+  font-size: 20px;
 
-  text-align: left;
+  flex:
+    0
+    1
+    auto;
 
-  box-sizing: border-box;
+  flex-shrink: 1;
 
-  /*
-    Important:
-    Do NOT hide the message.
-  */
-  overflow: visible;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
 }
 
+.main-icon-button:active {
+  transform: scale(0.9);
 
-/* MESSAGE TITLE */
-
-.lost-message-title {
-  display: block;
-
-  width: 100%;
-  max-width: 100%;
-
-  margin: 0 0 8px;
-
-  font-size: 17px;
-  line-height: 1.4;
-
-  font-weight: 700;
-
-  white-space: normal;
-
-  overflow-wrap: anywhere;
-  word-wrap: break-word;
-  word-break: normal;
-}
-
-
-/* MESSAGE TEXT */
-
-.lost-message-text {
-  display: block;
-
-  width: 100%;
-  max-width: 100%;
-
-  min-width: 0;
-
-  height: auto;
-  min-height: 0;
-
-  margin: 0;
-  padding: 0;
-
-  font-size: 17px;
-  line-height: 1.6;
-
-  white-space: normal;
-
-  overflow: visible;
-
-  overflow-wrap: anywhere;
-  word-wrap: break-word;
-  word-break: normal;
-
-  box-sizing: border-box;
+  opacity: 0.7;
 }
 
 
 /* =========================================================
-   OTHER PEOPLE
+   OTHER CONTACTS
 ========================================================= */
 
 .other-section {
   width: 100%;
 
-  margin-top: 32px;
+  max-width: 630px;
+
+  margin:
+    50px
+    auto
+    0;
+
+  text-align: left;
 }
 
 .other-section h2 {
-  width: 100%;
+  margin:
+    0
+    0
+    18px;
 
-  margin: 0 0 14px;
+  font-size: 23px;
 
-  font-size: 22px;
   line-height: 1.3;
 
-  font-weight: 700;
+  text-align: left;
 }
 
 .other-list {
   width: 100%;
 
   display: flex;
+
   flex-direction: column;
 
   gap: 12px;
@@ -371,44 +353,44 @@ a {
 
 /* =========================================================
    OTHER PROFILE
+
+   LAYOUT:
+
+   PHOTO | NAME
+         | SUBTITLE
+         | CONTACT ICONS
 ========================================================= */
 
 .other-profile {
   width: 100%;
-  max-width: 100%;
 
-  display: flex;
+  padding:
+    16px
+    15px;
+
+  border-radius: 14px;
+
+  text-align: left;
+
+  display: grid;
+
+  grid-template-columns: 88px minmax(0, 1fr);
+
+  column-gap: 16px;
 
   align-items: center;
-
-  gap: 12px;
-
-  padding: 12px;
-
-  border-radius: 16px;
-
-  background: #f3f3f3;
-
-  box-sizing: border-box;
-
-  min-width: 0;
 }
 
 
 /* =========================================================
    OTHER INFO
+
+   display: contents makes the PHOTO and TEXT become
+   direct grid items of .other-profile
 ========================================================= */
 
 .other-info {
-  min-width: 0;
-
-  flex: 1;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
+  display: contents;
 }
 
 
@@ -417,41 +399,48 @@ a {
 ========================================================= */
 
 .other-photo {
-  width: 58px;
-  height: 58px;
+  width: 78px;
+  height: 78px;
 
-  flex: 0 0 58px;
-
-  border-radius: 50%;
+  flex-shrink: 0;
 
   object-fit: cover;
-  object-position: center;
-
-  display: block;
-}
-
-
-/* =========================================================
-   DEFAULT OTHER PHOTO
-========================================================= */
-
-.default-other-profile {
-  width: 58px;
-  height: 58px;
-
-  flex: 0 0 58px;
 
   border-radius: 50%;
 
-  background: #ddd;
+  display: block;
+
+  grid-column: 1;
+
+  grid-row: 1 / 4;
+
+  align-self: center;
+}
+
+.default-other-profile {
+  width: 78px;
+  height: 78px;
+
+  flex-shrink: 0;
+
+  background: #d9dce1;
+
   color: #777;
+
+  font-size: 30px;
+
+  border-radius: 50%;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
 
-  font-size: 26px;
+  grid-column: 1;
+
+  grid-row: 1 / 4;
+
+  align-self: center;
 }
 
 
@@ -460,91 +449,116 @@ a {
 ========================================================= */
 
 .other-text {
+  width: 100%;
+
   min-width: 0;
 
-  flex: 1;
+  text-align: left;
+
+  grid-column: 2;
+
+  grid-row: 1 / 3;
+
+  align-self: center;
 }
 
 .other-name {
   width: 100%;
 
-  font-size: 18px;
-  line-height: 1.25;
+  margin: 0;
+
+  font-size: 20px;
+
+  line-height: 1.3;
 
   font-weight: 700;
 
-  overflow-wrap: anywhere;
+  white-space: normal;
+
+  overflow: visible;
+
+  text-overflow: unset;
+
   word-break: normal;
+
+  overflow-wrap: anywhere;
 }
 
 .other-subtitle {
-  width: 100%;
+  margin-top: 4px;
 
-  margin-top: 3px;
+  font-size: 16px;
 
-  font-size: 15px;
-  line-height: 1.3;
+  line-height: 1.4;
 
-  opacity: 0.7;
+  white-space: normal;
 
-  overflow-wrap: anywhere;
-  word-break: normal;
+  overflow: visible;
+
+  color: #666;
 }
 
 
 /* =========================================================
-   OTHER ACTIONS
+   OTHER CONTACT ICONS
+
+   ICONS ARE UNDER NAME/SUBTITLE
 ========================================================= */
 
 .other-actions {
+  width: 100%;
+
+  grid-column: 2;
+
+  grid-row: 3;
+
   display: flex;
 
   align-items: center;
 
-  gap: 6px;
+  justify-content: flex-start;
 
-  flex-shrink: 0;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top: 8px;
 }
 
-
-/* =========================================================
-   OTHER CONTACT BUTTON
-========================================================= */
-
 .other-contact-button {
-  width: 40px;
-  height: 40px;
-
-  flex-shrink: 0;
-
-  border-radius: 11px;
+  width: 42px;
+  height: 42px;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
 
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
   text-decoration: none;
 
-  background: #e9e9e9;
-  color: #111;
-
-  font-size: 17px;
+  font-size: 18px;
 
   transition:
     transform 0.15s ease,
     opacity 0.15s ease;
 }
 
+.other-contact-button:active {
+  transform: scale(0.9);
+
+  opacity: 0.7;
+}
+
 
 /* =========================================================
-   LOADING / ERROR
+   LOADING
 ========================================================= */
 
-.loading,
-.error {
-  width: 100%;
-
+.loading {
   min-height: 100vh;
 
   display: flex;
@@ -554,313 +568,184 @@ a {
 
   padding: 20px;
 
-  text-align: center;
-
-  font-size: 18px;
-
-  box-sizing: border-box;
+  font-size: 22px;
 }
 
 
 /* =========================================================
-   MOBILE - 430px
+   ERROR
+========================================================= */
+
+.error {
+  min-height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  text-align: center;
+}
+
+.error h1 {
+  margin-bottom: 8px;
+
+  font-size: 32px;
+}
+
+.error p {
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   MOBILE
 ========================================================= */
 
 @media (max-width: 430px) {
 
   .profile-page {
-    width: calc(100% - 20px);
-
-    margin: 10px auto;
-
-    padding: 20px 14px 26px;
-
-    border-radius: 22px;
+    padding:
+      30px
+      12px
+      50px;
   }
 
-
-  /* MAIN PHOTO */
-
-  .profile-photo {
-    width: 240px;
-    height: 240px;
-
-    max-width: calc(100vw - 40px);
-
-    border-radius: 50%;
-
-    object-fit: cover;
-  }
-
-
-  .default-profile {
-    width: 240px;
-    height: 240px;
-
-    max-width: calc(100vw - 40px);
-  }
-
-
-  /* TEXT */
-
-  .profile-page h1 {
-    font-size: 30px;
-  }
-
-  .subtitle {
-    font-size: 18px;
-  }
-
-  .location {
-    font-size: 16px;
-  }
-
-
-  /* CONTACT */
-
-  .main-contact-row {
-    gap: 8px;
-  }
-
-  .call-button {
-    min-height: 50px;
-
-    padding: 0 17px;
-  }
-
-  .main-icon-button {
-    width: 50px;
-    height: 50px;
-  }
-
-
-  /* MESSAGE */
-
-  .lost-message {
-    width: 100%;
-
-    padding: 14px;
-
-    height: auto;
-
-    overflow: visible;
-  }
-
-  .lost-message-title {
-    font-size: 16px;
-  }
-
-  .lost-message-text {
-    width: 100%;
-
-    font-size: 16px;
-    line-height: 1.55;
-
-    white-space: normal;
-
-    overflow: visible;
-
-    overflow-wrap: anywhere;
-    word-wrap: break-word;
-    word-break: normal;
-  }
-
-
-  /* OTHER */
-
-  .other-profile {
-    width: 100%;
-
-    padding: 10px;
-  }
-
-  .other-photo,
-  .default-other-profile {
-    width: 54px;
-    height: 54px;
-
-    flex-basis: 54px;
-  }
-
-  .other-name {
-    font-size: 17px;
-  }
-
-  .other-subtitle {
-    font-size: 14px;
-  }
-
-  .other-contact-button {
-    width: 38px;
-    height: 38px;
-  }
-}
-
-
-/* =========================================================
-   SMALL MOBILE - 365px
-========================================================= */
-
-@media (max-width: 365px) {
-
-  .profile-page {
-    width: calc(100% - 14px);
-
-    margin: 7px auto;
-
-    padding: 18px 11px 24px;
-
-    border-radius: 20px;
-  }
-
-
-  /* MAIN PHOTO */
-
-  .profile-photo {
-    width: 220px;
-    height: 220px;
-
-    max-width: calc(100vw - 30px);
-  }
-
-  .default-profile {
-    width: 220px;
-    height: 220px;
-
-    max-width: calc(100vw - 30px);
-  }
-
-
-  .profile-page h1 {
-    font-size: 27px;
-  }
-
-
-  .subtitle {
-    font-size: 17px;
-  }
-
-  .location {
-    font-size: 15px;
-  }
-
-
-  /* CONTACT */
-
-  .call-button {
-    padding: 0 14px;
-
-    font-size: 17px;
-  }
-
-  .main-icon-button {
-    width: 46px;
-    height: 46px;
-  }
-
-
-  /* MESSAGE */
-
-  .lost-message {
-    padding: 13px;
-  }
-
-  .lost-message-title {
-    font-size: 16px;
-  }
-
-  .lost-message-text {
-    font-size: 15px;
-
-    line-height: 1.55;
-  }
-
-
-  /* OTHER */
-
-  .other-actions {
-    gap: 4px;
-  }
-
-  .other-contact-button {
-    width: 35px;
-    height: 35px;
-
-    font-size: 15px;
-  }
-}
-
-
-/* =========================================================
-   VERY SMALL MOBILE - 320px
-========================================================= */
-
-@media (max-width: 320px) {
-
-  .profile-page {
-    width: calc(100% - 10px);
-
-    margin: 5px auto;
-
-    padding: 16px 9px 22px;
-
-    border-radius: 18px;
-  }
-
-
-  .profile-page h1 {
-    font-size: 25px;
-  }
-
-  .subtitle {
-    font-size: 16px;
-  }
-
-  .location {
-    font-size: 15px;
-  }
-
-
-  /* MAIN PHOTO */
-
-  .profile-photo {
-    width: 200px;
-    height: 200px;
-
-    max-width: calc(100vw - 25px);
-  }
-
-  .default-profile {
-    width: 200px;
-    height: 200px;
-
-    max-width: calc(100vw - 25px);
-  }
-
-
-  /* CONTACT */
 
   .main-contact-row {
     gap: 5px;
   }
 
-  .call-button {
-    padding: 0 11px;
 
-    font-size: 16px;
+  .call-button {
+    max-width: 88px;
+
+    height: 44px;
+
+    padding:
+      0
+      12px;
+
+    font-size: 17px;
+
+    gap: 7px;
   }
+
+
+  .call-button i {
+    font-size: 18px;
+  }
+
 
   .main-icon-button {
     width: 43px;
     height: 43px;
+
+    font-size: 18px;
   }
 
 
-  /* MESSAGE */
+  /* OTHER CONTACTS */
+
+  .other-profile {
+    grid-template-columns: 76px minmax(0, 1fr);
+
+    column-gap: 13px;
+
+    padding:
+      15px
+      13px;
+  }
+
+
+  .other-photo,
+  .default-other-profile {
+    width: 68px;
+    height: 68px;
+  }
+
+
+  .other-name {
+    font-size: 19px;
+  }
+
+
+  .other-subtitle {
+    font-size: 15px;
+  }
+
+
+  .other-contact-button {
+    width: 40px;
+    height: 40px;
+
+    font-size: 17px;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONE
+========================================================= */
+
+@media (max-width: 390px) {
+
+  .profile-page {
+    padding:
+      30px
+      10px
+      50px;
+  }
+
+
+  .profile-photo,
+  .default-profile {
+    width: 150px;
+    height: 150px;
+  }
+
+
+  .default-profile {
+    font-size: 62px;
+  }
+
+
+  .profile-page h1 {
+    font-size: 34px;
+  }
+
+
+  .subtitle {
+    font-size: 20px;
+  }
+
+
+  .location {
+    font-size: 17px;
+
+    margin-top: 16px;
+
+    margin-bottom: 25px;
+  }
+
 
   .lost-message {
-    padding: 12px;
+    padding:
+      15px
+      14px;
+
+    margin-bottom: 22px;
   }
+
+
+  .lost-message-title {
+    font-size: 16px;
+  }
+
 
   .lost-message-text {
     font-size: 15px;
@@ -869,31 +754,233 @@ a {
   }
 
 
+  .main-contact-row {
+    gap: 4px;
+  }
+
+
+  .call-button {
+    max-width: 82px;
+
+    height: 42px;
+
+    padding:
+      0
+      10px;
+
+    font-size: 16px;
+
+    gap: 6px;
+  }
+
+
+  .call-button i {
+    font-size: 17px;
+  }
+
+
+  .main-icon-button {
+    width: 40px;
+    height: 40px;
+
+    font-size: 17px;
+  }
+
+
   /* OTHER */
 
-  .other-info {
-    gap: 8px;
+  .other-profile {
+    grid-template-columns: 68px minmax(0, 1fr);
+
+    column-gap: 11px;
+
+    padding:
+      14px
+      12px;
   }
+
 
   .other-photo,
   .default-other-profile {
-    width: 48px;
-    height: 48px;
-
-    flex-basis: 48px;
+    width: 60px;
+    height: 60px;
   }
+
+
+  .default-other-profile {
+    font-size: 25px;
+  }
+
+
+  .other-name {
+    font-size: 18px;
+  }
+
+
+  .other-subtitle {
+    font-size: 14px;
+  }
+
+
+  .other-actions {
+    gap: 7px;
+
+    margin-top: 7px;
+  }
+
+
+  .other-contact-button {
+    width: 38px;
+    height: 38px;
+
+    font-size: 16px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONE
+========================================================= */
+
+@media (max-width: 365px) {
+
+  .main-contact-row {
+    gap: 3px;
+  }
+
+
+  .call-button {
+    width: 39px;
+
+    min-width: 39px;
+
+    max-width: 39px;
+
+    height: 39px;
+
+    padding: 0;
+
+    gap: 0;
+  }
+
+
+  .call-label {
+    display: none;
+  }
+
+
+  .call-button i {
+    font-size: 16px;
+  }
+
+
+  .main-icon-button {
+    width: 39px;
+    height: 39px;
+
+    font-size: 16px;
+  }
+
+
+  .other-profile {
+    grid-template-columns: 62px minmax(0, 1fr);
+
+    column-gap: 9px;
+  }
+
+
+  .other-photo,
+  .default-other-profile {
+    width: 55px;
+    height: 55px;
+  }
+
+
+  .other-name {
+    font-size: 17px;
+  }
+
+
+  .other-subtitle {
+    font-size: 13px;
+  }
+}
+
+
+/* =========================================================
+   EXTRA SMALL PHONE
+========================================================= */
+
+@media (max-width: 320px) {
+
+  .profile-page {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+
+  .main-contact-row {
+    gap: 2px;
+  }
+
+
+  .call-button {
+    width: 36px;
+
+    min-width: 36px;
+
+    max-width: 36px;
+
+    height: 36px;
+  }
+
+
+  .call-button i {
+    font-size: 15px;
+  }
+
+
+  .main-icon-button {
+    width: 36px;
+    height: 36px;
+
+    font-size: 15px;
+  }
+
+
+  .other-profile {
+    grid-template-columns: 58px minmax(0, 1fr);
+
+    column-gap: 8px;
+
+    padding:
+      12px
+      10px;
+  }
+
+
+  .other-photo,
+  .default-other-profile {
+    width: 52px;
+    height: 52px;
+  }
+
 
   .other-name {
     font-size: 16px;
   }
 
+
   .other-subtitle {
     font-size: 13px;
   }
 
+
   .other-contact-button {
-    width: 33px;
-    height: 33px;
+    width: 36px;
+    height: 36px;
+
+    font-size: 15px;
   }
 }
 
@@ -904,63 +991,92 @@ a {
 
 @media (prefers-color-scheme: dark) {
 
-  body {
-    background: #050505;
-    color: #f5f5f5;
-  }
-
-
-  /* MAIN CARD */
-
   .profile-page {
-    background: #151515;
-
-    box-shadow:
-      0 10px 30px rgba(0, 0, 0, 0.45);
+    background: #111318;
+    color: #ffffff;
   }
 
 
-  /* CALL */
+  .subtitle,
+  .location {
+    color: #c8cbd1;
+  }
+
 
   .call-button {
-    background: #fff;
-    color: #111;
+    background: #1d2027;
+    color: #ffffff;
   }
 
 
-  /* MAIN ICONS */
+  .call-button:hover {
+    background: #272b34;
+  }
+
 
   .main-icon-button {
-    background: #242424;
-    color: #fff;
+    background: #292d36;
+    color: #ffffff;
   }
 
 
-  /* MESSAGE */
+  .main-icon-button:hover {
+    background: #343944;
+  }
+
 
   .lost-message {
-    background: #202020;
+    background: #1d2027;
   }
 
 
-  /* OTHER */
+  .lost-message-title {
+    color: #ffffff;
+  }
+
+
+  .lost-message-text {
+    color: #c8cbd1;
+  }
+
+
+  .other-section h2 {
+    color: #ffffff;
+  }
+
 
   .other-profile {
-    background: #202020;
+    background: #1d2027;
   }
+
+
+  .other-subtitle {
+    color: #bfc3ca;
+  }
+
 
   .other-contact-button {
-    background: #2a2a2a;
-    color: #fff;
+    background: #292d36;
+    color: #ffffff;
   }
 
 
-  /* DEFAULT PHOTOS */
+  .other-contact-button:hover {
+    background: #343944;
+  }
+
 
   .default-profile,
   .default-other-profile {
-    background: #292929;
-    color: #aaa;
+    background: #2b2e35;
+    color: #9da2aa;
+  }
+
+
+  .loading,
+  .error {
+    background: #111318;
+    color: #ffffff;
   }
 }
 
@@ -971,62 +1087,86 @@ a {
 
 @media (prefers-color-scheme: light) {
 
-  body {
-    background: #e9e9e9;
-    color: #111;
-  }
-
-
-  /* MAIN CARD */
-
   .profile-page {
-    background: #fff;
-
-    box-shadow:
-      0 10px 30px rgba(0, 0, 0, 0.12);
+    background: #ffffff;
+    color: #111111;
   }
 
 
-  /* CALL */
+  .subtitle,
+  .location {
+    color: #555555;
+  }
+
 
   .call-button {
-    background: #111;
-    color: #fff;
+    background: #f1f2f4;
+    color: #111111;
   }
 
 
-  /* MAIN ICONS */
+  .call-button:hover {
+    background: #e5e7eb;
+  }
+
 
   .main-icon-button {
-    background: #e9e9e9;
-    color: #111;
+    background: #e1e3e7;
+    color: #111111;
   }
 
 
-  /* MESSAGE */
+  .main-icon-button:hover {
+    background: #d5d7db;
+  }
+
 
   .lost-message {
-    background: #f3f3f3;
+    background: #f1f2f4;
   }
 
 
-  /* OTHER */
+  .lost-message-title {
+    color: #111111;
+  }
+
+
+  .lost-message-text {
+    color: #555555;
+  }
+
 
   .other-profile {
-    background: #f3f3f3;
+    background: #f1f2f4;
   }
+
+
+  .other-subtitle {
+    color: #666666;
+  }
+
 
   .other-contact-button {
-    background: #e9e9e9;
-    color: #111;
+    background: #e1e3e7;
+    color: #111111;
   }
 
 
-  /* DEFAULT PHOTOS */
+  .other-contact-button:hover {
+    background: #d5d7db;
+  }
+
 
   .default-profile,
   .default-other-profile {
-    background: #ddd;
-    color: #777;
+    background: #d9dce1;
+    color: #777777;
+  }
+
+
+  .loading,
+  .error {
+    background: #ffffff;
+    color: #111111;
   }
 }
