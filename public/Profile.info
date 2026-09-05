@@ -1,7 +1,6 @@
 [rovelyn]
-name=Rovelyn Solis
+name=Rovelyn Polopot Solis
 subtitle=Contact Profile
-photo=/rovelyn-profile.jpg
 address=Jose Panganiban
 city=Camarines Norte, Philippines
 phone=+639XXXXXXXXX
@@ -12,7 +11,7 @@ email=your@email.com
 maps=https://www.google.com/maps/search/?api=1&query=Jose+Panganiban+Camarines+Norte
 
 [rovelyn][other]
-name=Jeffrey Solis
+name=Jeffrey Cuya Solis
 subtitle=Husband
 phone=+639481138565
 sms=+639481138565
