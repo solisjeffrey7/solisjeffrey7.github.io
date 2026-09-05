@@ -1,42 +1,41 @@
 [jeffrey]
-name=Jeffrey Solis
-subtitle=Contact Profile
+name=Jeffrey&nbsp;Solis
+subtitle=Contact&nbsp;Profile
 photo=profile.jpg
-address=Jose Panganiban
-city=Camarines Norte, Philippines
+address=Jose&nbsp;Panganiban
+city=Camarines&nbsp;Norte,&nbsp;Philippines
 phone=+639XXXXXXXXX
 sms=+639XXXXXXXXX
 messenger=https://m.me/YOUR_FACEBOOK_USERNAME
 facebook=https://www.facebook.com/YOUR_FACEBOOK_USERNAME
 email=your@email.com
-maps=https://www.google.com/maps/search/?api=1&query=Jose+Panganiban+Camarines+Norte
-message=Kung sakaling napulot ninyo ang item na ito, pakiusap po na kontakin ako gamit ang mga contact button sa page na ito. Malaking tulong po ang inyong kabutihan upang maibalik ito sa akin. Maraming salamat po sa inyong tulong at katapatan.6
+maps=https://www.google.com/maps/search/?api=1&amp;query=Jose+Panganiban+Camarines+Norte
+message=Kung&nbsp;sakaling&nbsp;napulot&nbsp;ninyo&nbsp;ang&nbsp;item&nbsp;na&nbsp;ito,&nbsp;pakiusap&nbsp;po&nbsp;na&nbsp;kontakin&nbsp;ako&nbsp;gamit&nbsp;ang&nbsp;mga&nbsp;contact&nbsp;button&nbsp;sa&nbsp;page&nbsp;na&nbsp;ito.&nbsp;Malaking&nbsp;tulong&nbsp;po&nbsp;ang&nbsp;inyong&nbsp;kabutihan&nbsp;upang&nbsp;maibalik&nbsp;ito&nbsp;sa&nbsp;akin.&nbsp;Maraming&nbsp;salamat&nbsp;po&nbsp;sa&nbsp;inyong&nbsp;tulong&nbsp;at&nbsp;katapatan.6
+
 
 [jeffrey][other]
-name=Juan Solis
+name=Juan&nbsp;Solis
 subtitle=Brother
-
 phone=+639XXXXXXXXX
 sms=+639XXXXXXXXX
 messenger=https://m.me/JUAN_FACEBOOK
 facebook=https://facebook.com/JUAN_FACEBOOK
 
-
 [rovelyn]
-name=Rovelyn Solis
-subtitle=Contact Profile
+name=Rovelyn&nbsp;Solis
+subtitle=Contact&nbsp;Profile
 photo=rovelyn.jpg
-address=Jose Panganiban
-city=Camarines Norte, Philippines
+address=Jose&nbsp;Panganiban
+city=Camarines&nbsp;Norte,&nbsp;Philippines
 phone=+639XXXXXXXXX
 sms=+639XXXXXXXXX
 messenger=https://m.me/ROVELYN_FACEBOOK
 facebook=https://www.facebook.com/ROVELYN_FACEBOOK
 email=your@email.com
-maps=https://www.google.com/maps/search/?api=1&query=Jose+Panganiban+Camarines+Norte
+maps=https://www.google.com/maps/search/?api=1&amp;query=Jose+Panganiban+Camarines+Norte
 
 [rovelyn][other]
-name=Jeffrey Solis
+name=Jeffrey&nbsp;Solis
 subtitle=Husband
 photo=profile.jpg
 phone=+639XXXXXXXXX
@@ -45,40 +44,10 @@ messenger=https://m.me/YOUR_FACEBOOK_USERNAME
 facebook=https://www.facebook.com/YOUR_FACEBOOK_USERNAME
 
 [rovelyn][other]
-name=Juan Solis
+name=Juan&nbsp;Solis
 subtitle=Brother
 photo=juan.jpg
 phone=+639XXXXXXXXX
 sms=+639XXXXXXXXX
 messenger=https://m.me/JUAN_FACEBOOK
 facebook=https://facebook.com/JUAN_FACEBOOK
-
-
-[juan]
-name=Juan Solis
-subtitle=Contact Profile
-photo=juan.jpg
-address=Jose Panganiban
-city=Camarines Norte, Philippines
-phone=+639XXXXXXXXX
-sms=+639XXXXXXXXX
-messenger=https://m.me/JUAN_FACEBOOK
-facebook=https://www.facebook.com/JUAN_FACEBOOK
-
-[juan][other]
-name=Jeffrey Solis
-subtitle=Brother
-photo=profile.jpg
-phone=+639XXXXXXXXX
-sms=+639XXXXXXXXX
-messenger=https://m.me/YOUR_FACEBOOK_USERNAME
-facebook=https://www.facebook.com/YOUR_FACEBOOK_USERNAME
-
-[juan][other]
-name=Rovelyn Solis
-subtitle=Sister-in-law
-photo=rovelyn.jpg
-phone=+639XXXXXXXXX
-sms=+639XXXXXXXXX
-messenger=https://m.me/ROVELYN_FACEBOOK
-facebook=https://facebook.com/ROVELYN_FACEBOOK
