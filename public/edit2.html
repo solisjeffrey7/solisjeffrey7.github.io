@@ -1,0 +1,3064 @@
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width,initial-scale=1">  
+<title>Profile.info Editor</title>  <style>  
+*{  
+  box-sizing:border-box;  
+}  
+  
+body{  
+  margin:0;  
+  font-family:Arial,sans-serif;  
+  background:#f3f4f6;  
+  color:#111;  
+}  
+  
+.wrap{  
+  max-width:760px;  
+  margin:auto;  
+  padding:18px 14px 40px;  
+}  
+  
+h1{  
+  margin:0 0 5px;  
+  font-size:27px;  
+}  
+  
+.desc{  
+  margin:0 0 18px;  
+  color:#666;  
+}  
+  
+.box{  
+  background:#fff;  
+  padding:16px;  
+  border-radius:14px;  
+  margin:14px 0;  
+  box-shadow:0 2px 10px #0001;  
+}  
+  
+h2{  
+  font-size:19px;  
+  margin:0 0 12px;  
+}  
+  
+label{  
+  display:block;  
+  font-weight:700;  
+  font-size:14px;  
+  margin:10px 0 5px;  
+}  
+  
+input,  
+textarea,  
+select{  
+  width:100%;  
+  padding:11px;  
+  border:1px solid #ccd0d6;  
+  border-radius:9px;  
+  font:inherit;  
+  background:#fff;  
+}  
+  
+textarea{  
+  min-height:120px;  
+  resize:vertical;  
+}  
+  
+.row{  
+  display:grid;  
+  grid-template-columns:1fr 1fr;  
+  gap:10px;  
+}  
+  
+button{  
+  border:0;  
+  border-radius:9px;  
+  padding:11px 14px;  
+  margin-top:10px;  
+  font-weight:bold;  
+  font-size:15px;  
+  cursor:pointer;  
+}  
+  
+button:active{  
+  transform:scale(.98);  
+}  
+  
+.primary{  
+  background:#111;  
+  color:#fff;  
+  width:100%;  
+}  
+  
+.github{  
+  background:#24292f;  
+  color:#fff;  
+  width:100%;  
+}  
+  
+.secondary,  
+.add{  
+  background:#e5e7eb;  
+  width:100%;  
+}  
+  
+.delete{  
+  background:#dc2626;  
+  color:#fff;  
+  width:100%;  
+}  
+  
+.remove{  
+  background:#eee;  
+  color:#b00020;  
+}  
+  
+.other{  
+  border:1px solid #ddd;  
+  padding:13px;  
+  border-radius:12px;  
+  margin-top:12px;  
+}  
+  
+.hint{  
+  font-size:13px;  
+  color:#777;  
+  line-height:1.45;  
+  margin-top:7px;  
+}  
+  
+.status{  
+  padding:11px;  
+  border-radius:9px;  
+  background:#f0f1f3;  
+  margin-top:12px;  
+  line-height:1.45;  
+  word-break:break-word;  
+}  
+  
+#output{  
+  min-height:320px;  
+  font-family:monospace;  
+  white-space:pre;  
+}  
+  
+.hidden{  
+  display:none;  
+}  
+  
+.danger-box{  
+  border:1px solid #fecaca;  
+  background:#fff7f7;  
+}  
+  
+.danger-title{  
+  color:#b91c1c;  
+}  
+  
+  
+/* =========================  
+   PHOTO UPLOAD  
+========================= */  
+  
+.photo-upload{  
+  display:flex;  
+  flex-direction:column;  
+  align-items:flex-start;  
+  gap:10px;  
+}  
+  
+.photo-preview{  
+  width:110px;  
+  height:110px;  
+  
+  border-radius:50%;  
+  
+  object-fit:cover;  
+  
+  background:#e5e7eb;  
+  
+  border:1px solid #d1d5db;  
+  
+  display:none;  
+}  
+  
+.photo-preview.show{  
+  display:block;  
+}  
+  
+.photo-buttons{  
+  display:flex;  
+  gap:8px;  
+  width:100%;  
+}  
+  
+.photo-buttons button{  
+  flex:1;  
+}  
+  
+.upload-btn{  
+  background:#e5e7eb;  
+}  
+  
+.clear-photo{  
+  background:#fee2e2;  
+  color:#b91c1c;  
+}  
+  
+  
+/* =========================  
+   OTHER PHOTO  
+========================= */  
+  
+.other-photo-upload{  
+  display:flex;  
+  flex-direction:column;  
+  align-items:center;  
+  margin:8px 0 12px;  
+}  
+  
+.other-photo-preview{  
+  width:90px;  
+  height:90px;  
+  
+  border-radius:50%;  
+  
+  object-fit:cover;  
+  
+  background:#e5e7eb;  
+  
+  border:1px solid #d1d5db;  
+  
+  display:none;  
+}  
+  
+.other-photo-preview.show{  
+  display:block;  
+}  
+  
+.other-photo-buttons{  
+  display:flex;  
+  gap:8px;  
+  width:100%;  
+  margin-top:8px;  
+}  
+  
+.other-photo-buttons button{  
+  flex:1;  
+}  
+  
+  
+/* =========================  
+   UPLOAD PROGRESS  
+========================= */  
+  
+.uploading{  
+  opacity:.6;  
+  pointer-events:none;  
+}  
+  
+  
+/* =========================  
+   MOBILE  
+========================= */  
+  
+@media(max-width:520px){  
+  
+  .row{  
+    grid-template-columns:1fr;  
+  }  
+  
+  .photo-buttons,  
+  .other-photo-buttons{  
+    flex-direction:column;  
+  }  
+  
+}  
+  
+</style>  </head>  <body>  <div class="wrap">  <h1>Profile.info Editor</h1>  <p class="desc">  
+Basahin ang current Profile.info mula GitHub, i-edit, mag-upload ng photo,  
+at i-save ulit.  
+</p>  <!-- =====================================================  
+     GITHUB CONNECTION  
+===================================================== -->  <div class="box">  <h2>GitHub Connection</h2>  <label>GitHub Username</label>
+
+<input
+id="ghUser"
+value="solisjeffrey7"
+
+> 
+
+<label>Repository</label>
+
+<input
+id="ghRepo"
+value="solisjeffrey7.github.io"
+
+> 
+
+<label>Branch</label>
+
+<input
+id="ghBranch"
+value="main"
+
+> 
+
+<label>GitHub Personal Access Token</label>
+
+<input
+id="ghToken"
+type="password"
+placeholder="github_pat_..."
+
+> 
+
+<div class="hint">  
+Ginagamit lamang ang token para sa GitHub API request.  
+Huwag i-share ang token.  
+</div>  <button
+class="github"
+onclick="loadFromGitHub()"
+
+> 
+
+Read Current Profile.info
+</button>
+
+<div  
+  id="status"  
+  class="status"  
+>  
+Ready.  
+</div>  </div>  <!-- =====================================================  
+     EDITOR  
+===================================================== -->  <div  
+  id="editor"  
+  class="hidden"  
+>  <!-- =====================================================  
+     SELECT PROFILE  
+===================================================== -->  <div class="box">  <h2>Select Profile</h2>  <select
+id="profileSelect"
+onchange="switchProfile()"
+
+> </select>  
+
+</div>  <!-- =====================================================  
+     MAIN PROFILE  
+===================================================== -->  <div class="box">  <h2>Main Profile</h2>  <label>Profile ID / Name</label>
+
+<input
+id="profile"
+placeholder="jeffrey"
+
+> 
+
+<label>Name</label>
+
+<input
+id="name"
+
+> 
+
+<label>Subtitle</label>
+
+<input
+id="subtitle"
+
+> 
+
+<!-- PHOTO -->  <label>Photo</label>
+
+<div class="photo-upload">  <img
+id="mainPhotoPreview"
+class="photo-preview"
+alt="Photo Preview"
+
+> 
+
+<input
+id="photoFile"
+type="file"
+accept="image/*"
+hidden
+onchange="handleMainPhoto(event)"
+
+> 
+
+<div class="photo-buttons">  <button
+type="button"
+class="upload-btn"
+onclick="document.getElementById('photoFile').click()"
+
+> 
+
+📷 Choose Photo
+</button>
+
+<button
+type="button"
+class="clear-photo"
+onclick="clearMainPhoto()"
+
+> 
+
+🗑 Remove Photo
+</button>
+
+</div>  <input
+id="photo"
+placeholder="profile.jpg"
+
+> 
+
+<div class="hint">  
+Pumili ng image para awtomatikong ma-upload sa  
+<code>public/</code> kapag pinindot ang Save Changes to GitHub.  
+</div>  </div>  <div class="row">  <div>  <label>Address</label>
+
+<input
+id="address"
+
+> 
+
+</div>  <div>  <label>City</label>
+
+<input
+id="city"
+
+> 
+
+</div>  </div>  <div class="row">  <div>  <label>Phone</label>
+
+<input
+id="phone"
+
+> 
+
+</div>  <div>  <label>SMS</label>
+
+<input
+id="sms"
+
+> 
+
+</div>  </div>  <label>Messenger</label>
+
+<input
+id="messenger"
+
+> 
+
+<label>Facebook</label>
+
+<input
+id="facebook"
+
+> 
+
+<label>Email</label>
+
+<input
+id="email"
+
+> 
+
+<label>Google Maps</label>
+
+<input
+id="maps"
+
+> 
+
+<label>Message</label>
+
+<textarea  
+  id="message"  
+></textarea>  <div class="hint">  
+Ang spaces at special characters ay automatic na ie-encode  
+kapag nag-generate.  
+</div>  </div>  <!-- =====================================================  
+     OTHER PEOPLE  
+===================================================== -->  <div class="box">  <h2>Other People</h2>  <div id="others"></div>  <button
+class="add"
+onclick="addOther()"
+
+> 
+
+Add Other Person
+</button>
+
+
+</div>  <!-- =====================================================  
+     ACTIONS  
+===================================================== -->  <div class="box">  <button
+class="primary"
+onclick="generate()"
+
+> 
+
+Generate Profile.info
+</button>
+
+<button
+class="github"
+onclick="saveToGitHub()"
+
+> 
+
+Save Changes to GitHub
+</button>
+
+<button
+class="secondary"
+onclick="copyOutput()"
+
+> 
+
+Copy
+</button>
+
+<button
+class="secondary"
+onclick="downloadFile()"
+
+> 
+
+Download Profile.info
+</button>
+
+</div>  <!-- =====================================================  
+     DELETE PROFILE  
+===================================================== -->  <div class="box danger-box">  <h2 class="danger-title">  
+Delete Profile  
+</h2>  <div class="hint">  
+Permanenteng aalisin ang napiling profile at lahat ng  
+<code>[profile][other]</code> nito mula sa generated file.  
+Hindi ito agad mabubura sa GitHub hanggang pindutin mo ang  
+<strong>Save Changes to GitHub</strong>.  
+</div>  <button
+class="delete"
+onclick="deleteProfile()"
+
+> 
+
+🗑 Delete Current Profile
+</button>
+
+</div>  <!-- =====================================================  
+     OUTPUT  
+===================================================== -->  <div class="box">  <h2>Generated Profile.info</h2>  <textarea  
+  id="output"  
+  readonly  
+></textarea>  </div>  </div>  </div>  <script>  
+  
+/* =========================================================  
+   GLOBAL  
+========================================================= */  
+  
+let data = {};  
+  
+let selectedProfile = "";  
+  
+let originalFileText = "";  
+  
+  
+/* =========================================================  
+   FIELDS  
+========================================================= */  
+  
+const fields = [  
+  "name",  
+  "subtitle",  
+  "photo",  
+  "address",  
+  "city",  
+  "phone",  
+  "sms",  
+  "messenger",  
+  "facebook",  
+  "email",  
+  "maps"  
+];  
+  
+  
+/* =========================================================  
+   ENCODE  
+========================================================= */  
+  
+function esc(v){  
+  
+  v = String(v ?? "");  
+  
+  return v  
+    .replace(/&/g,"&amp;")  
+    .replace(/</g,"&lt;")  
+    .replace(/>/g,"&gt;")  
+    .replace(/"/g,"&quot;")  
+    .replace(/'/g,"&#39;")  
+    .replace(/ /g,"&nbsp;");  
+  
+}  
+  
+  
+/* =========================================================  
+   DECODE  
+========================================================= */  
+  
+function decodeValue(v){  
+  
+  const ta =  
+    document.createElement("textarea");  
+  
+  ta.innerHTML = v;  
+  
+  return ta.value;  
+  
+}  
+  
+  
+/* =========================================================  
+   CLEAN PROFILE ID  
+========================================================= */  
+  
+function cleanProfile(v){  
+  
+  return String(v || "")  
+    .trim()  
+    .toLowerCase()  
+    .replace(/[^a-z0-9_-]/g,"");  
+  
+}  
+  
+  
+/* =========================================================  
+   SAFE FILE NAME  
+========================================================= */  
+  
+function cleanFileName(name){  
+  
+  return String(name || "")  
+    .trim()  
+    .replace(/[^a-zA-Z0-9._-]/g,"_");  
+  
+}  
+  
+  
+/* =========================================================  
+   ADD LINE  
+========================================================= */  
+  
+function line(a,k,v,m=false){  
+  
+  if(  
+    v === undefined ||  
+    v === null ||  
+    !String(v).trim()  
+  ){  
+  
+    return;  
+  
+  }  
+  
+  
+  if(m){  
+  
+    const lines =  
+      String(v)  
+        .split(/\r?\n/)  
+        .map(x => esc(x));  
+  
+  
+    a.push(  
+      k + "=" +  
+      lines.join("\n")  
+    );  
+  
+  }else{  
+  
+    a.push(  
+      k + "=" +  
+      esc(v)  
+    );  
+  
+  }  
+  
+}  
+  
+  
+/* =========================================================  
+   PARSE FILE  
+========================================================= */  
+  
+function parseInfo(text){  
+  
+  const result = {};  
+  
+  let current = null;  
+  
+  let currentKey = null;  
+  
+  
+  const lines =  
+    text.split(/\r?\n/);  
+  
+  
+  for(const raw of lines){  
+  
+    const lineText =  
+      raw.trimEnd();  
+  
+  
+    const section =  
+      lineText.match(  
+        /^([^]+)\](?:([^]+)\])?$/  
+      );  
+  
+  
+    if(section){  
+  
+      const p =  
+        section[1]  
+          .trim()  
+          .toLowerCase();  
+  
+  
+      const sub =  
+        section[2]  
+          ?.trim()  
+          .toLowerCase();  
+  
+  
+      if(!result[p]){  
+  
+        result[p] = {  
+          main:{},  
+          others:[]  
+        };  
+  
+      }  
+  
+  
+      if(sub === "other"){  
+  
+        current = {};  
+  
+        result[p].others.push(  
+          current  
+        );  
+  
+      }else{  
+  
+        current =  
+          result[p].main;  
+  
+      }  
+  
+  
+      currentKey = null;  
+  
+      continue;  
+  
+    }  
+  
+  
+    if(!current){  
+  
+      continue;  
+  
+    }  
+  
+  
+    const eq =  
+      lineText.indexOf("=");  
+  
+  
+    if(eq >= 0){  
+  
+      currentKey =  
+        lineText  
+          .slice(0,eq)  
+          .trim()  
+          .toLowerCase();  
+  
+  
+      current[currentKey] =  
+        lineText.slice(eq + 1);  
+  
+    }else if(  
+      currentKey === "message"  
+    ){  
+  
+      if(  
+        current.message === undefined  
+      ){  
+  
+        current.message = "";  
+  
+      }  
+  
+  
+      current.message +=  
+        "\n" +  
+        lineText;  
+  
+    }  
+  
+  }  
+  
+  
+  /* Decode HTML entities */  
+  
+  Object.values(result)  
+    .forEach(p => {  
+  
+      [  
+        p.main,  
+        ...p.others  
+  
+      ].forEach(o => {  
+  
+        Object.keys(o)  
+          .forEach(k => {  
+  
+            o[k] =  
+              decodeValue(o[k]);  
+  
+          });  
+  
+      });  
+  
+    });  
+  
+  
+  return result;  
+  
+}  
+  
+  
+/* =========================================================  
+   SET VALUE  
+========================================================= */  
+  
+function setValue(id,value){  
+  
+  const el =  
+    document.getElementById(id);  
+  
+  
+  if(el){  
+  
+    el.value =  
+      value || "";  
+  
+  }  
+  
+}  
+  
+  
+/* =========================================================  
+   MAIN PHOTO PREVIEW  
+========================================================= */  
+  
+function updateMainPhotoPreview(){  
+  
+  const input =  
+    document.getElementById("photo");  
+  
+  const preview =  
+    document.getElementById(  
+      "mainPhotoPreview"  
+    );  
+  
+  
+  const value =  
+    input.value.trim();  
+  
+  
+  if(value){  
+  
+    preview.src =  
+      value;  
+  
+    preview.classList.add(  
+      "show"  
+    );  
+  
+  }else{  
+  
+    preview.removeAttribute(  
+      "src"  
+    );  
+  
+    preview.classList.remove(  
+      "show"  
+    );  
+  
+  }  
+  
+}  
+  
+  
+/* =========================================================  
+   MAIN PHOTO SELECT  
+========================================================= */  
+  
+function handleMainPhoto(event){  
+  
+  const file =  
+    event.target.files[0];  
+  
+  
+  if(!file){  
+  
+    return;  
+  
+  }  
+  
+  
+  const filename =  
+    cleanFileName(file.name);  
+  
+  
+  document  
+    .getElementById("photo")  
+    .value =  
+      filename;  
+  
+  
+  const preview =  
+    document.getElementById(  
+      "mainPhotoPreview"  
+    );  
+  
+  
+  const url =  
+    URL.createObjectURL(file);  
+  
+  
+  preview.src =  
+    url;  
+  
+  preview.classList.add(  
+    "show"  
+  );  
+  
+  
+  /*  
+    Store selected file  
+    on input element.  
+  */  
+  
+  document  
+    .getElementById("photoFile")  
+    .selectedPhotoFile =  
+      file;  
+  
+  
+  setStatus(  
+    "📷 Main Profile photo selected: " +  
+    filename +  
+    ". Pindutin ang Save Changes to GitHub."  
+  );  
+  
+}  
+  
+  
+/* =========================================================  
+   CLEAR MAIN PHOTO  
+========================================================= */  
+  
+function clearMainPhoto(){  
+  
+  document  
+    .getElementById("photo")  
+    .value = "";  
+  
+  
+  document  
+    .getElementById("photoFile")  
+    .value = "";  
+  
+  
+  document  
+    .getElementById("photoFile")  
+    .selectedPhotoFile = null;  
+  
+  
+  const preview =  
+    document.getElementById(  
+      "mainPhotoPreview"  
+    );  
+  
+  
+  preview.removeAttribute(  
+    "src"  
+  );  
+  
+  
+  preview.classList.remove(  
+    "show"  
+  );  
+  
+}  
+  
+  
+/* =========================================================  
+   CAPTURE CURRENT PROFILE  
+========================================================= */  
+  
+function captureCurrentProfile(){  
+  
+  if(!selectedProfile){  
+  
+    return;  
+  
+  }  
+  
+  
+  const newId =  
+    cleanProfile(  
+      document  
+        .getElementById("profile")  
+        .value  
+    );  
+  
+  
+  if(!newId){  
+  
+    return;  
+  
+  }  
+  
+  
+  const profileData = {  
+  
+    main:{},  
+  
+    others:[]  
+  
+  };  
+  
+  
+  /* Main */  
+  
+  fields.forEach(k => {  
+  
+    const el =  
+      document.getElementById(k);  
+  
+  
+    if(el){  
+  
+      profileData.main[k] =  
+        el.value;  
+  
+    }  
+  
+  });  
+  
+  
+  const message =  
+    document.getElementById(  
+      "message"  
+    );  
+  
+  
+  if(message){  
+  
+    profileData.main.message =  
+      message.value;  
+  
+  }  
+  
+  
+  /* Others */  
+  
+  const map = {  
+  
+    name:".o-name",  
+    subtitle:".o-subtitle",  
+    photo:".o-photo",  
+    phone:".o-phone",  
+    sms:".o-sms",  
+    messenger:".o-messenger",  
+    facebook:".o-facebook",  
+    email:".o-email",  
+    maps:".o-maps"  
+  
+  };  
+  
+  
+  document  
+    .querySelectorAll(".other")  
+    .forEach(d => {  
+  
+      const person = {};  
+  
+  
+      Object.entries(map)  
+        .forEach(([k,s]) => {  
+  
+          const el =  
+            d.querySelector(s);  
+  
+  
+          if(el){  
+  
+            person[k] =  
+              el.value;  
+  
+          }  
+  
+        });  
+  
+  
+      const fileInput =  
+        d.querySelector(  
+          ".o-photo-file"  
+        );  
+  
+  
+      if(fileInput){  
+  
+        person._photoFile =  
+          fileInput.selectedPhotoFile ||  
+          null;  
+  
+      }  
+  
+  
+      profileData.others.push(  
+        person  
+      );  
+  
+    });  
+  
+  
+  /* Profile ID changed */  
+  
+  if(newId !== selectedProfile){  
+  
+    delete data[selectedProfile];  
+  
+  
+    data[newId] =  
+      profileData;  
+  
+  
+    selectedProfile =  
+      newId;  
+  
+  }else{  
+  
+    data[selectedProfile] =  
+      profileData;  
+  
+  }  
+  
+}  
+  
+  
+/* =========================================================  
+   FILL MAIN  
+========================================================= */  
+  
+function fillMain(){  
+  
+  const p =  
+    data[selectedProfile];  
+  
+  
+  if(!p){  
+  
+    return;  
+  
+  }  
+  
+  
+  setValue(  
+    "profile",  
+    selectedProfile  
+  );  
+  
+  
+  fields.forEach(k => {  
+  
+    setValue(  
+      k,  
+      p.main[k]  
+    );  
+  
+  });  
+  
+  
+  setValue(  
+    "message",  
+    p.main.message  
+  );  
+  
+  
+  /*  
+    Main photo preview  
+  */  
+  
+  const preview =  
+    document.getElementById(  
+      "mainPhotoPreview"  
+    );  
+  
+  
+  if(p.main.photo){  
+  
+    preview.src =  
+      p.main.photo;  
+  
+    preview.classList.add(  
+      "show"  
+    );  
+  
+  }else{  
+  
+    preview.removeAttribute(  
+      "src"  
+    );  
+  
+    preview.classList.remove(  
+      "show"  
+    );  
+  
+  }  
+  
+  
+  /*  
+    Reset file selector.  
+  */  
+  
+  const photoFile =  
+    document.getElementById(  
+      "photoFile"  
+    );  
+  
+  
+  photoFile.value = "";  
+  
+  photoFile.selectedPhotoFile =  
+    null;  
+  
+  
+  /*  
+    Other People  
+  */  
+  
+  const container =  
+    document.getElementById(  
+      "others"  
+    );  
+  
+  
+  container.innerHTML = "";  
+  
+  
+  p.others.forEach(  
+    person => {  
+  
+      addOther(person);  
+  
+    }  
+  );  
+  
+}  
+  
+  
+/* =========================================================  
+   SWITCH PROFILE  
+========================================================= */  
+  
+function switchProfile(){  
+  
+  captureCurrentProfile();  
+  
+  
+  selectedProfile =  
+    document  
+      .getElementById(  
+        "profileSelect"  
+      )  
+      .value;  
+  
+  
+  fillMain();  
+  
+  generate();  
+  
+}  
+  
+  
+/* =========================================================  
+   POPULATE PROFILES  
+========================================================= */  
+  
+function populateProfiles(){  
+  
+  const select =  
+    document.getElementById(  
+      "profileSelect"  
+    );  
+  
+  
+  select.innerHTML = "";  
+  
+  
+  Object.keys(data)  
+    .forEach(p => {  
+  
+      const option =  
+        document.createElement(  
+          "option"  
+        );  
+  
+  
+      option.value =  
+        p;  
+  
+      option.textContent =  
+        p;  
+  
+  
+      select.appendChild(  
+        option  
+      );  
+  
+    });  
+  
+  
+  if(!data[selectedProfile]){  
+  
+    selectedProfile =  
+      Object.keys(data)[0] || "";  
+  
+  }  
+  
+  
+  select.value =  
+    selectedProfile;  
+  
+  
+  fillMain();  
+  
+}  
+  
+  
+/* =========================================================  
+   OTHER PHOTO PREVIEW  
+========================================================= */  
+  
+function updateOtherPhotoPreview(d){  
+  
+  const input =  
+    d.querySelector(  
+      ".o-photo"  
+    );  
+  
+  
+  const preview =  
+    d.querySelector(  
+      ".other-photo-preview"  
+    );  
+  
+  
+  const value =  
+    input.value.trim();  
+  
+  
+  if(value){  
+  
+    preview.src =  
+      value;  
+  
+    preview.classList.add(  
+      "show"  
+    );  
+  
+  }else{  
+  
+    preview.removeAttribute(  
+      "src"  
+    );  
+  
+    preview.classList.remove(  
+      "show"  
+    );  
+  
+  }  
+  
+}  
+  
+  
+/* =========================================================  
+   OTHER PHOTO SELECT  
+========================================================= */  
+  
+function handleOtherPhoto(  
+  event,  
+  d  
+){  
+  
+  const file =  
+    event.target.files[0];  
+  
+  
+  if(!file){  
+  
+    return;  
+  
+  }  
+  
+  
+  const filename =  
+    cleanFileName(file.name);  
+  
+  
+  d.querySelector(  
+    ".o-photo"  
+  ).value =  
+    filename;  
+  
+  
+  const preview =  
+    d.querySelector(  
+      ".other-photo-preview"  
+    );  
+  
+  
+  const url =  
+    URL.createObjectURL(file);  
+  
+  
+  preview.src =  
+    url;  
+  
+  preview.classList.add(  
+    "show"  
+  );  
+  
+  
+  event.target.selectedPhotoFile =  
+    file;  
+  
+  
+  setStatus(  
+    "📷 Other Person photo selected: " +  
+    filename +  
+    ". Pindutin ang Save Changes to GitHub."  
+  );  
+  
+}  
+  
+  
+/* =========================================================  
+   CLEAR OTHER PHOTO  
+========================================================= */  
+  
+function clearOtherPhoto(d){  
+  
+  d.querySelector(  
+    ".o-photo"  
+  ).value = "";  
+  
+  
+  const file =  
+    d.querySelector(  
+      ".o-photo-file"  
+    );  
+  
+  
+  file.value = "";  
+  
+  file.selectedPhotoFile =  
+    null;  
+  
+  
+  const preview =  
+    d.querySelector(  
+      ".other-photo-preview"  
+    );  
+  
+  
+  preview.removeAttribute(  
+    "src"  
+  );  
+  
+  
+  preview.classList.remove(  
+    "show"  
+  );  
+  
+}  
+  
+  
+/* =========================================================  
+   ADD OTHER  
+========================================================= */  
+  
+function addOther(person={}){  
+  
+  const d =  
+    document.createElement(  
+      "div"  
+    );  
+  
+  
+  d.className =  
+    "other";  
+  
+  
+  d.innerHTML = `  
+  
+    <b>Other Person</b>  
+  
+  
+    <label>Name</label>  
+  
+    <input  
+      class="o-name"  
+    >  
+  
+  
+    <label>Subtitle</label>  
+  
+    <input  
+      class="o-subtitle"  
+    >  
+  
+  
+    <label>Photo</label>  
+  
+    <div class="other-photo-upload">  
+  
+      <img  
+        class="other-photo-preview"  
+        alt="Photo Preview"  
+      >  
+  
+      <input  
+        class="o-photo-file"  
+        type="file"  
+        accept="image/*"  
+        hidden  
+      >  
+  
+      <div class="other-photo-buttons">  
+  
+        <button  
+          type="button"  
+          class="upload-btn"  
+        >  
+          📷 Choose Photo  
+        </button>  
+  
+        <button  
+          type="button"  
+          class="clear-photo"  
+        >  
+          🗑 Remove  
+        </button>  
+  
+      </div>  
+  
+    </div>  
+  
+  
+    <input  
+      class="o-photo"  
+      placeholder="rovelyn.jpg"  
+    >  
+  
+  
+    <div class="row">  
+  
+      <div>  
+  
+        <label>Phone</label>  
+  
+        <input  
+          class="o-phone"  
+        >  
+  
+      </div>  
+  
+      <div>  
+  
+        <label>SMS</label>  
+  
+        <input  
+          class="o-sms"  
+        >  
+  
+      </div>  
+  
+    </div>  
+  
+  
+    <label>Messenger</label>  
+  
+    <input  
+      class="o-messenger"  
+    >  
+  
+  
+    <label>Facebook</label>  
+  
+    <input  
+      class="o-facebook"  
+    >  
+  
+  
+    <label>Email</label>  
+  
+    <input  
+      class="o-email"  
+    >  
+  
+  
+    <label>Google Maps</label>  
+  
+    <input  
+      class="o-maps"  
+    >  
+  
+  
+    <button  
+      type="button"  
+      class="remove"  
+    >  
+      Remove  
+    </button>  
+  
+  `;  
+  
+  
+  const map = {  
+  
+    name:".o-name",  
+    subtitle:".o-subtitle",  
+    photo:".o-photo",  
+    phone:".o-phone",  
+    sms:".o-sms",  
+    messenger:".o-messenger",  
+    facebook:".o-facebook",  
+    email:".o-email",  
+    maps:".o-maps"  
+  
+  };  
+  
+  
+  Object.entries(map)  
+    .forEach(([k,s]) => {  
+  
+      const el =  
+        d.querySelector(s);  
+  
+  
+      if(el){  
+  
+        el.value =  
+          person[k] || "";  
+  
+      }  
+  
+    });  
+  
+  
+  /* Existing photo */  
+  
+  updateOtherPhotoPreview(d);  
+  
+  
+  /* Choose */  
+  
+  const fileInput =  
+    d.querySelector(  
+      ".o-photo-file"  
+    );  
+  
+  
+  const chooseButton =  
+    d.querySelector(  
+      ".upload-btn"  
+    );  
+  
+  
+  chooseButton.onclick =  
+    () => fileInput.click();  
+  
+  
+  fileInput.onchange =  
+    (event) => {  
+  
+      handleOtherPhoto(  
+        event,  
+        d  
+      );  
+  
+    };  
+  
+  
+  /* Remove photo */  
+  
+  d.querySelector(  
+    ".clear-photo"  
+  ).onclick =  
+    () => {  
+  
+      clearOtherPhoto(d);  
+  
+    };  
+  
+  
+  /* Remove person */  
+  
+  d.querySelector(  
+    ".remove"  
+  ).onclick =  
+    () => {  
+  
+      d.remove();  
+  
+    };  
+  
+  
+  document  
+    .getElementById("others")  
+    .appendChild(d);  
+  
+}  
+  
+  
+/* =========================================================  
+   DELETE PROFILE  
+========================================================= */  
+  
+function deleteProfile(){  
+  
+  captureCurrentProfile();  
+  
+  
+  const profiles =  
+    Object.keys(data);  
+  
+  
+  if(!selectedProfile){  
+  
+    alert(  
+      "Walang napiling profile."  
+    );  
+  
+    return;  
+  
+  }  
+  
+  
+  if(profiles.length <= 1){  
+  
+    alert(  
+      "Hindi puwedeng burahin ang huling profile.\n\n" +  
+      "Kailangan may kahit isang profile na manatili."  
+    );  
+  
+    return;  
+  
+  }  
+  
+  
+  const p =  
+    data[selectedProfile];  
+  
+  
+  const personCount =  
+    p.others  
+      ? p.others.length  
+      : 0;  
+  
+  
+  const firstConfirm =  
+    confirm(  
+      "⚠️ DELETE PROFILE\n\n" +  
+  
+      "Profile: " +  
+      selectedProfile +  
+      "\n\n" +  
+  
+      "Ang profile na ito at " +  
+      personCount +  
+      " Other People ay aalisin.\n\n" +  
+  
+      "Sigurado ka bang gusto mong ituloy?"  
+    );  
+  
+  
+  if(!firstConfirm){  
+  
+    return;  
+  
+  }  
+  
+  
+  const secondConfirm =  
+    prompt(  
+      'I-type ang "' +  
+      selectedProfile +  
+      '" para kumpirmahin ang deletion:'  
+    );  
+  
+  
+  if(secondConfirm === null){  
+  
+    return;  
+  
+  }  
+  
+  
+  if(  
+    secondConfirm  
+      .trim()  
+      .toLowerCase() !==  
+    selectedProfile.toLowerCase()  
+  ){  
+  
+    alert(  
+      "❌ Hindi tugma ang profile name. Hindi binura."  
+    );  
+  
+    return;  
+  
+  }  
+  
+  
+  delete data[selectedProfile];  
+  
+  
+  const remaining =  
+    Object.keys(data);  
+  
+  
+  selectedProfile =  
+    remaining[0];  
+  
+  
+  populateProfiles();  
+  
+  generate();  
+  
+  
+  setStatus(  
+    "🗑 Profile deleted locally. " +  
+    "Pindutin ang Save Changes to GitHub para tuluyang alisin sa GitHub."  
+  );  
+  
+}  
+  
+  
+/* =========================================================  
+   GENERATE CURRENT PROFILE  
+========================================================= */  
+  
+function generate(){  
+  
+  captureCurrentProfile();  
+  
+  
+  if(!selectedProfile){  
+  
+    alert(  
+      "Maglagay muna ng Profile ID."  
+    );  
+  
+    return "";  
+  
+  }  
+  
+  
+  const p =  
+    data[selectedProfile];  
+  
+  
+  const a = [  
+  
+    "[" +  
+    selectedProfile +  
+    "]"  
+  
+  ];  
+  
+  
+  fields.forEach(k => {  
+  
+    line(  
+      a,  
+      k,  
+      p.main[k]  
+    );  
+  
+  });  
+  
+  
+  line(  
+    a,  
+    "message",  
+    p.main.message,  
+    true  
+  );  
+  
+  
+  p.others.forEach(  
+    person => {  
+  
+      a.push("");  
+  
+      a.push(  
+        "[" +  
+        selectedProfile +  
+        "][other]"  
+      );  
+  
+  
+      [  
+        "name",  
+        "subtitle",  
+        "photo",  
+        "phone",  
+        "sms",  
+        "messenger",  
+        "facebook",  
+        "email",  
+        "maps"  
+  
+      ].forEach(k => {  
+  
+        line(  
+          a,  
+          k,  
+          person[k]  
+        );  
+  
+      });  
+  
+    }  
+  );  
+  
+  
+  const result =  
+    a.join("\n");  
+  
+  
+  document  
+    .getElementById("output")  
+    .value =  
+      result;  
+  
+  
+  return result;  
+  
+}  
+  
+  
+/* =========================================================  
+   BUILD COMPLETE FILE  
+========================================================= */  
+  
+function buildCompleteFile(){  
+  
+  captureCurrentProfile();  
+  
+  
+  const sections = [];  
+  
+  
+  Object.keys(data)  
+    .forEach(p => {  
+  
+      const profile =  
+        data[p];  
+  
+  
+      const a = [  
+  
+        "[" +  
+        p +  
+        "]"  
+  
+      ];  
+  
+  
+      fields.forEach(k => {  
+  
+        line(  
+          a,  
+          k,  
+          profile.main[k]  
+        );  
+  
+      });  
+  
+  
+      line(  
+        a,  
+        "message",  
+        profile.main.message,  
+        true  
+      );  
+  
+  
+      profile.others  
+        .forEach(person => {  
+  
+          a.push("");  
+  
+          a.push(  
+            "[" +  
+            p +  
+            "][other]"  
+          );  
+  
+  
+          [  
+            "name",  
+            "subtitle",  
+            "photo",  
+            "phone",  
+            "sms",  
+            "messenger",  
+            "facebook",  
+            "email",  
+            "maps"  
+  
+          ].forEach(k => {  
+  
+            line(  
+              a,  
+              k,  
+              person[k]  
+            );  
+  
+          });  
+  
+        });  
+  
+  
+      sections.push(  
+        a.join("\n")  
+      );  
+  
+    });  
+  
+  
+  return sections  
+    .filter(Boolean)  
+    .join("\n\n");  
+  
+}  
+  
+  
+/* =========================================================  
+   BASE64  
+========================================================= */  
+  
+function base64Encode(str){  
+  
+  const bytes =  
+    new TextEncoder()  
+      .encode(str);  
+  
+  
+  let binary = "";  
+  
+  const chunk = 0x8000;  
+  
+  
+  for(  
+    let i=0;  
+    i<bytes.length;  
+    i+=chunk  
+  ){  
+  
+    binary +=  
+      String.fromCharCode(  
+        ...bytes.subarray(  
+          i,  
+          i + chunk  
+        )  
+      );  
+  
+  }  
+  
+  
+  return btoa(binary);  
+  
+}  
+  
+  
+/* =========================================================  
+   FILE TO BASE64  
+========================================================= */  
+  
+function fileToBase64(file){  
+  
+  return new Promise(  
+    (resolve,reject) => {  
+  
+      const reader =  
+        new FileReader();  
+  
+  
+      reader.onload = () => {  
+  
+        const result =  
+          reader.result;  
+  
+  
+        const base64 =  
+          result  
+            .split(",")[1];  
+  
+  
+        resolve(base64);  
+  
+      };  
+  
+  
+      reader.onerror =  
+        reject;  
+  
+  
+      reader.readAsDataURL(  
+        file  
+      );  
+  
+    }  
+  );  
+  
+}  
+  
+  
+/* =========================================================  
+   GITHUB REQUEST  
+========================================================= */  
+  
+async function githubRequest(  
+  url,  
+  options={}  
+){  
+  
+  const token =  
+    document  
+      .getElementById(  
+        "ghToken"  
+      )  
+      .value  
+      .trim();  
+  
+  
+  const headers = {  
+  
+    "Accept":  
+      "application/vnd.github+json",  
+  
+    "X-GitHub-Api-Version":  
+      "2022-11-28",  
+  
+    ...(options.headers || {})  
+  
+  };  
+  
+  
+  if(token){  
+  
+    headers.Authorization =  
+      "Bearer " +  
+      token;  
+  
+  }  
+  
+  
+  return fetch(  
+    url,  
+    {  
+      ...options,  
+      headers  
+    }  
+  );  
+  
+}  
+  
+  
+/* =========================================================  
+   STATUS  
+========================================================= */  
+  
+function setStatus(t){  
+  
+  document  
+    .getElementById(  
+      "status"  
+    )  
+    .textContent =  
+      t;  
+  
+}  
+  
+  
+/* =========================================================  
+   GITHUB REPO PATH  
+========================================================= */  
+  
+function githubApiPath(  
+  user,  
+  repo,  
+  path  
+){  
+  
+  return (  
+    `https://api.github.com/repos/` +  
+    `${encodeURIComponent(user)}/` +  
+    `${encodeURIComponent(repo)}/` +  
+    `contents/` +  
+    path  
+  );  
+  
+}  
+  
+  
+/* =========================================================  
+   UPLOAD PHOTO TO GITHUB  
+========================================================= */  
+  
+async function uploadPhotoToGitHub(  
+  file,  
+  filename,  
+  user,  
+  repo,  
+  branch  
+){  
+  
+  if(!file){  
+  
+    return null;  
+  
+  }  
+  
+  
+  const safeName =  
+    cleanFileName(  
+      filename  
+    );  
+  
+  
+  const path =  
+    "public/" +  
+    safeName;  
+  
+  
+  const api =  
+    githubApiPath(  
+      user,  
+      repo,  
+      path  
+    );  
+  
+  
+  setStatus(  
+    "📤 Uploading photo: " +  
+    safeName +  
+    "..."  
+  );  
+  
+  
+  /* Get existing file SHA */  
+  
+  const get =  
+    await githubRequest(  
+      api +  
+      "?ref=" +  
+      encodeURIComponent(  
+        branch  
+      )  
+    );  
+  
+  
+  let sha = null;  
+  
+  
+  if(get.ok){  
+  
+    const old =  
+      await get.json();  
+  
+  
+    sha =  
+      old.sha;  
+  
+  }else if(  
+    get.status !== 404  
+  ){  
+  
+    const err =  
+      await get  
+        .json()  
+        .catch(() => ({}));  
+  
+  
+    throw new Error(  
+      err.message ||  
+      "Unable to check photo."  
+    );  
+  
+  }  
+  
+  
+  const base64 =  
+    await fileToBase64(  
+      file  
+    );  
+  
+  
+  const body = {  
+  
+    message:  
+      "Upload profile photo " +  
+      safeName,  
+  
+    content:  
+      base64,  
+  
+    branch:  
+      branch  
+  
+  };  
+  
+  
+  /*  
+    Existing photo:  
+    use SHA to update it.  
+  */  
+  
+  if(sha){  
+  
+    body.sha =  
+      sha;  
+  
+  }  
+  
+  
+  const put =  
+    await githubRequest(  
+      api,  
+      {  
+        method:"PUT",  
+  
+        headers:{  
+          "Content-Type":  
+            "application/json"  
+        },  
+  
+        body:  
+          JSON.stringify(body)  
+      }  
+    );  
+  
+  
+  const result =  
+    await put.json();  
+  
+  
+  if(!put.ok){  
+  
+    throw new Error(  
+      result.message ||  
+      "Photo upload failed."  
+    );  
+  
+  }  
+  
+  
+  return safeName;  
+  
+}  
+  
+  
+/* =========================================================  
+   LOAD CURRENT PROFILE.INFO  
+========================================================= */  
+  
+async function loadFromGitHub(){  
+  
+  const user =  
+    document  
+      .getElementById(  
+        "ghUser"  
+      )  
+      .value  
+      .trim();  
+  
+  
+  const repo =  
+    document  
+      .getElementById(  
+        "ghRepo"  
+      )  
+      .value  
+      .trim();  
+  
+  
+  const branch =  
+    document  
+      .getElementById(  
+        "ghBranch"  
+      )  
+      .value  
+      .trim() ||  
+      "main";  
+  
+  
+  const token =  
+    document  
+      .getElementById(  
+        "ghToken"  
+      )  
+      .value  
+      .trim();  
+  
+  
+  if(  
+    !user ||  
+    !repo ||  
+    !token  
+  ){  
+  
+    setStatus(  
+      "❌ Ilagay ang username, repository at token."  
+    );  
+  
+    return;  
+  
+  }  
+  
+  
+  setStatus(  
+    "Reading current Profile.info..."  
+  );  
+  
+  
+  try{  
+  
+    const url =  
+      githubApiPath(  
+        user,  
+        repo,  
+        "public/Profile.info"  
+      ) +  
+      "?ref=" +  
+      encodeURIComponent(  
+        branch  
+      );  
+  
+  
+    const res =  
+      await githubRequest(  
+        url  
+      );  
+  
+  
+    const obj =  
+      await res.json();  
+  
+  
+    if(!res.ok){  
+  
+      throw new Error(  
+        obj.message ||  
+        ("GitHub error " +  
+         res.status)  
+      );  
+  
+    }  
+  
+  
+    if(!obj.content){  
+  
+      throw new Error(  
+        "Walang file content na nakuha."  
+      );  
+  
+    }  
+  
+  
+    const binary =  
+      atob(  
+        obj.content  
+          .replace(/\n/g,"")  
+      );  
+  
+  
+    const bytes =  
+      Uint8Array.from(  
+        binary,  
+        c =>  
+          c.charCodeAt(0)  
+      );  
+  
+  
+    const text =  
+      new TextDecoder()  
+        .decode(bytes);  
+  
+  
+    originalFileText =  
+      text;  
+  
+  
+    data =  
+      parseInfo(text);  
+  
+  
+    selectedProfile =  
+      Object.keys(data)[0] ||  
+      "";  
+  
+  
+    if(!selectedProfile){  
+  
+      throw new Error(  
+        "Walang profile section sa Profile.info."  
+      );  
+  
+    }  
+  
+  
+    document  
+      .getElementById(  
+        "editor"  
+      )  
+      .classList  
+      .remove(  
+        "hidden"  
+      );  
+  
+  
+    populateProfiles();  
+  
+    generate();  
+  
+  
+    setStatus(  
+      "✅ Profile.info loaded. Puwede mo nang i-edit."  
+    );  
+  
+  }catch(e){  
+  
+    console.error(e);  
+  
+  
+    setStatus(  
+      "❌ Error: " +  
+      e.message  
+    );  
+  
+  }  
+  
+}  
+  
+  
+/* =========================================================  
+   SAVE TO GITHUB  
+========================================================= */  
+  
+async function saveToGitHub(){  
+  
+  /*  
+    Capture current form first.  
+  */  
+  
+  captureCurrentProfile();  
+  
+  
+  const user =  
+    document  
+      .getElementById(  
+        "ghUser"  
+      )  
+      .value  
+      .trim();  
+  
+  
+  const repo =  
+    document  
+      .getElementById(  
+        "ghRepo"  
+      )  
+      .value  
+      .trim();  
+  
+  
+  const branch =  
+    document  
+      .getElementById(  
+        "ghBranch"  
+      )  
+      .value  
+      .trim() ||  
+      "main";  
+  
+  
+  const token =  
+    document  
+      .getElementById(  
+        "ghToken"  
+      )  
+      .value  
+      .trim();  
+  
+  
+  if(  
+    !user ||  
+    !repo ||  
+    !token  
+  ){  
+  
+    setStatus(  
+      "❌ Ilagay ang username, repository at token."  
+    );  
+  
+    return;  
+  
+  }  
+  
+  
+  try{  
+  
+    /*  
+      Disable editor while uploading.  
+    */  
+  
+    document  
+      .getElementById(  
+        "editor"  
+      )  
+      .classList  
+      .add(  
+        "uploading"  
+      );  
+  
+  
+    /* =====================================================  
+       UPLOAD MAIN PHOTO  
+    ===================================================== */  
+  
+    const mainFile =  
+      document  
+        .getElementById(  
+          "photoFile"  
+        )  
+        .selectedPhotoFile;  
+  
+  
+    if(mainFile){  
+  
+      const filename =  
+        cleanFileName(  
+          document  
+            .getElementById(  
+              "photo"  
+            )  
+            .value  
+        );  
+  
+  
+      await uploadPhotoToGitHub(  
+        mainFile,  
+        filename ||  
+          mainFile.name,  
+        user,  
+        repo,  
+        branch  
+      );  
+  
+    }  
+  
+  
+    /* =====================================================  
+       UPLOAD OTHER PHOTOS  
+    ===================================================== */  
+  
+    const otherContainers =  
+      document.querySelectorAll(  
+        ".other"  
+      );  
+  
+  
+    for(  
+      const d of otherContainers  
+    ){  
+  
+      const fileInput =  
+        d.querySelector(  
+          ".o-photo-file"  
+        );  
+  
+  
+      const file =  
+        fileInput  
+          ?.selectedPhotoFile;  
+  
+  
+      if(file){  
+  
+        const filename =  
+          cleanFileName(  
+            d.querySelector(  
+              ".o-photo"  
+            ).value  
+          );  
+  
+  
+        await uploadPhotoToGitHub(  
+          file,  
+          filename ||  
+            file.name,  
+          user,  
+          repo,  
+          branch  
+        );  
+  
+      }  
+  
+    }  
+  
+  
+    /*  
+      Capture again after  
+      photo upload.  
+    */  
+  
+    captureCurrentProfile();  
+  
+  
+    const content =  
+      buildCompleteFile();  
+  
+  
+    if(!content){  
+  
+      throw new Error(  
+        "Walang content na ise-save."  
+      );  
+  
+    }  
+  
+  
+    setStatus(  
+      "💾 Saving Profile.info..."  
+    );  
+  
+  
+    /* =====================================================  
+       PROFILE.INFO  
+    ===================================================== */  
+  
+    const api =  
+      githubApiPath(  
+        user,  
+        repo,  
+        "public/Profile.info"  
+      );  
+  
+  
+    /* Get SHA */  
+  
+    const get =  
+      await githubRequest(  
+        api +  
+        "?ref=" +  
+        encodeURIComponent(  
+          branch  
+        )  
+      );  
+  
+  
+    let sha = null;  
+  
+  
+    if(get.ok){  
+  
+      const old =  
+        await get.json();  
+  
+  
+      sha =  
+        old.sha;  
+  
+    }else if(  
+      get.status !== 404  
+    ){  
+  
+      const err =  
+        await get  
+          .json()  
+          .catch(  
+            () => ({})  
+          );  
+  
+  
+      throw new Error(  
+        err.message ||  
+        ("GitHub GET error " +  
+         get.status)  
+      );  
+  
+    }  
+  
+  
+    const body = {  
+  
+      message:  
+        "Update Profile.info",  
+  
+      content:  
+        base64Encode(  
+          content  
+        ),  
+  
+      branch:  
+        branch  
+  
+    };  
+  
+  
+    if(sha){  
+  
+      body.sha =  
+        sha;  
+  
+    }  
+  
+  
+    const put =  
+      await githubRequest(  
+        api,  
+        {  
+          method:"PUT",  
+  
+          headers:{  
+            "Content-Type":  
+              "application/json"  
+          },  
+  
+          body:  
+            JSON.stringify(  
+              body  
+            )  
+  
+        }  
+      );  
+  
+  
+    const result =  
+      await put.json();  
+  
+  
+    if(!put.ok){  
+  
+      throw new Error(  
+        result.message ||  
+        ("GitHub error " +  
+         put.status)  
+      );  
+  
+    }  
+  
+  
+    originalFileText =  
+      content;  
+  
+  
+    /*  
+      Clear selected files  
+      after successful save.  
+    */  
+  
+    const mainInput =  
+      document.getElementById(  
+        "photoFile"  
+      );  
+  
+  
+    mainInput.value = "";  
+  
+    mainInput.selectedPhotoFile =  
+      null;  
+  
+  
+    document  
+      .querySelectorAll(  
+        ".o-photo-file"  
+      )  
+      .forEach(input => {  
+  
+        input.value = "";  
+  
+        input.selectedPhotoFile =  
+          null;  
+  
+      });  
+  
+  
+    setStatus(  
+      "✅ Saved successfully! " +  
+      "Profile.info at photos uploaded na sa GitHub."  
+    );  
+  
+  
+  }catch(e){  
+  
+    console.error(e);  
+  
+  
+    setStatus(  
+      "❌ Error: " +  
+      e.message  
+    );  
+  
+  }finally{  
+  
+    document  
+      .getElementById(  
+        "editor"  
+      )  
+      .classList  
+      .remove(  
+        "uploading"  
+      );  
+  
+  }  
+  
+}  
+  
+  
+/* =========================================================  
+   COPY  
+========================================================= */  
+  
+async function copyOutput(){  
+  
+  const v =  
+    generate();  
+  
+  
+  if(!v){  
+  
+    return;  
+  
+  }  
+  
+  
+  try{  
+  
+    await navigator  
+      .clipboard  
+      .writeText(v);  
+  
+  
+    setStatus(  
+      "Copied."  
+    );  
+  
+  }catch(e){  
+  
+    const o =  
+      document  
+        .getElementById(  
+          "output"  
+        );  
+  
+  
+    o.select();  
+  
+  
+    document.execCommand(  
+      "copy"  
+    );  
+  
+  
+    setStatus(  
+      "Copied."  
+    );  
+  
+  }  
+  
+}  
+  
+  
+/* =========================================================  
+   DOWNLOAD  
+========================================================= */  
+  
+function downloadFile(){  
+  
+  const v =  
+    buildCompleteFile();  
+  
+  
+  if(!v){  
+  
+    return;  
+  
+  }  
+  
+  
+  const u =  
+    URL.createObjectURL(  
+      new Blob(  
+        [v],  
+        {  
+          type:  
+            "text/plain;charset=utf-8"  
+        }  
+      )  
+    );  
+  
+  
+  const a =  
+    document.createElement(  
+      "a"  
+    );  
+  
+  
+  a.href =  
+    u;  
+  
+  
+  a.download =  
+    "Profile.info";  
+  
+  
+  document  
+    .body  
+    .appendChild(a);  
+  
+  
+  a.click();  
+  
+  
+  a.remove();  
+  
+  
+  URL.revokeObjectURL(  
+    u  
+  );  
+  
+}  
+  
+</script>  </body>  
+</html>  
