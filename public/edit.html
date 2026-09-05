@@ -96,6 +96,11 @@ button:hover{
   opacity:.9;
 }
 
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
 .primary{
   background:#111;
   color:#fff;
@@ -139,7 +144,7 @@ button:hover{
 
 .status{
   display:none;
-  padding:12px;
+  padding:14px;
   margin-top:15px;
   border-radius:10px;
   background:#eef5ff;
@@ -234,16 +239,6 @@ button:hover{
   margin-top:10px;
 }
 
-#editor{
-  display:none;
-}
-
-#output{
-  font-family:monospace;
-  min-height:350px;
-  white-space:pre;
-}
-
 .small{
   color:#666;
   font-size:13px;
@@ -253,6 +248,32 @@ button:hover{
 .delete-box{
   border:1px solid #f0b0b0;
   background:#fff5f5;
+}
+
+.progress{
+  display:none;
+  margin-top:15px;
+}
+
+.progress-bar{
+  width:100%;
+  height:8px;
+  border-radius:10px;
+  background:#ddd;
+  overflow:hidden;
+}
+
+.progress-fill{
+  width:0%;
+  height:100%;
+  background:#111;
+  transition:width .4s ease;
+}
+
+.progress-text{
+  margin-top:8px;
+  font-size:13px;
+  color:#555;
 }
 
 @media(max-width:650px){
@@ -340,7 +361,6 @@ button:hover{
       placeholder="GitHub username"
     >
 
-
     <label>Repository</label>
 
     <input
@@ -349,7 +369,6 @@ button:hover{
       value="solisjeffrey7.github.io"
       placeholder="Repository name"
     >
-
 
     <label>Branch</label>
 
@@ -360,7 +379,6 @@ button:hover{
       placeholder="main"
     >
 
-
     <label>GitHub Personal Access Token</label>
 
     <input
@@ -369,14 +387,13 @@ button:hover{
       placeholder="github_pat_..."
     >
 
-
     <p class="small">
       Your GitHub token is used only by this page to access your repository.
       Do not share it with anyone.
     </p>
 
-
     <button
+      id="readButton"
       class="github"
       type="button"
       onclick="loadFromGitHub()"
@@ -384,11 +401,31 @@ button:hover{
       Read Current Profile.info
     </button>
 
-
     <div
       id="status"
       class="status"
     ></div>
+
+    <div
+      id="progress"
+      class="progress"
+    >
+
+      <div class="progress-bar">
+
+        <div
+          id="progressFill"
+          class="progress-fill"
+        ></div>
+
+      </div>
+
+      <div
+        id="progressText"
+        class="progress-text"
+      ></div>
+
+    </div>
 
   </div>
 
@@ -406,7 +443,6 @@ button:hover{
         id="profileSelect"
         onchange="switchProfile()"
       ></select>
-
 
       <div class="profile-create">
 
@@ -428,7 +464,6 @@ button:hover{
 
       <h2>Main Profile</h2>
 
-
       <label>Profile ID</label>
 
       <input
@@ -436,7 +471,6 @@ button:hover{
         type="text"
         placeholder="jeffrey"
       >
-
 
       <label>Name</label>
 
@@ -446,7 +480,6 @@ button:hover{
         placeholder="Jeffrey Solis"
       >
 
-
       <label>Subtitle</label>
 
       <input
@@ -454,7 +487,6 @@ button:hover{
         type="text"
         placeholder="Personal Contact Profile"
       >
-
 
       <!-- MAIN PHOTO -->
       <label>Profile Photo</label>
@@ -467,7 +499,6 @@ button:hover{
           alt="Profile preview"
         >
 
-
         <div class="photo-buttons">
 
           <input
@@ -478,7 +509,6 @@ button:hover{
             hidden
           >
 
-
           <button
             type="button"
             class="primary"
@@ -486,7 +516,6 @@ button:hover{
           >
             📷 Upload Photo
           </button>
-
 
           <button
             type="button"
@@ -500,7 +529,6 @@ button:hover{
 
       </div>
 
-
       <div
         id="mainPhotoName"
         class="file-name"
@@ -510,7 +538,6 @@ button:hover{
       <!-- LOCATION -->
       <h3>Location</h3>
 
-
       <label>Address</label>
 
       <input
@@ -518,7 +545,6 @@ button:hover{
         type="text"
         placeholder="Address"
       >
-
 
       <label>City</label>
 
@@ -531,7 +557,6 @@ button:hover{
 
       <!-- CONTACTS -->
       <h3>Contacts</h3>
-
 
       <div class="row">
 
@@ -547,7 +572,6 @@ button:hover{
 
         </div>
 
-
         <div>
 
           <label>SMS</label>
@@ -559,7 +583,6 @@ button:hover{
           >
 
         </div>
-
 
         <div>
 
@@ -573,7 +596,6 @@ button:hover{
 
         </div>
 
-
         <div>
 
           <label>Facebook</label>
@@ -586,7 +608,6 @@ button:hover{
 
         </div>
 
-
         <div>
 
           <label>Email</label>
@@ -598,7 +619,6 @@ button:hover{
           >
 
         </div>
-
 
         <div>
 
@@ -635,9 +655,7 @@ button:hover{
         Add additional people connected to this profile.
       </p>
 
-
       <div id="others"></div>
-
 
       <button
         type="button"
@@ -655,10 +673,10 @@ button:hover{
 
       <h2>Actions</h2>
 
-
       <div class="actions">
 
         <button
+          id="generateButton"
           type="button"
           class="primary"
           onclick="generate()"
@@ -666,15 +684,14 @@ button:hover{
           Generate Profile.info
         </button>
 
-
         <button
+          id="saveButton"
           type="button"
           class="github"
           onclick="saveToGitHub()"
         >
           Save Changes to GitHub
         </button>
-
 
         <button
           type="button"
@@ -683,7 +700,6 @@ button:hover{
         >
           Copy
         </button>
-
 
         <button
           type="button"
@@ -707,7 +723,6 @@ button:hover{
         This permanently removes the selected profile from the generated
         Profile.info file when you save to GitHub.
       </p>
-
 
       <button
         type="button"
@@ -739,6 +754,11 @@ button:hover{
 
 <script>
 
+
+// =====================================
+// GLOBAL VARIABLES
+// =====================================
+
 let data = {};
 
 let selectedProfile = "";
@@ -747,6 +767,12 @@ let originalFileText = "";
 
 let mainPhotoFile = null;
 
+let isProcessing = false;
+
+
+// =====================================
+// PROFILE FIELDS
+// =====================================
 
 const fields = [
 
@@ -763,6 +789,22 @@ const fields = [
   "maps"
 
 ];
+
+
+// =====================================
+// DELAY
+// =====================================
+
+function sleep(ms){
+
+  return new Promise(
+    resolve => setTimeout(
+      resolve,
+      ms
+    )
+  );
+
+}
 
 
 // =====================================
@@ -788,7 +830,9 @@ function esc(value){
 function decodeValue(value){
 
   const txt =
-    document.createElement("textarea");
+    document.createElement(
+      "textarea"
+    );
 
   txt.innerHTML =
     value ?? "";
@@ -799,7 +843,7 @@ function decodeValue(value){
 
 
 // =====================================
-// CLEAN PROFILE ID
+// CLEAN PROFILE
 // =====================================
 
 function cleanProfile(value){
@@ -807,8 +851,14 @@ function cleanProfile(value){
   return String(value ?? "")
     .trim()
     .toLowerCase()
-    .replace(/[^a-z0-9_-]+/g,"")
-    .replace(/^-+|-+$/g,"");
+    .replace(
+      /[^a-z0-9_-]+/g,
+      ""
+    )
+    .replace(
+      /^-+|-+$/g,
+      ""
+    );
 
 }
 
@@ -821,7 +871,10 @@ function cleanFileName(value){
 
   return String(value ?? "")
     .trim()
-    .replace(/[^a-zA-Z0-9._-]/g,"_");
+    .replace(
+      /[^a-zA-Z0-9._-]/g,
+      "_"
+    );
 
 }
 
@@ -860,7 +913,7 @@ function parseInfo(text){
 
 
   for(
-    let raw of lines
+    const raw of lines
   ){
 
     const lineText =
@@ -876,13 +929,15 @@ function parseInfo(text){
       lineText.startsWith("#") ||
       lineText.startsWith(";")
     ){
+
       continue;
+
     }
 
 
     const otherMatch =
       lineText.match(
-        /^\[([^\]]+)\]\[other\]$/
+        /^\[([^\]]+)\]\[other\]$/i
       );
 
 
@@ -928,7 +983,7 @@ function parseInfo(text){
 
     const profileMatch =
       lineText.match(
-        /^\[([^\]]+)\]$/
+        /^\[([^\]]+)\]$/i
       );
 
 
@@ -1018,7 +1073,10 @@ function parseInfo(text){
 
     const key =
       lineText
-        .slice(0,equalIndex)
+        .slice(
+          0,
+          equalIndex
+        )
         .trim()
         .toLowerCase();
 
@@ -1141,10 +1199,6 @@ function captureCurrentProfile(){
     ).value;
 
 
-  /*
-   * Keep currently selected
-   * main photo file.
-   */
   if(mainPhotoFile){
 
     main._photoFile =
@@ -1200,9 +1254,6 @@ function captureCurrentProfile(){
         }
 
 
-        /*
-         * Keep existing photo.
-         */
         if(
           box.dataset.existingPhoto &&
           !person.photo
@@ -1214,15 +1265,14 @@ function captureCurrentProfile(){
         }
 
 
-        others.push(person);
+        others.push(
+          person
+        );
 
       }
     );
 
 
-  /*
-   * Profile ID changed.
-   */
   if(
     newProfile !== oldProfile
   ){
@@ -1258,7 +1308,7 @@ function captureCurrentProfile(){
 
 
 // =====================================
-// FILL MAIN PROFILE
+// FILL MAIN
 // =====================================
 
 function fillMain(){
@@ -1386,6 +1436,11 @@ function fillMain(){
 
 function switchProfile(){
 
+  if(isProcessing){
+    return;
+  }
+
+
   captureCurrentProfile();
 
 
@@ -1401,7 +1456,7 @@ function switchProfile(){
 
 
 // =====================================
-// POPULATE PROFILE SELECT
+// POPULATE PROFILES
 // =====================================
 
 function populateProfiles(){
@@ -1489,9 +1544,11 @@ function populateProfiles(){
 
 function createNewProfile(){
 
-  /*
-   * Save any current edits first.
-   */
+  if(isProcessing){
+    return;
+  }
+
+
   captureCurrentProfile();
 
 
@@ -1526,8 +1583,7 @@ function createNewProfile(){
   if(data[id]){
 
     alert(
-      "Profile ID already exists.\n\n" +
-      "Please choose another ID."
+      "Profile ID already exists."
     );
 
     return;
@@ -1535,9 +1591,6 @@ function createNewProfile(){
   }
 
 
-  /*
-   * Create blank profile.
-   */
   data[id] = {
 
     main:{
@@ -1571,17 +1624,14 @@ function createNewProfile(){
 
   setStatus(
     "✅ New profile created: " +
-    id +
-    "\n\n" +
-    "I-edit ang fields at pindutin ang " +
-    "\"Save Changes to GitHub\" para ma-save."
+    id
   );
 
 }
 
 
 // =====================================
-// MAIN PHOTO SELECT
+// MAIN PHOTO
 // =====================================
 
 function selectMainPhoto(event){
@@ -1624,7 +1674,7 @@ function selectMainPhoto(event){
 
 
 // =====================================
-// REMOVE MAIN PHOTO
+// CLEAR MAIN PHOTO
 // =====================================
 
 function clearMainPhoto(){
@@ -1754,7 +1804,6 @@ function addOther(person = {}){
 
 
     <label>Photo</label>
-
 
     <input
       class="other-file"
@@ -1912,6 +1961,11 @@ function previewOtherPhoto(event){
 
 function deleteProfile(){
 
+  if(isProcessing){
+    return;
+  }
+
+
   captureCurrentProfile();
 
 
@@ -1976,14 +2030,14 @@ function deleteProfile(){
 
   setStatus(
     "🗑️ Profile deleted locally.\n\n" +
-    "Pindutin ang Save Changes to GitHub para ma-save ang deletion."
+    "Pindutin ang Save Changes to GitHub para ma-save."
   );
 
 }
 
 
 // =====================================
-// GENERATE CURRENT PROFILE
+// GENERATE
 // =====================================
 
 function generate(){
@@ -2029,7 +2083,10 @@ function generate(){
       if(value !== ""){
 
         output +=
-          line(key,value) +
+          line(
+            key,
+            value
+          ) +
           "\n";
 
       }
@@ -2082,7 +2139,10 @@ function generate(){
             if(value !== ""){
 
               output +=
-                line(key,value) +
+                line(
+                  key,
+                  value
+                ) +
                 "\n";
 
             }
@@ -2232,7 +2292,9 @@ function base64Encode(str){
 
   return btoa(
     unescape(
-      encodeURIComponent(str)
+      encodeURIComponent(
+        str
+      )
     )
   );
 
@@ -2441,7 +2503,112 @@ function setStatus(message){
 
 
 // =====================================
-// UPLOAD PHOTO TO GITHUB
+// PROGRESS
+// =====================================
+
+function showProgress(
+  percent,
+  text
+){
+
+  const progress =
+    document.getElementById(
+      "progress"
+    );
+
+
+  const fill =
+    document.getElementById(
+      "progressFill"
+    );
+
+
+  const progressText =
+    document.getElementById(
+      "progressText"
+    );
+
+
+  progress.style.display =
+    "block";
+
+
+  fill.style.width =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        percent
+      )
+    ) +
+    "%";
+
+
+  progressText.textContent =
+    text || "";
+
+}
+
+
+// =====================================
+// HIDE PROGRESS
+// =====================================
+
+function hideProgress(){
+
+  document.getElementById(
+    "progress"
+  ).style.display =
+    "none";
+
+}
+
+
+// =====================================
+// SET PROCESSING
+// =====================================
+
+function setProcessing(
+  value
+){
+
+  isProcessing =
+    value;
+
+
+  const ids = [
+
+    "readButton",
+    "generateButton",
+    "saveButton"
+
+  ];
+
+
+  ids.forEach(
+    id => {
+
+      const el =
+        document.getElementById(
+          id
+        );
+
+
+      if(el){
+
+        el.disabled =
+          value;
+
+      }
+
+    }
+  );
+
+}
+
+
+// =====================================
+// UPLOAD PHOTO
 // =====================================
 
 async function uploadPhotoToGitHub(
@@ -2484,10 +2651,13 @@ async function uploadPhotoToGitHub(
   }catch(error){
 
     /*
-     * File doesn't exist yet.
+     * File does not exist.
      */
 
   }
+
+
+  await sleep(500);
 
 
   const content =
@@ -2533,6 +2703,12 @@ async function uploadPhotoToGitHub(
   );
 
 
+  /*
+   * Wait after GitHub upload.
+   */
+  await sleep(1500);
+
+
   return "/" +
     safeName;
 
@@ -2540,18 +2716,22 @@ async function uploadPhotoToGitHub(
 
 
 // =====================================
-// GET PHOTO FILENAMES FROM PROFILE.INFO
+// GET DECLARED PHOTO FILENAMES
 // =====================================
 
-function getDeclaredPhotoNames(profileText){
+function getDeclaredPhotoNames(
+  profileText
+){
 
   const declared =
     new Set();
 
 
   const lines =
-    String(profileText || "")
-      .split(/\r?\n/);
+    String(
+      profileText || ""
+    )
+    .split(/\r?\n/);
 
 
   lines.forEach(
@@ -2562,7 +2742,7 @@ function getDeclaredPhotoNames(profileText){
 
 
       /*
-       * Find every:
+       * Find ALL:
        *
        * photo=value
        */
@@ -2587,18 +2767,21 @@ function getDeclaredPhotoNames(profileText){
 
 
       /*
-       * Remove query string
-       * and hash.
+       * Remove ?query
        */
       value =
-        value
-          .split("?")[0]
-          .split("#")[0];
+        value.split("?")[0];
 
 
       /*
-       * If value is a full URL,
-       * use only pathname.
+       * Remove #hash
+       */
+      value =
+        value.split("#")[0];
+
+
+      /*
+       * URL support
        */
       try{
 
@@ -2624,7 +2807,7 @@ function getDeclaredPhotoNames(profileText){
 
 
       /*
-       * Normalize slashes.
+       * Normalize slash.
        */
       value =
         value.replace(
@@ -2634,7 +2817,9 @@ function getDeclaredPhotoNames(profileText){
 
 
       /*
-       * ONLY FILENAME
+       * IMPORTANT:
+       *
+       * Get filename ONLY.
        *
        * /public/jeffrey.jpg
        * /jeffrey.jpg
@@ -2670,7 +2855,7 @@ function getDeclaredPhotoNames(profileText){
 
 
 // =====================================
-// GET ALL IMAGES FROM PUBLIC
+// GET ALL REPOSITORY IMAGES
 // =====================================
 
 async function getAllRepositoryImages(){
@@ -2682,17 +2867,24 @@ async function getAllRepositoryImages(){
     "main";
 
 
+  /*
+   * Use tree API.
+   */
   const result =
     await githubRequest(
       "/git/trees/" +
-      encodeURIComponent(branch) +
+      encodeURIComponent(
+        branch
+      ) +
       "?recursive=1"
     );
 
 
   if(
     !result.tree ||
-    !Array.isArray(result.tree)
+    !Array.isArray(
+      result.tree
+    )
   ){
 
     return [];
@@ -2732,7 +2924,7 @@ async function getAllRepositoryImages(){
 
 
         /*
-         * ONLY images inside public/
+         * Only public/
          */
         if(
           !item.path.startsWith(
@@ -2760,7 +2952,9 @@ async function getAllRepositoryImages(){
       item => {
 
         /*
-         * Extract filename ONLY.
+         * IMPORTANT:
+         *
+         * Filename ONLY.
          */
         const name =
           item.path
@@ -2792,7 +2986,7 @@ async function getAllRepositoryImages(){
 
 
 // =====================================
-// DELETE IMAGE FROM GITHUB
+// DELETE IMAGE
 // =====================================
 
 async function deleteImageFromGitHub(
@@ -2826,6 +3020,12 @@ async function deleteImageFromGitHub(
     }
   );
 
+
+  /*
+   * Wait after every delete.
+   */
+  await sleep(1500);
+
 }
 
 
@@ -2838,9 +3038,26 @@ async function cleanupUnusedImages(
 ){
 
   /*
-   * Get all photo filenames
-   * declared in Profile.info.
+   * STEP A
+   *
+   * Read photo= declarations.
    */
+  setStatus(
+    "🧹 Image cleanup\n\n" +
+    "Step 1/3\n" +
+    "Reading all photo= declarations..."
+  );
+
+
+  showProgress(
+    0,
+    "Reading photo declarations..."
+  );
+
+
+  await sleep(1000);
+
+
   const declared =
     getDeclaredPhotoNames(
       profileText
@@ -2848,33 +3065,57 @@ async function cleanupUnusedImages(
 
 
   /*
-   * Get all image files
-   * from public/.
+   * STEP B
+   *
+   * Scan public/.
    */
+  setStatus(
+    "🧹 Image cleanup\n\n" +
+    "Step 2/3\n" +
+    "Scanning all image files in public/..."
+  );
+
+
+  showProgress(
+    20,
+    "Scanning public/..."
+  );
+
+
+  await sleep(1500);
+
+
   const images =
     await getAllRepositoryImages();
 
 
   /*
-   * Compare filename ONLY.
+   * IMPORTANT:
    *
-   * If image filename is NOT
-   * inside photo= declarations,
-   * it will be deleted.
+   * Compare NAME ONLY.
    */
   const unused =
     images.filter(
-      image => {
-
-        return !declared.has(
+      image =>
+        !declared.has(
           image.name
-        );
-
-      }
+        )
     );
 
 
+  /*
+   * Nothing to delete.
+   */
   if(!unused.length){
+
+    showProgress(
+      100,
+      "No unused images."
+    );
+
+
+    await sleep(1000);
+
 
     return {
 
@@ -2893,17 +3134,79 @@ async function cleanupUnusedImages(
   }
 
 
+  /*
+   * STEP C
+   *
+   * Delete one by one.
+   */
+  setStatus(
+    "🧹 Image cleanup\n\n" +
+    "Step 3/3\n" +
+    "Deleting unused images...\n\n" +
+    "Found " +
+    unused.length +
+    " unused image(s)."
+  );
+
+
   const deleted = [];
 
   let skipped = 0;
 
 
-  /*
-   * Delete unused images.
-   */
   for(
-    const image of unused
+    let i = 0;
+    i < unused.length;
+    i++
   ){
+
+    const image =
+      unused[i];
+
+
+    const percent =
+      20 +
+      (
+        (
+          i /
+          unused.length
+        ) *
+        80
+      );
+
+
+    showProgress(
+      percent,
+      "Deleting " +
+      (i + 1) +
+      " of " +
+      unused.length +
+      ": " +
+      image.name
+    );
+
+
+    setStatus(
+      "🧹 Image cleanup\n\n" +
+      "Step 3/3\n\n" +
+      "Deleting:\n" +
+      image.path +
+      "\n\n" +
+      "Progress: " +
+      (i + 1) +
+      " / " +
+      unused.length +
+      "\n\n" +
+      "Please wait..."
+    );
+
+
+    /*
+     * Extra safety delay
+     * before every delete.
+     */
+    await sleep(1000);
+
 
     try{
 
@@ -2917,6 +3220,7 @@ async function cleanupUnusedImages(
         image.path
       );
 
+
     }catch(error){
 
       skipped++;
@@ -2928,9 +3232,24 @@ async function cleanupUnusedImages(
         error
       );
 
+
+      /*
+       * Wait before next request.
+       */
+      await sleep(1500);
+
     }
 
   }
+
+
+  showProgress(
+    100,
+    "Image cleanup complete."
+  );
+
+
+  await sleep(1000);
 
 
   return {
@@ -2956,6 +3275,14 @@ async function cleanupUnusedImages(
 
 async function loadFromGitHub(){
 
+  if(isProcessing){
+    return;
+  }
+
+
+  setProcessing(true);
+
+
   try{
 
     setStatus(
@@ -2963,10 +3290,28 @@ async function loadFromGitHub(){
     );
 
 
+    showProgress(
+      10,
+      "Connecting to GitHub..."
+    );
+
+
+    await sleep(1000);
+
+
     const result =
       await githubRequest(
         githubApiPath()
       );
+
+
+    showProgress(
+      50,
+      "Downloading Profile.info..."
+    );
+
+
+    await sleep(700);
 
 
     if(!result.content){
@@ -3016,14 +3361,33 @@ async function loadFromGitHub(){
       Object.keys(data)[0];
 
 
+    showProgress(
+      90,
+      "Loading profiles..."
+    );
+
+
+    await sleep(700);
+
+
     populateProfiles();
+
+
+    showProgress(
+      100,
+      "Done."
+    );
 
 
     setStatus(
       "✅ Profile.info loaded successfully.\n\n" +
-      "Profiles: " +
-      Object.keys(data).join(", ")
+      "Profiles:\n" +
+      Object.keys(data).join("\n")
     );
+
+
+    await sleep(700);
+
 
   }catch(error){
 
@@ -3034,6 +3398,11 @@ async function loadFromGitHub(){
       "❌ Error:\n" +
       error.message
     );
+
+
+  }finally{
+
+    setProcessing(false);
 
   }
 
@@ -3046,7 +3415,19 @@ async function loadFromGitHub(){
 
 async function saveToGitHub(){
 
+  if(isProcessing){
+    return;
+  }
+
+
+  setProcessing(true);
+
+
   try{
+
+    // =================================
+    // START
+    // =================================
 
     captureCurrentProfile();
 
@@ -3063,15 +3444,51 @@ async function saveToGitHub(){
 
 
     setStatus(
-      "⏳ Preparing profiles..."
+      "⏳ SAVE PROCESS STARTED\n\n" +
+      "Please wait.\n" +
+      "Huwag munang pindutin ulit ang Save."
     );
 
 
-    /*
-     * MAIN PHOTOS
-     */
+    showProgress(
+      0,
+      "Starting..."
+    );
+
+
+    await sleep(1500);
+
+
+    // =================================
+    // STEP 1
+    // UPLOAD MAIN PHOTOS
+    // =================================
+
+    setStatus(
+      "📷 STEP 1/5\n\n" +
+      "Uploading main profile photos...\n\n" +
+      "One file at a time."
+    );
+
+
+    showProgress(
+      5,
+      "Preparing main photos..."
+    );
+
+
+    await sleep(1000);
+
+
+    const profileIds =
+      Object.keys(data);
+
+
+    let mainPhotoCount = 0;
+
+
     for(
-      const profileId of Object.keys(data)
+      const profileId of profileIds
     ){
 
       const profile =
@@ -3082,6 +3499,9 @@ async function saveToGitHub(){
         profile.main &&
         profile.main._photoFile
       ){
+
+        mainPhotoCount++;
+
 
         const file =
           profile.main._photoFile;
@@ -3100,25 +3520,115 @@ async function saveToGitHub(){
           ext;
 
 
-        await uploadPhotoToGitHub(
-          file,
-          fileName
+        setStatus(
+          "📷 STEP 1/5\n\n" +
+          "Uploading main photo:\n" +
+          fileName +
+          "\n\n" +
+          "Please wait..."
         );
 
 
+        await sleep(1000);
+
+
+        const uploadedPath =
+          await uploadPhotoToGitHub(
+            file,
+            fileName
+          );
+
+
         profile.main.photo =
-          "/" +
-          fileName;
+          uploadedPath;
 
 
         delete profile.main._photoFile;
 
+
+        showProgress(
+          5 +
+          (
+            mainPhotoCount /
+            Math.max(
+              1,
+              profileIds.length
+            )
+          ) *
+          20,
+          "Main photo uploaded."
+        );
+
+
+        await sleep(1000);
+
       }
 
+    }
 
-      /*
-       * OTHER PHOTOS
-       */
+
+    // =================================
+    // STEP 2
+    // UPLOAD OTHER PHOTOS
+    // =================================
+
+    setStatus(
+      "📷 STEP 2/5\n\n" +
+      "Uploading other profile photos...\n\n" +
+      "One file at a time."
+    );
+
+
+    showProgress(
+      25,
+      "Preparing other photos..."
+    );
+
+
+    await sleep(1000);
+
+
+    let otherPhotoTotal = 0;
+
+
+    profileIds.forEach(
+      profileId => {
+
+        const profile =
+          data[profileId];
+
+
+        (
+          profile.others || []
+        ).forEach(
+          person => {
+
+            if(
+              person._photoFile
+            ){
+
+              otherPhotoTotal++;
+
+            }
+
+          }
+        );
+
+      }
+    );
+
+
+    let otherPhotoDone = 0;
+
+
+    for(
+      const profileId of profileIds
+    ){
+
+      const profile =
+        data[profileId];
+
+
       for(
         let i = 0;
         i < (
@@ -3131,7 +3641,9 @@ async function saveToGitHub(){
           profile.others[i];
 
 
-        if(person._photoFile){
+        if(
+          person._photoFile
+        ){
 
           const file =
             person._photoFile;
@@ -3152,18 +3664,55 @@ async function saveToGitHub(){
             ext;
 
 
-          await uploadPhotoToGitHub(
-            file,
-            fileName
+          setStatus(
+            "📷 STEP 2/5\n\n" +
+            "Uploading other photo:\n" +
+            fileName +
+            "\n\n" +
+            "Progress: " +
+            (otherPhotoDone + 1) +
+            " / " +
+            otherPhotoTotal +
+            "\n\n" +
+            "Please wait..."
           );
 
 
+          await sleep(1000);
+
+
+          const uploadedPath =
+            await uploadPhotoToGitHub(
+              file,
+              fileName
+            );
+
+
           person.photo =
-            "/" +
-            fileName;
+            uploadedPath;
 
 
           delete person._photoFile;
+
+
+          otherPhotoDone++;
+
+
+          showProgress(
+            25 +
+            (
+              otherPhotoDone /
+              Math.max(
+                1,
+                otherPhotoTotal
+              )
+            ) *
+            20,
+            "Other photo uploaded."
+          );
+
+
+          await sleep(1000);
 
         }
 
@@ -3172,9 +3721,27 @@ async function saveToGitHub(){
     }
 
 
-    /*
-     * COMPLETE PROFILE.INFO
-     */
+    // =================================
+    // STEP 3
+    // BUILD PROFILE.INFO
+    // =================================
+
+    setStatus(
+      "📝 STEP 3/5\n\n" +
+      "Building final Profile.info...\n\n" +
+      "Please wait..."
+    );
+
+
+    showProgress(
+      50,
+      "Generating Profile.info..."
+    );
+
+
+    await sleep(1500);
+
+
     const content =
       buildCompleteFile();
 
@@ -3185,9 +3752,28 @@ async function saveToGitHub(){
       content;
 
 
+    await sleep(1000);
+
+
+    // =================================
+    // STEP 4
+    // SAVE PROFILE.INFO
+    // =================================
+
     setStatus(
-      "⏳ Saving Profile.info to GitHub..."
+      "💾 STEP 4/5\n\n" +
+      "Saving Profile.info to GitHub...\n\n" +
+      "Please wait..."
     );
+
+
+    showProgress(
+      60,
+      "Checking existing Profile.info..."
+    );
+
+
+    await sleep(1200);
 
 
     let sha =
@@ -3214,6 +3800,9 @@ async function saveToGitHub(){
     }
 
 
+    await sleep(1000);
+
+
     const body = {
 
       message:
@@ -3235,6 +3824,15 @@ async function saveToGitHub(){
     }
 
 
+    showProgress(
+      70,
+      "Uploading Profile.info..."
+    );
+
+
+    await sleep(1000);
+
+
     await githubRequest(
       githubApiPath(),
       {
@@ -3247,21 +3845,56 @@ async function saveToGitHub(){
         },
 
         body:
-          JSON.stringify(body)
+          JSON.stringify(
+            body
+          )
 
       }
     );
 
 
     /*
-     * =================================
-     * CLEAN UNUSED IMAGES
-     * =================================
+     * IMPORTANT:
+     *
+     * Wait for GitHub to settle
+     * before scanning the tree.
      */
+    setStatus(
+      "💾 STEP 4/5\n\n" +
+      "Profile.info saved.\n\n" +
+      "Waiting for GitHub to update...\n\n" +
+      "Please wait..."
+    );
+
+
+    showProgress(
+      75,
+      "Waiting for GitHub..."
+    );
+
+
+    await sleep(3000);
+
+
+    // =================================
+    // STEP 5
+    // IMAGE CLEANUP
+    // =================================
 
     setStatus(
-      "⏳ Scanning images..."
+      "🧹 STEP 5/5\n\n" +
+      "Starting image cleanup...\n\n" +
+      "Comparing photo filenames..."
     );
+
+
+    showProgress(
+      80,
+      "Starting image scan..."
+    );
+
+
+    await sleep(1500);
 
 
     let cleanupResult = {
@@ -3291,17 +3924,44 @@ async function saveToGitHub(){
         error
       );
 
+
+      setStatus(
+        "⚠️ Profile.info was saved,\n" +
+        "but image cleanup failed.\n\n" +
+        error.message
+      );
+
+
+      await sleep(1500);
+
     }
 
 
-    /*
-     * SHOW CLEANUP RESULT
-     */
-    let cleanupMessage =
-      "\n\n🖼️ Image Scan" +
-      "\nDeclared photos: " +
+    // =================================
+    // FINAL RESULT
+    // =================================
+
+    showProgress(
+      100,
+      "Save process complete."
+    );
+
+
+    await sleep(1000);
+
+
+    let resultMessage =
+      "✅ SAVE COMPLETE\n\n" +
+
+      "Profile.info: SAVED\n\n" +
+
+      "🖼️ IMAGE SCAN\n" +
+
+      "Declared photo names: " +
       cleanupResult.found +
-      "\nImages scanned: " +
+      "\n" +
+
+      "Images scanned in public/: " +
       cleanupResult.scanned;
 
 
@@ -3309,16 +3969,16 @@ async function saveToGitHub(){
       cleanupResult.deleted.length
     ){
 
-      cleanupMessage +=
-        "\n\n🗑️ Deleted:\n" +
+      resultMessage +=
+        "\n\n🗑️ DELETED UNUSED IMAGES:\n" +
         cleanupResult.deleted.join(
           "\n"
         );
 
     }else{
 
-      cleanupMessage +=
-        "\n\n✅ No unused images.";
+      resultMessage +=
+        "\n\n✅ No unused images found.";
 
     }
 
@@ -3327,30 +3987,40 @@ async function saveToGitHub(){
       cleanupResult.skipped
     ){
 
-      cleanupMessage +=
+      resultMessage +=
         "\n\n⚠️ Failed to delete: " +
         cleanupResult.skipped;
 
     }
 
 
+    resultMessage +=
+      "\n\n✔️ All steps finished.";
+
+
     setStatus(
-      "✅ Successfully saved to GitHub!\n\n" +
-      "Profiles:\n" +
-      Object.keys(data).join("\n") +
-      cleanupMessage
+      resultMessage
     );
 
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      error
+    );
 
 
     setStatus(
-      "❌ Save failed:\n" +
-      error.message
+      "❌ SAVE FAILED\n\n" +
+      error.message +
+      "\n\n" +
+      "Process stopped to prevent further changes."
     );
+
+
+  }finally{
+
+    setProcessing(false);
 
   }
 
@@ -3358,7 +4028,7 @@ async function saveToGitHub(){
 
 
 // =====================================
-// COPY
+// COPY OUTPUT
 // =====================================
 
 async function copyOutput(){
