@@ -122,6 +122,8 @@ a {
   width: 100%;
 
   margin-top: 10px;
+
+  overflow: hidden;
 }
 
 .main-contact-row {
@@ -133,39 +135,41 @@ a {
 
   justify-content: center;
 
-  gap: 10px;
+  gap: clamp(4px, 2vw, 10px);
 
   flex-wrap: nowrap;
 }
 
 /* =========================
-   CALL BUTTON
+   CALL
 ========================= */
 
 .call-button {
-  height: 52px;
+  min-width: 48px;
 
-  display: flex;
+  height: 48px;
+
+  display: inline-flex;
 
   align-items: center;
 
   justify-content: center;
 
-  gap: 9px;
+  gap: 8px;
 
   padding:
     0
-    20px;
+    17px;
 
-  border-radius: 14px;
+  border-radius: 13px;
 
   text-decoration: none;
 
-  font-size: 19px;
+  font-size: 18px;
 
   font-weight: 700;
 
-  flex-shrink: 0;
+  flex: 0 1 auto;
 
   transition:
     transform 0.15s ease,
@@ -173,11 +177,22 @@ a {
 }
 
 .call-button i {
-  font-size: 20px;
+  font-size: 19px;
+
+  flex-shrink: 0;
+}
+
+.call-label {
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  transition:
+    opacity 0.15s ease;
 }
 
 .call-button:active {
-  transform: scale(0.95);
+  transform: scale(0.94);
 
   opacity: 0.75;
 }
@@ -190,9 +205,10 @@ a {
   width: 48px;
   height: 48px;
 
-  display: flex;
+  display: inline-flex;
 
   align-items: center;
+
   justify-content: center;
 
   border-radius: 50%;
@@ -201,7 +217,9 @@ a {
 
   font-size: 20px;
 
-  flex-shrink: 0;
+  flex: 0 1 auto;
+
+  flex-shrink: 1;
 
   transition:
     transform 0.15s ease,
@@ -212,6 +230,107 @@ a {
   transform: scale(0.9);
 
   opacity: 0.7;
+}
+
+/* =========================
+   AUTO FIT
+========================= */
+
+/*
+   Kapag maliit ang screen,
+   lahat ng buttons ay automatic
+   liliit para manatili sa isang row.
+*/
+
+@media (max-width: 430px) {
+
+  .main-contact-row {
+    gap: 5px;
+  }
+
+  .call-button {
+    height: 44px;
+
+    min-width: 44px;
+
+    padding:
+      0
+      13px;
+
+    font-size: 17px;
+  }
+
+  .call-button i {
+    font-size: 18px;
+  }
+
+  .main-icon-button {
+    width: 43px;
+    height: 43px;
+
+    font-size: 18px;
+  }
+}
+
+/*
+   Very small phones.
+   Call text automatically disappears.
+*/
+
+@media (max-width: 365px) {
+
+  .main-contact-row {
+    gap: 4px;
+  }
+
+  .call-button {
+    width: 40px;
+    min-width: 40px;
+
+    height: 40px;
+
+    padding: 0;
+  }
+
+  .call-label {
+    display: none;
+  }
+
+  .call-button i {
+    font-size: 17px;
+  }
+
+  .main-icon-button {
+    width: 40px;
+    height: 40px;
+
+    font-size: 16px;
+  }
+}
+
+/*
+   Extra small devices.
+*/
+
+@media (max-width: 320px) {
+
+  .main-contact-row {
+    gap: 3px;
+  }
+
+  .call-button {
+    width: 37px;
+    min-width: 37px;
+
+    height: 37px;
+  }
+
+  .main-icon-button {
+    width: 37px;
+    height: 37px;
+
+    font-size: 15px;
+  }
 }
 
 /* =========================
@@ -457,8 +576,6 @@ a {
     color: #c8cbd1;
   }
 
-  /* CALL */
-
   .call-button {
     background: #1d2027;
 
@@ -469,8 +586,6 @@ a {
     background: #272b34;
   }
 
-  /* MAIN ICONS */
-
   .main-icon-button {
     background: #292d36;
 
@@ -480,8 +595,6 @@ a {
   .main-icon-button:hover {
     background: #343944;
   }
-
-  /* OTHER */
 
   .other-section h2 {
     color: #ffffff;
@@ -504,8 +617,6 @@ a {
   .other-contact-button:hover {
     background: #343944;
   }
-
-  /* DEFAULT PHOTO */
 
   .default-profile,
   .default-other-profile {
@@ -539,8 +650,6 @@ a {
     color: #555555;
   }
 
-  /* CALL */
-
   .call-button {
     background: #f1f2f4;
 
@@ -551,8 +660,6 @@ a {
     background: #e5e7eb;
   }
 
-  /* MAIN ICONS */
-
   .main-icon-button {
     background: #e1e3e7;
 
@@ -562,8 +669,6 @@ a {
   .main-icon-button:hover {
     background: #d5d7db;
   }
-
-  /* OTHER */
 
   .other-profile {
     background: #f1f2f4;
@@ -583,8 +688,6 @@ a {
     background: #d5d7db;
   }
 
-  /* DEFAULT PHOTO */
-
   .default-profile,
   .default-other-profile {
     background: #d9dce1;
@@ -597,177 +700,5 @@ a {
     background: #ffffff;
 
     color: #111111;
-  }
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 390px) {
-
-  .profile-page {
-    padding:
-      30px
-      10px
-      50px;
-  }
-
-  .profile-photo {
-    width: 150px;
-    height: 150px;
-  }
-
-  .default-profile {
-    font-size: 62px;
-  }
-
-  .profile-page h1 {
-    font-size: 34px;
-  }
-
-  .subtitle {
-    font-size: 20px;
-  }
-
-  .location {
-    font-size: 17px;
-
-    margin-top: 16px;
-
-    margin-bottom: 25px;
-  }
-
-  /* MAIN CONTACT ROW */
-
-  .main-contact-row {
-    gap: 6px;
-  }
-
-  /* CALL */
-
-  .call-button {
-    height: 46px;
-
-    padding:
-      0
-      14px;
-
-    gap: 7px;
-
-    font-size: 17px;
-
-    border-radius: 12px;
-  }
-
-  .call-button i {
-    font-size: 18px;
-  }
-
-  /* ICONS */
-
-  .main-icon-button {
-    width: 42px;
-    height: 42px;
-
-    font-size: 17px;
-  }
-
-  /* OTHER */
-
-  .other-section {
-    margin-top: 45px;
-  }
-
-  .other-section h2 {
-    font-size: 21px;
-
-    margin-bottom: 15px;
-  }
-
-  .other-profile {
-    padding:
-      16px
-      12px;
-  }
-
-  .other-photo {
-    width: 60px;
-    height: 60px;
-  }
-
-  .default-other-profile {
-    font-size: 27px;
-  }
-
-  .other-name {
-    font-size: 18px;
-
-    line-height: 1.35;
-  }
-
-  .other-subtitle {
-    font-size: 14px;
-  }
-
-  .other-actions {
-    gap: 8px;
-
-    margin-top: 11px;
-  }
-
-  .other-contact-button {
-    width: 38px;
-    height: 38px;
-
-    font-size: 17px;
-  }
-}
-
-/* =========================
-   VERY SMALL SCREEN
-========================= */
-
-@media (max-width: 330px) {
-
-  .profile-page {
-    padding-left: 7px;
-    padding-right: 7px;
-  }
-
-  .profile-page h1 {
-    font-size: 30px;
-  }
-
-  .main-contact-row {
-    gap: 4px;
-  }
-
-  .call-button {
-    padding:
-      0
-      11px;
-
-    font-size: 16px;
-  }
-
-  .call-button i {
-    font-size: 17px;
-  }
-
-  .main-icon-button {
-    width: 39px;
-    height: 39px;
-
-    font-size: 16px;
-  }
-
-  .other-name {
-    font-size: 17px;
-  }
-
-  .other-contact-button {
-    width: 36px;
-    height: 36px;
   }
 }
