@@ -369,8 +369,8 @@ a {
    OTHER PROFILE
 
    PHOTO LEFT
-   NAME/SUBTITLE RIGHT
-   CONTACTS BELOW NAME
+   NAME + SUBTITLE RIGHT
+   CONTACT ICONS UNDER NAME
 ========================================================= */
 
 .other-profile {
@@ -379,11 +379,11 @@ a {
 
   display: grid;
 
-  grid-template-columns: 58px minmax(0, 1fr);
+  grid-template-columns: 68px minmax(0, 1fr);
 
   grid-template-rows: auto auto;
 
-  column-gap: 12px;
+  column-gap: 14px;
 
   align-items: center;
 
@@ -401,9 +401,6 @@ a {
 
 /* =========================================================
    OTHER INFO
-
-   Let photo and text participate directly
-   in the parent grid.
 ========================================================= */
 
 .other-info {
@@ -418,10 +415,10 @@ a {
 ========================================================= */
 
 .other-photo {
-  width: 58px;
-  height: 58px;
+  width: 68px;
+  height: 68px;
 
-  flex: 0 0 58px;
+  flex: 0 0 68px;
 
   border-radius: 50%;
 
@@ -442,10 +439,10 @@ a {
 ========================================================= */
 
 .default-other-profile {
-  width: 58px;
-  height: 58px;
+  width: 68px;
+  height: 68px;
 
-  flex: 0 0 58px;
+  flex: 0 0 68px;
 
   border-radius: 50%;
 
@@ -457,7 +454,7 @@ a {
   align-items: center;
   justify-content: center;
 
-  font-size: 26px;
+  font-size: 30px;
 
   grid-column: 1;
   grid-row: 1 / 3;
@@ -706,11 +703,11 @@ a {
 
     display: grid;
 
-    grid-template-columns: 54px minmax(0, 1fr);
+    grid-template-columns: 64px minmax(0, 1fr);
 
     grid-template-rows: auto auto;
 
-    column-gap: 10px;
+    column-gap: 11px;
 
     padding: 10px;
   }
@@ -723,13 +720,18 @@ a {
 
   .other-photo,
   .default-other-profile {
-    width: 54px;
-    height: 54px;
+    width: 64px;
+    height: 64px;
 
-    flex: 0 0 54px;
+    flex: 0 0 64px;
 
     grid-column: 1;
     grid-row: 1 / 3;
+  }
+
+
+  .default-other-profile {
+    font-size: 28px;
   }
 
 
@@ -864,7 +866,7 @@ a {
   ===================================================== */
 
   .other-profile {
-    grid-template-columns: 50px minmax(0, 1fr);
+    grid-template-columns: 60px minmax(0, 1fr);
 
     column-gap: 9px;
 
@@ -874,10 +876,15 @@ a {
 
   .other-photo,
   .default-other-profile {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
 
-    flex-basis: 50px;
+    flex-basis: 60px;
+  }
+
+
+  .default-other-profile {
+    font-size: 27px;
   }
 
 
@@ -992,7 +999,7 @@ a {
   ===================================================== */
 
   .other-profile {
-    grid-template-columns: 48px minmax(0, 1fr);
+    grid-template-columns: 58px minmax(0, 1fr);
 
     column-gap: 8px;
 
@@ -1002,10 +1009,15 @@ a {
 
   .other-photo,
   .default-other-profile {
-    width: 48px;
-    height: 48px;
+    width: 58px;
+    height: 58px;
 
-    flex-basis: 48px;
+    flex-basis: 58px;
+  }
+
+
+  .default-other-profile {
+    font-size: 26px;
   }
 
 
@@ -1086,6 +1098,7 @@ a {
     background: #202020;
   }
 
+
   .other-contact-button {
     background: #2a2a2a;
     color: #fff;
@@ -1152,6 +1165,7 @@ a {
   .other-profile {
     background: #f3f3f3;
   }
+
 
   .other-contact-button {
     background: #e9e9e9;
