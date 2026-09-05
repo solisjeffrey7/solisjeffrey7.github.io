@@ -649,19 +649,12 @@ export default function App() {
 
 
         /* -----------------------------------------
-           If no ?profile=, use first profile
-        ----------------------------------------- */
+   If no ?profile=, use Jeffrey
+----------------------------------------- */
 
-        if (!profileToShow) {
-
-          const firstKey =
-            Object.keys(parsed)[0];
-
-          if (firstKey) {
-            profileToShow =
-              parsed[firstKey];
-          }
-        }
+if (!profileToShow) {
+  profileToShow = parsed["jeffrey"] || null;
+}
 
 
         if (!profileToShow) {
