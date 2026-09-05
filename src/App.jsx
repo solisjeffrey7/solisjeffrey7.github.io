@@ -1,302 +1,411 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-/* =========================
-   DECODE HTML ENTITIES
-========================= */
+/* =========================================================
+   HTML ENTITY DECODER
+========================================================= */
 
 function decodeHtml(value = "") {
+  if (typeof document === "undefined") {
+    return value;
+  }
+
   const textarea = document.createElement("textarea");
   textarea.innerHTML = value;
+
   return textarea.value;
 }
 
-/* =========================
-   PARSE PROFILE.INFO
-========================= */
 
-function parseProfileInfo(text) {
+/* =========================================================
+   PROFILE.INFO PARSER
+========================================================= */
+
+function parseInfo(text) {
   const profiles = {};
 
   let currentProfile = null;
-  let currentPerson = null;
-  let currentKey = null;
+  let currentOther = null;
 
   const lines = text.split(/\r?\n/);
 
-  for (const rawLine of lines) {
-    const line = rawLine.trimEnd();
+  for (let rawLine of lines) {
+    let line = rawLine.trim();
 
-    /* =========================
+    if (!line) continue;
+
+    /* Ignore comments */
+    if (line.startsWith("#") || line.startsWith(";")) {
+      continue;
+    }
+
+    /* -----------------------------------------------
        [profile]
-       [profile][other]
-    ========================= */
+    ----------------------------------------------- */
 
-    const section = line.match(
-      /^\[([^\]]+)\](?:\[([^\]]+)\])?$/
+    let sectionMatch = line.match(
+      /^\[([^\]]+)\]$/i
     );
 
-    if (section) {
-      const profileId = section[1]
-        .trim()
-        .toLowerCase();
+    if (sectionMatch) {
+      const profileName = decodeHtml(
+        sectionMatch[1].trim()
+      );
 
-      const sectionType = section[2]
-        ?.trim()
-        .toLowerCase();
+      const key = profileName.toLowerCase();
 
-      if (!profiles[profileId]) {
-        profiles[profileId] = {
-          main: {},
+      if (!profiles[key]) {
+        profiles[key] = {
+          name: profileName,
+          data: {},
           others: []
         };
       }
 
-      if (sectionType === "other") {
-        currentPerson = {};
-        profiles[profileId].others.push(currentPerson);
-      } else {
-        currentPerson = profiles[profileId].main;
+      currentProfile = profiles[key];
+      currentOther = null;
+
+      continue;
+    }
+
+
+    /* -----------------------------------------------
+       [profile][other]
+    ----------------------------------------------- */
+
+    let otherMatch = line.match(
+      /^\[([^\]]+)\]\[([^\]]+)\]$/i
+    );
+
+    if (otherMatch) {
+      const profileName = decodeHtml(
+        otherMatch[1].trim()
+      );
+
+      const otherSection = decodeHtml(
+        otherMatch[2].trim()
+      );
+
+      const profileKey = profileName.toLowerCase();
+
+      if (!profiles[profileKey]) {
+        profiles[profileKey] = {
+          name: profileName,
+          data: {},
+          others: []
+        };
       }
 
-      currentProfile = profileId;
-      currentKey = null;
+      currentProfile = profiles[profileKey];
+
+      /* Every [profile][other] becomes another person */
+      currentOther = {
+        section: otherSection,
+        data: {}
+      };
+
+      currentProfile.others.push(currentOther);
 
       continue;
     }
 
-    if (!currentPerson) {
-      continue;
-    }
 
-    /* =========================
+    /* -----------------------------------------------
        key=value
-    ========================= */
+    ----------------------------------------------- */
 
     const equalIndex = line.indexOf("=");
 
-    if (equalIndex !== -1) {
-      currentKey = line
-        .slice(0, equalIndex)
-        .trim()
-        .toLowerCase();
-
-      currentPerson[currentKey] =
-        line.slice(equalIndex + 1);
-
+    if (equalIndex === -1) {
       continue;
     }
 
-    /* =========================
-       MULTILINE MESSAGE
-    ========================= */
+    const key = line
+      .slice(0, equalIndex)
+      .trim()
+      .toLowerCase();
 
-    if (currentKey === "message") {
-      currentPerson.message =
-        (currentPerson.message || "") +
-        "\n" +
-        line;
+    const value = line
+      .slice(equalIndex + 1)
+      .trim();
+
+    if (!key) {
+      continue;
+    }
+
+    const decodedValue = decodeHtml(value);
+
+    if (currentOther) {
+      currentOther.data[key] = decodedValue;
+    } else if (currentProfile) {
+      currentProfile.data[key] = decodedValue;
     }
   }
-
-  /* =========================
-     DECODE EVERYTHING
-  ========================= */
-
-  Object.values(profiles).forEach((profile) => {
-    const people = [
-      profile.main,
-      ...profile.others
-    ];
-
-    people.forEach((person) => {
-      Object.keys(person).forEach((key) => {
-        person[key] = decodeHtml(person[key]);
-      });
-    });
-  });
 
   return profiles;
 }
 
-/* =========================
-   MAIN CONTACT BUTTON
-========================= */
 
-function MainContactButton({
-  href,
-  icon,
-  label,
-  className = "main-icon-button",
-  external = false
+/* =========================================================
+   CONTACT BUTTON
+========================================================= */
+
+function ContactButton({
+  type,
+  value,
+  main = false
 }) {
-  if (!href) {
+  if (!value) {
     return null;
   }
 
+  let href = value;
+  let icon = "";
+  let label = "";
+
+  switch (type) {
+    case "phone":
+      href = `tel:${value}`;
+      icon = "fa-solid fa-phone";
+      label = "Call";
+      break;
+
+    case "sms":
+      href = `sms:${value}`;
+      icon = "fa-solid fa-comment-sms";
+      break;
+
+    case "messenger":
+      href = value;
+      icon = "fa-brands fa-facebook-messenger";
+      break;
+
+    case "facebook":
+      href = value;
+      icon = "fa-brands fa-facebook";
+      break;
+
+    case "email":
+      href = value.startsWith("mailto:")
+        ? value
+        : `mailto:${value}`;
+      icon = "fa-solid fa-envelope";
+      break;
+
+    case "maps":
+      href = value;
+      icon = "fa-solid fa-location-dot";
+      break;
+
+    default:
+      return null;
+  }
+
+
+  /* Main Call button */
+  if (main && type === "phone") {
+    return (
+      <a
+        className="call-button"
+        href={href}
+        aria-label="Call"
+      >
+        <i className={icon}></i>
+
+        <span className="call-label">
+          {label}
+        </span>
+      </a>
+    );
+  }
+
+
+  /* Main icon buttons */
+  if (main) {
+    return (
+      <a
+        className="main-icon-button"
+        href={href}
+        target={
+          type === "messenger" ||
+          type === "facebook" ||
+          type === "maps"
+            ? "_blank"
+            : undefined
+        }
+        rel={
+          type === "messenger" ||
+          type === "facebook" ||
+          type === "maps"
+            ? "noopener noreferrer"
+            : undefined
+        }
+        aria-label={type}
+      >
+        <i className={icon}></i>
+      </a>
+    );
+  }
+
+
+  /* Other People buttons */
   return (
     <a
-      className={className}
+      className="other-contact-button"
       href={href}
-      target={external ? "_blank" : undefined}
+      target={
+        type === "messenger" ||
+        type === "facebook" ||
+        type === "maps"
+          ? "_blank"
+          : undefined
+      }
       rel={
-        external
+        type === "messenger" ||
+        type === "facebook" ||
+        type === "maps"
           ? "noopener noreferrer"
           : undefined
       }
-      aria-label={label}
-      title={label}
+      aria-label={type}
     >
       <i className={icon}></i>
-
-      {label === "Call" && (
-        <span className="call-label">
-          Call
-        </span>
-      )}
     </a>
   );
 }
 
-/* =========================
-   MAIN CONTACTS
-========================= */
+
+/* =========================================================
+   MAIN PROFILE CONTACTS
+========================================================= */
 
 function MainContacts({ profile }) {
-  return (
-    <div className="main-contacts">
+  const data = profile.data;
 
+  return (
+    <section className="main-contacts">
       <div className="main-contact-row">
 
-        {profile.phone && (
-          <MainContactButton
-            href={`tel:${profile.phone}`}
-            icon="fa-solid fa-phone"
-            label="Call"
-            className="call-button"
-          />
-        )}
+        <ContactButton
+          type="phone"
+          value={data.phone}
+          main
+        />
 
-        {profile.sms && (
-          <MainContactButton
-            href={`sms:${profile.sms}`}
-            icon="fa-solid fa-comment-sms"
-            label="SMS"
-          />
-        )}
+        <ContactButton
+          type="sms"
+          value={data.sms}
+          main
+        />
 
-        {profile.messenger && (
-          <MainContactButton
-            href={profile.messenger}
-            icon="fa-brands fa-facebook-messenger"
-            label="Messenger"
-            external
-          />
-        )}
+        <ContactButton
+          type="messenger"
+          value={data.messenger}
+          main
+        />
 
-        {profile.facebook && (
-          <MainContactButton
-            href={profile.facebook}
-            icon="fa-brands fa-facebook"
-            label="Facebook"
-            external
-          />
-        )}
+        <ContactButton
+          type="facebook"
+          value={data.facebook}
+          main
+        />
 
-        {profile.email && (
-          <MainContactButton
-            href={`mailto:${profile.email}`}
-            icon="fa-solid fa-envelope"
-            label="Email"
-          />
-        )}
+        <ContactButton
+          type="email"
+          value={data.email}
+          main
+        />
 
-        {profile.maps && (
-          <MainContactButton
-            href={profile.maps}
-            icon="fa-solid fa-location-dot"
-            label="Maps"
-            external
-          />
-        )}
+        <ContactButton
+          type="maps"
+          value={data.maps}
+          main
+        />
 
       </div>
+    </section>
+  );
+}
+
+
+/* =========================================================
+   OTHER PEOPLE CONTACTS
+========================================================= */
+
+function OtherContacts({ data }) {
+  return (
+    <div className="other-actions">
+
+      <ContactButton
+        type="phone"
+        value={data.phone}
+      />
+
+      <ContactButton
+        type="sms"
+        value={data.sms}
+      />
+
+      <ContactButton
+        type="messenger"
+        value={data.messenger}
+      />
+
+      <ContactButton
+        type="facebook"
+        value={data.facebook}
+      />
+
+      <ContactButton
+        type="email"
+        value={data.email}
+      />
+
+      <ContactButton
+        type="maps"
+        value={data.maps}
+      />
 
     </div>
   );
 }
 
-/* =========================
+
+/* =========================================================
    OTHER PERSON
-========================= */
+========================================================= */
 
 function OtherPerson({ person }) {
-  const photo = person.photo?.trim();
+  const data = person.data;
+
+  const photo = data.photo?.trim();
 
   return (
     <div className="other-profile">
 
       <div className="other-info">
 
-        <div
-          className={
-            `other-photo ${
-              photo
-                ? ""
-                : "default-other-profile"
-            }`
-          }
-        >
-
-          {photo ? (
-            <img
-              src={photo}
-              alt={person.name || "Profile"}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                borderRadius: "50%"
-              }}
-              onError={(e) => {
-                e.currentTarget.style.display =
-                  "none";
-
-                e.currentTarget.parentElement.classList.add(
-                  "default-other-profile"
-                );
-
-                if (
-                  !e.currentTarget.parentElement.querySelector(
-                    ".default-user-icon"
-                  )
-                ) {
-                  const icon =
-                    document.createElement("i");
-
-                  icon.className =
-                    "fa-solid fa-user default-user-icon";
-
-                  e.currentTarget.parentElement.appendChild(
-                    icon
-                  );
-                }
-              }}
-            />
-          ) : (
+        {photo ? (
+          <img
+            className="other-photo"
+            src={photo}
+            alt={data.name || "Profile"}
+          />
+        ) : (
+          <div className="default-other-profile">
             <i className="fa-solid fa-user"></i>
-          )}
+          </div>
+        )}
 
-        </div>
 
         <div className="other-text">
 
           <div className="other-name">
-            {person.name || "Unknown"}
+            {data.name || "Unknown"}
           </div>
 
-          {person.subtitle && (
+          {data.subtitle && (
             <div className="other-subtitle">
-              {person.subtitle}
+              {data.subtitle}
             </div>
           )}
 
@@ -304,440 +413,128 @@ function OtherPerson({ person }) {
 
       </div>
 
-      <div className="other-actions">
 
-        {person.phone && (
-          <a
-            className="other-contact-button"
-            href={`tel:${person.phone}`}
-            aria-label="Call"
-            title="Call"
-          >
-            <i className="fa-solid fa-phone"></i>
-          </a>
-        )}
-
-        {person.sms && (
-          <a
-            className="other-contact-button"
-            href={`sms:${person.sms}`}
-            aria-label="SMS"
-            title="SMS"
-          >
-            <i className="fa-solid fa-comment-sms"></i>
-          </a>
-        )}
-
-        {person.messenger && (
-          <a
-            className="other-contact-button"
-            href={person.messenger}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Messenger"
-            title="Messenger"
-          >
-            <i className="fa-brands fa-facebook-messenger"></i>
-          </a>
-        )}
-
-        {person.facebook && (
-          <a
-            className="other-contact-button"
-            href={person.facebook}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facebook"
-            title="Facebook"
-          >
-            <i className="fa-brands fa-facebook"></i>
-          </a>
-        )}
-
-        {person.email && (
-          <a
-            className="other-contact-button"
-            href={`mailto:${person.email}`}
-            aria-label="Email"
-            title="Email"
-          >
-            <i className="fa-solid fa-envelope"></i>
-          </a>
-        )}
-
-        {person.maps && (
-          <a
-            className="other-contact-button"
-            href={person.maps}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Maps"
-            title="Maps"
-          >
-            <i className="fa-solid fa-location-dot"></i>
-          </a>
-        )}
-
-      </div>
+      <OtherContacts data={data} />
 
     </div>
   );
 }
 
-/* =========================
-   APP
-========================= */
 
-export default function App() {
-  const [profiles, setProfiles] = useState({});
-  const [profileId, setProfileId] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+/* =========================================================
+   MESSAGE
+========================================================= */
 
-  /* =========================
-     LOAD PROFILE.INFO
-  ========================= */
-
-  useEffect(() => {
-    async function loadProfile() {
-      try {
-        setLoading(true);
-        setError("");
-
-        const response = await fetch(
-          "/Profile.info",
-          {
-            cache: "no-cache"
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(
-            `Profile.info not found (${response.status})`
-          );
-        }
-
-        const text =
-          await response.text();
-
-        const parsed =
-          parseProfileInfo(text);
-
-        setProfiles(parsed);
-
-        /* =========================
-           GET ?profile=
-        ========================= */
-
-        const params =
-          new URLSearchParams(
-            window.location.search
-          );
-
-        const requested =
-          params
-            .get("profile")
-            ?.trim()
-            .toLowerCase();
-
-        const available =
-          Object.keys(parsed);
-
-        if (
-          requested &&
-          parsed[requested]
-        ) {
-          setProfileId(requested);
-        } else {
-          setProfileId(
-            available[0] || ""
-          );
-        }
-
-      } catch (err) {
-        console.error(err);
-
-        setError(
-          err.message ||
-          "Unable to load profile."
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadProfile();
-  }, []);
-
-  /* =========================
-     LOADING
-  ========================= */
-
-  if (loading) {
-    return (
-      <div className="loading">
-
-        <i className="fa-solid fa-spinner fa-spin"></i>
-
-        <span style={{ marginLeft: "10px" }}>
-          Loading profile...
-        </span>
-
-      </div>
-    );
+function LostMessage({ message }) {
+  if (!message || !message.trim()) {
+    return null;
   }
 
-  /* =========================
-     ERROR
-  ========================= */
-
-  if (error) {
-    return (
-      <div className="error">
-
-        <i
-          className="fa-solid fa-triangle-exclamation"
-          style={{
-            fontSize: "55px",
-            marginBottom: "15px"
-          }}
-        ></i>
-
-        <h1>
-          Unable to load profile
-        </h1>
-
-        <p>
-          {error}
-        </p>
-
-      </div>
-    );
-  }
-
-  const profile =
-    profiles[profileId];
-
-  /* =========================
-     PROFILE NOT FOUND
-  ========================= */
-
-  if (!profile) {
-    return (
-      <div className="error">
-
-        <i
-          className="fa-solid fa-user-slash"
-          style={{
-            fontSize: "55px",
-            marginBottom: "15px"
-          }}
-        ></i>
-
-        <h1>
-          Profile Not Found
-        </h1>
-
-        <p>
-          The requested profile does not exist.
-        </p>
-
-      </div>
-    );
-  }
-
-  const main =
-    profile.main || {};
-
-  const others =
-    profile.others || [];
-
-  const photo =
-    main.photo?.trim();
-
-  const message =
-    main.message?.trim();
-
-  /* =========================
-     PAGE
-  ========================= */
+  const lines = message.split(/\r?\n/);
 
   return (
-    <div className="profile-page">
+    <section className="lost-message">
 
-      <div className="main-profile">
+      <div className="lost-message-title">
+        <i className="fa-solid fa-message"></i>
 
-        {/* =========================
-            PROFILE PHOTO
-        ========================= */}
+        <span style={{ marginLeft: "8px" }}>
+          PAUMANHIN AT PAKIUSAP
+        </span>
+      </div>
 
-        <div
-          className={
-            `profile-photo ${
-              photo
-                ? ""
-                : "default-profile"
-            }`
-          }
-        >
 
-          {photo ? (
-            <img
-              src={photo}
-              alt={main.name || "Profile"}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                borderRadius: "50%"
-              }}
-              onError={(e) => {
-                e.currentTarget.style.display =
-                  "none";
+      <div className="lost-message-text">
 
-                e.currentTarget.parentElement.classList.add(
-                  "default-profile"
-                );
+        {lines.map((line, index) => (
+          <React.Fragment key={index}>
 
-                if (
-                  !e.currentTarget.parentElement.querySelector(
-                    ".default-user-icon"
-                  )
-                ) {
-                  const icon =
-                    document.createElement("i");
+            {line}
 
-                  icon.className =
-                    "fa-solid fa-user default-user-icon";
+            {index < lines.length - 1 && (
+              <br />
+            )}
 
-                  e.currentTarget.parentElement.appendChild(
-                    icon
-                  );
-                }
-              }}
-            />
-          ) : (
-            <i className="fa-solid fa-user"></i>
-          )}
-
-        </div>
-
-        {/* =========================
-            NAME
-        ========================= */}
-
-        <h1>
-          {main.name || "Unknown"}
-        </h1>
-
-        {/* =========================
-            SUBTITLE
-        ========================= */}
-
-        {main.subtitle && (
-          <div className="subtitle">
-            {main.subtitle}
-          </div>
-        )}
-
-        {/* =========================
-            LOCATION
-        ========================= */}
-
-        {(main.address ||
-          main.city) && (
-
-          <div className="location">
-
-            <i className="fa-solid fa-location-dot"></i>
-
-            <span>
-              {[
-                main.address,
-                main.city
-              ]
-                .filter(Boolean)
-                .join(", ")}
-            </span>
-
-          </div>
-
-        )}
-
-        {/* =========================
-            CONTACTS
-        ========================= */}
-
-        <MainContacts
-          profile={main}
-        />
-
-        {/* =========================
-            MESSAGE
-            ONLY IF message=
-            EXISTS
-        ========================= */}
-
-        {message && (
-          <section
-            className="profile-message"
-            style={{
-              marginTop: "28px",
-              textAlign: "left"
-            }}
-          >
-
-            <div
-              style={{
-                fontWeight: "700",
-                fontSize: "18px",
-                marginBottom: "8px"
-              }}
-            >
-              <i className="fa-solid fa-message"></i>
-              <span
-                style={{
-                  marginLeft: "8px"
-                }}
-              >
-                PAUMANHIN AT PAKIUSAP
-              </span>
-            </div>
-
-            <div
-              style={{
-                fontSize: "17px",
-                lineHeight: "1.6",
-                whiteSpace: "normal"
-              }}
-            >
-              {message
-                .split(/\r?\n/)
-                .map(
-                  (line, index, lines) => (
-                    <span key={index}>
-                      {line}
-
-                      {index <
-                        lines.length - 1 && (
-                        <br />
-                      )}
-                    </span>
-                  )
-                )}
-            </div>
-
-          </section>
-        )}
+          </React.Fragment>
+        ))}
 
       </div>
 
-      {/* =========================
-          OTHER PEOPLE
-      ========================= */}
+    </section>
+  );
+}
 
-      {others.length > 0 && (
 
+/* =========================================================
+   MAIN PROFILE
+========================================================= */
+
+function MainProfile({ profile }) {
+  const data = profile.data;
+
+  const photo = data.photo?.trim();
+
+  const addressParts = [];
+
+  if (data.address?.trim()) {
+    addressParts.push(data.address.trim());
+  }
+
+  if (data.city?.trim()) {
+    addressParts.push(data.city.trim());
+  }
+
+  const location = addressParts.join(", ");
+
+  return (
+    <>
+
+      <section className="main-profile">
+
+        {photo ? (
+          <img
+            className="profile-photo"
+            src={photo}
+            alt={data.name || "Profile"}
+          />
+        ) : (
+          <div className="default-profile">
+            <i className="fa-solid fa-user"></i>
+          </div>
+        )}
+
+
+        <h1>
+          {data.name || profile.name}
+        </h1>
+
+
+        {data.subtitle && (
+          <div className="subtitle">
+            {data.subtitle}
+          </div>
+        )}
+
+
+        {location && (
+          <div className="location">
+            <i className="fa-solid fa-location-dot"></i>
+            {location}
+          </div>
+        )}
+
+      </section>
+
+
+      <MainContacts profile={profile} />
+
+
+      <LostMessage
+        message={data.message}
+      />
+
+
+      {profile.others.length > 0 && (
         <section className="other-section">
 
           <h2>
@@ -746,7 +543,7 @@ export default function App() {
 
           <div className="other-list">
 
-            {others.map(
+            {profile.others.map(
               (person, index) => (
                 <OtherPerson
                   key={index}
@@ -758,9 +555,198 @@ export default function App() {
           </div>
 
         </section>
-
       )}
 
-    </div>
+    </>
+  );
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+export default function App() {
+
+  const [profiles, setProfiles] = useState({});
+  const [selectedProfile, setSelectedProfile] =
+    useState(null);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
+
+
+  /* -----------------------------------------------
+     LOAD Profile.info
+  ----------------------------------------------- */
+
+  useEffect(() => {
+
+    async function loadProfileInfo() {
+
+      try {
+
+        setLoading(true);
+        setError("");
+
+
+        const response = await fetch(
+          "/Profile.info",
+          {
+            cache: "no-cache"
+          }
+        );
+
+
+        if (!response.ok) {
+          throw new Error(
+            `HTTP ${response.status}`
+          );
+        }
+
+
+        const text =
+          await response.text();
+
+
+        const parsed =
+          parseInfo(text);
+
+
+        setProfiles(parsed);
+
+
+        /* -----------------------------------------
+           Get ?profile=
+        ----------------------------------------- */
+
+        const params =
+          new URLSearchParams(
+            window.location.search
+          );
+
+        const requestedProfile =
+          params.get("profile");
+
+
+        let profileToShow = null;
+
+
+        if (requestedProfile) {
+
+          const requestedKey =
+            requestedProfile
+              .trim()
+              .toLowerCase();
+
+
+          profileToShow =
+            parsed[requestedKey] || null;
+        }
+
+
+        /* -----------------------------------------
+           If no ?profile=, use first profile
+        ----------------------------------------- */
+
+        if (!profileToShow) {
+
+          const firstKey =
+            Object.keys(parsed)[0];
+
+          if (firstKey) {
+            profileToShow =
+              parsed[firstKey];
+          }
+        }
+
+
+        if (!profileToShow) {
+
+          throw new Error(
+            "No profile found in Profile.info"
+          );
+        }
+
+
+        setSelectedProfile(
+          profileToShow
+        );
+
+      } catch (err) {
+
+        console.error(err);
+
+        setError(
+          err?.message ||
+          "Unable to load profile."
+        );
+
+      } finally {
+
+        setLoading(false);
+      }
+    }
+
+
+    loadProfileInfo();
+
+  }, []);
+
+
+  /* =====================================================
+     LOADING
+  ===================================================== */
+
+  if (loading) {
+    return (
+      <div className="loading">
+        Loading...
+      </div>
+    );
+  }
+
+
+  /* =====================================================
+     ERROR
+  ===================================================== */
+
+  if (error) {
+    return (
+      <div className="error">
+        {error}
+      </div>
+    );
+  }
+
+
+  /* =====================================================
+     PROFILE
+  ===================================================== */
+
+  if (!selectedProfile) {
+    return (
+      <div className="error">
+        Profile not found.
+      </div>
+    );
+  }
+
+
+  /* =====================================================
+     PAGE
+  ===================================================== */
+
+  return (
+    <main className="profile-page">
+
+      <MainProfile
+        profile={selectedProfile}
+      />
+
+    </main>
   );
 }
