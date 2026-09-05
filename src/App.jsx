@@ -533,7 +533,7 @@ function QRButton() {
 
 
   /* -----------------------------------------------
-     QR API
+     QR API URL
   ----------------------------------------------- */
 
   const qrUrl =
@@ -543,7 +543,7 @@ function QRButton() {
 
 
   /* -----------------------------------------------
-     RESET
+     Reset image state
   ----------------------------------------------- */
 
   useEffect(() => {
@@ -609,51 +609,16 @@ function QRButton() {
   return (
     <>
       {/* =================================================
-          QR BUTTON
+          TOP RIGHT QR BUTTON
       ================================================= */}
 
       <button
         type="button"
-
+        className="qr-button"
         onClick={() =>
           setShowQR(true)
         }
-
         aria-label="Show QR Code"
-
-        style={{
-          position: "fixed",
-          top: "14px",
-          right: "14px",
-
-          width: "44px",
-          height: "44px",
-
-          padding: 0,
-          margin: 0,
-
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-
-          border: "none",
-          borderRadius: "50%",
-
-          background: "#ffffff",
-          color: "#111111",
-
-          fontSize: "20px",
-
-          zIndex: 2147483647,
-
-          cursor: "pointer",
-
-          boxShadow:
-            "0 2px 10px rgba(0,0,0,.25)",
-
-          WebkitTapHighlightColor:
-            "transparent"
-        }}
       >
 
         <i className="fa-solid fa-qrcode"></i>
@@ -668,124 +633,36 @@ function QRButton() {
       {showQR && (
 
         <div
-
+          className="qr-overlay"
           onClick={() =>
             setShowQR(false)
           }
-
-          style={{
-            position: "fixed",
-
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-
-            width: "100vw",
-            height: "100vh",
-
-            margin: 0,
-            padding: "20px",
-
-            display: "flex",
-
-            alignItems: "center",
-            justifyContent: "center",
-
-            background:
-              "rgba(0,0,0,0.80)",
-
-            zIndex: 2147483646,
-
-            overflowY: "auto",
-
-            isolation: "isolate"
-          }}
         >
 
-          {/* =================================================
-              MODAL
-          ================================================= */}
-
           <div
+            className="qr-modal"
 
             onClick={(event) =>
               event.stopPropagation()
             }
 
             style={{
-              position: "relative",
-
               width: "280px",
               maxWidth: "90vw",
-
-              margin: "auto",
-
-              padding:
-                "18px 12px 14px",
-
-              borderRadius: "18px",
-
-              background: "#ffffff",
-              color: "#111111",
-
-              textAlign: "center",
-
-              boxShadow:
-                "0 20px 60px rgba(0,0,0,.6)",
-
               overflow: "hidden",
-
-              flexShrink: 0
+              textAlign: "center"
             }}
           >
 
-            {/* =================================================
-                CLOSE
-            ================================================= */}
+            {/* CLOSE */}
 
             <button
-
               type="button"
-
+              className="qr-close"
               onClick={() =>
                 setShowQR(false)
               }
-
               aria-label="Close QR Code"
-
-              style={{
-                position: "absolute",
-
-                top: "8px",
-                right: "8px",
-
-                width: "30px",
-                height: "30px",
-
-                margin: 0,
-                padding: 0,
-
-                display: "flex",
-
-                alignItems: "center",
-                justifyContent: "center",
-
-                border: "none",
-
-                borderRadius: "50%",
-
-                background: "#e1e3e7",
-                color: "#111111",
-
-                fontSize: "16px",
-
-                lineHeight: 1,
-
-                cursor: "pointer",
-
-                zIndex: 5
-              }}
             >
 
               <i className="fa-solid fa-xmark"></i>
@@ -793,37 +670,9 @@ function QRButton() {
             </button>
 
 
-            {/* =================================================
-                TITLE
-            ================================================= */}
+            {/* TITLE */}
 
-            <div
-              style={{
-                width: "100%",
-
-                margin:
-                  "0 0 10px",
-
-                padding:
-                  "0 30px",
-
-                display: "flex",
-
-                alignItems: "center",
-
-                justifyContent: "center",
-
-                gap: "6px",
-
-                fontSize: "16px",
-
-                fontWeight: "700",
-
-                lineHeight: "1.3",
-
-                whiteSpace: "nowrap"
-              }}
-            >
+            <div className="qr-title">
 
               <i className="fa-solid fa-qrcode"></i>
 
@@ -834,25 +683,20 @@ function QRButton() {
             </div>
 
 
-            {/* =================================================
-                LOADING
-            ================================================= */}
+            {/* QR IMAGE */}
 
             {!imageLoaded && (
 
               <div
+                className="qr-loading"
+
                 style={{
                   width: "160px",
                   height: "160px",
-
                   margin: "0 auto",
-
                   display: "flex",
-
                   alignItems: "center",
-                  justifyContent: "center",
-
-                  fontSize: "13px"
+                  justifyContent: "center"
                 }}
               >
                 Loading QR...
@@ -861,14 +705,9 @@ function QRButton() {
             )}
 
 
-            {/* =================================================
-                QR IMAGE
-            ================================================= */}
-
             <img
-
+              className="qr-image"
               src={qrUrl}
-
               alt="Profile QR Code"
 
               onLoad={() =>
@@ -894,105 +733,29 @@ function QRButton() {
 
                 padding: 0,
 
-                border: 0,
-
-                borderRadius: 0,
-
                 objectFit: "contain",
 
                 flex: "none"
               }}
 
               width="160"
-
               height="160"
-
             />
 
 
-            {/* =================================================
-                CURRENT URL
-            ================================================= */}
+            {/* CURRENT URL */}
 
-            <div
-              style={{
-                width: "100%",
-
-                marginTop: "9px",
-
-                padding:
-                  "6px 7px",
-
-                borderRadius: "7px",
-
-                background: "#f1f2f4",
-
-                color: "#555555",
-
-                fontSize: "9px",
-
-                lineHeight: "1.3",
-
-                textAlign: "center",
-
-                wordBreak: "break-all",
-
-                overflowWrap:
-                  "anywhere",
-
-                maxHeight: "38px",
-
-                overflow: "hidden"
-              }}
-            >
-
+            <div className="qr-url">
               {currentUrl}
-
             </div>
 
 
-            {/* =================================================
-                DOWNLOAD
-            ================================================= */}
+            {/* DOWNLOAD */}
 
             <button
-
               type="button"
-
+              className="qr-download"
               onClick={downloadQR}
-
-              style={{
-                width: "100%",
-
-                height: "40px",
-
-                marginTop: "9px",
-
-                padding:
-                  "0 10px",
-
-                display: "flex",
-
-                alignItems: "center",
-                justifyContent: "center",
-
-                gap: "7px",
-
-                border: "none",
-
-                borderRadius: "9px",
-
-                background: "#111111",
-                color: "#ffffff",
-
-                fontSize: "13px",
-
-                fontWeight: "700",
-
-                lineHeight: 1,
-
-                cursor: "pointer"
-              }}
             >
 
               <i className="fa-solid fa-download"></i>
