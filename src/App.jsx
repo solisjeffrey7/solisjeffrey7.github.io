@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
+const DEFAULT_ICON = "fa-solid fa-user";
+
 function parseProfileInfo(text) {
   const profiles = {};
   const others = {};
@@ -14,41 +16,57 @@ function parseProfileInfo(text) {
   for (const rawLine of lines) {
     const line = rawLine.trim();
 
-    if (!line || line.startsWith("#") || line.startsWith("id=")) {
+    if (!line || line.startsWith("#")) {
       continue;
     }
 
-    // [jeffrey][other]
-    const otherMatch = line.match(/^\[([^\]]+)\]\[other\]$/i);
+    // Ignore global id line
+    if (/^id\s*=/i.test(line)) {
+      continue;
+    }
+
+    // [profile][other]
+    const otherMatch = line.match(
+      /^\[([^\]]+)\]\[other\]$/i
+    );
 
     if (otherMatch) {
       current = {};
+
       currentType = "other";
-      currentParent = otherMatch[1].trim().toLowerCase();
+      currentParent = otherMatch[1]
+        .trim()
+        .toLowerCase();
 
       if (!others[currentParent]) {
         others[currentParent] = [];
       }
 
       others[currentParent].push(current);
+
       continue;
     }
 
-    // [jeffrey]
-    const profileMatch = line.match(/^\[([^\]]+)\]$/);
+    // [profile]
+    const profileMatch = line.match(
+      /^\[([^\]]+)\]$/i
+    );
 
     if (profileMatch) {
-      const key = profileMatch[1].trim().toLowerCase();
+      const key = profileMatch[1]
+        .trim()
+        .toLowerCase();
 
       current = {};
       currentType = "profile";
       currentParent = key;
 
       profiles[key] = current;
+
       continue;
     }
 
-    // name=value
+    // key=value
     if (current) {
       const separator = line.indexOf("=");
 
@@ -69,28 +87,61 @@ function parseProfileInfo(text) {
 
   return {
     profiles,
-    others,
+    others
   };
 }
 
-function ContactButton({ icon, label, href }) {
-  if (!href) return null;
+
+// ==============================
+// MAIN CONTACT BUTTON
+// ==============================
+
+function ContactButton({
+  icon,
+  label,
+  href
+}) {
+  if (!href) {
+    return null;
+  }
+
+  const external = href.startsWith("http");
 
   return (
     <a
       className="contact-button"
       href={href}
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+      target={external ? "_blank" : undefined}
+      rel={
+        external
+          ? "noopener noreferrer"
+          : undefined
+      }
     >
       <i className={icon}></i>
-      <span>{label}</span>
+
+      <span>
+        {label}
+      </span>
     </a>
   );
 }
 
-function OtherContactButton({ icon, href, title }) {
-  if (!href) return null;
+
+// ==============================
+// OTHER CONTACT ICON
+// ==============================
+
+function OtherContactButton({
+  icon,
+  href,
+  title
+}) {
+  if (!href) {
+    return null;
+  }
+
+  const external = href.startsWith("http");
 
   return (
     <a
@@ -98,27 +149,72 @@ function OtherContactButton({ icon, href, title }) {
       href={href}
       title={title}
       aria-label={title}
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+      target={external ? "_blank" : undefined}
+      rel={
+        external
+          ? "noopener noreferrer"
+          : undefined
+      }
     >
       <i className={icon}></i>
     </a>
   );
 }
 
+
+// ==============================
+// DEFAULT / REAL PHOTO
+// ==============================
+
+function ProfileImage({
+  photo,
+  name,
+  small = false
+}) {
+  if (photo) {
+    return (
+      <img
+        className={
+          small
+            ? "other-photo"
+            : "profile-photo"
+        }
+        src={photo}
+        alt={name || "Profile"}
+      />
+    );
+  }
+
+  return (
+    <div
+      className={
+        small
+          ? "other-photo default-other-profile"
+          : "profile-photo default-profile"
+      }
+    >
+      <i className={DEFAULT_ICON}></i>
+    </div>
+  );
+}
+
+
+// ==============================
+// MAIN PROFILE
+// ==============================
+
 function MainProfile({ profile }) {
   return (
     <section className="main-profile">
 
-      {profile.photo && (
-        <img
-          className="profile-photo"
-          src={profile.photo}
-          alt={profile.name || "Profile"}
-        />
-      )}
+      <ProfileImage
+        photo={profile.photo}
+        name={profile.name}
+      />
 
-      <h1>{profile.name || "Unnamed Profile"}</h1>
+      <h1>
+        {profile.name || "Unnamed Profile"}
+      </h1>
 
       {profile.subtitle && (
         <div className="subtitle">
@@ -126,8 +222,10 @@ function MainProfile({ profile }) {
         </div>
       )}
 
-      {(profile.address || profile.city) && (
+      {(profile.address ||
+        profile.city) && (
         <div className="location">
+
           {profile.address && (
             <div>
               <i className="fa-solid fa-location-dot"></i>{" "}
@@ -136,8 +234,11 @@ function MainProfile({ profile }) {
           )}
 
           {profile.city && (
-            <div>{profile.city}</div>
+            <div>
+              {profile.city}
+            </div>
           )}
+
         </div>
       )}
 
@@ -192,9 +293,15 @@ function MainProfile({ profile }) {
         )}
 
       </div>
+
     </section>
   );
 }
+
+
+// ==============================
+// OTHER PROFILE
+// ==============================
 
 function OtherProfile({ person }) {
   return (
@@ -202,15 +309,14 @@ function OtherProfile({ person }) {
 
       <div className="other-info">
 
-        {person.photo && (
-          <img
-            className="other-photo"
-            src={person.photo}
-            alt={person.name || "Contact"}
-          />
-        )}
+        <ProfileImage
+          photo={person.photo}
+          name={person.name}
+          small
+        />
 
         <div className="other-text">
+
           <div className="other-name">
             {person.name || "Unnamed"}
           </div>
@@ -220,6 +326,7 @@ function OtherProfile({ person }) {
               {person.subtitle}
             </div>
           )}
+
         </div>
 
       </div>
@@ -280,38 +387,60 @@ function OtherProfile({ person }) {
   );
 }
 
+
+// ==============================
+// APP
+// ==============================
+
 export default function App() {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState("");
+
+  const [data, setData] =
+    useState(null);
+
+  const [error, setError] =
+    useState("");
 
   useEffect(() => {
+
     fetch("/Profile.info")
+
       .then((response) => {
+
         if (!response.ok) {
-          throw new Error("Profile.info not found");
+          throw new Error(
+            "Profile.info not found"
+          );
         }
 
         return response.text();
       })
+
       .then((text) => {
-        setData(parseProfileInfo(text));
+
+        const parsed =
+          parseProfileInfo(text);
+
+        setData(parsed);
       })
+
       .catch((err) => {
+
         console.error(err);
-        setError("Hindi ma-load ang Profile.info");
+
+        setError(
+          "Hindi ma-load ang Profile.info"
+        );
       });
+
   }, []);
 
-  if (error) {
-    return (
-      <div className="error">
-        <h1>Error</h1>
-        <p>{error}</p>
-      </div>
-    );
-  }
 
-  if (!data) {
+  // ============================
+  // LOADING
+  // ============================
+
+  if (!data && !error) {
+
     return (
       <div className="loading">
         Loading...
@@ -319,55 +448,125 @@ export default function App() {
     );
   }
 
-  const params = new URLSearchParams(
-    window.location.search
-  );
 
-  const requestedProfile =
-    params.get("profile")?.trim().toLowerCase() ||
-    "jeffrey";
+  // ============================
+  // ERROR
+  // ============================
 
-  const profile =
-    data.profiles[requestedProfile];
+  if (error) {
 
-  if (!profile) {
     return (
       <div className="error">
-        <h1>Profile Not Found</h1>
+
+        <h1>
+          Error
+        </h1>
 
         <p>
-          Walang profile na{" "}
-          <strong>{requestedProfile}</strong>.
+          {error}
         </p>
+
       </div>
     );
   }
 
+
+  // ============================
+  // GET ?profile=
+  // ============================
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const requestedProfile =
+    params
+      .get("profile")
+      ?.trim()
+      .toLowerCase() ||
+    "jeffrey";
+
+
+  // ============================
+  // FIND PROFILE
+  // ============================
+
+  const profile =
+    data.profiles[
+      requestedProfile
+    ];
+
+
+  if (!profile) {
+
+    return (
+      <div className="error">
+
+        <h1>
+          Profile Not Found
+        </h1>
+
+        <p>
+          Walang profile na{" "}
+          <strong>
+            {requestedProfile}
+          </strong>.
+        </p>
+
+      </div>
+    );
+  }
+
+
+  // ============================
+  // FIND OTHER PEOPLE
+  // ============================
+
   const profileOthers =
-    data.others[requestedProfile] || [];
+    data.others[
+      requestedProfile
+    ] || [];
+
+
+  // ============================
+  // DISPLAY
+  // ============================
 
   return (
     <main className="profile-page">
 
-      <MainProfile profile={profile} />
+      <MainProfile
+        profile={profile}
+      />
 
       {profileOthers.length > 0 && (
+
         <section className="other-section">
 
-          <h2>Other People to Contact</h2>
+          <h2>
+            Other People to Contact
+          </h2>
 
           <div className="other-list">
 
-            {profileOthers.map((person, index) => (
-              <OtherProfile
-                key={`${requestedProfile}-${index}`}
-                person={person}
-              />
-            ))}
+            {profileOthers.map(
+              (person, index) => (
+
+                <OtherProfile
+                  key={
+                    `${requestedProfile}-${index}`
+                  }
+                  person={person}
+                />
+
+              )
+            )}
 
           </div>
 
         </section>
+
       )}
 
     </main>
