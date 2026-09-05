@@ -439,7 +439,7 @@ function LostMessage({ message }) {
         <i className="fa-solid fa-message"></i>
 
         <span style={{ marginLeft: "8px" }}>
-          PAUMANHIN AT PAKIUSAP
+          Message
         </span>
       </div>
 
