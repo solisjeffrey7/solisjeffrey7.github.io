@@ -510,6 +510,7 @@ function LostMessage({ message }) {
 
 /* =========================================================
    QR CODE BUTTON + POPUP
+   QR LANG ANG BINAGO
 ========================================================= */
 
 function QRButton() {
@@ -536,7 +537,7 @@ function QRButton() {
   ----------------------------------------------- */
 
   const qrUrl =
-    `https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=20&data=${encodeURIComponent(
+    `https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=10&data=${encodeURIComponent(
       currentUrl
     )}`;
 
@@ -597,13 +598,6 @@ function QRButton() {
 
       console.error(error);
 
-      /*
-        Some mobile browsers may block
-        cross-origin downloads.
-
-        Fallback: open QR image.
-      */
-
       window.open(
         qrUrl,
         "_blank"
@@ -647,9 +641,17 @@ function QRButton() {
 
           <div
             className="qr-modal"
+
             onClick={(event) =>
               event.stopPropagation()
             }
+
+            style={{
+              width: "280px",
+              maxWidth: "90vw",
+              overflow: "hidden",
+              textAlign: "center"
+            }}
           >
 
             {/* CLOSE */}
@@ -685,25 +687,59 @@ function QRButton() {
 
             {!imageLoaded && (
 
-              <div className="qr-loading">
+              <div
+                className="qr-loading"
+
+                style={{
+                  width: "160px",
+                  height: "160px",
+                  margin: "0 auto",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+              >
                 Loading QR...
               </div>
 
             )}
 
+
             <img
               className="qr-image"
               src={qrUrl}
               alt="Profile QR Code"
+
               onLoad={() =>
                 setImageLoaded(true)
               }
+
               style={{
                 display:
                   imageLoaded
                     ? "block"
-                    : "none"
+                    : "none",
+
+                width: "160px",
+                height: "160px",
+
+                minWidth: "160px",
+                minHeight: "160px",
+
+                maxWidth: "160px",
+                maxHeight: "160px",
+
+                margin: "0 auto",
+
+                padding: 0,
+
+                objectFit: "contain",
+
+                flex: "none"
               }}
+
+              width="160"
+              height="160"
             />
 
 
@@ -1082,6 +1118,7 @@ export default function App() {
       <div className="error">
         {error}
       </div>
+
     );
 
   }
@@ -1097,6 +1134,7 @@ export default function App() {
       <div className="error">
         Profile not found.
       </div>
+
     );
 
   }
