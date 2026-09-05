@@ -5,41 +5,94 @@
 .profile-page {
   min-height: 100vh;
   width: 100%;
+
   padding: 45px 20px 60px;
+
   text-align: center;
 }
+
+
+/* ==========================
+   MAIN PROFILE
+   ========================== */
 
 .main-profile {
   width: 100%;
   max-width: 500px;
+
   margin: 0 auto;
 }
+
+
+/* ==========================
+   MAIN PROFILE PHOTO
+   ========================== */
 
 .profile-photo {
   width: 180px;
   height: 180px;
+
   object-fit: cover;
+
   border-radius: 50%;
+
   margin-bottom: 22px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
 }
+
+
+/* DEFAULT MAIN PROFILE */
+
+.default-profile {
+  background: #d9dce1;
+  color: #777;
+
+  font-size: 75px;
+}
+
+
+/* ==========================
+   NAME
+   ========================== */
 
 .profile-page h1 {
   margin: 0;
+
   font-size: 40px;
+
   line-height: 1.2;
+
   font-weight: 700;
 }
 
+
+/* ==========================
+   SUBTITLE
+   ========================== */
+
 .subtitle {
   margin-top: 8px;
+
   font-size: 22px;
+
   font-weight: 500;
 }
+
+
+/* ==========================
+   LOCATION
+   ========================== */
 
 .location {
   margin-top: 20px;
   margin-bottom: 30px;
+
   font-size: 19px;
+
   line-height: 1.6;
 }
 
@@ -47,21 +100,30 @@
   margin-right: 4px;
 }
 
-/* MAIN CONTACT BUTTONS */
+
+/* ==========================
+   MAIN BUTTONS
+   ========================== */
 
 .contacts {
   width: 100%;
+
   display: flex;
+
   flex-direction: column;
+
   gap: 13px;
 }
 
 .contact-button {
   width: 100%;
+
   min-height: 58px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   gap: 14px;
@@ -71,6 +133,7 @@
   text-decoration: none;
 
   font-size: 21px;
+
   font-weight: 600;
 
   border-radius: 13px;
@@ -82,40 +145,64 @@
 
 .contact-button i {
   width: 28px;
+
   font-size: 24px;
 }
 
 .contact-button:active {
   transform: scale(0.97);
+
   opacity: 0.75;
 }
 
-/* OTHER PEOPLE */
+
+/* ==========================
+   OTHER SECTION
+   ========================== */
 
 .other-section {
   width: 100%;
+
   max-width: 500px;
+
   margin: 55px auto 0;
+
   text-align: left;
 }
 
 .other-section h2 {
   margin: 0 0 18px;
+
   font-size: 23px;
+
   text-align: center;
 }
 
+
+/* ==========================
+   OTHER LIST
+   ========================== */
+
 .other-list {
   display: flex;
+
   flex-direction: column;
+
   gap: 12px;
 }
+
+
+/* ==========================
+   OTHER PROFILE
+   ========================== */
 
 .other-profile {
   width: 100%;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
   gap: 12px;
@@ -125,14 +212,25 @@
   border-radius: 13px;
 }
 
+
+/* ==========================
+   OTHER INFO
+   ========================== */
+
 .other-info {
   min-width: 0;
 
   display: flex;
+
   align-items: center;
 
   gap: 12px;
 }
+
+
+/* ==========================
+   OTHER PHOTO
+   ========================== */
 
 .other-photo {
   width: 58px;
@@ -141,19 +239,47 @@
   flex-shrink: 0;
 
   object-fit: cover;
+
   border-radius: 50%;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
 }
+
+
+/* DEFAULT OTHER PHOTO */
+
+.default-other-profile {
+  background: #d9dce1;
+
+  color: #777;
+
+  font-size: 27px;
+}
+
+
+/* ==========================
+   OTHER TEXT
+   ========================== */
 
 .other-text {
   min-width: 0;
+
+  text-align: left;
 }
 
 .other-name {
   font-size: 18px;
+
   font-weight: 700;
 
   white-space: nowrap;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
 }
 
@@ -163,13 +289,22 @@
   font-size: 15px;
 
   white-space: nowrap;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
 }
 
+
+/* ==========================
+   OTHER ACTIONS
+   ========================== */
+
 .other-actions {
   display: flex;
+
   align-items: center;
+
   gap: 7px;
 
   flex-shrink: 0;
@@ -180,7 +315,9 @@
   height: 38px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   text-decoration: none;
@@ -196,19 +333,41 @@
 
 .other-contact-button:active {
   transform: scale(0.9);
+
   opacity: 0.7;
 }
 
-/* LOADING / ERROR */
 
-.loading,
+/* ==========================
+   LOADING
+   ========================== */
+
+.loading {
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 22px;
+}
+
+
+/* ==========================
+   ERROR
+   ========================== */
+
 .error {
   min-height: 100vh;
 
   display: flex;
+
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 
   padding: 20px;
@@ -224,12 +383,16 @@
   font-size: 18px;
 }
 
-/* DARK MODE */
+
+/* ==========================
+   DARK MODE
+   ========================== */
 
 @media (prefers-color-scheme: dark) {
 
   .profile-page {
     background: #111318;
+
     color: #ffffff;
   }
 
@@ -240,6 +403,7 @@
 
   .contact-button {
     background: #1d2027;
+
     color: #ffffff;
   }
 
@@ -261,22 +425,35 @@
 
   .other-contact-button {
     background: #292d36;
+
     color: #ffffff;
+  }
+
+  .default-profile,
+  .default-other-profile {
+    background: #2b2e35;
+
+    color: #9da2aa;
   }
 
   .loading,
   .error {
     background: #111318;
+
     color: #ffffff;
   }
 }
 
-/* LIGHT MODE */
+
+/* ==========================
+   LIGHT MODE
+   ========================== */
 
 @media (prefers-color-scheme: light) {
 
   .profile-page {
     background: #ffffff;
+
     color: #111111;
   }
 
@@ -287,6 +464,7 @@
 
   .contact-button {
     background: #f1f2f4;
+
     color: #111111;
   }
 
@@ -304,17 +482,29 @@
 
   .other-contact-button {
     background: #e1e3e7;
+
     color: #111111;
+  }
+
+  .default-profile,
+  .default-other-profile {
+    background: #d9dce1;
+
+    color: #777777;
   }
 
   .loading,
   .error {
     background: #ffffff;
+
     color: #111111;
   }
 }
 
-/* MOBILE */
+
+/* ==========================
+   MOBILE
+   ========================== */
 
 @media (max-width: 390px) {
 
@@ -325,6 +515,10 @@
   .profile-photo {
     width: 150px;
     height: 150px;
+  }
+
+  .default-profile {
+    font-size: 62px;
   }
 
   .profile-page h1 {
@@ -341,6 +535,7 @@
 
   .contact-button {
     min-height: 55px;
+
     font-size: 20px;
   }
 
@@ -361,6 +556,10 @@
     height: 52px;
   }
 
+  .default-other-profile {
+    font-size: 24px;
+  }
+
   .other-name {
     font-size: 16px;
   }
@@ -376,6 +575,7 @@
   .other-contact-button {
     width: 34px;
     height: 34px;
+
     font-size: 15px;
   }
 }
