@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-function getProfileId() {
-  const path = window.location.pathname;
-  const match = path.match(/^\/profile=([^/]+)\/?$/i);
-  return match ? decodeURIComponent(match[1]).toLowerCase() : "jeffrey";
-}
-
-function parseProfileInfo(text) {
-  const profiles = {};
+function parseProfileInfo(text, username) {
+  const sections = {};
   let current = null;
 
   text.split(/\r?\n/).forEach((line) => {
@@ -16,126 +10,151 @@ function parseProfileInfo(text) {
 
     if (!line || line.startsWith("#")) return;
 
-    if (line.startsWith("[") && line.endsWith("]")) {
-      current = line.slice(1, -1).trim().toLowerCase();
-      profiles[current] = {};
+    const section = line.match(/^\[(.+)\]$/);
+
+    if (section) {
+      current = section[1].trim().toLowerCase();
+      sections[current] = {};
       return;
     }
 
-    if (current && line.includes("=")) {
+    if (current) {
       const index = line.indexOf("=");
-      const key = line.slice(0, index).trim();
-      const value = line.slice(index + 1).trim();
-      profiles[current][key] = value;
+
+      if (index !== -1) {
+        const key = line.slice(0, index).trim();
+        const value = line.slice(index + 1).trim();
+
+        sections[current][key] = value;
+      }
     }
   });
 
-  return profiles;
+  return sections[username.toLowerCase()];
 }
 
 function App() {
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
+    const path = window.location.pathname;
+
+    const match = path.match(/^\/profile=([^/]+)\/?$/i);
+
+    const username = match ? match[1] : "jeffrey";
+
     fetch("/Profile.info")
       .then((response) => {
-        if (!response.ok) throw new Error("Profile.info not found");
+        if (!response.ok) {
+          throw new Error("Profile.info not found");
+        }
+
         return response.text();
       })
       .then((text) => {
-        const profiles = parseProfileInfo(text);
-        setProfile(profiles[getProfileId()] || null);
+        const data = parseProfileInfo(text, username);
+
+        if (!data) {
+          throw new Error(`Profile "${username}" not found`);
+        }
+
+        setProfile(data);
       })
-      .catch((error) => {
-        console.error(error);
-        setProfile(null);
-      })
-      .finally(() => setLoading(false));
+      .catch((err) => {
+        setError(err.message);
+      });
   }, []);
 
-  if (loading) return <div className="loading">Loading profile...</div>;
-
-  if (!profile) {
+  if (error) {
     return (
-      <div className="not-found">
-        <h1>Profile Not Found</h1>
-        <p>The requested profile does not exist.</p>
+      <div className="error">
+        <h1>Profile Error</h1>
+        <p>{error}</p>
       </div>
     );
   }
 
-  return (
-    <main className="container">
-      <div className="profile-card">
-        <div className="profile">
-          <img
-            className="profile-photo"
-            src={`/${profile.photo || "profile.jpg"}`}
-            alt={profile.name}
-          />
-          <h1 className="name">{profile.name}</h1>
-          <p className="subtitle">{profile.subtitle || "Contact Profile"}</p>
-        </div>
+  if (!profile) {
+    return <div className="loading">Loading...</div>;
+  }
 
-        {(profile.address || profile.city) && (
-          <section className="section">
-            <div className="section-title">Address</div>
-            <div className="address-box">
-              <div className="address-icon">
-                <i className="fa-solid fa-location-dot"></i>
-              </div>
-              <div className="address-text">
-                {profile.address}
-                {profile.address && profile.city && <br />}
-                {profile.city}
-              </div>
-            </div>
-          </section>
+  return (
+    <main className="profile-page">
+      <img
+        className="profile-photo"
+        src={`/${profile.photo || "profile.jpg"}`}
+        alt={profile.name}
+      />
+
+      <h1>{profile.name}</h1>
+
+      <p className="subtitle">
+        {profile.subtitle}
+      </p>
+
+      <p className="location">
+        📍 {profile.address}
+        <br />
+        {profile.city}
+      </p>
+
+      <div className="contacts">
+
+        {profile.phone && (
+          <a href={`tel:${profile.phone}`}>
+            <i className="fa-solid fa-phone"></i>
+            <span>Call</span>
+          </a>
         )}
 
-        <section className="section">
-          <div className="section-title">Contact Me</div>
-          <div className="icon-buttons">
-            {profile.phone && (
-              <a className="icon-button call" href={`tel:${profile.phone}`} aria-label="Call">
-                <i className="fa-solid fa-phone"></i>
-              </a>
-            )}
-            {profile.sms && (
-              <a className="icon-button sms" href={`sms:${profile.sms}?body=Hello%20${encodeURIComponent(profile.name)}`} aria-label="SMS">
-                <i className="fa-solid fa-comment-sms"></i>
-              </a>
-            )}
-            {profile.messenger && (
-              <a className="icon-button messenger" href={profile.messenger} target="_blank" rel="noopener noreferrer" aria-label="Messenger">
-                <i className="fa-brands fa-facebook-messenger"></i>
-              </a>
-            )}
-            {profile.facebook && (
-              <a className="icon-button facebook" href={profile.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                <i className="fa-brands fa-facebook-f"></i>
-              </a>
-            )}
-            {profile.email && (
-              <a className="icon-button email" href={`mailto:${profile.email}`} aria-label="Email">
-                <i className="fa-solid fa-envelope"></i>
-              </a>
-            )}
-            {profile.maps && (
-              <a className="icon-button maps" href={profile.maps} target="_blank" rel="noopener noreferrer" aria-label="Google Maps">
-                <i className="fa-solid fa-map-location-dot"></i>
-              </a>
-            )}
-          </div>
-        </section>
+        {profile.sms && (
+          <a href={`sms:${profile.sms}`}>
+            <i className="fa-solid fa-comment-sms"></i>
+            <span>SMS</span>
+          </a>
+        )}
 
-        <div className="message">
-          If you found something belonging to me,
-          please contact me or any of the people listed above.
-        </div>
+        {profile.messenger && (
+          <a
+            href={profile.messenger}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i className="fa-brands fa-facebook-messenger"></i>
+            <span>Messenger</span>
+          </a>
+        )}
 
-        <div className="footer">Personal Contact Profile</div>
+        {profile.facebook && (
+          <a
+            href={profile.facebook}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i className="fa-brands fa-facebook"></i>
+            <span>Facebook</span>
+          </a>
+        )}
+
+        {profile.email && (
+          <a href={`mailto:${profile.email}`}>
+            <i className="fa-solid fa-envelope"></i>
+            <span>Email</span>
+          </a>
+        )}
+
+        {profile.maps && (
+          <a
+            href={profile.maps}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i className="fa-solid fa-location-dot"></i>
+            <span>Google Maps</span>
+          </a>
+        )}
+
       </div>
     </main>
   );
