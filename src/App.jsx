@@ -465,10 +465,8 @@ function App() {
 
               <i className="fa-solid fa-message"></i>
 
-              PAUMANHIN AT PAKIUSAP
-
-            </div>
-
+            
+           
             <div className="lost-message-text">
 
               {message
@@ -489,6 +487,7 @@ function App() {
                 )}
 
             </div>
+ </div>
 
           </section>
         )}
