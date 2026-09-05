@@ -1,49 +1,188 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
+function MainContacts({ profile }) {
+  const buttons = [
+    ["phone", "fa-solid fa-phone", "Call"],
+    ["sms", "fa-solid fa-comment-sms", "SMS"],
+    ["messenger", "fa-brands fa-facebook-messenger", "Messenger"],
+    ["facebook", "fa-brands fa-facebook", "Facebook"],
+    ["email", "fa-solid fa-envelope", "Email"],
+    ["maps", "fa-solid fa-location-dot", "Google Maps"],
+  ];
+
+  return (
+    <div className="contacts">
+      {buttons.map(([type, icon, label]) => {
+        if (!profile[type]) return null;
+
+        let href = profile[type];
+
+        if (type === "phone") href = `tel:${profile[type]}`;
+        if (type === "sms") href = `sms:${profile[type]}`;
+        if (type === "email") href = `mailto:${profile[type]}`;
+
+        return (
+          <a
+            key={type}
+            href={href}
+            target={
+              ["messenger", "facebook", "maps"].includes(type)
+                ? "_blank"
+                : undefined
+            }
+            rel={
+              ["messenger", "facebook", "maps"].includes(type)
+                ? "noopener noreferrer"
+                : undefined
+            }
+          >
+            <i className={icon}></i>
+            <span>{label}</span>
+          </a>
+        );
+      })}
+    </div>
+  );
+}
+
+function OtherContacts({ people }) {
+  if (!people.length) return null;
+
+  return (
+    <section className="other-people">
+      <h2>Other People to Contact</h2>
+
+      <div className="other-list">
+        {people.map((person, index) => (
+          <div className="other-person" key={index}>
+
+            <img
+              src={`/${person.photo || "profile.jpg"}`}
+              alt={person.name}
+              className="other-photo"
+            />
+
+            <div className="other-info">
+              <h3>{person.name}</h3>
+
+              {person.subtitle && (
+                <p>{person.subtitle}</p>
+              )}
+
+              <div className="other-icons">
+
+                {person.phone && (
+                  <a href={`tel:${person.phone}`}>
+                    <i className="fa-solid fa-phone"></i>
+                  </a>
+                )}
+
+                {person.sms && (
+                  <a href={`sms:${person.sms}`}>
+                    <i className="fa-solid fa-comment-sms"></i>
+                  </a>
+                )}
+
+                {person.messenger && (
+                  <a
+                    href={person.messenger}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <i className="fa-brands fa-facebook-messenger"></i>
+                  </a>
+                )}
+
+                {person.facebook && (
+                  <a
+                    href={person.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <i className="fa-brands fa-facebook"></i>
+                  </a>
+                )}
+
+                {person.email && (
+                  <a href={`mailto:${person.email}`}>
+                    <i className="fa-solid fa-envelope"></i>
+                  </a>
+                )}
+
+                {person.maps && (
+                  <a
+                    href={person.maps}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <i className="fa-solid fa-location-dot"></i>
+                  </a>
+                )}
+
+              </div>
+            </div>
+
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function App() {
-  const [profile, setProfile] = useState(null);
-  const [error, setError] = useState(null);
+  const [profiles, setProfiles] = useState({});
+  const [others, setOthers] = useState({});
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const username = (params.get("profile") || "jeffrey")
-      .trim()
-      .toLowerCase();
-
     fetch("/Profile.info")
       .then((response) => {
         if (!response.ok) {
-          throw new Error(
-            "Hindi makita ang Profile.info (" +
-              response.status +
-              ")"
-          );
+          throw new Error("Hindi makita ang Profile.info");
         }
 
         return response.text();
       })
       .then((text) => {
-        const profiles = {};
+        const normalProfiles = {};
+        const otherProfiles = {};
+
         let current = null;
+        let currentType = null;
+        let currentParent = null;
 
-        const lines = text.split(/\r?\n/);
-
-        for (const rawLine of lines) {
+        text.split(/\r?\n/).forEach((rawLine) => {
           const line = rawLine.trim();
 
-          if (!line || line.startsWith("#")) {
-            continue;
-          }
+          if (!line || line.startsWith("#")) return;
 
-          if (line.startsWith("[") && line.endsWith("]")) {
-            current = line
-              .slice(1, -1)
+          const section = line.match(
+            /^\[([^\]]+)\](?:\[([^\]]+)\])?$/
+          );
+
+          if (section) {
+            currentParent = section[1]
               .trim()
               .toLowerCase();
 
-            profiles[current] = {};
-            continue;
+            currentType = section[2]
+              ? section[2].trim().toLowerCase()
+              : null;
+
+            current = {};
+
+            if (currentType === "other") {
+              if (!otherProfiles[currentParent]) {
+                otherProfiles[currentParent] = [];
+              }
+
+              otherProfiles[currentParent].push(current);
+            } else {
+              normalProfiles[currentParent] = current;
+            }
+
+            return;
           }
 
           if (current && line.includes("=")) {
@@ -58,17 +197,18 @@ function App() {
               .slice(index + 1)
               .trim();
 
-            profiles[current][key] = value;
+            current[key] = value;
           }
-        }
+        });
 
-        if (!profiles[username]) {
+        if (!normalProfiles.jeffrey) {
           throw new Error(
-            `Profile "${username}" not found sa Profile.info`
+            "Hindi makita ang [jeffrey]"
           );
         }
 
-        setProfile(profiles[username]);
+        setProfiles(normalProfiles);
+        setOthers(otherProfiles);
       })
       .catch((err) => {
         setError(err.message);
@@ -84,7 +224,7 @@ function App() {
     );
   }
 
-  if (!profile) {
+  if (!profiles.jeffrey) {
     return (
       <div className="loading">
         Loading Profile...
@@ -92,13 +232,17 @@ function App() {
     );
   }
 
+  const profile = profiles.jeffrey;
+
   return (
     <main className="profile-page">
 
+      {/* MAIN PROFILE */}
+
       <img
         className="profile-photo"
-        src={`/` + (profile.photo || "profile.jpg")}
-        alt={profile.name || "Profile"}
+        src={`/${profile.photo || "profile.jpg"}`}
+        alt={profile.name}
       />
 
       <h1>{profile.name}</h1>
@@ -117,63 +261,14 @@ function App() {
         </p>
       )}
 
-      <div className="contacts">
+      <MainContacts profile={profile} />
 
-        {profile.phone && (
-          <a href={`tel:${profile.phone}`}>
-            <i className="fa-solid fa-phone"></i>
-            <span>Call</span>
-          </a>
-        )}
+      {/* OTHER CONTACTS */}
 
-        {profile.sms && (
-          <a href={`sms:${profile.sms}`}>
-            <i className="fa-solid fa-comment-sms"></i>
-            <span>SMS</span>
-          </a>
-        )}
+      <OtherContacts
+        people={others.jeffrey || []}
+      />
 
-        {profile.messenger && (
-          <a
-            href={profile.messenger}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i className="fa-brands fa-facebook-messenger"></i>
-            <span>Messenger</span>
-          </a>
-        )}
-
-        {profile.facebook && (
-          <a
-            href={profile.facebook}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i className="fa-brands fa-facebook"></i>
-            <span>Facebook</span>
-          </a>
-        )}
-
-        {profile.email && (
-          <a href={`mailto:${profile.email}`}>
-            <i className="fa-solid fa-envelope"></i>
-            <span>Email</span>
-          </a>
-        )}
-
-        {profile.maps && (
-          <a
-            href={profile.maps}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i className="fa-solid fa-location-dot"></i>
-            <span>Google Maps</span>
-          </a>
-        )}
-
-      </div>
     </main>
   );
 }
