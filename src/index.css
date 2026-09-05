@@ -214,8 +214,9 @@ a {
 }
 
 
-/* =========================================================
-   LOST MESSAGE
+
+  /* =========================================================
+   MESSAGE - AUTO HEIGHT / AUTO WRAP
 ========================================================= */
 
 .lost-message {
@@ -228,41 +229,28 @@ a {
   border-radius: 16px;
 
   background: #fff;
-
   text-align: left;
 
   box-sizing: border-box;
 
-  /* Prevent anything from escaping the box */
-  overflow: hidden;
+  /* Auto height */
+  height: auto;
+  min-height: 0;
+
+  /* HUWAG itago ang text */
+  overflow: visible;
 }
 
-
-/* MESSAGE TITLE */
-
 .lost-message-title {
-  display: block;
-
   width: 100%;
-  max-width: 100%;
-
-  margin-bottom: 8px;
+  margin: 0 0 8px;
 
   font-size: 17px;
   line-height: 1.4;
   font-weight: 700;
 
-  white-space: normal !important;
-
-  overflow-wrap: anywhere !important;
-  word-wrap: break-word !important;
-  word-break: normal !important;
-
-  box-sizing: border-box;
+  white-space: normal;
 }
-
-
-/* MESSAGE BODY */
 
 .lost-message-text {
   display: block;
@@ -276,34 +264,29 @@ a {
   font-size: 16px;
   line-height: 1.55;
 
-  white-space: normal !important;
+  /* Automatic height */
+  height: auto;
+  min-height: 0;
 
-  overflow-wrap: anywhere !important;
-  word-wrap: break-word !important;
-  word-break: normal !important;
+  /* Automatic wrapping */
+  white-space: normal !important;
+  overflow: visible !important;
+
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: normal;
 
   box-sizing: border-box;
-
-  min-width: 0;
 }
 
-
-/*
-   React creates <span> for every line.
-   Force those spans to allow normal wrapping.
-*/
-
 .lost-message-text span {
-  display: inline !important;
-
-  width: auto;
-  max-width: 100%;
-
   white-space: normal !important;
 
-  overflow-wrap: anywhere !important;
-  word-wrap: break-word !important;
-  word-break: normal !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: normal;
+
+  display: inline;
 }
 
 
