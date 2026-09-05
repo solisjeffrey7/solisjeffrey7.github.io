@@ -823,3 +823,76 @@ a {
     color: #111111;
   }
 }
+
+/* =========================
+   LOST ITEM MESSAGE
+========================= */
+
+.lost-message {
+  width: 100%;
+
+  margin:
+    0
+    auto
+    25px;
+
+  padding:
+    17px
+    18px;
+
+  border-radius: 15px;
+
+  text-align: center;
+}
+
+.lost-message-title {
+  font-size: 17px;
+
+  font-weight: 700;
+
+  margin-bottom: 9px;
+}
+
+.lost-message-title i {
+  margin-right: 7px;
+}
+
+.lost-message-text {
+  font-size: 16px;
+
+  line-height: 1.55;
+}
+
+/* DARK MODE */
+
+@media (prefers-color-scheme: dark) {
+
+  .lost-message {
+    background: #1d2027;
+  }
+
+  .lost-message-title {
+    color: #ffffff;
+  }
+
+  .lost-message-text {
+    color: #c8cbd1;
+  }
+}
+
+/* LIGHT MODE */
+
+@media (prefers-color-scheme: light) {
+
+  .lost-message {
+    background: #f1f2f4;
+  }
+
+  .lost-message-title {
+    color: #111111;
+  }
+
+  .lost-message-text {
+    color: #555555;
+  }
+}
