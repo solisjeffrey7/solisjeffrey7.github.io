@@ -185,3 +185,102 @@
     padding: 15px;
   }
 }
+
+.other-people {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 40px;
+}
+
+.other-people h2 {
+  margin: 0 0 16px;
+  font-size: 24px;
+}
+
+.other-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.other-person {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  border-radius: 14px;
+  text-align: left;
+}
+
+.other-photo {
+  width: 58px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+
+.other-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.other-info h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.other-info p {
+  margin: 3px 0 7px;
+  font-size: 14px;
+}
+
+.other-icons {
+  display: flex;
+  gap: 6px;
+}
+
+.other-icons a {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.other-icons i {
+  font-size: 15px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .other-person {
+    background: #1d2027;
+  }
+
+  .other-info p {
+    color: #c8cbd1;
+  }
+
+  .other-icons a {
+    background: #292d35;
+    color: white;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .other-person {
+    background: #f1f2f4;
+  }
+
+  .other-info p {
+    color: #555;
+  }
+
+  .other-icons a {
+    background: white;
+    color: #111;
+  }
+}
