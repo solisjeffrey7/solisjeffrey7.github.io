@@ -151,6 +151,34 @@ button:disabled{
   color:#174ea6;
   white-space:pre-wrap;
   line-height:1.5;
+  max-height:350px;
+  overflow-y:auto;
+}
+
+.progress{
+  display:none;
+  margin-top:15px;
+}
+
+.progress-bar{
+  width:100%;
+  height:9px;
+  border-radius:10px;
+  background:#ddd;
+  overflow:hidden;
+}
+
+.progress-fill{
+  width:0%;
+  height:100%;
+  background:#111;
+  transition:width .35s ease;
+}
+
+.progress-text{
+  margin-top:8px;
+  font-size:13px;
+  color:#555;
 }
 
 .profile-create{
@@ -166,7 +194,6 @@ button:disabled{
   align-items:center;
   gap:15px;
   flex-wrap:wrap;
-  margin-top:10px;
 }
 
 .photo-preview{
@@ -187,7 +214,6 @@ button:disabled{
 
 .photo-buttons button{
   margin:0;
-  width:auto;
 }
 
 .file-name{
@@ -250,32 +276,6 @@ button:disabled{
   background:#fff5f5;
 }
 
-.progress{
-  display:none;
-  margin-top:15px;
-}
-
-.progress-bar{
-  width:100%;
-  height:8px;
-  border-radius:10px;
-  background:#ddd;
-  overflow:hidden;
-}
-
-.progress-fill{
-  width:0%;
-  height:100%;
-  background:#111;
-  transition:width .4s ease;
-}
-
-.progress-text{
-  margin-top:8px;
-  font-size:13px;
-  color:#555;
-}
-
 @media(max-width:650px){
 
   body{
@@ -336,18 +336,16 @@ button:disabled{
 <div class="wrap">
 
   <div class="box">
-
     <h1>Profile.info Editor</h1>
 
     <p class="small">
       Create, edit and save multiple profiles in your
       <b>Profile.info</b> file.
     </p>
-
   </div>
 
 
-  <!-- GITHUB CONNECTION -->
+  <!-- GITHUB -->
   <div class="box">
 
     <h2>GitHub Connection</h2>
@@ -358,7 +356,6 @@ button:disabled{
       id="ghUser"
       type="text"
       value="solisjeffrey7"
-      placeholder="GitHub username"
     >
 
     <label>Repository</label>
@@ -367,7 +364,6 @@ button:disabled{
       id="ghRepo"
       type="text"
       value="solisjeffrey7.github.io"
-      placeholder="Repository name"
     >
 
     <label>Branch</label>
@@ -376,7 +372,6 @@ button:disabled{
       id="ghBranch"
       type="text"
       value="main"
-      placeholder="main"
     >
 
     <label>GitHub Personal Access Token</label>
@@ -387,11 +382,6 @@ button:disabled{
       placeholder="github_pat_..."
     >
 
-    <p class="small">
-      Your GitHub token is used only by this page to access your repository.
-      Do not share it with anyone.
-    </p>
-
     <button
       id="readButton"
       class="github"
@@ -401,23 +391,15 @@ button:disabled{
       Read Current Profile.info
     </button>
 
-    <div
-      id="status"
-      class="status"
-    ></div>
+    <div id="status" class="status"></div>
 
-    <div
-      id="progress"
-      class="progress"
-    >
+    <div id="progress" class="progress">
 
       <div class="progress-bar">
-
         <div
           id="progressFill"
           class="progress-fill"
         ></div>
-
       </div>
 
       <div
@@ -430,11 +412,9 @@ button:disabled{
   </div>
 
 
-  <!-- EDITOR -->
   <div id="editor">
 
-
-    <!-- SELECT PROFILE -->
+    <!-- PROFILE SELECT -->
     <div class="box">
 
       <h2>Select Profile</h2>
@@ -477,7 +457,6 @@ button:disabled{
       <input
         id="name"
         type="text"
-        placeholder="Jeffrey Solis"
       >
 
       <label>Subtitle</label>
@@ -485,10 +464,8 @@ button:disabled{
       <input
         id="subtitle"
         type="text"
-        placeholder="Personal Contact Profile"
       >
 
-      <!-- MAIN PHOTO -->
       <label>Profile Photo</label>
 
       <div class="profile-photo">
@@ -496,7 +473,7 @@ button:disabled{
         <img
           id="mainPhotoPreview"
           class="photo-preview"
-          alt="Profile preview"
+          alt="Profile"
         >
 
         <div class="photo-buttons">
@@ -535,7 +512,6 @@ button:disabled{
       ></div>
 
 
-      <!-- LOCATION -->
       <h3>Location</h3>
 
       <label>Address</label>
@@ -543,7 +519,6 @@ button:disabled{
       <input
         id="address"
         type="text"
-        placeholder="Address"
       >
 
       <label>City</label>
@@ -551,109 +526,60 @@ button:disabled{
       <input
         id="city"
         type="text"
-        placeholder="City"
       >
 
 
-      <!-- CONTACTS -->
       <h3>Contacts</h3>
 
       <div class="row">
 
         <div>
-
           <label>Phone</label>
-
-          <input
-            id="phone"
-            type="text"
-            placeholder="+639..."
-          >
-
+          <input id="phone" type="text">
         </div>
 
         <div>
-
           <label>SMS</label>
-
-          <input
-            id="sms"
-            type="text"
-            placeholder="+639..."
-          >
-
+          <input id="sms" type="text">
         </div>
 
         <div>
-
           <label>Messenger</label>
-
-          <input
-            id="messenger"
-            type="text"
-            placeholder="Messenger link"
-          >
-
+          <input id="messenger" type="text">
         </div>
 
         <div>
-
           <label>Facebook</label>
-
-          <input
-            id="facebook"
-            type="text"
-            placeholder="Facebook link"
-          >
-
+          <input id="facebook" type="text">
         </div>
 
         <div>
-
           <label>Email</label>
-
-          <input
-            id="email"
-            type="email"
-            placeholder="email@example.com"
-          >
-
+          <input id="email" type="email">
         </div>
 
         <div>
-
           <label>Maps</label>
-
-          <input
-            id="maps"
-            type="text"
-            placeholder="Google Maps link"
-          >
-
+          <input id="maps" type="text">
         </div>
 
       </div>
 
 
-      <!-- MESSAGE -->
       <h3>Lost Message</h3>
 
       <textarea
         id="message"
-        placeholder="Message shown on the profile..."
+        placeholder="Message..."
       ></textarea>
 
     </div>
 
 
-    <!-- OTHER PEOPLE -->
+    <!-- OTHER -->
     <div class="box">
 
       <h2>Other People</h2>
-
-      <p class="small">
-        Add additional people connected to this profile.
-      </p>
 
       <div id="others"></div>
 
@@ -677,8 +603,8 @@ button:disabled{
 
         <button
           id="generateButton"
-          type="button"
           class="primary"
+          type="button"
           onclick="generate()"
         >
           Generate Profile.info
@@ -686,24 +612,24 @@ button:disabled{
 
         <button
           id="saveButton"
-          type="button"
           class="github"
+          type="button"
           onclick="saveToGitHub()"
         >
           Save Changes to GitHub
         </button>
 
         <button
-          type="button"
           class="secondary"
+          type="button"
           onclick="copyOutput()"
         >
           Copy
         </button>
 
         <button
-          type="button"
           class="secondary"
+          type="button"
           onclick="downloadFile()"
         >
           Download
@@ -720,8 +646,7 @@ button:disabled{
       <h2>Delete Profile</h2>
 
       <p class="small">
-        This permanently removes the selected profile from the generated
-        Profile.info file when you save to GitHub.
+        Removes the selected profile from Profile.info.
       </p>
 
       <button
@@ -754,11 +679,6 @@ button:disabled{
 
 <script>
 
-
-// =====================================
-// GLOBAL VARIABLES
-// =====================================
-
 let data = {};
 
 let selectedProfile = "";
@@ -770,46 +690,103 @@ let mainPhotoFile = null;
 let isProcessing = false;
 
 
-// =====================================
-// PROFILE FIELDS
-// =====================================
-
-const fields = [
-
-  "name",
-  "subtitle",
-  "photo",
-  "address",
-  "city",
-  "phone",
-  "sms",
-  "messenger",
-  "facebook",
-  "email",
-  "maps"
-
-];
-
-
-// =====================================
-// DELAY
-// =====================================
+/* =========================
+   HELPERS
+========================= */
 
 function sleep(ms){
-
   return new Promise(
-    resolve => setTimeout(
-      resolve,
-      ms
-    )
+    resolve => setTimeout(resolve,ms)
   );
+}
+
+
+function scrollToProgress(){
+
+  const status =
+    document.getElementById("status");
+
+  if(status){
+
+    status.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+
+  }
 
 }
 
 
-// =====================================
-// ESCAPE
-// =====================================
+function setStatus(message){
+
+  const status =
+    document.getElementById("status");
+
+  status.textContent =
+    message;
+
+  status.style.display =
+    "block";
+
+  /*
+   * Automatically scroll to status.
+   */
+  scrollToProgress();
+}
+
+
+function showProgress(percent,text){
+
+  const progress =
+    document.getElementById("progress");
+
+  const fill =
+    document.getElementById("progressFill");
+
+  const progressText =
+    document.getElementById("progressText");
+
+  progress.style.display =
+    "block";
+
+  fill.style.width =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        percent
+      )
+    ) + "%";
+
+  progressText.textContent =
+    text || "";
+
+  scrollToProgress();
+}
+
+
+function setProcessing(value){
+
+  isProcessing = value;
+
+  [
+    "readButton",
+    "generateButton",
+    "saveButton"
+  ].forEach(id => {
+
+    const el =
+      document.getElementById(id);
+
+    if(el){
+      el.disabled = value;
+    }
+
+  });
+
+}
+
 
 function esc(value){
 
@@ -819,32 +796,20 @@ function esc(value){
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
-
 }
 
-
-// =====================================
-// HTML DECODE
-// =====================================
 
 function decodeValue(value){
 
-  const txt =
-    document.createElement(
-      "textarea"
-    );
+  const textarea =
+    document.createElement("textarea");
 
-  txt.innerHTML =
+  textarea.innerHTML =
     value ?? "";
 
-  return txt.value;
-
+  return textarea.value;
 }
 
-
-// =====================================
-// CLEAN PROFILE
-// =====================================
 
 function cleanProfile(value){
 
@@ -859,13 +824,8 @@ function cleanProfile(value){
       /^-+|-+$/g,
       ""
     );
-
 }
 
-
-// =====================================
-// CLEAN FILE NAME
-// =====================================
 
 function cleanFileName(value){
 
@@ -875,26 +835,20 @@ function cleanFileName(value){
       /[^a-zA-Z0-9._-]/g,
       "_"
     );
-
 }
 
-
-// =====================================
-// LINE
-// =====================================
 
 function line(key,value){
 
   return key +
     "=" +
     String(value ?? "");
-
 }
 
 
-// =====================================
-// PARSE PROFILE.INFO
-// =====================================
+/* =========================
+   PARSER
+========================= */
 
 function parseInfo(text){
 
@@ -906,7 +860,6 @@ function parseInfo(text){
 
   let lastKey = null;
 
-
   const lines =
     String(text || "")
       .split(/\r?\n/);
@@ -916,27 +869,25 @@ function parseInfo(text){
     const raw of lines
   ){
 
-    const lineText =
+    const textLine =
       raw.trim();
 
 
-    if(!lineText){
+    if(!textLine){
       continue;
     }
 
 
     if(
-      lineText.startsWith("#") ||
-      lineText.startsWith(";")
+      textLine.startsWith("#") ||
+      textLine.startsWith(";")
     ){
-
       continue;
-
     }
 
 
     const otherMatch =
-      lineText.match(
+      textLine.match(
         /^\[([^\]]+)\]\[other\]$/i
       );
 
@@ -954,11 +905,8 @@ function parseInfo(text){
       ){
 
         result[currentProfile] = {
-
           main:{},
-
           others:[]
-
         };
 
       }
@@ -966,23 +914,20 @@ function parseInfo(text){
 
       currentOther = {};
 
-
       result[
         currentProfile
       ].others.push(
         currentOther
       );
 
-
       lastKey = null;
 
       continue;
-
     }
 
 
     const profileMatch =
-      lineText.match(
+      textLine.match(
         /^\[([^\]]+)\]$/i
       );
 
@@ -1000,11 +945,8 @@ function parseInfo(text){
       ){
 
         result[currentProfile] = {
-
           main:{},
-
           others:[]
-
         };
 
       }
@@ -1015,7 +957,6 @@ function parseInfo(text){
       lastKey = null;
 
       continue;
-
     }
 
 
@@ -1024,11 +965,11 @@ function parseInfo(text){
     }
 
 
-    const equalIndex =
-      lineText.indexOf("=");
+    const eq =
+      textLine.indexOf("=");
 
 
-    if(equalIndex === -1){
+    if(eq === -1){
 
       if(
         lastKey === "message"
@@ -1043,7 +984,7 @@ function parseInfo(text){
             ) +
             "\n" +
             decodeValue(
-              lineText
+              textLine
             );
 
         }else{
@@ -1059,7 +1000,7 @@ function parseInfo(text){
             ) +
             "\n" +
             decodeValue(
-              lineText
+              textLine
             );
 
         }
@@ -1067,25 +1008,19 @@ function parseInfo(text){
       }
 
       continue;
-
     }
 
 
     const key =
-      lineText
-        .slice(
-          0,
-          equalIndex
-        )
+      textLine
+        .slice(0,eq)
         .trim()
         .toLowerCase();
 
 
     const value =
       decodeValue(
-        lineText.slice(
-          equalIndex + 1
-        )
+        textLine.slice(eq + 1)
       );
 
 
@@ -1110,33 +1045,24 @@ function parseInfo(text){
 
 
   return result;
-
 }
 
 
-// =====================================
-// SET VALUE
-// =====================================
+/* =========================
+   MAIN PROFILE
+========================= */
 
 function setValue(id,value){
 
   const el =
     document.getElementById(id);
 
-
   if(el){
-
     el.value =
       value || "";
-
   }
-
 }
 
-
-// =====================================
-// CAPTURE CURRENT PROFILE
-// =====================================
 
 function captureCurrentProfile(){
 
@@ -1150,47 +1076,50 @@ function captureCurrentProfile(){
   }
 
 
-  const oldProfile =
-    selectedProfile;
+  const profile =
+    data[selectedProfile];
 
 
-  let newProfile =
-    cleanProfile(
-      document.getElementById(
-        "profile"
-      ).value
-    );
-
-
-  if(!newProfile){
-
-    newProfile =
-      oldProfile;
-
-  }
+  /*
+   * IMPORTANT:
+   *
+   * Do NOT destroy existing photo.
+   */
+  const existingPhoto =
+    profile.main.photo || "";
 
 
   const main = {};
 
 
-  fields.forEach(
-    key => {
+  [
+    "name",
+    "subtitle",
+    "address",
+    "city",
+    "phone",
+    "sms",
+    "messenger",
+    "facebook",
+    "email",
+    "maps"
+  ].forEach(key => {
 
-      const el =
-        document.getElementById(
-          key
-        );
+    const el =
+      document.getElementById(key);
 
+    if(el){
 
-      if(el){
-
-        main[key] =
-          el.value.trim();
-
-      }
+      main[key] =
+        el.value.trim();
 
     }
-  );
+
+  });
+
+
+  main.photo =
+    existingPhoto;
 
 
   main.message =
@@ -1199,6 +1128,10 @@ function captureCurrentProfile(){
     ).value;
 
 
+  /*
+   * Only replace photo when
+   * a NEW file was selected.
+   */
   if(mainPhotoFile){
 
     main._photoFile =
@@ -1207,109 +1140,78 @@ function captureCurrentProfile(){
   }
 
 
+  profile.main =
+    main;
+
+
+  /*
+   * Capture other people.
+   */
   const others = [];
 
 
   document
-    .querySelectorAll(
-      ".other"
-    )
-    .forEach(
-      box => {
+    .querySelectorAll(".other")
+    .forEach(box => {
 
-        const person = {};
+      const person = {};
 
 
-        box
-          .querySelectorAll(
-            "[data-key]"
-          )
-          .forEach(
-            el => {
+      box
+        .querySelectorAll("[data-key]")
+        .forEach(el => {
 
-              person[
-                el.dataset.key
-              ] =
-                el.value.trim();
+          person[
+            el.dataset.key
+          ] =
+            el.value.trim();
 
-            }
-          );
+        });
 
 
-        const photoInput =
-          box.querySelector(
-            ".other-file"
-          );
+      /*
+       * Keep old photo.
+       */
+      if(
+        box.dataset.existingPhoto
+      ){
 
-
-        if(
-          photoInput &&
-          photoInput.files &&
-          photoInput.files[0]
-        ){
-
-          person._photoFile =
-            photoInput.files[0];
-
-        }
-
-
-        if(
-          box.dataset.existingPhoto &&
-          !person.photo
-        ){
-
-          person.photo =
-            box.dataset.existingPhoto;
-
-        }
-
-
-        others.push(
-          person
-        );
+        person.photo =
+          box.dataset.existingPhoto;
 
       }
-    );
 
 
-  if(
-    newProfile !== oldProfile
-  ){
-
-    if(data[newProfile]){
-
-      alert(
-        "Profile ID already exists."
-      );
-
-      return;
-
-    }
+      const photoInput =
+        box.querySelector(
+          ".other-file"
+        );
 
 
-    delete data[oldProfile];
+      /*
+       * New photo overrides old photo.
+       */
+      if(
+        photoInput &&
+        photoInput.files &&
+        photoInput.files[0]
+      ){
 
-    selectedProfile =
-      newProfile;
+        person._photoFile =
+          photoInput.files[0];
 
-  }
+      }
 
 
-  data[selectedProfile] = {
+      others.push(person);
 
-    main,
+    });
 
-    others
 
-  };
-
+  profile.others =
+    others;
 }
 
-
-// =====================================
-// FILL MAIN
-// =====================================
 
 function fillMain(){
 
@@ -1332,21 +1234,25 @@ function fillMain(){
   );
 
 
-  fields.forEach(
-    key => {
+  [
+    "name",
+    "subtitle",
+    "address",
+    "city",
+    "phone",
+    "sms",
+    "messenger",
+    "facebook",
+    "email",
+    "maps"
+  ].forEach(key => {
 
-      if(key === "photo"){
-        return;
-      }
+    setValue(
+      key,
+      main[key] || ""
+    );
 
-
-      setValue(
-        key,
-        main[key] || ""
-      );
-
-    }
-  );
+  });
 
 
   setValue(
@@ -1355,18 +1261,22 @@ function fillMain(){
   );
 
 
-  mainPhotoFile =
-    main._photoFile || null;
+  /*
+   * IMPORTANT:
+   *
+   * Restore photo every time
+   * profile changes.
+   */
+  mainPhotoFile = null;
 
 
-  const input =
+  const photoInput =
     document.getElementById(
       "mainPhoto"
     );
 
-
-  if(input){
-    input.value = "";
+  if(photoInput){
+    photoInput.value = "";
   }
 
 
@@ -1386,9 +1296,7 @@ function fillMain(){
 
   }else{
 
-    preview.removeAttribute(
-      "src"
-    );
+    preview.removeAttribute("src");
 
     preview.style.display =
       "none";
@@ -1399,40 +1307,32 @@ function fillMain(){
   document.getElementById(
     "mainPhotoName"
   ).textContent =
-    mainPhotoFile
-      ? mainPhotoFile.name
-      : "";
+    main.photo || "";
 
 
-  const othersContainer =
+  /*
+   * Load OTHER people.
+   */
+  const container =
     document.getElementById(
       "others"
     );
 
-
-  othersContainer.innerHTML =
-    "";
+  container.innerHTML = "";
 
 
   (
     profile.others || []
-  ).forEach(
-    person => {
+  ).forEach(person => {
 
-      addOther(person);
+    addOther(person);
 
-    }
-  );
+  });
 
 
   generate();
-
 }
 
-
-// =====================================
-// SWITCH PROFILE
-// =====================================
 
 function switchProfile(){
 
@@ -1441,6 +1341,10 @@ function switchProfile(){
   }
 
 
+  /*
+   * Save current fields before
+   * switching.
+   */
   captureCurrentProfile();
 
 
@@ -1451,13 +1355,8 @@ function switchProfile(){
 
 
   fillMain();
-
 }
 
-
-// =====================================
-// POPULATE PROFILES
-// =====================================
 
 function populateProfiles(){
 
@@ -1467,8 +1366,7 @@ function populateProfiles(){
     );
 
 
-  select.innerHTML =
-    "";
+  select.innerHTML = "";
 
 
   const profiles =
@@ -1486,39 +1384,28 @@ function populateProfiles(){
   }
 
 
-  profiles.forEach(
-    id => {
+  profiles.forEach(id => {
 
-      const option =
-        document.createElement(
-          "option"
-        );
+    const option =
+      document.createElement("option");
 
+    option.value =
+      id;
 
-      option.value =
-        id;
+    option.textContent =
+      id;
 
+    if(
+      id === selectedProfile
+    ){
 
-      option.textContent =
-        id;
-
-
-      if(
-        id === selectedProfile
-      ){
-
-        option.selected =
-          true;
-
-      }
-
-
-      select.appendChild(
-        option
-      );
+      option.selected = true;
 
     }
-  );
+
+    select.appendChild(option);
+
+  });
 
 
   document.getElementById(
@@ -1534,13 +1421,12 @@ function populateProfiles(){
     fillMain();
 
   }
-
 }
 
 
-// =====================================
-// CREATE NEW PROFILE
-// =====================================
+/* =========================
+   CREATE PROFILE
+========================= */
 
 function createNewProfile(){
 
@@ -1554,7 +1440,7 @@ function createNewProfile(){
 
   let id =
     prompt(
-      "Enter new Profile ID / Name:",
+      "Enter new Profile ID:",
       "newprofile"
     );
 
@@ -1570,13 +1456,9 @@ function createNewProfile(){
 
   if(!id){
 
-    alert(
-      "Invalid Profile ID.\n\n" +
-      "Use letters, numbers, _ or - only."
-    );
+    alert("Invalid Profile ID.");
 
     return;
-
   }
 
 
@@ -1587,14 +1469,12 @@ function createNewProfile(){
     );
 
     return;
-
   }
 
 
   data[id] = {
 
     main:{
-
       name:"",
       subtitle:"",
       photo:"",
@@ -1607,7 +1487,6 @@ function createNewProfile(){
       email:"",
       maps:"",
       message:""
-
     },
 
     others:[]
@@ -1626,13 +1505,12 @@ function createNewProfile(){
     "✅ New profile created: " +
     id
   );
-
 }
 
 
-// =====================================
-// MAIN PHOTO
-// =====================================
+/* =========================
+   MAIN PHOTO
+========================= */
 
 function selectMainPhoto(event){
 
@@ -1656,9 +1534,7 @@ function selectMainPhoto(event){
 
 
   preview.src =
-    URL.createObjectURL(
-      file
-    );
+    URL.createObjectURL(file);
 
 
   preview.style.display =
@@ -1669,18 +1545,12 @@ function selectMainPhoto(event){
     "mainPhotoName"
   ).textContent =
     file.name;
-
 }
 
 
-// =====================================
-// CLEAR MAIN PHOTO
-// =====================================
-
 function clearMainPhoto(){
 
-  mainPhotoFile =
-    null;
+  mainPhotoFile = null;
 
 
   const input =
@@ -1688,9 +1558,7 @@ function clearMainPhoto(){
       "mainPhoto"
     );
 
-
-  input.value =
-    "";
+  input.value = "";
 
 
   const preview =
@@ -1699,10 +1567,7 @@ function clearMainPhoto(){
     );
 
 
-  preview.removeAttribute(
-    "src"
-  );
-
+  preview.removeAttribute("src");
 
   preview.style.display =
     "none";
@@ -1718,21 +1583,15 @@ function clearMainPhoto(){
 
     data[
       selectedProfile
-    ].main.photo =
-      "";
-
-    delete data[
-      selectedProfile
-    ].main._photoFile;
+    ].main.photo = "";
 
   }
-
 }
 
 
-// =====================================
-// ADD OTHER PERSON
-// =====================================
+/* =========================
+   OTHER
+========================= */
 
 function addOther(person = {}){
 
@@ -1743,15 +1602,17 @@ function addOther(person = {}){
 
 
   const box =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
 
   box.className =
     "other";
 
 
+  /*
+   * Store existing photo separately.
+   * This prevents it from disappearing.
+   */
   if(person.photo){
 
     box.dataset.existingPhoto =
@@ -1789,7 +1650,6 @@ function addOther(person = {}){
       type="text"
       data-key="name"
       value="${esc(person.name || "")}"
-      placeholder="Name"
     >
 
 
@@ -1799,7 +1659,6 @@ function addOther(person = {}){
       type="text"
       data-key="subtitle"
       value="${esc(person.subtitle || "")}"
-      placeholder="Subtitle"
     >
 
 
@@ -1835,7 +1694,6 @@ function addOther(person = {}){
       type="text"
       data-key="phone"
       value="${esc(person.phone || "")}"
-      placeholder="+639..."
     >
 
 
@@ -1845,7 +1703,6 @@ function addOther(person = {}){
       type="text"
       data-key="sms"
       value="${esc(person.sms || "")}"
-      placeholder="+639..."
     >
 
 
@@ -1855,7 +1712,6 @@ function addOther(person = {}){
       type="text"
       data-key="messenger"
       value="${esc(person.messenger || "")}"
-      placeholder="Messenger link"
     >
 
 
@@ -1865,7 +1721,6 @@ function addOther(person = {}){
       type="text"
       data-key="facebook"
       value="${esc(person.facebook || "")}"
-      placeholder="Facebook link"
     >
 
 
@@ -1875,7 +1730,6 @@ function addOther(person = {}){
       type="email"
       data-key="email"
       value="${esc(person.email || "")}"
-      placeholder="email@example.com"
     >
 
 
@@ -1885,17 +1739,17 @@ function addOther(person = {}){
       type="text"
       data-key="maps"
       value="${esc(person.maps || "")}"
-      placeholder="Google Maps link"
     >
 
   `;
 
 
-  container.appendChild(
-    box
-  );
+  container.appendChild(box);
 
 
+  /*
+   * Restore existing other photo.
+   */
   if(person.photo){
 
     const preview =
@@ -1912,13 +1766,8 @@ function addOther(person = {}){
       "block";
 
   }
-
 }
 
-
-// =====================================
-// OTHER PHOTO PREVIEW
-// =====================================
 
 function previewOtherPhoto(event){
 
@@ -1932,9 +1781,7 @@ function previewOtherPhoto(event){
 
 
   const box =
-    event.target.closest(
-      ".other"
-    );
+    event.target.closest(".other");
 
 
   const preview =
@@ -1944,20 +1791,17 @@ function previewOtherPhoto(event){
 
 
   preview.src =
-    URL.createObjectURL(
-      file
-    );
+    URL.createObjectURL(file);
 
 
   preview.style.display =
     "block";
-
 }
 
 
-// =====================================
-// DELETE PROFILE
-// =====================================
+/* =========================
+   DELETE PROFILE
+========================= */
 
 function deleteProfile(){
 
@@ -1976,15 +1820,9 @@ function deleteProfile(){
   if(profiles.length <= 1){
 
     alert(
-      "Hindi puwedeng i-delete ang last profile."
+      "Cannot delete the last profile."
     );
 
-    return;
-
-  }
-
-
-  if(!selectedProfile){
     return;
   }
 
@@ -1998,21 +1836,6 @@ function deleteProfile(){
   ){
 
     return;
-
-  }
-
-
-  if(
-    !confirm(
-      "Sigurado ka?\n\n" +
-      "Mawawala ang profile na \"" +
-      selectedProfile +
-      "\" kapag nag-save ka sa GitHub."
-    )
-  ){
-
-    return;
-
   }
 
 
@@ -2022,7 +1845,7 @@ function deleteProfile(){
 
 
   selectedProfile =
-    Object.keys(data)[0] || "";
+    Object.keys(data)[0];
 
 
   populateProfiles();
@@ -2030,97 +1853,93 @@ function deleteProfile(){
 
   setStatus(
     "🗑️ Profile deleted locally.\n\n" +
-    "Pindutin ang Save Changes to GitHub para ma-save."
+    "Press Save Changes to GitHub."
   );
-
 }
 
 
-// =====================================
-// GENERATE
-// =====================================
+/* =========================
+   BUILD FILE
+========================= */
 
-function generate(){
+function buildCompleteFile(){
 
-  captureCurrentProfile();
-
-
-  if(!selectedProfile){
-    return;
-  }
+  let output = "";
 
 
-  const profile =
-    data[selectedProfile];
+  Object.keys(data).forEach(
+    profileId => {
+
+      const profile =
+        data[profileId];
 
 
-  if(!profile){
-    return;
-  }
+      const main =
+        profile.main || {};
 
 
-  const main =
-    profile.main || {};
+      output +=
+        "[" +
+        profileId +
+        "]\n";
 
 
-  let output =
-    "";
+      [
+        "name",
+        "subtitle",
+        "photo",
+        "address",
+        "city",
+        "phone",
+        "sms",
+        "messenger",
+        "facebook",
+        "email",
+        "maps"
+      ].forEach(key => {
+
+        const value =
+          main[key] || "";
 
 
-  output +=
-    "[" +
-    selectedProfile +
-    "]\n";
+        if(value !== ""){
+
+          output +=
+            line(
+              key,
+              value
+            ) +
+            "\n";
+
+        }
+
+      });
 
 
-  fields.forEach(
-    key => {
-
-      const value =
-        main[key] || "";
-
-
-      if(value !== ""){
+      if(
+        main.message !== undefined &&
+        main.message !== ""
+      ){
 
         output +=
-          line(
-            key,
-            value
-          ) +
+          "message=" +
+          main.message +
           "\n";
 
       }
 
-    }
-  );
+
+      (
+        profile.others || []
+      ).forEach(person => {
+
+        output +=
+          "\n[" +
+          profileId +
+          "][other]\n";
 
 
-  if(
-    main.message !== undefined &&
-    main.message !== ""
-  ){
-
-    output +=
-      "message=" +
-      main.message +
-      "\n";
-
-  }
-
-
-  (
-    profile.others || []
-  ).forEach(
-    person => {
-
-      output +=
-        "\n[" +
-        selectedProfile +
-        "][other]\n";
-
-
-      Object.keys(person)
-        .forEach(
+        Object.keys(person).forEach(
           key => {
 
             if(
@@ -2128,7 +1947,6 @@ function generate(){
             ){
 
               return;
-
             }
 
 
@@ -2150,160 +1968,49 @@ function generate(){
           }
         );
 
+      });
+
+
+      output += "\n";
+
     }
   );
+
+
+  return output.trim() + "\n";
+}
+
+
+function generate(){
+
+  captureCurrentProfile();
+
+
+  const content =
+    buildCompleteFile();
 
 
   document.getElementById(
     "output"
   ).value =
-    output;
+    content;
 
 }
 
 
-// =====================================
-// BUILD COMPLETE FILE
-// =====================================
-
-function buildCompleteFile(){
-
-  let output =
-    "";
-
-
-  Object.keys(data)
-    .forEach(
-      profileId => {
-
-        const profile =
-          data[profileId];
-
-
-        const main =
-          profile.main || {};
-
-
-        output +=
-          "[" +
-          profileId +
-          "]\n";
-
-
-        fields.forEach(
-          key => {
-
-            const value =
-              main[key] || "";
-
-
-            if(value !== ""){
-
-              output +=
-                line(
-                  key,
-                  value
-                ) +
-                "\n";
-
-            }
-
-          }
-        );
-
-
-        if(
-          main.message !== undefined &&
-          main.message !== ""
-        ){
-
-          output +=
-            "message=" +
-            main.message +
-            "\n";
-
-        }
-
-
-        (
-          profile.others || []
-        ).forEach(
-          person => {
-
-            output +=
-              "\n[" +
-              profileId +
-              "][other]\n";
-
-
-            Object.keys(person)
-              .forEach(
-                key => {
-
-                  if(
-                    key === "_photoFile"
-                  ){
-
-                    return;
-
-                  }
-
-
-                  const value =
-                    person[key] || "";
-
-
-                  if(value !== ""){
-
-                    output +=
-                      line(
-                        key,
-                        value
-                      ) +
-                      "\n";
-
-                  }
-
-                }
-              );
-
-          }
-        );
-
-
-        output +=
-          "\n";
-
-      }
-    );
-
-
-  return output.trim() +
-    "\n";
-
-}
-
-
-// =====================================
-// BASE64
-// =====================================
+/* =========================
+   BASE64
+========================= */
 
 function base64Encode(str){
 
   return btoa(
     unescape(
-      encodeURIComponent(
-        str
-      )
+      encodeURIComponent(str)
     )
   );
-
 }
 
-
-// =====================================
-// FILE TO BASE64
-// =====================================
 
 function fileToBase64(file){
 
@@ -2314,37 +2021,29 @@ function fileToBase64(file){
         new FileReader();
 
 
-      reader.onload =
-        () => {
+      reader.onload = () => {
 
-          const result =
-            reader.result;
+        resolve(
+          reader.result.split(",")[1]
+        );
 
-
-          resolve(
-            result.split(",")[1]
-          );
-
-        };
+      };
 
 
       reader.onerror =
         reject;
 
 
-      reader.readAsDataURL(
-        file
-      );
+      reader.readAsDataURL(file);
 
     }
   );
-
 }
 
 
-// =====================================
-// GITHUB REQUEST
-// =====================================
+/* =========================
+   GITHUB REQUEST
+========================= */
 
 async function githubRequest(
   path,
@@ -2389,19 +2088,43 @@ async function githubRequest(
   }
 
 
-  const url =
-    "https://api.github.com/repos/" +
-    encodeURIComponent(user) +
-    "/" +
-    encodeURIComponent(repo) +
-    path +
-    (
-      path.includes("?")
-        ? "&"
-        : "?"
-    ) +
-    "ref=" +
-    encodeURIComponent(branch);
+  /*
+   * IMPORTANT:
+   *
+   * Tree API should not receive
+   * the normal contents ref parameter.
+   */
+  let url;
+
+
+  if(
+    path.startsWith("/git/trees/")
+  ){
+
+    url =
+      "https://api.github.com/repos/" +
+      encodeURIComponent(user) +
+      "/" +
+      encodeURIComponent(repo) +
+      path;
+
+  }else{
+
+    url =
+      "https://api.github.com/repos/" +
+      encodeURIComponent(user) +
+      "/" +
+      encodeURIComponent(repo) +
+      path +
+      (
+        path.includes("?")
+          ? "&"
+          : "?"
+      ) +
+      "ref=" +
+      encodeURIComponent(branch);
+
+  }
 
 
   const response =
@@ -2435,8 +2158,7 @@ async function githubRequest(
     await response.text();
 
 
-  let result =
-    {};
+  let result = {};
 
 
   try{
@@ -2465,161 +2187,23 @@ async function githubRequest(
 
 
   return result;
-
 }
 
-
-// =====================================
-// GITHUB PATH
-// =====================================
 
 function githubApiPath(){
 
   return "/contents/public/Profile.info";
-
 }
 
 
-// =====================================
-// STATUS
-// =====================================
-
-function setStatus(message){
-
-  const status =
-    document.getElementById(
-      "status"
-    );
-
-
-  status.textContent =
-    message;
-
-
-  status.style.display =
-    "block";
-
-}
-
-
-// =====================================
-// PROGRESS
-// =====================================
-
-function showProgress(
-  percent,
-  text
-){
-
-  const progress =
-    document.getElementById(
-      "progress"
-    );
-
-
-  const fill =
-    document.getElementById(
-      "progressFill"
-    );
-
-
-  const progressText =
-    document.getElementById(
-      "progressText"
-    );
-
-
-  progress.style.display =
-    "block";
-
-
-  fill.style.width =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        percent
-      )
-    ) +
-    "%";
-
-
-  progressText.textContent =
-    text || "";
-
-}
-
-
-// =====================================
-// HIDE PROGRESS
-// =====================================
-
-function hideProgress(){
-
-  document.getElementById(
-    "progress"
-  ).style.display =
-    "none";
-
-}
-
-
-// =====================================
-// SET PROCESSING
-// =====================================
-
-function setProcessing(
-  value
-){
-
-  isProcessing =
-    value;
-
-
-  const ids = [
-
-    "readButton",
-    "generateButton",
-    "saveButton"
-
-  ];
-
-
-  ids.forEach(
-    id => {
-
-      const el =
-        document.getElementById(
-          id
-        );
-
-
-      if(el){
-
-        el.disabled =
-          value;
-
-      }
-
-    }
-  );
-
-}
-
-
-// =====================================
-// UPLOAD PHOTO
-// =====================================
+/* =========================
+   UPLOAD PHOTO
+========================= */
 
 async function uploadPhotoToGitHub(
   file,
   preferredName
 ){
-
-  if(!file){
-    return "";
-  }
-
 
   const safeName =
     cleanFileName(
@@ -2633,16 +2217,13 @@ async function uploadPhotoToGitHub(
     safeName;
 
 
-  let sha =
-    null;
+  let sha = null;
 
 
   try{
 
     const existing =
-      await githubRequest(
-        path
-      );
+      await githubRequest(path);
 
 
     sha =
@@ -2650,20 +2231,14 @@ async function uploadPhotoToGitHub(
 
   }catch(error){
 
-    /*
-     * File does not exist.
-     */
-
   }
 
 
-  await sleep(500);
+  await sleep(700);
 
 
   const content =
-    await fileToBase64(
-      file
-    );
+    await fileToBase64(file);
 
 
   const body = {
@@ -2703,21 +2278,16 @@ async function uploadPhotoToGitHub(
   );
 
 
-  /*
-   * Wait after GitHub upload.
-   */
-  await sleep(1500);
+  await sleep(1800);
 
 
-  return "/" +
-    safeName;
-
+  return "/" + safeName;
 }
 
 
-// =====================================
-// GET DECLARED PHOTO FILENAMES
-// =====================================
+/* =========================
+   PHOTO NAME SCANNER
+========================= */
 
 function getDeclaredPhotoNames(
   profileText
@@ -2728,135 +2298,111 @@ function getDeclaredPhotoNames(
 
 
   const lines =
-    String(
-      profileText || ""
-    )
-    .split(/\r?\n/);
+    String(profileText || "")
+      .split(/\r?\n/);
 
 
-  lines.forEach(
-    raw => {
+  lines.forEach(raw => {
 
-      const text =
-        raw.trim();
-
-
-      /*
-       * Find ALL:
-       *
-       * photo=value
-       */
-      const match =
-        text.match(
-          /^photo\s*=\s*(.+)$/i
-        );
+    const text =
+      raw.trim();
 
 
-      if(!match){
-        return;
-      }
+    const match =
+      text.match(
+        /^photo\s*=\s*(.+)$/i
+      );
 
 
-      let value =
-        match[1].trim();
+    if(!match){
+      return;
+    }
 
 
-      if(!value){
-        return;
-      }
+    let value =
+      match[1].trim();
 
 
-      /*
-       * Remove ?query
-       */
-      value =
-        value.split("?")[0];
+    if(!value){
+      return;
+    }
 
 
-      /*
-       * Remove #hash
-       */
-      value =
-        value.split("#")[0];
+    /*
+     * Remove query/hash.
+     */
+    value =
+      value
+        .split("?")[0]
+        .split("#")[0];
 
 
-      /*
-       * URL support
-       */
-      try{
+    /*
+     * If URL, use pathname.
+     */
+    try{
 
-        if(
-          value.startsWith(
-            "http://"
-          ) ||
-          value.startsWith(
-            "https://"
-          )
-        ){
+      if(
+        value.startsWith("http://") ||
+        value.startsWith("https://")
+      ){
 
-          value =
-            new URL(
-              value
-            ).pathname;
-
-        }
-
-      }catch(error){
+        value =
+          new URL(value).pathname;
 
       }
 
-
-      /*
-       * Normalize slash.
-       */
-      value =
-        value.replace(
-          /\\/g,
-          "/"
-        );
-
-
-      /*
-       * IMPORTANT:
-       *
-       * Get filename ONLY.
-       *
-       * /public/jeffrey.jpg
-       * /jeffrey.jpg
-       * public/jeffrey.jpg
-       * jeffrey.jpg
-       *
-       * all become:
-       *
-       * jeffrey.jpg
-       */
-      value =
-        value
-          .split("/")
-          .pop()
-          .trim();
-
-
-      if(value){
-
-        declared.add(
-          value.toLowerCase()
-        );
-
-      }
+    }catch(error){
 
     }
-  );
+
+
+    /*
+     * Normalize slashes.
+     */
+    value =
+      value.replace(
+        /\\/g,
+        "/"
+      );
+
+
+    /*
+     * FILENAME ONLY.
+     *
+     * Example:
+     *
+     * /abc/jeffrey.jpg
+     *
+     * becomes:
+     *
+     * jeffrey.jpg
+     */
+    value =
+      value
+        .split("/")
+        .pop()
+        .trim();
+
+
+    if(value){
+
+      declared.add(
+        value.toLowerCase()
+      );
+
+    }
+
+  });
 
 
   return declared;
-
 }
 
 
-// =====================================
-// GET ALL REPOSITORY IMAGES
-// =====================================
+/* =========================
+   SCAN PUBLIC IMAGES
+========================= */
 
 async function getAllRepositoryImages(){
 
@@ -2867,32 +2413,24 @@ async function getAllRepositoryImages(){
     "main";
 
 
-  /*
-   * Use tree API.
-   */
   const result =
     await githubRequest(
       "/git/trees/" +
-      encodeURIComponent(
-        branch
-      ) +
+      encodeURIComponent(branch) +
       "?recursive=1"
     );
 
 
   if(
     !result.tree ||
-    !Array.isArray(
-      result.tree
-    )
+    !Array.isArray(result.tree)
   ){
 
     return [];
-
   }
 
 
-  const imageExtensions = [
+  const extensions = [
 
     ".jpg",
     ".jpeg",
@@ -2908,86 +2446,63 @@ async function getAllRepositoryImages(){
 
 
   return result.tree
-    .filter(
-      item => {
+    .filter(item => {
 
-        /*
-         * Only files.
-         */
-        if(
-          item.type !== "blob"
-        ){
+      if(
+        item.type !== "blob"
+      ){
 
-          return false;
-
-        }
-
-
-        /*
-         * Only public/
-         */
-        if(
-          !item.path.startsWith(
-            "public/"
-          )
-        ){
-
-          return false;
-
-        }
-
-
-        const lower =
-          item.path.toLowerCase();
-
-
-        return imageExtensions.some(
-          ext =>
-            lower.endsWith(ext)
-        );
-
+        return false;
       }
-    )
-    .map(
-      item => {
-
-        /*
-         * IMPORTANT:
-         *
-         * Filename ONLY.
-         */
-        const name =
-          item.path
-            .replace(
-              /\\/g,
-              "/"
-            )
-            .split("/")
-            .pop()
-            .toLowerCase();
 
 
-        return {
+      if(
+        !item.path.startsWith(
+          "public/"
+        )
+      ){
 
-          path:
-            item.path,
-
-          name,
-
-          sha:
-            item.sha
-
-        };
-
+        return false;
       }
-    );
 
+
+      const lower =
+        item.path.toLowerCase();
+
+
+      return extensions.some(
+        ext =>
+          lower.endsWith(ext)
+      );
+
+    })
+    .map(item => {
+
+      const name =
+        item.path
+          .replace(/\\/g,"/")
+          .split("/")
+          .pop()
+          .toLowerCase();
+
+
+      return {
+
+        path:item.path,
+
+        name:name,
+
+        sha:item.sha
+
+      };
+
+    });
 }
 
 
-// =====================================
-// DELETE IMAGE
-// =====================================
+/* =========================
+   DELETE IMAGE
+========================= */
 
 async function deleteImageFromGitHub(
   imagePath,
@@ -3013,7 +2528,7 @@ async function deleteImageFromGitHub(
             "Delete unused image " +
             imagePath,
 
-          sha
+          sha:sha
 
         })
 
@@ -3021,36 +2536,27 @@ async function deleteImageFromGitHub(
   );
 
 
-  /*
-   * Wait after every delete.
-   */
-  await sleep(1500);
-
+  await sleep(1800);
 }
 
 
-// =====================================
-// CLEAN UNUSED IMAGES
-// =====================================
+/* =========================
+   CLEAN UNUSED IMAGES
+   ONLY CALLED BY READ
+========================= */
 
 async function cleanupUnusedImages(
   profileText
 ){
 
-  /*
-   * STEP A
-   *
-   * Read photo= declarations.
-   */
   setStatus(
-    "🧹 Image cleanup\n\n" +
-    "Step 1/3\n" +
+    "🧹 IMAGE CLEANUP\n\n" +
     "Reading all photo= declarations..."
   );
 
 
   showProgress(
-    0,
+    10,
     "Reading photo declarations..."
   );
 
@@ -3064,25 +2570,19 @@ async function cleanupUnusedImages(
     );
 
 
-  /*
-   * STEP B
-   *
-   * Scan public/.
-   */
   setStatus(
-    "🧹 Image cleanup\n\n" +
-    "Step 2/3\n" +
+    "🧹 IMAGE CLEANUP\n\n" +
     "Scanning all image files in public/..."
   );
 
 
   showProgress(
-    20,
+    30,
     "Scanning public/..."
   );
 
 
-  await sleep(1500);
+  await sleep(1200);
 
 
   const images =
@@ -3090,9 +2590,7 @@ async function cleanupUnusedImages(
 
 
   /*
-   * IMPORTANT:
-   *
-   * Compare NAME ONLY.
+   * FILENAME-ONLY COMPARISON.
    */
   const unused =
     images.filter(
@@ -3103,18 +2601,12 @@ async function cleanupUnusedImages(
     );
 
 
-  /*
-   * Nothing to delete.
-   */
   if(!unused.length){
 
     showProgress(
       100,
-      "No unused images."
+      "No unused images found."
     );
-
-
-    await sleep(1000);
 
 
     return {
@@ -3134,21 +2626,6 @@ async function cleanupUnusedImages(
   }
 
 
-  /*
-   * STEP C
-   *
-   * Delete one by one.
-   */
-  setStatus(
-    "🧹 Image cleanup\n\n" +
-    "Step 3/3\n" +
-    "Deleting unused images...\n\n" +
-    "Found " +
-    unused.length +
-    " unused image(s)."
-  );
-
-
   const deleted = [];
 
   let skipped = 0;
@@ -3164,32 +2641,9 @@ async function cleanupUnusedImages(
       unused[i];
 
 
-    const percent =
-      20 +
-      (
-        (
-          i /
-          unused.length
-        ) *
-        80
-      );
-
-
-    showProgress(
-      percent,
-      "Deleting " +
-      (i + 1) +
-      " of " +
-      unused.length +
-      ": " +
-      image.name
-    );
-
-
     setStatus(
-      "🧹 Image cleanup\n\n" +
-      "Step 3/3\n\n" +
-      "Deleting:\n" +
+      "🧹 IMAGE CLEANUP\n\n" +
+      "Deleting unused image:\n\n" +
       image.path +
       "\n\n" +
       "Progress: " +
@@ -3201,11 +2655,20 @@ async function cleanupUnusedImages(
     );
 
 
-    /*
-     * Extra safety delay
-     * before every delete.
-     */
-    await sleep(1000);
+    showProgress(
+      30 +
+      (
+        (i + 1) /
+        unused.length
+      ) * 70,
+      "Deleting " +
+      (i + 1) +
+      " of " +
+      unused.length
+    );
+
+
+    await sleep(1200);
 
 
     try{
@@ -3225,31 +2688,18 @@ async function cleanupUnusedImages(
 
       skipped++;
 
-
       console.error(
-        "Failed to delete:",
+        "Delete failed:",
         image.path,
         error
       );
 
 
-      /*
-       * Wait before next request.
-       */
       await sleep(1500);
 
     }
 
   }
-
-
-  showProgress(
-    100,
-    "Image cleanup complete."
-  );
-
-
-  await sleep(1000);
 
 
   return {
@@ -3265,13 +2715,12 @@ async function cleanupUnusedImages(
       images.length
 
   };
-
 }
 
 
-// =====================================
-// LOAD FROM GITHUB
-// =====================================
+/* =========================
+   READ CURRENT PROFILE.INFO
+========================= */
 
 async function loadFromGitHub(){
 
@@ -3286,7 +2735,8 @@ async function loadFromGitHub(){
   try{
 
     setStatus(
-      "⏳ Reading Profile.info from GitHub..."
+      "📥 READ CURRENT PROFILE.INFO\n\n" +
+      "Connecting to GitHub..."
     );
 
 
@@ -3296,7 +2746,7 @@ async function loadFromGitHub(){
     );
 
 
-    await sleep(1000);
+    await sleep(1200);
 
 
     const result =
@@ -3305,13 +2755,20 @@ async function loadFromGitHub(){
       );
 
 
-    showProgress(
-      50,
-      "Downloading Profile.info..."
+    setStatus(
+      "📥 READ CURRENT PROFILE.INFO\n\n" +
+      "Profile.info downloaded.\n\n" +
+      "Reading profiles..."
     );
 
 
-    await sleep(700);
+    showProgress(
+      30,
+      "Reading Profile.info..."
+    );
+
+
+    await sleep(1000);
 
 
     if(!result.content){
@@ -3341,9 +2798,7 @@ async function loadFromGitHub(){
 
 
     data =
-      parseInfo(
-        decoded
-      );
+      parseInfo(decoded);
 
 
     if(
@@ -3361,32 +2816,75 @@ async function loadFromGitHub(){
       Object.keys(data)[0];
 
 
-    showProgress(
-      90,
-      "Loading profiles..."
+    populateProfiles();
+
+
+    setStatus(
+      "📥 READ CURRENT PROFILE.INFO\n\n" +
+      "Profiles loaded successfully.\n\n" +
+      "Profiles:\n" +
+      Object.keys(data).join("\n") +
+      "\n\n" +
+      "Now checking unused images..."
     );
 
 
-    await sleep(700);
+    showProgress(
+      50,
+      "Profiles loaded. Starting image cleanup..."
+    );
 
 
-    populateProfiles();
+    await sleep(1500);
+
+
+    /*
+     * =================================
+     *
+     * IMPORTANT:
+     *
+     * IMAGE DELETE HAPPENS HERE ONLY.
+     *
+     * NOT in saveToGitHub().
+     *
+     * =================================
+     */
+    const cleanup =
+      await cleanupUnusedImages(
+        decoded
+      );
+
+
+    setStatus(
+      "✅ READ COMPLETE\n\n" +
+
+      "Profiles loaded: " +
+      Object.keys(data).length +
+      "\n\n" +
+
+      "🖼️ IMAGE SCAN\n" +
+
+      "Declared photo names: " +
+      cleanup.found +
+      "\n" +
+
+      "Images scanned: " +
+      cleanup.scanned +
+      "\n" +
+
+      "Images deleted: " +
+      cleanup.deleted.length +
+      "\n" +
+
+      "Delete failed: " +
+      cleanup.skipped
+    );
 
 
     showProgress(
       100,
-      "Done."
+      "Read and image cleanup complete."
     );
-
-
-    setStatus(
-      "✅ Profile.info loaded successfully.\n\n" +
-      "Profiles:\n" +
-      Object.keys(data).join("\n")
-    );
-
-
-    await sleep(700);
 
 
   }catch(error){
@@ -3395,8 +2893,14 @@ async function loadFromGitHub(){
 
 
     setStatus(
-      "❌ Error:\n" +
+      "❌ READ FAILED\n\n" +
       error.message
+    );
+
+
+    showProgress(
+      0,
+      "Failed."
     );
 
 
@@ -3405,13 +2909,12 @@ async function loadFromGitHub(){
     setProcessing(false);
 
   }
-
 }
 
 
-// =====================================
-// SAVE TO GITHUB
-// =====================================
+/* =========================
+   SAVE TO GITHUB
+========================= */
 
 async function saveToGitHub(){
 
@@ -3425,55 +2928,47 @@ async function saveToGitHub(){
 
   try{
 
-    // =================================
-    // START
-    // =================================
-
+    /*
+     * IMPORTANT:
+     *
+     * Save only.
+     * NO IMAGE CLEANUP HERE.
+     */
     captureCurrentProfile();
 
 
-    if(
-      !Object.keys(data).length
-    ){
-
-      throw new Error(
-        "No profiles to save."
-      );
-
-    }
-
-
     setStatus(
-      "⏳ SAVE PROCESS STARTED\n\n" +
-      "Please wait.\n" +
-      "Huwag munang pindutin ulit ang Save."
+      "💾 SAVE CHANGES TO GITHUB\n\n" +
+      "Starting save process...\n\n" +
+      "Image deletion is NOT performed during Save."
     );
 
 
     showProgress(
       0,
-      "Starting..."
+      "Starting save..."
     );
 
 
     await sleep(1500);
 
 
-    // =================================
-    // STEP 1
-    // UPLOAD MAIN PHOTOS
-    // =================================
+    /*
+     * =============================
+     * STEP 1
+     * MAIN PHOTOS
+     * =============================
+     */
 
     setStatus(
-      "📷 STEP 1/5\n\n" +
-      "Uploading main profile photos...\n\n" +
-      "One file at a time."
+      "💾 STEP 1/4\n\n" +
+      "Checking main profile photos..."
     );
 
 
     showProgress(
-      5,
-      "Preparing main photos..."
+      10,
+      "Checking main photos..."
     );
 
 
@@ -3482,9 +2977,6 @@ async function saveToGitHub(){
 
     const profileIds =
       Object.keys(data);
-
-
-    let mainPhotoCount = 0;
 
 
     for(
@@ -3499,9 +2991,6 @@ async function saveToGitHub(){
         profile.main &&
         profile.main._photoFile
       ){
-
-        mainPhotoCount++;
-
 
         const file =
           profile.main._photoFile;
@@ -3521,7 +3010,7 @@ async function saveToGitHub(){
 
 
         setStatus(
-          "📷 STEP 1/5\n\n" +
+          "💾 STEP 1/4\n\n" +
           "Uploading main photo:\n" +
           fileName +
           "\n\n" +
@@ -3529,35 +3018,23 @@ async function saveToGitHub(){
         );
 
 
+        showProgress(
+          15,
+          "Uploading main photo..."
+        );
+
+
         await sleep(1000);
 
 
-        const uploadedPath =
+        profile.main.photo =
           await uploadPhotoToGitHub(
             file,
             fileName
           );
 
 
-        profile.main.photo =
-          uploadedPath;
-
-
         delete profile.main._photoFile;
-
-
-        showProgress(
-          5 +
-          (
-            mainPhotoCount /
-            Math.max(
-              1,
-              profileIds.length
-            )
-          ) *
-          20,
-          "Main photo uploaded."
-        );
 
 
         await sleep(1000);
@@ -3567,58 +3044,26 @@ async function saveToGitHub(){
     }
 
 
-    // =================================
-    // STEP 2
-    // UPLOAD OTHER PHOTOS
-    // =================================
+    /*
+     * =============================
+     * STEP 2
+     * OTHER PHOTOS
+     * =============================
+     */
 
     setStatus(
-      "📷 STEP 2/5\n\n" +
-      "Uploading other profile photos...\n\n" +
-      "One file at a time."
+      "💾 STEP 2/4\n\n" +
+      "Checking other profile photos..."
     );
 
 
     showProgress(
-      25,
-      "Preparing other photos..."
+      35,
+      "Checking other photos..."
     );
 
 
     await sleep(1000);
-
-
-    let otherPhotoTotal = 0;
-
-
-    profileIds.forEach(
-      profileId => {
-
-        const profile =
-          data[profileId];
-
-
-        (
-          profile.others || []
-        ).forEach(
-          person => {
-
-            if(
-              person._photoFile
-            ){
-
-              otherPhotoTotal++;
-
-            }
-
-          }
-        );
-
-      }
-    );
-
-
-    let otherPhotoDone = 0;
 
 
     for(
@@ -3665,51 +3110,31 @@ async function saveToGitHub(){
 
 
           setStatus(
-            "📷 STEP 2/5\n\n" +
+            "💾 STEP 2/4\n\n" +
             "Uploading other photo:\n" +
             fileName +
             "\n\n" +
-            "Progress: " +
-            (otherPhotoDone + 1) +
-            " / " +
-            otherPhotoTotal +
-            "\n\n" +
             "Please wait..."
+          );
+
+
+          showProgress(
+            45,
+            "Uploading other photo..."
           );
 
 
           await sleep(1000);
 
 
-          const uploadedPath =
+          person.photo =
             await uploadPhotoToGitHub(
               file,
               fileName
             );
 
 
-          person.photo =
-            uploadedPath;
-
-
           delete person._photoFile;
-
-
-          otherPhotoDone++;
-
-
-          showProgress(
-            25 +
-            (
-              otherPhotoDone /
-              Math.max(
-                1,
-                otherPhotoTotal
-              )
-            ) *
-            20,
-            "Other photo uploaded."
-          );
 
 
           await sleep(1000);
@@ -3721,20 +3146,21 @@ async function saveToGitHub(){
     }
 
 
-    // =================================
-    // STEP 3
-    // BUILD PROFILE.INFO
-    // =================================
+    /*
+     * =============================
+     * STEP 3
+     * BUILD
+     * =============================
+     */
 
     setStatus(
-      "📝 STEP 3/5\n\n" +
-      "Building final Profile.info...\n\n" +
-      "Please wait..."
+      "💾 STEP 3/4\n\n" +
+      "Generating final Profile.info..."
     );
 
 
     showProgress(
-      50,
+      60,
       "Generating Profile.info..."
     );
 
@@ -3755,20 +3181,22 @@ async function saveToGitHub(){
     await sleep(1000);
 
 
-    // =================================
-    // STEP 4
-    // SAVE PROFILE.INFO
-    // =================================
+    /*
+     * =============================
+     * STEP 4
+     * SAVE
+     * =============================
+     */
 
     setStatus(
-      "💾 STEP 4/5\n\n" +
+      "💾 STEP 4/4\n\n" +
       "Saving Profile.info to GitHub...\n\n" +
       "Please wait..."
     );
 
 
     showProgress(
-      60,
+      75,
       "Checking existing Profile.info..."
     );
 
@@ -3776,8 +3204,7 @@ async function saveToGitHub(){
     await sleep(1200);
 
 
-    let sha =
-      null;
+    let sha = null;
 
 
     try{
@@ -3793,10 +3220,6 @@ async function saveToGitHub(){
 
     }catch(error){
 
-      /*
-       * Profile.info may not exist.
-       */
-
     }
 
 
@@ -3809,9 +3232,7 @@ async function saveToGitHub(){
         "Update Profile.info",
 
       content:
-        base64Encode(
-          content
-        )
+        base64Encode(content)
 
     };
 
@@ -3825,7 +3246,7 @@ async function saveToGitHub(){
 
 
     showProgress(
-      70,
+      85,
       "Uploading Profile.info..."
     );
 
@@ -3845,176 +3266,50 @@ async function saveToGitHub(){
         },
 
         body:
-          JSON.stringify(
-            body
-          )
+          JSON.stringify(body)
 
       }
     );
 
 
-    /*
-     * IMPORTANT:
-     *
-     * Wait for GitHub to settle
-     * before scanning the tree.
-     */
-    setStatus(
-      "💾 STEP 4/5\n\n" +
-      "Profile.info saved.\n\n" +
-      "Waiting for GitHub to update...\n\n" +
-      "Please wait..."
-    );
+    await sleep(2500);
 
-
-    showProgress(
-      75,
-      "Waiting for GitHub..."
-    );
-
-
-    await sleep(3000);
-
-
-    // =================================
-    // STEP 5
-    // IMAGE CLEANUP
-    // =================================
-
-    setStatus(
-      "🧹 STEP 5/5\n\n" +
-      "Starting image cleanup...\n\n" +
-      "Comparing photo filenames..."
-    );
-
-
-    showProgress(
-      80,
-      "Starting image scan..."
-    );
-
-
-    await sleep(1500);
-
-
-    let cleanupResult = {
-
-      deleted:[],
-
-      skipped:0,
-
-      found:0,
-
-      scanned:0
-
-    };
-
-
-    try{
-
-      cleanupResult =
-        await cleanupUnusedImages(
-          content
-        );
-
-    }catch(error){
-
-      console.error(
-        "Image cleanup failed:",
-        error
-      );
-
-
-      setStatus(
-        "⚠️ Profile.info was saved,\n" +
-        "but image cleanup failed.\n\n" +
-        error.message
-      );
-
-
-      await sleep(1500);
-
-    }
-
-
-    // =================================
-    // FINAL RESULT
-    // =================================
 
     showProgress(
       100,
-      "Save process complete."
+      "Save complete."
     );
 
 
-    await sleep(1000);
-
-
-    let resultMessage =
+    /*
+     * NO CLEANUP HERE.
+     */
+    setStatus(
       "✅ SAVE COMPLETE\n\n" +
 
       "Profile.info: SAVED\n\n" +
 
-      "🖼️ IMAGE SCAN\n" +
+      "🖼️ Image cleanup:\n" +
 
-      "Declared photo names: " +
-      cleanupResult.found +
-      "\n" +
+      "NOT PERFORMED\n\n" +
 
-      "Images scanned in public/: " +
-      cleanupResult.scanned;
+      "Unused images will only be deleted\n" +
+      "when you press:\n\n" +
 
-
-    if(
-      cleanupResult.deleted.length
-    ){
-
-      resultMessage +=
-        "\n\n🗑️ DELETED UNUSED IMAGES:\n" +
-        cleanupResult.deleted.join(
-          "\n"
-        );
-
-    }else{
-
-      resultMessage +=
-        "\n\n✅ No unused images found.";
-
-    }
-
-
-    if(
-      cleanupResult.skipped
-    ){
-
-      resultMessage +=
-        "\n\n⚠️ Failed to delete: " +
-        cleanupResult.skipped;
-
-    }
-
-
-    resultMessage +=
-      "\n\n✔️ All steps finished.";
-
-
-    setStatus(
-      resultMessage
+      "📥 Read Current Profile.info"
     );
 
 
   }catch(error){
 
-    console.error(
-      error
-    );
+    console.error(error);
 
 
     setStatus(
       "❌ SAVE FAILED\n\n" +
       error.message +
       "\n\n" +
-      "Process stopped to prevent further changes."
+      "Process stopped."
     );
 
 
@@ -4023,13 +3318,12 @@ async function saveToGitHub(){
     setProcessing(false);
 
   }
-
 }
 
 
-// =====================================
-// COPY OUTPUT
-// =====================================
+/* =========================
+   COPY
+========================= */
 
 async function copyOutput(){
 
@@ -4054,7 +3348,7 @@ async function copyOutput(){
 
 
     setStatus(
-      "✅ Profile.info copied to clipboard."
+      "✅ Profile.info copied."
     );
 
   }catch(error){
@@ -4071,13 +3365,12 @@ async function copyOutput(){
     );
 
   }
-
 }
 
 
-// =====================================
-// DOWNLOAD
-// =====================================
+/* =========================
+   DOWNLOAD
+========================= */
 
 function downloadFile(){
 
@@ -4107,15 +3400,11 @@ function downloadFile(){
 
 
   const url =
-    URL.createObjectURL(
-      blob
-    );
+    URL.createObjectURL(blob);
 
 
   const a =
-    document.createElement(
-      "a"
-    );
+    document.createElement("a");
 
 
   a.href =
@@ -4126,26 +3415,19 @@ function downloadFile(){
     "Profile.info";
 
 
-  document.body.appendChild(
-    a
-  );
-
+  document.body.appendChild(a);
 
   a.click();
-
 
   a.remove();
 
 
-  URL.revokeObjectURL(
-    url
-  );
+  URL.revokeObjectURL(url);
 
 
   setStatus(
     "✅ Profile.info downloaded."
   );
-
 }
 
 </script>
