@@ -334,4 +334,395 @@ a {
   align-items: center;
   justify-content: center;
 
- 
+  flex-wrap: wrap;
+
+  gap: 9px;
+
+  margin-top: 13px;
+}
+
+.other-contact-button {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  text-decoration: none;
+
+  font-size: 18px;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.other-contact-button:active {
+  transform: scale(0.9);
+
+  opacity: 0.7;
+}
+
+/* =========================
+   LOADING / ERROR
+========================= */
+
+.loading {
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  font-size: 22px;
+}
+
+.error {
+  min-height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  text-align: center;
+}
+
+.error h1 {
+  margin-bottom: 8px;
+
+  font-size: 32px;
+}
+
+.error p {
+  font-size: 18px;
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+@media (prefers-color-scheme: dark) {
+
+  .profile-page {
+    background: #111318;
+
+    color: #ffffff;
+  }
+
+  .subtitle,
+  .location {
+    color: #c8cbd1;
+  }
+
+  /* CALL */
+
+  .call-button {
+    background: #1d2027;
+
+    color: #ffffff;
+  }
+
+  .call-button:hover {
+    background: #272b34;
+  }
+
+  /* ICON BUTTONS */
+
+  .main-icon-button {
+    background: #292d36;
+
+    color: #ffffff;
+  }
+
+  .main-icon-button:hover {
+    background: #343944;
+  }
+
+  /* OTHER */
+
+  .other-section h2 {
+    color: #ffffff;
+  }
+
+  .other-profile {
+    background: #1d2027;
+  }
+
+  .other-subtitle {
+    color: #bfc3ca;
+  }
+
+  .other-contact-button {
+    background: #292d36;
+
+    color: #ffffff;
+  }
+
+  .other-contact-button:hover {
+    background: #343944;
+  }
+
+  /* DEFAULT PHOTO */
+
+  .default-profile,
+  .default-other-profile {
+    background: #2b2e35;
+
+    color: #9da2aa;
+  }
+
+  .loading,
+  .error {
+    background: #111318;
+
+    color: #ffffff;
+  }
+}
+
+/* =========================
+   LIGHT MODE
+========================= */
+
+@media (prefers-color-scheme: light) {
+
+  .profile-page {
+    background: #ffffff;
+
+    color: #111111;
+  }
+
+  .subtitle,
+  .location {
+    color: #555555;
+  }
+
+  /* CALL */
+
+  .call-button {
+    background: #f1f2f4;
+
+    color: #111111;
+  }
+
+  .call-button:hover {
+    background: #e5e7eb;
+  }
+
+  /* ICON BUTTONS */
+
+  .main-icon-button {
+    background: #e1e3e7;
+
+    color: #111111;
+  }
+
+  .main-icon-button:hover {
+    background: #d5d7db;
+  }
+
+  /* OTHER */
+
+  .other-profile {
+    background: #f1f2f4;
+  }
+
+  .other-subtitle {
+    color: #666666;
+  }
+
+  .other-contact-button {
+    background: #e1e3e7;
+
+    color: #111111;
+  }
+
+  .other-contact-button:hover {
+    background: #d5d7db;
+  }
+
+  /* DEFAULT PHOTO */
+
+  .default-profile,
+  .default-other-profile {
+    background: #d9dce1;
+
+    color: #777777;
+  }
+
+  .loading,
+  .error {
+    background: #ffffff;
+
+    color: #111111;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 390px) {
+
+  .profile-page {
+    padding:
+      30px
+      14px
+      50px;
+  }
+
+  .profile-photo {
+    width: 150px;
+    height: 150px;
+  }
+
+  .default-profile {
+    font-size: 62px;
+  }
+
+  .profile-page h1 {
+    font-size: 34px;
+  }
+
+  .subtitle {
+    font-size: 20px;
+  }
+
+  .location {
+    font-size: 17px;
+
+    margin-top: 16px;
+
+    margin-bottom: 25px;
+  }
+
+  /* CALL */
+
+  .call-button {
+    min-height: 58px;
+
+    padding:
+      14px
+      15px;
+
+    font-size: 21px;
+  }
+
+  .call-button i {
+    font-size: 23px;
+  }
+
+  /* ICONS */
+
+  .icon-contacts {
+    gap: 10px;
+
+    margin-top: 13px;
+  }
+
+  .main-icon-button {
+    width: 44px;
+    height: 44px;
+
+    font-size: 19px;
+  }
+
+  /* OTHER */
+
+  .other-section {
+    margin-top: 45px;
+  }
+
+  .other-section h2 {
+    font-size: 21px;
+
+    margin-bottom: 15px;
+  }
+
+  .other-profile {
+    padding:
+      16px
+      12px;
+  }
+
+  .other-photo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .default-other-profile {
+    font-size: 27px;
+  }
+
+  .other-name {
+    font-size: 18px;
+
+    line-height: 1.35;
+  }
+
+  .other-subtitle {
+    font-size: 14px;
+  }
+
+  .other-actions {
+    gap: 8px;
+
+    margin-top: 11px;
+  }
+
+  .other-contact-button {
+    width: 38px;
+    height: 38px;
+
+    font-size: 17px;
+  }
+}
+
+/* =========================
+   VERY SMALL SCREEN
+========================= */
+
+@media (max-width: 330px) {
+
+  .profile-page {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .profile-page h1 {
+    font-size: 30px;
+  }
+
+  .call-button {
+    font-size: 19px;
+  }
+
+  .main-icon-button {
+    width: 42px;
+    height: 42px;
+
+    font-size: 18px;
+  }
+
+  .other-name {
+    font-size: 17px;
+  }
+
+  .other-contact-button {
+    width: 36px;
+    height: 36px;
+  }
+}
