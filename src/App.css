@@ -25,24 +25,25 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
-
-/* =================================
-   MAIN PAGE
-   ================================= */
+/* =========================
+   PAGE
+========================= */
 
 .profile-page {
   min-height: 100vh;
   width: 100%;
 
-  padding: 35px 18px 60px;
+  padding:
+    35px
+    18px
+    60px;
 
   text-align: center;
 }
 
-
-/* =================================
+/* =========================
    MAIN PROFILE
-   ================================= */
+========================= */
 
 .main-profile {
   width: 100%;
@@ -50,11 +51,6 @@ a {
 
   margin: 0 auto;
 }
-
-
-/* =================================
-   MAIN PROFILE PHOTO
-   ================================= */
 
 .profile-photo {
   width: 180px;
@@ -72,38 +68,23 @@ a {
   justify-content: center;
 }
 
-
-/* Default user icon */
-
 .default-profile {
   background: #d9dce1;
-
   color: #777;
 
   font-size: 75px;
 }
 
-
-/* =================================
-   MAIN NAME
-   ================================= */
-
 .profile-page h1 {
   margin: 0;
 
   font-size: 40px;
-
   line-height: 1.2;
 
   font-weight: 700;
 
   word-break: normal;
 }
-
-
-/* =================================
-   SUBTITLE
-   ================================= */
 
 .subtitle {
   margin-top: 8px;
@@ -113,14 +94,8 @@ a {
   font-weight: 500;
 }
 
-
-/* =================================
-   LOCATION
-   ================================= */
-
 .location {
   margin-top: 18px;
-
   margin-bottom: 28px;
 
   font-size: 19px;
@@ -132,69 +107,104 @@ a {
   margin-right: 4px;
 }
 
+/* =========================
+   MAIN CONTACTS
+========================= */
 
-/* =================================
-   MAIN CONTACT BUTTONS
-   ================================= */
-
-.contacts {
+.main-contacts {
   width: 100%;
 
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 12px;
+  margin-top: 10px;
 }
 
-.contact-button {
+/* BIG CALL BUTTON */
+
+.call-button {
   width: 100%;
 
-  min-height: 58px;
+  min-height: 62px;
 
   display: flex;
 
   align-items: center;
-
   justify-content: center;
 
   gap: 14px;
 
-  padding: 15px 20px;
+  padding: 16px 20px;
 
   text-decoration: none;
 
-  font-size: 21px;
+  font-size: 22px;
 
-  font-weight: 600;
+  font-weight: 700;
 
-  border-radius: 13px;
+  border-radius: 14px;
 
   transition:
     transform 0.15s ease,
     opacity 0.15s ease;
 }
 
-.contact-button i {
-  width: 28px;
-
-  font-size: 24px;
+.call-button i {
+  font-size: 25px;
 }
 
-.contact-button:active {
+.call-button:active {
   transform: scale(0.97);
 
   opacity: 0.75;
 }
 
+/* ICON CONTACTS */
 
-/* =================================
-   OTHER PEOPLE SECTION
-   ================================= */
+.icon-contacts {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin-top: 14px;
+}
+
+.main-icon-button {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  text-decoration: none;
+
+  font-size: 21px;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.main-icon-button:active {
+  transform: scale(0.9);
+
+  opacity: 0.7;
+}
+
+/* =========================
+   OTHER PEOPLE
+========================= */
 
 .other-section {
   width: 100%;
-
   max-width: 500px;
 
   margin: 50px auto 0;
@@ -203,7 +213,10 @@ a {
 }
 
 .other-section h2 {
-  margin: 0 0 18px;
+  margin:
+    0
+    0
+    18px;
 
   font-size: 23px;
 
@@ -211,11 +224,6 @@ a {
 
   text-align: center;
 }
-
-
-/* =================================
-   OTHER PEOPLE LIST
-   ================================= */
 
 .other-list {
   width: 100%;
@@ -227,25 +235,17 @@ a {
   gap: 12px;
 }
 
-
-/* =================================
-   OTHER PROFILE CARD
-   ================================= */
-
 .other-profile {
   width: 100%;
 
-  padding: 18px 15px;
+  padding:
+    18px
+    15px;
 
   border-radius: 14px;
 
   text-align: center;
 }
-
-
-/* =================================
-   OTHER INFO
-   ================================= */
 
 .other-info {
   width: 100%;
@@ -255,16 +255,10 @@ a {
   flex-direction: column;
 
   align-items: center;
-
   justify-content: center;
 
   gap: 8px;
 }
-
-
-/* =================================
-   OTHER PHOTO
-   ================================= */
 
 .other-photo {
   width: 68px;
@@ -279,12 +273,8 @@ a {
   display: inline-flex;
 
   align-items: center;
-
   justify-content: center;
 }
-
-
-/* Default other profile icon */
 
 .default-other-profile {
   background: #d9dce1;
@@ -294,11 +284,6 @@ a {
   font-size: 30px;
 }
 
-
-/* =================================
-   OTHER TEXT
-   ================================= */
-
 .other-text {
   width: 100%;
 
@@ -306,12 +291,6 @@ a {
 
   text-align: center;
 }
-
-
-/*
-   IMPORTANT:
-   Full name will NOT be cut.
-*/
 
 .other-name {
   width: 100%;
@@ -335,7 +314,6 @@ a {
   overflow-wrap: anywhere;
 }
 
-
 .other-subtitle {
   margin-top: 4px;
 
@@ -348,384 +326,12 @@ a {
   overflow: visible;
 }
 
-
-/* =================================
-   OTHER CONTACT ICONS
-   ================================= */
-
 .other-actions {
   width: 100%;
 
   display: flex;
 
   align-items: center;
-
   justify-content: center;
 
-  flex-wrap: wrap;
-
-  gap: 9px;
-
-  margin-top: 13px;
-}
-
-
-.other-contact-button {
-  width: 40px;
-  height: 40px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  flex-shrink: 0;
-
-  border-radius: 50%;
-
-  text-decoration: none;
-
-  font-size: 18px;
-
-  transition:
-    transform 0.15s ease,
-    opacity 0.15s ease;
-}
-
-.other-contact-button:active {
-  transform: scale(0.9);
-
-  opacity: 0.7;
-}
-
-
-/* =================================
-   LOADING
-   ================================= */
-
-.loading {
-  min-height: 100vh;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 20px;
-
-  font-size: 22px;
-}
-
-
-/* =================================
-   ERROR
-   ================================= */
-
-.error {
-  min-height: 100vh;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 20px;
-
-  text-align: center;
-}
-
-.error h1 {
-  margin-bottom: 8px;
-
-  font-size: 32px;
-}
-
-.error p {
-  font-size: 18px;
-}
-
-
-/* =================================
-   DARK MODE
-   ================================= */
-
-@media (prefers-color-scheme: dark) {
-
-  .profile-page {
-    background: #111318;
-
-    color: #ffffff;
-  }
-
-
-  .subtitle,
-  .location {
-    color: #c8cbd1;
-  }
-
-
-  .contact-button {
-    background: #1d2027;
-
-    color: #ffffff;
-  }
-
-
-  .contact-button:hover {
-    background: #272b34;
-  }
-
-
-  .other-section h2 {
-    color: #ffffff;
-  }
-
-
-  .other-profile {
-    background: #1d2027;
-  }
-
-
-  .other-subtitle {
-    color: #bfc3ca;
-  }
-
-
-  .other-contact-button {
-    background: #292d36;
-
-    color: #ffffff;
-  }
-
-
-  .default-profile,
-  .default-other-profile {
-    background: #2b2e35;
-
-    color: #9da2aa;
-  }
-
-
-  .loading,
-  .error {
-    background: #111318;
-
-    color: #ffffff;
-  }
-}
-
-
-/* =================================
-   LIGHT MODE
-   ================================= */
-
-@media (prefers-color-scheme: light) {
-
-  .profile-page {
-    background: #ffffff;
-
-    color: #111111;
-  }
-
-
-  .subtitle,
-  .location {
-    color: #555555;
-  }
-
-
-  .contact-button {
-    background: #f1f2f4;
-
-    color: #111111;
-  }
-
-
-  .contact-button:hover {
-    background: #e5e7eb;
-  }
-
-
-  .other-profile {
-    background: #f1f2f4;
-  }
-
-
-  .other-subtitle {
-    color: #666666;
-  }
-
-
-  .other-contact-button {
-    background: #e1e3e7;
-
-    color: #111111;
-  }
-
-
-  .default-profile,
-  .default-other-profile {
-    background: #d9dce1;
-
-    color: #777777;
-  }
-
-
-  .loading,
-  .error {
-    background: #ffffff;
-
-    color: #111111;
-  }
-}
-
-
-/* =================================
-   MOBILE
-   ================================= */
-
-@media (max-width: 390px) {
-
-  .profile-page {
-    padding: 30px 14px 50px;
-  }
-
-
-  .profile-photo {
-    width: 150px;
-    height: 150px;
-  }
-
-
-  .default-profile {
-    font-size: 62px;
-  }
-
-
-  .profile-page h1 {
-    font-size: 34px;
-  }
-
-
-  .subtitle {
-    font-size: 20px;
-  }
-
-
-  .location {
-    font-size: 17px;
-
-    margin-top: 16px;
-
-    margin-bottom: 25px;
-  }
-
-
-  .contact-button {
-    min-height: 55px;
-
-    padding: 14px 15px;
-
-    font-size: 20px;
-  }
-
-
-  .contact-button i {
-    font-size: 22px;
-  }
-
-
-  .other-section {
-    margin-top: 45px;
-  }
-
-
-  .other-section h2 {
-    font-size: 21px;
-
-    margin-bottom: 15px;
-  }
-
-
-  .other-profile {
-    padding: 16px 12px;
-  }
-
-
-  .other-photo {
-    width: 60px;
-    height: 60px;
-  }
-
-
-  .default-other-profile {
-    font-size: 27px;
-  }
-
-
-  .other-name {
-    font-size: 18px;
-
-    line-height: 1.35;
-  }
-
-
-  .other-subtitle {
-    font-size: 14px;
-  }
-
-
-  .other-actions {
-    gap: 8px;
-
-    margin-top: 11px;
-  }
-
-
-  .other-contact-button {
-    width: 38px;
-    height: 38px;
-
-    font-size: 17px;
-  }
-}
-
-
-/* =================================
-   VERY SMALL PHONES
-   ================================= */
-
-@media (max-width: 330px) {
-
-  .profile-page {
-    padding-left: 10px;
-
-    padding-right: 10px;
-  }
-
-
-  .profile-page h1 {
-    font-size: 30px;
-  }
-
-
-  .contact-button {
-    font-size: 18px;
-  }
-
-
-  .other-name {
-    font-size: 17px;
-  }
-
-
-  .other-contact-button {
-    width: 36px;
-    height: 36px;
-  }
-}
+ 
