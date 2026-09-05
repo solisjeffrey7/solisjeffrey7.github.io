@@ -538,7 +538,7 @@ function MainProfile({ profile }) {
         <section className="other-section">
 
           <h2>
-            Other People
+            Other Contacts
           </h2>
 
           <div className="other-list">
