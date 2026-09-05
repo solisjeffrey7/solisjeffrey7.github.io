@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
 
-/* ==================================================
-   HTML DECODE
-================================================== */
+/* =========================================================
+   HTML ENTITY DECODER
+========================================================= */
 
 function decodeHtml(value = "") {
+  if (typeof document === "undefined") {
+    return value;
+  }
+
   const textarea = document.createElement("textarea");
   textarea.innerHTML = value;
+
   return textarea.value;
 }
 
-/* ==================================================
-   PARSE Profile.info
-================================================== */
+
+/* =========================================================
+   PROFILE.INFO PARSER
+========================================================= */
 
 function parseInfo(text) {
   const profiles = {};
@@ -23,66 +28,49 @@ function parseInfo(text) {
 
   const lines = text.split(/\r?\n/);
 
-  for (const rawLine of lines) {
-    const line = rawLine.trim();
+  for (let rawLine of lines) {
+    let line = rawLine.trim();
 
-    // Empty line
     if (!line) continue;
 
-    // Comments
-    if (line.startsWith("#")) continue;
-    if (line.startsWith(";")) continue;
-
-    /* ==================================================
-       [profile] NAME
-    ================================================== */
-
-    if (
-      line.toLowerCase().startsWith("[profile]") &&
-      !line.toLowerCase().startsWith("[profile][other]")
-    ) {
-      const match = line.match(
-        /^\[profile\]\s*(.*)$/i
-      );
-
-      if (match) {
-        const name = match[1].trim();
-
-        currentProfile = {
-          name,
-          data: {},
-          others: []
-        };
-
-        profiles[name.toLowerCase()] = currentProfile;
-
-        currentOther = null;
-      }
-
+    if (line.startsWith("#") || line.startsWith(";")) {
       continue;
     }
 
-    /* ==================================================
-       [profile][other] NAME
-    ================================================== */
+    /* -----------------------------------------------
+       [profile][other]
+       IMPORTANT: check this BEFORE [profile]
+    ----------------------------------------------- */
 
-    if (
-      line
-        .toLowerCase()
-        .startsWith("[profile][other]")
-    ) {
-      if (!currentProfile) continue;
+    let otherMatch = line.match(
+      /^\[([^\]]+)\]\[([^\]]+)\]$/i
+    );
 
-      const match = line.match(
-        /^\[profile\]\[other\]\s*(.*)$/i
+    if (otherMatch) {
+      const profileName = decodeHtml(
+        otherMatch[1].trim()
       );
 
-      const name = (
-        match?.[1] || ""
-      ).trim();
+      const otherSection = decodeHtml(
+        otherMatch[2].trim()
+      );
+
+      const profileKey =
+        profileName.toLowerCase();
+
+      if (!profiles[profileKey]) {
+        profiles[profileKey] = {
+          name: profileName,
+          data: {},
+          others: []
+        };
+      }
+
+      currentProfile =
+        profiles[profileKey];
 
       currentOther = {
-        name,
+        section: otherSection,
         data: {}
       };
 
@@ -93,148 +81,148 @@ function parseInfo(text) {
       continue;
     }
 
-    /* ==================================================
-       KEY = VALUE
-    ================================================== */
 
-    const equalIndex = line.indexOf("=");
+    /* -----------------------------------------------
+       [profile]
+    ----------------------------------------------- */
 
-    if (equalIndex === -1) continue;
+    let sectionMatch = line.match(
+      /^\[([^\]]+)\]$/i
+    );
+
+    if (sectionMatch) {
+      const profileName = decodeHtml(
+        sectionMatch[1].trim()
+      );
+
+      const key =
+        profileName.toLowerCase();
+
+      if (!profiles[key]) {
+        profiles[key] = {
+          name: profileName,
+          data: {},
+          others: []
+        };
+      }
+
+      currentProfile =
+        profiles[key];
+
+      currentOther = null;
+
+      continue;
+    }
+
+
+    /* -----------------------------------------------
+       key=value
+    ----------------------------------------------- */
+
+    const equalIndex =
+      line.indexOf("=");
+
+    if (equalIndex === -1) {
+      continue;
+    }
 
     const key = line
-      .substring(0, equalIndex)
+      .slice(0, equalIndex)
       .trim()
       .toLowerCase();
 
-    const value = decodeHtml(
-      line.substring(equalIndex + 1).trim()
-    );
+    const value = line
+      .slice(equalIndex + 1)
+      .trim();
+
+    if (!key) {
+      continue;
+    }
+
+    const decodedValue =
+      decodeHtml(value);
 
     if (currentOther) {
-      currentOther.data[key] = value;
+      currentOther.data[key] =
+        decodedValue;
     } else if (currentProfile) {
-      currentProfile.data[key] = value;
+      currentProfile.data[key] =
+        decodedValue;
     }
   }
 
   return profiles;
 }
 
-/* ==================================================
+
+/* =========================================================
    CONTACT BUTTON
-================================================== */
+========================================================= */
 
 function ContactButton({
   type,
   value,
   main = false
 }) {
-  if (!value) return null;
+  if (!value) {
+    return null;
+  }
 
-  const cleanValue = String(value).trim();
-
-  if (!cleanValue) return null;
-
-  let href = "";
+  let href = value;
   let icon = "";
   let label = "";
-  let newTab = false;
 
   switch (type) {
-    /* =========================
-       PHONE
-    ========================= */
 
     case "phone":
-    case "tel":
-      href = `tel:${cleanValue}`;
+      href = `tel:${value}`;
       icon = "fa-solid fa-phone";
       label = "Call";
       break;
 
-    /* =========================
-       SMS
-    ========================= */
-
     case "sms":
-      href = `sms:${cleanValue}`;
+      href = `sms:${value}`;
       icon = "fa-solid fa-comment-sms";
-      label = "SMS";
       break;
-
-    /* =========================
-       MESSENGER
-    ========================= */
 
     case "messenger":
-      href = cleanValue.startsWith("http")
-        ? cleanValue
-        : `https://m.me/${cleanValue}`;
-
-      icon = "fa-brands fa-facebook-messenger";
-      label = "Messenger";
-      newTab = true;
+      href = value;
+      icon =
+        "fa-brands fa-facebook-messenger";
       break;
-
-    /* =========================
-       FACEBOOK
-    ========================= */
 
     case "facebook":
-      href = cleanValue.startsWith("http")
-        ? cleanValue
-        : `https://facebook.com/${cleanValue}`;
-
-      icon = "fa-brands fa-facebook";
-      label = "Facebook";
-      newTab = true;
+      href = value;
+      icon =
+        "fa-brands fa-facebook";
       break;
-
-    /* =========================
-       EMAIL
-    ========================= */
 
     case "email":
-      href = `mailto:${cleanValue}`;
+      href = value.startsWith("mailto:")
+        ? value
+        : `mailto:${value}`;
       icon = "fa-solid fa-envelope";
-      label = "Email";
       break;
 
-    /* =========================
-       MAPS
-    ========================= */
-
     case "maps":
-    case "map":
-    case "location":
-      href = cleanValue.startsWith("http")
-        ? cleanValue
-        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-            cleanValue
-          )}`;
-
-      icon = "fa-solid fa-location-dot";
-      label = "Location";
-      newTab = true;
+      href = value;
+      icon =
+        "fa-solid fa-location-dot";
       break;
 
     default:
       return null;
   }
 
-  /* ==================================================
-     MAIN CALL BUTTON
-  ================================================== */
 
-  if (
-    main &&
-    (type === "phone" || type === "tel")
-  ) {
+  /* Main Call button */
+
+  if (main && type === "phone") {
     return (
       <a
         className="call-button"
         href={href}
-        aria-label={label}
+        aria-label="Call"
       >
         <i className={icon}></i>
 
@@ -245,293 +233,342 @@ function ContactButton({
     );
   }
 
-  /* ==================================================
-     MAIN ICON
-  ================================================== */
+
+  /* Main icon buttons */
 
   if (main) {
     return (
       <a
         className="main-icon-button"
         href={href}
-        target={newTab ? "_blank" : undefined}
+        target={
+          type === "messenger" ||
+          type === "facebook" ||
+          type === "maps"
+            ? "_blank"
+            : undefined
+        }
         rel={
-          newTab
+          type === "messenger" ||
+          type === "facebook" ||
+          type === "maps"
             ? "noopener noreferrer"
             : undefined
         }
-        aria-label={label}
+        aria-label={type}
       >
         <i className={icon}></i>
       </a>
     );
   }
 
-  /* ==================================================
-     OTHER CONTACT ICON
-  ================================================== */
+
+  /* Other People buttons */
 
   return (
     <a
       className="other-contact-button"
       href={href}
-      target={newTab ? "_blank" : undefined}
+      target={
+        type === "messenger" ||
+        type === "facebook" ||
+        type === "maps"
+          ? "_blank"
+          : undefined
+      }
       rel={
-        newTab
+        type === "messenger" ||
+        type === "facebook" ||
+        type === "maps"
           ? "noopener noreferrer"
           : undefined
       }
-      aria-label={label}
+      aria-label={type}
     >
       <i className={icon}></i>
     </a>
   );
 }
 
-/* ==================================================
-   MAIN CONTACTS
-================================================== */
 
-function MainContacts({ data }) {
-  const contacts = [
-    [
-      "phone",
-      data.phone || data.tel
-    ],
+/* =========================================================
+   MAIN PROFILE CONTACTS
+========================================================= */
 
-    [
-      "sms",
-      data.sms
-    ],
+function MainContacts({ profile }) {
 
-    [
-      "messenger",
-      data.messenger
-    ],
-
-    [
-      "facebook",
-      data.facebook
-    ],
-
-    [
-      "email",
-      data.email
-    ],
-
-    [
-      "maps",
-      data.maps ||
-        data.location ||
-        data.address
-    ]
-  ];
+  const data = profile.data;
 
   return (
-    <div className="main-contacts">
+    <section className="main-contacts">
+
       <div className="main-contact-row">
 
-        {contacts.map(
-          ([type, value]) => (
-            <ContactButton
-              key={type}
-              type={type}
-              value={value}
-              main
-            />
-          )
-        )}
+        <ContactButton
+          type="phone"
+          value={data.phone}
+          main
+        />
+
+        <ContactButton
+          type="sms"
+          value={data.sms}
+          main
+        />
+
+        <ContactButton
+          type="messenger"
+          value={data.messenger}
+          main
+        />
+
+        <ContactButton
+          type="facebook"
+          value={data.facebook}
+          main
+        />
+
+        <ContactButton
+          type="email"
+          value={data.email}
+          main
+        />
+
+        <ContactButton
+          type="maps"
+          value={data.maps}
+          main
+        />
 
       </div>
+
+    </section>
+  );
+}
+
+
+/* =========================================================
+   OTHER PEOPLE CONTACTS
+========================================================= */
+
+function OtherContacts({ data }) {
+
+  return (
+    <div className="other-actions">
+
+      <ContactButton
+        type="phone"
+        value={data.phone}
+      />
+
+      <ContactButton
+        type="sms"
+        value={data.sms}
+      />
+
+      <ContactButton
+        type="messenger"
+        value={data.messenger}
+      />
+
+      <ContactButton
+        type="facebook"
+        value={data.facebook}
+      />
+
+      <ContactButton
+        type="email"
+        value={data.email}
+      />
+
+      <ContactButton
+        type="maps"
+        value={data.maps}
+      />
+
     </div>
   );
 }
 
-/* ==================================================
-   OTHER CONTACTS
-================================================== */
 
-function OtherContacts({ person }) {
-  const data = person.data || {};
-
-  const contacts = [
-    [
-      "phone",
-      data.phone || data.tel
-    ],
-
-    [
-      "sms",
-      data.sms
-    ],
-
-    [
-      "messenger",
-      data.messenger
-    ],
-
-    [
-      "facebook",
-      data.facebook
-    ],
-
-    [
-      "email",
-      data.email
-    ],
-
-    [
-      "maps",
-      data.maps ||
-        data.location ||
-        data.address
-    ]
-  ];
-
-  return (
-    <>
-      {contacts.map(
-        ([type, value]) => (
-          <ContactButton
-            key={type}
-            type={type}
-            value={value}
-          />
-        )
-      )}
-    </>
-  );
-}
-
-/* ==================================================
+/* =========================================================
    OTHER PERSON
-================================================== */
+========================================================= */
 
 function OtherPerson({ person }) {
-  const data = person.data || {};
+
+  const data = person.data;
+
+  const photo =
+    data.photo?.trim();
 
   return (
     <div className="other-profile">
 
       <div className="other-info">
 
-        {/* =========================
-            PROFILE PIC - LEFT
-        ========================= */}
+        {photo ? (
 
-        {data.photo ? (
           <img
             className="other-photo"
-            src={data.photo}
-            alt={person.name}
+            src={photo}
+            alt={data.name || "Profile"}
           />
+
         ) : (
-          <div className="other-photo default-other-profile">
+
+          <div className="default-other-profile">
             <i className="fa-solid fa-user"></i>
           </div>
+
         )}
 
-        {/* =========================
-            RIGHT SIDE
-        ========================= */}
 
         <div className="other-text">
 
-          {/* NAME + SUBTITLE */}
-
-          <div className="other-heading">
-
-            <span className="other-name">
-              {person.name}
-            </span>
-
-            {data.subtitle && (
-              <span className="other-subtitle">
-                ({data.subtitle})
-              </span>
-            )}
-
+          <div className="other-name">
+            {data.name || "Unknown"}
           </div>
 
-          {/* =========================
-              CONTACT ICONS
-              UNDER NAME
-          ========================= */}
-
-          <div className="other-actions">
-            <OtherContacts
-              person={person}
-            />
-          </div>
+          {data.subtitle && (
+            <div className="other-subtitle">
+              {data.subtitle}
+            </div>
+          )}
 
         </div>
 
       </div>
 
+
+      <OtherContacts
+        data={data}
+      />
+
     </div>
   );
 }
 
-/* ==================================================
-   LOST MESSAGE
-================================================== */
 
-function LostMessage({ data }) {
-  const message =
-    data.message ||
-    data.lostmessage ||
-    data["lost-message"];
+/* =========================================================
+   MESSAGE
+========================================================= */
 
-  if (!message) return null;
+function LostMessage({ message }) {
+
+  if (
+    !message ||
+    !message.trim()
+  ) {
+    return null;
+  }
+
+  const lines =
+    message.split(/\r?\n/);
 
   return (
-    <div className="lost-message">
+    <section className="lost-message">
 
       <div className="lost-message-title">
+
         <i className="fa-solid fa-message"></i>
 
-        Message
+        <span style={{ marginLeft: "8px" }}>
+          Message
+        </span>
+
       </div>
+
 
       <div className="lost-message-text">
-        {message}
+
+        {lines.map(
+          (line, index) => (
+
+            <React.Fragment
+              key={index}
+            >
+
+              {line}
+
+              {index <
+                lines.length - 1 && (
+                <br />
+              )}
+
+            </React.Fragment>
+
+          )
+        )}
+
       </div>
 
-    </div>
+    </section>
   );
 }
 
-/* ==================================================
-   QR BUTTON
-================================================== */
+
+/* =========================================================
+   QR CODE BUTTON + POPUP
+   QR LANG ANG BINAGO
+========================================================= */
 
 function QRButton() {
-  const [open, setOpen] =
+
+  const [showQR, setShowQR] =
     useState(false);
 
-  const [loaded, setLoaded] =
+  const [imageLoaded, setImageLoaded] =
     useState(false);
+
+
+  /* -----------------------------------------------
+     CURRENT URL
+  ----------------------------------------------- */
 
   const currentUrl =
-    window.location.href;
+    typeof window !== "undefined"
+      ? window.location.href
+      : "";
+
+
+  /* -----------------------------------------------
+     QR API
+  ----------------------------------------------- */
 
   const qrUrl =
-    "https://api.qrserver.com/v1/create-qr-code/" +
-    "?size=160x160&margin=10&data=" +
-    encodeURIComponent(currentUrl);
+    `https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=10&data=${encodeURIComponent(
+      currentUrl
+    )}`;
 
-  /* =========================
-     DOWNLOAD QR
-  ========================= */
 
-  const downloadQR = async () => {
+  /* -----------------------------------------------
+     RESET
+  ----------------------------------------------- */
+
+  useEffect(() => {
+
+    if (showQR) {
+      setImageLoaded(false);
+    }
+
+  }, [showQR]);
+
+
+  /* -----------------------------------------------
+     DOWNLOAD
+  ----------------------------------------------- */
+
+  async function downloadQR() {
+
     try {
+
       const response =
         await fetch(qrUrl);
 
       if (!response.ok) {
         throw new Error(
-          "QR download failed"
+          "Unable to download QR"
         );
       }
 
@@ -547,39 +584,43 @@ function QRButton() {
       link.href = blobUrl;
 
       link.download =
-        "profile-qr.png";
+        "profile-qr-code.png";
 
-      document.body.appendChild(
-        link
-      );
+      document.body.appendChild(link);
 
       link.click();
 
-      link.remove();
+      document.body.removeChild(link);
 
-      URL.revokeObjectURL(
-        blobUrl
-      );
-    } catch {
+      URL.revokeObjectURL(blobUrl);
+
+    } catch (error) {
+
+      console.error(error);
+
       window.open(
         qrUrl,
         "_blank"
       );
     }
-  };
+  }
+
 
   return (
     <>
-      {/* =========================
+      {/* =================================================
           QR BUTTON
-      ========================= */}
+      ================================================= */}
 
       <button
-        onClick={() => {
-          setOpen(true);
-          setLoaded(false);
-        }}
+        type="button"
+
+        onClick={() =>
+          setShowQR(true)
+        }
+
         aria-label="Show QR Code"
+
         style={{
           position: "fixed",
           top: "14px",
@@ -591,100 +632,128 @@ function QRButton() {
           padding: 0,
           margin: 0,
 
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+
           border: "none",
           borderRadius: "50%",
 
           background: "#ffffff",
           color: "#111111",
 
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-
-          fontSize: "21px",
-
-          cursor: "pointer",
+          fontSize: "20px",
 
           zIndex: 2147483647,
 
+          cursor: "pointer",
+
           boxShadow:
-            "0 3px 12px rgba(0,0,0,.25)"
+            "0 2px 10px rgba(0,0,0,.25)",
+
+          WebkitTapHighlightColor:
+            "transparent"
         }}
       >
+
         <i className="fa-solid fa-qrcode"></i>
+
       </button>
 
-      {/* =========================
-          QR OVERLAY
-      ========================= */}
 
-      {open && (
+      {/* =================================================
+          QR POPUP
+      ================================================= */}
+
+      {showQR && (
+
         <div
+
           onClick={() =>
-            setOpen(false)
+            setShowQR(false)
           }
+
           style={{
             position: "fixed",
-            inset: 0,
+
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
 
             width: "100vw",
             height: "100vh",
 
-            background:
-              "rgba(0,0,0,.80)",
+            margin: 0,
+            padding: "20px",
 
             display: "flex",
+
             alignItems: "center",
             justifyContent: "center",
 
-            padding: "20px",
-
-            overflowY: "auto",
+            background:
+              "rgba(0,0,0,0.80)",
 
             zIndex: 2147483646,
+
+            overflowY: "auto",
 
             isolation: "isolate"
           }}
         >
 
-          {/* =========================
-              QR MODAL
-          ========================= */}
+          {/* =================================================
+              MODAL
+          ================================================= */}
 
           <div
+
             onClick={(event) =>
               event.stopPropagation()
             }
+
             style={{
               position: "relative",
 
               width: "280px",
               maxWidth: "90vw",
 
-              background: "#ffffff",
-              color: "#111111",
-
-              borderRadius: "18px",
+              margin: "auto",
 
               padding:
                 "18px 12px 14px",
 
+              borderRadius: "18px",
+
+              background: "#ffffff",
+              color: "#111111",
+
               textAlign: "center",
+
+              boxShadow:
+                "0 20px 60px rgba(0,0,0,.6)",
 
               overflow: "hidden",
 
-              boxShadow:
-                "0 15px 50px rgba(0,0,0,.45)"
+              flexShrink: 0
             }}
           >
 
-            {/* CLOSE */}
+            {/* =================================================
+                CLOSE
+            ================================================= */}
 
             <button
+
+              type="button"
+
               onClick={() =>
-                setOpen(false)
+                setShowQR(false)
               }
-              aria-label="Close"
+
+              aria-label="Close QR Code"
+
               style={{
                 position: "absolute",
 
@@ -694,280 +763,412 @@ function QRButton() {
                 width: "30px",
                 height: "30px",
 
-                border: "none",
-                borderRadius: "50%",
-
-                background: "#eeeeee",
-                color: "#111111",
-
-                fontSize: "18px",
+                margin: 0,
+                padding: 0,
 
                 display: "flex",
+
                 alignItems: "center",
                 justifyContent: "center",
 
+                border: "none",
+
+                borderRadius: "50%",
+
+                background: "#e1e3e7",
+                color: "#111111",
+
+                fontSize: "16px",
+
+                lineHeight: 1,
+
                 cursor: "pointer",
 
-                padding: 0
+                zIndex: 5
               }}
             >
-              ×
+
+              <i className="fa-solid fa-xmark"></i>
+
             </button>
 
-            {/* TITLE */}
 
-            <div
-              style={{
-                fontSize: "20px",
-                fontWeight: "700",
-
-                marginBottom: "14px",
-
-                paddingRight: "25px"
-              }}
-            >
-              QR Code
-            </div>
-
-            {/* LOADING */}
-
-            {!loaded && (
-              <div
-                style={{
-                  width: "160px",
-                  height: "160px",
-
-                  margin:
-                    "0 auto 12px",
-
-                  background:
-                    "#f1f1f1",
-
-                  borderRadius: "8px"
-                }}
-              />
-            )}
-
-            {/* QR IMAGE */}
-
-            <img
-              src={qrUrl}
-              alt="Profile QR Code"
-
-              width="160"
-              height="160"
-
-              onLoad={() =>
-                setLoaded(true)
-              }
-
-              style={{
-                display: loaded
-                  ? "block"
-                  : "none",
-
-                width: "160px",
-                minWidth: "160px",
-                maxWidth: "160px",
-
-                height: "160px",
-                minHeight: "160px",
-                maxHeight: "160px",
-
-                objectFit: "contain",
-
-                margin:
-                  "0 auto 12px"
-              }}
-            />
-
-            {/* URL */}
+            {/* =================================================
+                TITLE
+            ================================================= */}
 
             <div
               style={{
                 width: "100%",
 
-                padding: "8px",
+                margin:
+                  "0 0 10px",
 
-                marginBottom: "10px",
+                padding:
+                  "0 30px",
 
-                background:
-                  "#f1f1f1",
+                display: "flex",
 
-                borderRadius: "7px",
+                alignItems: "center",
 
-                fontSize: "10px",
+                justifyContent: "center",
+
+                gap: "6px",
+
+                fontSize: "16px",
+
+                fontWeight: "700",
 
                 lineHeight: "1.3",
 
-                color: "#666666",
+                whiteSpace: "nowrap"
+              }}
+            >
 
-                wordBreak:
-                  "break-all",
+              <i className="fa-solid fa-qrcode"></i>
+
+              <span>
+                Profile QR Code
+              </span>
+
+            </div>
+
+
+            {/* =================================================
+                LOADING
+            ================================================= */}
+
+            {!imageLoaded && (
+
+              <div
+                style={{
+                  width: "160px",
+                  height: "160px",
+
+                  margin: "0 auto",
+
+                  display: "flex",
+
+                  alignItems: "center",
+                  justifyContent: "center",
+
+                  fontSize: "13px"
+                }}
+              >
+                Loading QR...
+              </div>
+
+            )}
+
+
+            {/* =================================================
+                QR IMAGE
+            ================================================= */}
+
+            <img
+
+              src={qrUrl}
+
+              alt="Profile QR Code"
+
+              onLoad={() =>
+                setImageLoaded(true)
+              }
+
+              style={{
+                display:
+                  imageLoaded
+                    ? "block"
+                    : "none",
+
+                width: "160px",
+                height: "160px",
+
+                minWidth: "160px",
+                minHeight: "160px",
+
+                maxWidth: "160px",
+                maxHeight: "160px",
+
+                margin: "0 auto",
+
+                padding: 0,
+
+                border: 0,
+
+                borderRadius: 0,
+
+                objectFit: "contain",
+
+                flex: "none"
+              }}
+
+              width="160"
+
+              height="160"
+
+            />
+
+
+            {/* =================================================
+                CURRENT URL
+            ================================================= */}
+
+            <div
+              style={{
+                width: "100%",
+
+                marginTop: "9px",
+
+                padding:
+                  "6px 7px",
+
+                borderRadius: "7px",
+
+                background: "#f1f2f4",
+
+                color: "#555555",
+
+                fontSize: "9px",
+
+                lineHeight: "1.3",
+
+                textAlign: "center",
+
+                wordBreak: "break-all",
+
+                overflowWrap:
+                  "anywhere",
 
                 maxHeight: "38px",
 
                 overflow: "hidden"
               }}
             >
+
               {currentUrl}
+
             </div>
 
-            {/* DOWNLOAD */}
+
+            {/* =================================================
+                DOWNLOAD
+            ================================================= */}
 
             <button
+
+              type="button"
+
               onClick={downloadQR}
+
               style={{
                 width: "100%",
+
                 height: "40px",
 
+                marginTop: "9px",
+
+                padding:
+                  "0 10px",
+
+                display: "flex",
+
+                alignItems: "center",
+                justifyContent: "center",
+
+                gap: "7px",
+
                 border: "none",
+
                 borderRadius: "9px",
 
                 background: "#111111",
                 color: "#ffffff",
 
-                fontSize: "15px",
+                fontSize: "13px",
+
                 fontWeight: "700",
+
+                lineHeight: 1,
 
                 cursor: "pointer"
               }}
             >
-              <i
-                className="fa-solid fa-download"
-                style={{
-                  marginRight: "7px"
-                }}
-              ></i>
 
-              Download QR
+              <i className="fa-solid fa-download"></i>
+
+              <span>
+                Download QR
+              </span>
+
             </button>
 
           </div>
+
         </div>
+
       )}
+
     </>
   );
 }
 
-/* ==================================================
-   MAIN PROFILE
-================================================== */
 
-function MainProfile({ profile }) {
-  const data =
-    profile.data || {};
+/* =========================================================
+   MAIN PROFILE
+========================================================= */
+
+function MainProfile({
+  profile
+}) {
+
+  const data = profile.data;
+
+  const photo =
+    data.photo?.trim();
+
+
+  /* -----------------------------------------------
+     LOCATION
+  ----------------------------------------------- */
+
+  const addressParts = [];
+
+  if (data.address?.trim()) {
+    addressParts.push(
+      data.address.trim()
+    );
+  }
+
+  if (data.city?.trim()) {
+    addressParts.push(
+      data.city.trim()
+    );
+  }
+
+  const location =
+    addressParts.join(", ");
+
 
   return (
-    <div className="main-profile">
+    <>
 
-      {/* =========================
-          PROFILE PHOTO
-      ========================= */}
+      {/* MAIN PROFILE */}
 
-      {data.photo ? (
-        <img
-          className="profile-photo"
-          src={data.photo}
-          alt={profile.name}
-        />
-      ) : (
-        <div className="profile-photo default-profile">
-          <i className="fa-solid fa-user"></i>
-        </div>
-      )}
+      <section className="main-profile">
 
-      {/* =========================
-          NAME
-      ========================= */}
+        {photo ? (
 
-      <h1>
-        {profile.name}
-      </h1>
+          <img
+            className="profile-photo"
+            src={photo}
+            alt={
+              data.name ||
+              "Profile"
+            }
+          />
 
-      {/* =========================
-          SUBTITLE
-      ========================= */}
+        ) : (
 
-      {data.subtitle && (
-        <div className="subtitle">
-          {data.subtitle}
-        </div>
-      )}
+          <div className="default-profile">
 
-      {/* =========================
-          LOCATION
-      ========================= */}
+            <i className="fa-solid fa-user"></i>
 
-      {(data.location ||
-        data.address ||
-        data.maps) && (
-        <div className="location">
+          </div>
 
-          <i className="fa-solid fa-location-dot"></i>
-
-          {data.location ||
-            data.address ||
-            data.maps}
-
-        </div>
-      )}
-
-      {/* =========================
-          MAIN CONTACTS
-      ========================= */}
-
-      <MainContacts
-        data={data}
-      />
-
-      {/* =========================
-          MESSAGE
-      ========================= */}
-
-      <LostMessage
-        data={data}
-      />
-
-      {/* =========================
-          OTHER CONTACTS
-      ========================= */}
-
-      {profile.others &&
-        profile.others.length > 0 && (
-          <section className="other-section">
-
-            <h2>
-              Other Contacts
-            </h2>
-
-            <div className="other-list">
-
-              {profile.others.map(
-                (person, index) => (
-                  <OtherPerson
-                    key={index}
-                    person={person}
-                  />
-                )
-              )}
-
-            </div>
-
-          </section>
         )}
 
-    </div>
+
+        <h1>
+          {data.name ||
+            profile.name}
+        </h1>
+
+
+        {data.subtitle && (
+
+          <div className="subtitle">
+            {data.subtitle}
+          </div>
+
+        )}
+
+
+        {location && (
+
+          <div className="location">
+
+            <i className="fa-solid fa-location-dot"></i>
+
+            {location}
+
+          </div>
+
+        )}
+
+      </section>
+
+
+      {/* CONTACT BUTTONS */}
+
+      <MainContacts
+        profile={profile}
+      />
+
+
+      {/* MESSAGE */}
+
+      <LostMessage
+        message={data.message}
+      />
+
+
+      {/* OTHER CONTACTS */}
+
+      {profile.others.length > 0 && (
+
+        <section className="other-section">
+
+          <h2>
+            Other Contacts
+          </h2>
+
+
+          <div className="other-list">
+
+            {profile.others.map(
+              (person, index) => (
+
+                <OtherPerson
+                  key={index}
+                  person={person}
+                />
+
+              )
+            )}
+
+          </div>
+
+        </section>
+
+      )}
+
+    </>
   );
 }
 
-/* ==================================================
+
+/* =========================================================
    APP
-================================================== */
+========================================================= */
 
 export default function App() {
 
-  const [profile, setProfile] =
+  const [profiles, setProfiles] =
+    useState({});
+
+  const [selectedProfile,
+    setSelectedProfile] =
     useState(null);
 
   const [loading, setLoading] =
@@ -976,188 +1177,226 @@ export default function App() {
   const [error, setError] =
     useState("");
 
+
+  /* =====================================================
+     LOAD PROFILE.INFO
+  ===================================================== */
+
   useEffect(() => {
 
-    /* ==================================================
-       LOAD Profile.info
+    async function loadProfileInfo() {
 
-       ./Profile.info is used instead of
-       /Profile.info so it works correctly
-       with GitHub Pages.
-    ================================================== */
+      try {
 
-    fetch("./Profile.info", {
-      cache: "no-store"
-    })
+        setLoading(true);
 
-      .then((response) => {
+        setError("");
+
+
+        const response =
+          await fetch(
+            "/Profile.info",
+            {
+              cache: "no-cache"
+            }
+          );
+
 
         if (!response.ok) {
+
           throw new Error(
-            `Profile.info HTTP ${response.status}`
+            `HTTP ${response.status}`
           );
+
         }
 
-        return response.text();
-      })
 
-      .then((text) => {
+        const text =
+          await response.text();
 
-        console.log(
-          "Profile.info loaded successfully"
-        );
 
         const parsed =
           parseInfo(text);
 
-        console.log(
-          "Parsed profiles:",
-          parsed
-        );
 
-        /* ==================================================
+        setProfiles(parsed);
+
+
+        /* -----------------------------------------
            GET ?profile=
-        ================================================== */
+        ----------------------------------------- */
 
         const params =
           new URLSearchParams(
             window.location.search
           );
 
-        const requested =
+
+        const requestedProfile =
           params.get("profile");
 
-        let selected = null;
 
-        /* ==================================================
-           REQUESTED PROFILE
+        let profileToShow =
+          null;
 
-           Example:
-           ?profile=jeffrey
-        ================================================== */
 
-        if (
-          requested &&
-          requested.trim()
-        ) {
-          selected =
+        /* -----------------------------------------
+           Requested profile
+        ----------------------------------------- */
+
+        if (requestedProfile) {
+
+          const requestedKey =
+            requestedProfile
+              .trim()
+              .toLowerCase();
+
+
+          profileToShow =
             parsed[
-              requested
-                .trim()
-                .toLowerCase()
-            ];
+              requestedKey
+            ] || null;
+
         }
 
-        /* ==================================================
-           DEFAULT JEFFREY
 
-           Used when:
-           ?profile=
-           or no profile parameter
-        ================================================== */
+        /* -----------------------------------------
+           DEFAULT PROFILE = JEFFREY
+        ----------------------------------------- */
 
-        if (!selected) {
-          selected =
-            parsed["jeffrey"];
+        if (!profileToShow) {
+
+          profileToShow =
+            parsed["jeffrey"] ||
+            null;
+
         }
 
-        /* ==================================================
-           FIRST PROFILE FALLBACK
-        ================================================== */
 
-        if (!selected) {
+        /* -----------------------------------------
+           If Jeffrey doesn't exist,
+           use first profile
+        ----------------------------------------- */
 
-          const keys =
-            Object.keys(parsed);
+        if (!profileToShow) {
 
-          if (keys.length > 0) {
-            selected =
-              parsed[keys[0]];
+          const firstKey =
+            Object.keys(parsed)[0];
+
+
+          if (firstKey) {
+
+            profileToShow =
+              parsed[firstKey];
+
           }
+
         }
 
-        /* ==================================================
-           NO PROFILE
-        ================================================== */
 
-        if (!selected) {
+        if (!profileToShow) {
+
           throw new Error(
             "No profile found in Profile.info"
           );
+
         }
 
-        /* ==================================================
-           SET PROFILE
-        ================================================== */
 
-        setProfile(selected);
-
-        setLoading(false);
-      })
-
-      .catch((err) => {
-
-        console.error(
-          "Profile.info error:",
-          err
+        setSelectedProfile(
+          profileToShow
         );
+
+      } catch (err) {
+
+        console.error(err);
 
         setError(
-          err.message ||
-            "Unable to load Profile.info"
+          err?.message ||
+          "Unable to load profile."
         );
 
+      } finally {
+
         setLoading(false);
-      });
+
+      }
+
+    }
+
+
+    loadProfileInfo();
 
   }, []);
 
-  /* ==================================================
+
+  /* =====================================================
      LOADING
-  ================================================== */
+  ===================================================== */
 
   if (loading) {
+
     return (
       <div className="loading">
         Loading...
       </div>
     );
+
   }
 
-  /* ==================================================
-     ERROR
-  ================================================== */
 
-  if (!profile) {
+  /* =====================================================
+     ERROR
+  ===================================================== */
+
+  if (error) {
+
     return (
       <div className="error">
-
-        <h1>
-          Profile Not Found
-        </h1>
-
-        <p>
-          {error ||
-            "Unable to load profile."}
-        </p>
-
+        {error}
       </div>
+
     );
+
   }
 
-  /* ==================================================
+
+  /* =====================================================
+     PROFILE
+  ===================================================== */
+
+  if (!selectedProfile) {
+
+    return (
+      <div className="error">
+        Profile not found.
+      </div>
+
+    );
+
+  }
+
+
+  /* =====================================================
      PAGE
-  ================================================== */
+  ===================================================== */
 
   return (
-    <div className="profile-page">
+
+    <main className="profile-page">
+
+      {/* QR BUTTON */}
 
       <QRButton />
 
+
+      {/* PROFILE */}
+
       <MainProfile
-        profile={profile}
+        profile={selectedProfile}
       />
 
-    </div>
+    </main>
+
   );
 }
