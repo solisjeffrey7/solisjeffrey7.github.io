@@ -1,537 +1,395 @@
 import { useEffect, useState } from "react";
-import "./App.css";
 
-const DEFAULT_ICON = "fa-solid fa-user";
+const DEFAULT_MESSAGE = `PAUMANHIN AT PAKIUSAP
 
-const DEFAULT_MESSAGE =
-  "Kung sakaling napulot ninyo ang item na ito, pakiusap po na kontakin ako gamit ang mga contact button sa page na ito. Malaking tulong po ang inyong kabutihan upang maibalik ito sa akin. Maraming salamat po sa inyong tulong at katapatan. ❤️";
+Kung hindi po kayo agad nasagot sa tawag o mensahe, maaaring nasa trabaho, natutulog, nagmamaneho, o hindi namin napapansin ang notification.
+
+Pakiiwan na lamang po ang inyong mensahe at babalikan namin kayo sa lalong madaling panahon. Maraming salamat po sa inyong pang-unawa.`;
 
 function parseProfileInfo(text) {
   const profiles = {};
-  const others = {};
+  let currentSection = null;
 
-  let current = null;
-  let currentParent = null;
+  const lines = text.split(/\r?\n/);
 
-  for (const rawLine of text.split(/\r?\n/)) {
+  for (const rawLine of lines) {
     const line = rawLine.trim();
 
-    if (!line || line.startsWith("#")) {
+    if (!line || line.startsWith("#") || line.startsWith(";")) {
       continue;
     }
 
-    if (/^id\s*=/i.test(line)) {
-      continue;
-    }
+    const sectionMatch = line.match(/^\[([^\]]+)\](?:\[([^\]]+)\])?$/);
 
-    const otherMatch = line.match(
-      /^\[([^\]]+)\]\[other\]$/i
-    );
+    if (sectionMatch) {
+      const profileName = sectionMatch[1].trim().toLowerCase();
+      const subSection = sectionMatch[2]?.trim().toLowerCase();
 
-    if (otherMatch) {
-      current = {};
-
-      currentParent =
-        otherMatch[1].trim().toLowerCase();
-
-      if (!others[currentParent]) {
-        others[currentParent] = [];
+      if (!profiles[profileName]) {
+        profiles[profileName] = {
+          main: {},
+          others: [],
+        };
       }
 
-      others[currentParent].push(current);
+      if (subSection === "other") {
+        currentSection = {
+          type: "other",
+          profile: profileName,
+          data: {},
+        };
+
+        profiles[profileName].others.push(currentSection.data);
+      } else {
+        currentSection = {
+          type: "main",
+          profile: profileName,
+          data: profiles[profileName].main,
+        };
+      }
 
       continue;
     }
 
-    const profileMatch = line.match(
-      /^\[([^\]]+)\]$/i
-    );
+    const separator = line.indexOf("=");
 
-    if (profileMatch) {
-      const key =
-        profileMatch[1].trim().toLowerCase();
-
-      current = {};
-      currentParent = key;
-
-      profiles[key] = current;
-
+    if (separator === -1 || !currentSection) {
       continue;
     }
 
-    if (current) {
-      const separator = line.indexOf("=");
+    const key = line
+      .slice(0, separator)
+      .trim()
+      .toLowerCase();
 
-      if (separator !== -1) {
-        const key = line
-          .substring(0, separator)
-          .trim()
-          .toLowerCase();
+    const value = line
+      .slice(separator + 1)
+      .trim();
 
-        const value = line
-          .substring(separator + 1)
-          .trim();
-
-        current[key] = value;
-      }
-    }
+    currentSection.data[key] = value;
   }
 
-  return {
-    profiles,
-    others
-  };
+  return profiles;
 }
 
-/* =========================
-   IMAGE
-========================= */
+function getProfileName() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("profile")?.trim() || "jeffrey";
+}
 
-function ProfileImage({
-  photo,
-  name,
-  small = false
-}) {
-  if (photo) {
-    return (
-      <img
-        className={
-          small
-            ? "other-photo"
-            : "profile-photo"
-        }
-        src={photo}
-        alt={name || "Profile"}
-      />
-    );
+function getPhoto(photo) {
+  if (!photo) return null;
+
+  if (
+    photo.startsWith("http://") ||
+    photo.startsWith("https://") ||
+    photo.startsWith("/")
+  ) {
+    return photo;
   }
 
-  return (
-    <div
-      className={
-        small
-          ? "other-photo default-other-profile"
-          : "profile-photo default-profile"
-      }
-    >
-      <i className={DEFAULT_ICON}></i>
-    </div>
-  );
+  return `/${photo}`;
 }
 
-/* =========================
-   MAIN PROFILE
-========================= */
-
-function MainProfile({ profile }) {
-  const message =
-    profile.message?.trim() ||
-    DEFAULT_MESSAGE;
-
-  return (
-    <section className="main-profile">
-
-      <ProfileImage
-        photo={profile.photo}
-        name={profile.name}
-      />
-
-      <h1>
-        {profile.name || "Unnamed Profile"}
-      </h1>
-
-      {profile.subtitle && (
-        <div className="subtitle">
-          {profile.subtitle}
-        </div>
-      )}
-
-      {(profile.address || profile.city) && (
-        <div className="location">
-
-          {profile.address && (
-            <div>
-              <i className="fa-solid fa-location-dot"></i>{" "}
-              {profile.address}
-            </div>
-          )}
-
-          {profile.city && (
-            <div>
-              {profile.city}
-            </div>
-          )}
-
-        </div>
-      )}
-
-      {/* =========================
-          MESSAGE
-      ========================= */}
-
-      <div className="lost-message">
-
-        <div className="lost-message-title">
-          <i className="fa-solid fa-hand-holding-heart"></i>
-          PAUMANHIN AT PAKIUSAP
-        </div>
-
-        <div className="lost-message-text">
-          {message}
-        </div>
-
-      </div>
-
-      {/* =========================
-          CONTACT BUTTONS
-      ========================= */}
-
-      <div className="main-contacts">
-
-        <div className="main-contact-row">
-
-          {profile.phone && (
-            <a
-              className="call-button"
-              href={`tel:${profile.phone}`}
-              title="Call"
-              aria-label="Call"
-            >
-              <i className="fa-solid fa-phone"></i>
-
-              <span className="call-label">
-                Call
-              </span>
-            </a>
-          )}
-
-          {profile.sms && (
-            <a
-              className="main-icon-button"
-              href={`sms:${profile.sms}`}
-              title="SMS"
-              aria-label="SMS"
-            >
-              <i className="fa-solid fa-comment-sms"></i>
-            </a>
-          )}
-
-          {profile.messenger && (
-            <a
-              className="main-icon-button"
-              href={profile.messenger}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Messenger"
-              aria-label="Messenger"
-            >
-              <i className="fa-brands fa-facebook-messenger"></i>
-            </a>
-          )}
-
-          {profile.facebook && (
-            <a
-              className="main-icon-button"
-              href={profile.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Facebook"
-              aria-label="Facebook"
-            >
-              <i className="fa-brands fa-facebook"></i>
-            </a>
-          )}
-
-          {profile.email && (
-            <a
-              className="main-icon-button"
-              href={`mailto:${profile.email}`}
-              title="Email"
-              aria-label="Email"
-            >
-              <i className="fa-solid fa-envelope"></i>
-            </a>
-          )}
-
-          {profile.maps && (
-            <a
-              className="main-icon-button"
-              href={profile.maps}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Google Maps"
-              aria-label="Google Maps"
-            >
-              <i className="fa-solid fa-map-location-dot"></i>
-            </a>
-          )}
-
-        </div>
-
-      </div>
-
-    </section>
-  );
-}
-
-/* =========================
-   OTHER CONTACT BUTTON
-========================= */
-
-function OtherContactButton({
-  icon,
-  href,
-  title
-}) {
-  if (!href) {
-    return null;
-  }
-
-  const external =
-    href.startsWith("http");
+function ContactButton({ href, icon, label, main = false }) {
+  if (!href) return null;
 
   return (
     <a
-      className="other-contact-button"
+      className={main ? "main-icon-button" : "other-contact-button"}
       href={href}
-      title={title}
-      aria-label={title}
-      target={
-        external
-          ? "_blank"
-          : undefined
-      }
-      rel={
-        external
-          ? "noopener noreferrer"
-          : undefined
-      }
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+      aria-label={label}
+      title={label}
     >
       <i className={icon}></i>
     </a>
   );
 }
 
-/* =========================
-   OTHER PROFILE
-========================= */
+function MainContacts({ profile }) {
+  return (
+    <section className="main-contacts">
+      <div className="main-contact-row">
+        {profile.phone && (
+          <a
+            className="call-button"
+            href={`tel:${profile.phone}`}
+            aria-label="Call"
+          >
+            <i className="fa-solid fa-phone"></i>
+            <span className="call-label">Call</span>
+          </a>
+        )}
+
+        {profile.sms && (
+          <ContactButton
+            href={`sms:${profile.sms}`}
+            icon="fa-solid fa-comment-sms"
+            label="SMS"
+            main
+          />
+        )}
+
+        {profile.messenger && (
+          <ContactButton
+            href={profile.messenger}
+            icon="fa-brands fa-facebook-messenger"
+            label="Messenger"
+            main
+          />
+        )}
+
+        {profile.facebook && (
+          <ContactButton
+            href={profile.facebook}
+            icon="fa-brands fa-facebook"
+            label="Facebook"
+            main
+          />
+        )}
+
+        {profile.email && (
+          <ContactButton
+            href={`mailto:${profile.email}`}
+            icon="fa-solid fa-envelope"
+            label="Email"
+            main
+          />
+        )}
+
+        {profile.maps && (
+          <ContactButton
+            href={profile.maps}
+            icon="fa-solid fa-location-dot"
+            label="Google Maps"
+            main
+          />
+        )}
+      </div>
+    </section>
+  );
+}
 
 function OtherProfile({ person }) {
+  const photo = getPhoto(person.photo);
+
   return (
     <div className="other-profile">
-
       <div className="other-info">
-
-        <ProfileImage
-          photo={person.photo}
-          name={person.name}
-          small
-        />
+        {photo ? (
+          <img
+            className="other-photo"
+            src={photo}
+            alt={person.name || "Profile"}
+          />
+        ) : (
+          <div className="other-photo default-other-profile">
+            <i className="fa-solid fa-user"></i>
+          </div>
+        )}
 
         <div className="other-text">
-
-          <div className="other-name">
-            {person.name || "Unnamed"}
-          </div>
+          <h3 className="other-name">
+            {person.name || "Unnamed Profile"}
+          </h3>
 
           {person.subtitle && (
             <div className="other-subtitle">
               {person.subtitle}
             </div>
           )}
-
         </div>
-
       </div>
 
       <div className="other-actions">
-
         {person.phone && (
-          <OtherContactButton
-            icon="fa-solid fa-phone"
-            title="Call"
+          <ContactButton
             href={`tel:${person.phone}`}
+            icon="fa-solid fa-phone"
+            label="Call"
           />
         )}
 
         {person.sms && (
-          <OtherContactButton
-            icon="fa-solid fa-comment-sms"
-            title="SMS"
+          <ContactButton
             href={`sms:${person.sms}`}
+            icon="fa-solid fa-comment-sms"
+            label="SMS"
           />
         )}
 
         {person.messenger && (
-          <OtherContactButton
-            icon="fa-brands fa-facebook-messenger"
-            title="Messenger"
+          <ContactButton
             href={person.messenger}
+            icon="fa-brands fa-facebook-messenger"
+            label="Messenger"
           />
         )}
 
         {person.facebook && (
-          <OtherContactButton
-            icon="fa-brands fa-facebook"
-            title="Facebook"
+          <ContactButton
             href={person.facebook}
+            icon="fa-brands fa-facebook"
+            label="Facebook"
           />
         )}
 
         {person.email && (
-          <OtherContactButton
-            icon="fa-solid fa-envelope"
-            title="Email"
+          <ContactButton
             href={`mailto:${person.email}`}
+            icon="fa-solid fa-envelope"
+            label="Email"
           />
         )}
 
         {person.maps && (
-          <OtherContactButton
-            icon="fa-solid fa-map-location-dot"
-            title="Google Maps"
+          <ContactButton
             href={person.maps}
+            icon="fa-solid fa-location-dot"
+            label="Google Maps"
           />
         )}
-
       </div>
-
     </div>
   );
 }
 
-/* =========================
-   APP
-========================= */
-
-export default function App() {
-  const [data, setData] = useState(null);
+function App() {
+  const [profiles, setProfiles] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("/Profile.info")
+    fetch("/Profile.info", {
+      cache: "no-store",
+    })
       .then((response) => {
         if (!response.ok) {
-          throw new Error(
-            "Profile.info not found"
-          );
+          throw new Error("Profile.info not found");
         }
 
         return response.text();
       })
       .then((text) => {
-        const parsed =
-          parseProfileInfo(text);
-
-        console.log(
-          "Loaded profiles:",
-          parsed.profiles
-        );
-
-        console.log(
-          "Jeffrey message:",
-          parsed.profiles.jeffrey?.message
-        );
-
-        setData(parsed);
+        setProfiles(parseProfileInfo(text));
       })
       .catch((err) => {
         console.error(err);
-
-        setError(
-          "Hindi ma-load ang Profile.info"
-        );
+        setError("Hindi ma-load ang Profile.info.");
       });
   }, []);
-
-  if (!data && !error) {
-    return (
-      <div className="loading">
-        Loading...
-      </div>
-    );
-  }
 
   if (error) {
     return (
       <div className="error">
-        <h1>Error</h1>
+        <h1>Oops!</h1>
         <p>{error}</p>
       </div>
     );
   }
 
-  const params =
-    new URLSearchParams(
-      window.location.search
-    );
+  if (!profiles) {
+    return <div className="loading">Loading...</div>;
+  }
 
-  const requestedProfile =
-    params
-      .get("profile")
-      ?.trim()
-      .toLowerCase() ||
-    "jeffrey";
-
-  const profile =
-    data.profiles[
-      requestedProfile
-    ];
+  const profileName = getProfileName().toLowerCase();
+  const profile = profiles[profileName]?.main;
+  const others = profiles[profileName]?.others || [];
 
   if (!profile) {
     return (
       <div className="error">
-
-        <h1>
-          Profile Not Found
-        </h1>
-
+        <h1>Profile Not Found</h1>
         <p>
-          Walang profile na{" "}
-          <strong>
-            {requestedProfile}
-          </strong>.
+          Walang profile na <strong>{getProfileName()}</strong>.
         </p>
-
       </div>
     );
   }
 
-  const profileOthers =
-    data.others[
-      requestedProfile
-    ] || [];
+  const photo = getPhoto(profile.photo);
+
+  const message =
+    profile.message?.trim() || DEFAULT_MESSAGE;
 
   return (
     <main className="profile-page">
+      <div className="main-profile">
 
-      <MainProfile
-        profile={profile}
-      />
+        {/* PROFILE */}
+        {photo ? (
+          <img
+            className="profile-photo"
+            src={photo}
+            alt={profile.name || "Profile"}
+          />
+        ) : (
+          <div className="profile-photo default-profile">
+            <i className="fa-solid fa-user"></i>
+          </div>
+        )}
 
-      {profileOthers.length > 0 && (
-        <section className="other-section">
+        <h1>
+          {profile.name || "Unnamed Profile"}
+        </h1>
 
-          <h2>
-            Other People to Contact
-          </h2>
+        {profile.subtitle && (
+          <div className="subtitle">
+            {profile.subtitle}
+          </div>
+        )}
 
-          <div className="other-list">
+        {(profile.address || profile.city) && (
+          <div className="location">
+            <i className="fa-solid fa-location-dot"></i>{" "}
+            {[profile.address, profile.city]
+              .filter(Boolean)
+              .join(", ")}
+          </div>
+        )}
 
-            {profileOthers.map(
-              (person, index) => (
-                <OtherProfile
-                  key={`${requestedProfile}-${index}`}
-                  person={person}
-                />
-              )
-            )}
+        {/* CONTACT — MAUNA */}
+        <MainContacts profile={profile} />
 
+        {/* MESSAGE — SUNOD SA CONTACT */}
+        <section className="lost-message">
+          <div className="lost-message-title">
+            <i className="fa-solid fa-message"></i>
+            PAUMANHIN AT PAKIUSAP
           </div>
 
+          <div className="lost-message-text">
+            {message.split(/\r?\n/).map((line, index) => (
+              <span key={index}>
+                {line}
+                {index < message.split(/\r?\n/).length - 1 && (
+                  <br />
+                )}
+              </span>
+            ))}
+          </div>
         </section>
-      )}
 
+        {/* OTHER PEOPLE — HULI */}
+        {others.length > 0 && (
+          <section className="other-section">
+            <h2>Other People</h2>
+
+            <div className="other-list">
+              {others.map((person, index) => (
+                <OtherProfile
+                  key={index}
+                  person={person}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+      </div>
     </main>
   );
 }
+
+export default App;
