@@ -19,12 +19,10 @@ function parseProfileInfo(text) {
       continue;
     }
 
-    // Ignore id="..."
     if (/^id\s*=/i.test(line)) {
       continue;
     }
 
-    // [profile][other]
     const otherMatch = line.match(
       /^\[([^\]]+)\]\[other\]$/i
     );
@@ -42,7 +40,6 @@ function parseProfileInfo(text) {
       continue;
     }
 
-    // [profile]
     const profileMatch = line.match(
       /^\[([^\]]+)\]$/i
     );
@@ -58,7 +55,6 @@ function parseProfileInfo(text) {
       continue;
     }
 
-    // key=value
     if (current) {
       const separator = line.indexOf("=");
 
@@ -162,14 +158,14 @@ function MainProfile({ profile }) {
       )}
 
       {/* =========================
-          MAIN CONTACT ROW
+          RESPONSIVE CONTACT ROW
       ========================= */}
 
       <div className="main-contacts">
 
         <div className="main-contact-row">
 
-          {/* CALL WITH TEXT */}
+          {/* CALL */}
 
           {profile.phone && (
             <a
@@ -180,7 +176,7 @@ function MainProfile({ profile }) {
             >
               <i className="fa-solid fa-phone"></i>
 
-              <span>
+              <span className="call-label">
                 Call
               </span>
             </a>
@@ -242,7 +238,7 @@ function MainProfile({ profile }) {
             </a>
           )}
 
-          {/* GOOGLE MAPS */}
+          {/* MAPS */}
 
           {profile.maps && (
             <a
@@ -337,8 +333,6 @@ function OtherProfile({ person }) {
 
       <div className="other-actions">
 
-        {/* CALL */}
-
         {person.phone && (
           <OtherContactButton
             icon="fa-solid fa-phone"
@@ -346,8 +340,6 @@ function OtherProfile({ person }) {
             href={`tel:${person.phone}`}
           />
         )}
-
-        {/* SMS */}
 
         {person.sms && (
           <OtherContactButton
@@ -357,8 +349,6 @@ function OtherProfile({ person }) {
           />
         )}
 
-        {/* MESSENGER */}
-
         {person.messenger && (
           <OtherContactButton
             icon="fa-brands fa-facebook-messenger"
@@ -366,8 +356,6 @@ function OtherProfile({ person }) {
             href={person.messenger}
           />
         )}
-
-        {/* FACEBOOK */}
 
         {person.facebook && (
           <OtherContactButton
@@ -377,8 +365,6 @@ function OtherProfile({ person }) {
           />
         )}
 
-        {/* EMAIL */}
-
         {person.email && (
           <OtherContactButton
             icon="fa-solid fa-envelope"
@@ -386,8 +372,6 @@ function OtherProfile({ person }) {
             href={`mailto:${person.email}`}
           />
         )}
-
-        {/* MAPS */}
 
         {person.maps && (
           <OtherContactButton
@@ -437,8 +421,6 @@ export default function App() {
       });
   }, []);
 
-  /* LOADING */
-
   if (!data && !error) {
     return (
       <div className="loading">
@@ -447,27 +429,17 @@ export default function App() {
     );
   }
 
-  /* ERROR */
-
   if (error) {
     return (
       <div className="error">
-
-        <h1>
-          Error
-        </h1>
+        <h1>Error</h1>
 
         <p>
           {error}
         </p>
-
       </div>
     );
   }
-
-  /* =========================
-     GET PROFILE FROM URL
-  ========================= */
 
   const params =
     new URLSearchParams(
@@ -485,8 +457,6 @@ export default function App() {
     data.profiles[
       requestedProfile
     ];
-
-  /* PROFILE NOT FOUND */
 
   if (!profile) {
     return (
@@ -506,10 +476,6 @@ export default function App() {
       </div>
     );
   }
-
-  /* =========================
-     OTHER PEOPLE
-  ========================= */
 
   const profileOthers =
     data.others[
