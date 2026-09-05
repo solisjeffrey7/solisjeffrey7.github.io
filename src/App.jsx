@@ -1,276 +1,375 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-function MainContacts({ profile }) {
-  const buttons = [
-    ["phone", "fa-solid fa-phone", "Call"],
-    ["sms", "fa-solid fa-comment-sms", "SMS"],
-    ["messenger", "fa-brands fa-facebook-messenger", "Messenger"],
-    ["facebook", "fa-brands fa-facebook", "Facebook"],
-    ["email", "fa-solid fa-envelope", "Email"],
-    ["maps", "fa-solid fa-location-dot", "Google Maps"],
-  ];
+function parseProfileInfo(text) {
+  const profiles = {};
+  const others = {};
+
+  let current = null;
+  let currentType = null;
+  let currentParent = null;
+
+  const lines = text.split(/\r?\n/);
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+
+    if (!line || line.startsWith("#") || line.startsWith("id=")) {
+      continue;
+    }
+
+    // [jeffrey][other]
+    const otherMatch = line.match(/^\[([^\]]+)\]\[other\]$/i);
+
+    if (otherMatch) {
+      current = {};
+      currentType = "other";
+      currentParent = otherMatch[1].trim().toLowerCase();
+
+      if (!others[currentParent]) {
+        others[currentParent] = [];
+      }
+
+      others[currentParent].push(current);
+      continue;
+    }
+
+    // [jeffrey]
+    const profileMatch = line.match(/^\[([^\]]+)\]$/);
+
+    if (profileMatch) {
+      const key = profileMatch[1].trim().toLowerCase();
+
+      current = {};
+      currentType = "profile";
+      currentParent = key;
+
+      profiles[key] = current;
+      continue;
+    }
+
+    // name=value
+    if (current) {
+      const separator = line.indexOf("=");
+
+      if (separator !== -1) {
+        const key = line
+          .substring(0, separator)
+          .trim()
+          .toLowerCase();
+
+        const value = line
+          .substring(separator + 1)
+          .trim();
+
+        current[key] = value;
+      }
+    }
+  }
+
+  return {
+    profiles,
+    others,
+  };
+}
+
+function ContactButton({ icon, label, href }) {
+  if (!href) return null;
 
   return (
-    <div className="contacts">
-      {buttons.map(([type, icon, label]) => {
-        if (!profile[type]) return null;
-
-        let href = profile[type];
-
-        if (type === "phone") href = `tel:${profile[type]}`;
-        if (type === "sms") href = `sms:${profile[type]}`;
-        if (type === "email") href = `mailto:${profile[type]}`;
-
-        return (
-          <a
-            key={type}
-            href={href}
-            target={
-              ["messenger", "facebook", "maps"].includes(type)
-                ? "_blank"
-                : undefined
-            }
-            rel={
-              ["messenger", "facebook", "maps"].includes(type)
-                ? "noopener noreferrer"
-                : undefined
-            }
-          >
-            <i className={icon}></i>
-            <span>{label}</span>
-          </a>
-        );
-      })}
-    </div>
+    <a
+      className="contact-button"
+      href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+    >
+      <i className={icon}></i>
+      <span>{label}</span>
+    </a>
   );
 }
 
-function OtherContacts({ people }) {
-  if (!people.length) return null;
+function OtherContactButton({ icon, href, title }) {
+  if (!href) return null;
 
   return (
-    <section className="other-people">
-      <h2>Other People to Contact</h2>
+    <a
+      className="other-contact-button"
+      href={href}
+      title={title}
+      aria-label={title}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+    >
+      <i className={icon}></i>
+    </a>
+  );
+}
 
-      <div className="other-list">
-        {people.map((person, index) => (
-          <div className="other-person" key={index}>
+function MainProfile({ profile }) {
+  return (
+    <section className="main-profile">
 
-            <img
-              src={`/${person.photo || "profile.jpg"}`}
-              alt={person.name}
-              className="other-photo"
-            />
+      {profile.photo && (
+        <img
+          className="profile-photo"
+          src={profile.photo}
+          alt={profile.name || "Profile"}
+        />
+      )}
 
-            <div className="other-info">
-              <h3>{person.name}</h3>
+      <h1>{profile.name || "Unnamed Profile"}</h1>
 
-              {person.subtitle && (
-                <p>{person.subtitle}</p>
-              )}
+      {profile.subtitle && (
+        <div className="subtitle">
+          {profile.subtitle}
+        </div>
+      )}
 
-              <div className="other-icons">
-
-                {person.phone && (
-                  <a href={`tel:${person.phone}`}>
-                    <i className="fa-solid fa-phone"></i>
-                  </a>
-                )}
-
-                {person.sms && (
-                  <a href={`sms:${person.sms}`}>
-                    <i className="fa-solid fa-comment-sms"></i>
-                  </a>
-                )}
-
-                {person.messenger && (
-                  <a
-                    href={person.messenger}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <i className="fa-brands fa-facebook-messenger"></i>
-                  </a>
-                )}
-
-                {person.facebook && (
-                  <a
-                    href={person.facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <i className="fa-brands fa-facebook"></i>
-                  </a>
-                )}
-
-                {person.email && (
-                  <a href={`mailto:${person.email}`}>
-                    <i className="fa-solid fa-envelope"></i>
-                  </a>
-                )}
-
-                {person.maps && (
-                  <a
-                    href={person.maps}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <i className="fa-solid fa-location-dot"></i>
-                  </a>
-                )}
-
-              </div>
+      {(profile.address || profile.city) && (
+        <div className="location">
+          {profile.address && (
+            <div>
+              <i className="fa-solid fa-location-dot"></i>{" "}
+              {profile.address}
             </div>
+          )}
 
-          </div>
-        ))}
+          {profile.city && (
+            <div>{profile.city}</div>
+          )}
+        </div>
+      )}
+
+      <div className="contacts">
+
+        {profile.phone && (
+          <ContactButton
+            icon="fa-solid fa-phone"
+            label="Call"
+            href={`tel:${profile.phone}`}
+          />
+        )}
+
+        {profile.sms && (
+          <ContactButton
+            icon="fa-solid fa-comment-sms"
+            label="SMS"
+            href={`sms:${profile.sms}`}
+          />
+        )}
+
+        {profile.messenger && (
+          <ContactButton
+            icon="fa-brands fa-facebook-messenger"
+            label="Messenger"
+            href={profile.messenger}
+          />
+        )}
+
+        {profile.facebook && (
+          <ContactButton
+            icon="fa-brands fa-facebook"
+            label="Facebook"
+            href={profile.facebook}
+          />
+        )}
+
+        {profile.email && (
+          <ContactButton
+            icon="fa-solid fa-envelope"
+            label="Email"
+            href={`mailto:${profile.email}`}
+          />
+        )}
+
+        {profile.maps && (
+          <ContactButton
+            icon="fa-solid fa-map-location-dot"
+            label="Google Maps"
+            href={profile.maps}
+          />
+        )}
+
       </div>
     </section>
   );
 }
 
-function App() {
-  const [profiles, setProfiles] = useState({});
-  const [others, setOthers] = useState({});
+function OtherProfile({ person }) {
+  return (
+    <div className="other-profile">
+
+      <div className="other-info">
+
+        {person.photo && (
+          <img
+            className="other-photo"
+            src={person.photo}
+            alt={person.name || "Contact"}
+          />
+        )}
+
+        <div className="other-text">
+          <div className="other-name">
+            {person.name || "Unnamed"}
+          </div>
+
+          {person.subtitle && (
+            <div className="other-subtitle">
+              {person.subtitle}
+            </div>
+          )}
+        </div>
+
+      </div>
+
+      <div className="other-actions">
+
+        {person.phone && (
+          <OtherContactButton
+            icon="fa-solid fa-phone"
+            title="Call"
+            href={`tel:${person.phone}`}
+          />
+        )}
+
+        {person.sms && (
+          <OtherContactButton
+            icon="fa-solid fa-comment-sms"
+            title="SMS"
+            href={`sms:${person.sms}`}
+          />
+        )}
+
+        {person.messenger && (
+          <OtherContactButton
+            icon="fa-brands fa-facebook-messenger"
+            title="Messenger"
+            href={person.messenger}
+          />
+        )}
+
+        {person.facebook && (
+          <OtherContactButton
+            icon="fa-brands fa-facebook"
+            title="Facebook"
+            href={person.facebook}
+          />
+        )}
+
+        {person.email && (
+          <OtherContactButton
+            icon="fa-solid fa-envelope"
+            title="Email"
+            href={`mailto:${person.email}`}
+          />
+        )}
+
+        {person.maps && (
+          <OtherContactButton
+            icon="fa-solid fa-map-location-dot"
+            title="Google Maps"
+            href={person.maps}
+          />
+        )}
+
+      </div>
+
+    </div>
+  );
+}
+
+export default function App() {
+  const [data, setData] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
     fetch("/Profile.info")
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Hindi makita ang Profile.info");
+          throw new Error("Profile.info not found");
         }
 
         return response.text();
       })
       .then((text) => {
-        const normalProfiles = {};
-        const otherProfiles = {};
-
-        let current = null;
-        let currentType = null;
-        let currentParent = null;
-
-        text.split(/\r?\n/).forEach((rawLine) => {
-          const line = rawLine.trim();
-
-          if (!line || line.startsWith("#")) return;
-
-          const section = line.match(
-            /^\[([^\]]+)\](?:\[([^\]]+)\])?$/
-          );
-
-          if (section) {
-            currentParent = section[1]
-              .trim()
-              .toLowerCase();
-
-            currentType = section[2]
-              ? section[2].trim().toLowerCase()
-              : null;
-
-            current = {};
-
-            if (currentType === "other") {
-              if (!otherProfiles[currentParent]) {
-                otherProfiles[currentParent] = [];
-              }
-
-              otherProfiles[currentParent].push(current);
-            } else {
-              normalProfiles[currentParent] = current;
-            }
-
-            return;
-          }
-
-          if (current && line.includes("=")) {
-            const index = line.indexOf("=");
-
-            const key = line
-              .slice(0, index)
-              .trim()
-              .toLowerCase();
-
-            const value = line
-              .slice(index + 1)
-              .trim();
-
-            current[key] = value;
-          }
-        });
-
-        if (!normalProfiles.jeffrey) {
-          throw new Error(
-            "Hindi makita ang [jeffrey]"
-          );
-        }
-
-        setProfiles(normalProfiles);
-        setOthers(otherProfiles);
+        setData(parseProfileInfo(text));
       })
       .catch((err) => {
-        setError(err.message);
+        console.error(err);
+        setError("Hindi ma-load ang Profile.info");
       });
   }, []);
 
   if (error) {
     return (
       <div className="error">
-        <h1>Profile Error</h1>
+        <h1>Error</h1>
         <p>{error}</p>
       </div>
     );
   }
 
-  if (!profiles.jeffrey) {
+  if (!data) {
     return (
       <div className="loading">
-        Loading Profile...
+        Loading...
       </div>
     );
   }
 
-  const profile = profiles.jeffrey;
+  const params = new URLSearchParams(
+    window.location.search
+  );
+
+  const requestedProfile =
+    params.get("profile")?.trim().toLowerCase() ||
+    "jeffrey";
+
+  const profile =
+    data.profiles[requestedProfile];
+
+  if (!profile) {
+    return (
+      <div className="error">
+        <h1>Profile Not Found</h1>
+
+        <p>
+          Walang profile na{" "}
+          <strong>{requestedProfile}</strong>.
+        </p>
+      </div>
+    );
+  }
+
+  const profileOthers =
+    data.others[requestedProfile] || [];
 
   return (
     <main className="profile-page">
 
-      {/* MAIN PROFILE */}
+      <MainProfile profile={profile} />
 
-      <img
-        className="profile-photo"
-        src={`/${profile.photo || "profile.jpg"}`}
-        alt={profile.name}
-      />
+      {profileOthers.length > 0 && (
+        <section className="other-section">
 
-      <h1>{profile.name}</h1>
+          <h2>Other People to Contact</h2>
 
-      {profile.subtitle && (
-        <p className="subtitle">
-          {profile.subtitle}
-        </p>
+          <div className="other-list">
+
+            {profileOthers.map((person, index) => (
+              <OtherProfile
+                key={`${requestedProfile}-${index}`}
+                person={person}
+              />
+            ))}
+
+          </div>
+
+        </section>
       )}
-
-      {(profile.address || profile.city) && (
-        <p className="location">
-          📍 {profile.address}
-          {profile.address && profile.city && <br />}
-          {profile.city}
-        </p>
-      )}
-
-      <MainContacts profile={profile} />
-
-      {/* OTHER CONTACTS */}
-
-      <OtherContacts
-        people={others.jeffrey || []}
-      />
 
     </main>
   );
 }
-
-export default App;
