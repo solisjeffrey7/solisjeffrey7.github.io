@@ -1,0 +1,610 @@
+<!DOCTYPE html><html lang="en">  <head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Jeffrey Solis | Contact</title>  <meta name="description" content="Personal contact profile">  <link  
+    rel="stylesheet"  
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"  
+  >  <style>  * {  
+  box-sizing: border-box;  
+  margin: 0;  
+  padding: 0;  
+}  
+
+body {  
+  min-height: 100vh;  
+  font-family: Arial, Helvetica, sans-serif;  
+  background: #f2f3f5;  
+  color: #17191c;  
+  padding: 16px 10px;  
+}  
+
+.container {  
+  width: 100%;  
+  max-width: 390px;  
+  margin: auto;  
+}  
+
+/* =========================  
+   PROFILE CARD  
+========================= */  
+
+.profile-card {  
+  background: #fff;  
+  border-radius: 20px;  
+  padding: 25px 18px;  
+  box-shadow: 0 8px 30px rgba(0,0,0,.08);  
+}  
+
+/* =========================  
+   PROFILE  
+========================= */  
+
+.profile {  
+  text-align: center;  
+}  
+
+.profile-photo {  
+  width: 92px;  
+  height: 92px;  
+  border-radius: 50%;  
+  object-fit: cover;  
+  display: block;  
+  margin: 0 auto 11px;  
+  border: 2px solid #eee;  
+  background: #eee;  
+}  
+
+.name {  
+  font-size: 27px;  
+  font-weight: 700;  
+  line-height: 1.2;  
+}  
+
+.subtitle {  
+  margin-top: 4px;  
+  color: #777;  
+  font-size: 13px;  
+}  
+
+/* =========================  
+   SECTIONS  
+========================= */  
+
+.section {  
+  margin-top: 21px;  
+}  
+
+.section-title {  
+  font-size: 11px;  
+  font-weight: 700;  
+  color: #888;  
+  text-transform: uppercase;  
+  letter-spacing: 1.2px;  
+  margin-bottom: 9px;  
+}  
+
+/* =========================  
+   ADDRESS  
+========================= */  
+
+.address-box {  
+  display: flex;  
+  align-items: center;  
+  gap: 11px;  
+  background: #f7f7f8;  
+  border-radius: 12px;  
+  padding: 12px;  
+}  
+
+.address-icon {  
+  width: 38px;  
+  height: 38px;  
+  min-width: 38px;  
+  display: flex;  
+  align-items: center;  
+  justify-content: center;  
+  background: #e9eaec;  
+  border-radius: 50%;  
+  font-size: 16px;  
+}  
+
+.address-text {  
+  font-size: 14px;  
+  line-height: 1.45;  
+}  
+
+/* =========================  
+   CONTACT BUTTONS  
+========================= */  
+
+.icon-buttons {  
+  display: flex;  
+  gap: 9px;  
+  flex-wrap: wrap;  
+}  
+
+.icon-button {  
+  width: 45px;  
+  height: 45px;  
+  display: flex;  
+  align-items: center;  
+  justify-content: center;  
+  border-radius: 50%;  
+  color: #fff;  
+  text-decoration: none;  
+  font-size: 17px;  
+  transition: transform .15s, filter .15s;  
+}  
+
+.icon-button:active {  
+  transform: scale(.92);  
+}  
+
+.icon-button:hover {  
+  filter: brightness(1.08);  
+}  
+
+.call {  
+  background: #22a447;  
+}  
+
+.sms {  
+  background: #1976d2;  
+}  
+
+.messenger {  
+  background: #4267b2;  
+}  
+
+.facebook {  
+  background: #1877f2;  
+}  
+
+.email {  
+  background: #6b7280;  
+}  
+
+.maps {  
+  background: #d14b3f;  
+}  
+
+/* =========================  
+   OTHER PEOPLE  
+========================= */  
+
+.contact-list {  
+  display: flex;  
+  flex-direction: column;  
+  gap: 8px;  
+}  
+
+.contact {  
+  display: flex;  
+  align-items: center;  
+  justify-content: space-between;  
+  gap: 9px;  
+  background: #f7f7f8;  
+  border-radius: 12px;  
+  padding: 10px 11px;  
+}  
+
+.contact-info {  
+  display: flex;  
+  align-items: center;  
+  gap: 10px;  
+  min-width: 0;  
+}  
+
+.contact-avatar {  
+  width: 40px;  
+  height: 40px;  
+  min-width: 40px;  
+  display: flex;  
+  align-items: center;  
+  justify-content: center;  
+  background: #e9eaec;  
+  border-radius: 50%;  
+  font-size: 18px;  
+}  
+
+.contact-name {  
+  font-size: 14px;  
+  font-weight: 700;  
+  line-height: 1.2;  
+}  
+
+.contact-role {  
+  margin-top: 3px;  
+  color: #888;  
+  font-size: 11px;  
+}  
+
+.contact-icons {  
+  display: flex;  
+  gap: 6px;  
+}  
+
+.mini-icon {  
+  width: 34px;  
+  height: 34px;  
+  min-width: 34px;  
+  display: flex;  
+  align-items: center;  
+  justify-content: center;  
+  border-radius: 50%;  
+  color: #fff;  
+  text-decoration: none;  
+  font-size: 13px;  
+  transition: transform .15s, filter .15s;  
+}  
+
+.mini-icon:active {  
+  transform: scale(.92);  
+}  
+
+.mini-icon:hover {  
+  filter: brightness(1.08);  
+}  
+
+/* =========================  
+   MESSAGE  
+========================= */  
+
+.message {  
+  margin-top: 19px;  
+  padding-top: 15px;  
+  border-top: 1px solid #eee;  
+  text-align: center;  
+  color: #777;  
+  font-size: 11px;  
+  line-height: 1.55;  
+}  
+
+.footer {  
+  text-align: center;  
+  margin-top: 11px;  
+  color: #aaa;  
+  font-size: 10px;  
+}  
+
+/* =========================  
+   DARK MODE  
+========================= */  
+
+@media (prefers-color-scheme: dark) {  
+
+  body {  
+    background: #101214;  
+    color: #f1f1f1;  
+  }  
+
+  .profile-card {  
+    background: #191c20;  
+    box-shadow: 0 8px 30px rgba(0,0,0,.3);  
+  }  
+
+  .subtitle,  
+  .section-title,  
+  .contact-role,  
+  .message {  
+    color: #92979d;  
+  }  
+
+  .address-box,  
+  .contact {  
+    background: #22262b;  
+  }  
+
+  .address-icon,  
+  .contact-avatar {  
+    background: #2c3137;  
+  }  
+
+  .address-text,  
+  .contact-name {  
+    color: #f1f1f1;  
+  }  
+
+  .message {  
+    border-color: #30343a;  
+  }  
+
+  .footer {  
+    color: #62676d;  
+  }  
+
+  .profile-photo {  
+    border-color: #30343a;  
+  }  
+}  
+
+/* =========================  
+   SMALL PHONE  
+========================= */  
+
+@media (max-width: 360px) {  
+
+  body {  
+    padding: 8px;  
+  }  
+
+  .profile-card {  
+    padding: 21px 14px;  
+  }  
+
+  .profile-photo {  
+    width: 84px;  
+    height: 84px;  
+  }  
+
+  .name {  
+    font-size: 24px;  
+  }  
+
+  .icon-button {  
+    width: 42px;  
+    height: 42px;  
+    font-size: 16px;  
+  }  
+
+  .mini-icon {  
+    width: 31px;  
+    height: 31px;  
+    min-width: 31px;  
+    font-size: 12px;  
+  }  
+
+}
+
+</style></head><body>  <main class="container"><div class="profile-card">
+
+  <!-- PROFILE -->    <div class="profile">  <img  
+  class="profile-photo"  
+  src="profile.jpg"  
+  alt="Jeffrey Solis"  
+>  
+
+<h1 class="name">  
+  Jeffrey Solis  
+</h1>  
+
+<p class="subtitle">  
+  Contact Profile  
+</p>
+
+  </div>    <!-- ADDRESS -->    <section class="section">  <div class="section-title">  
+  Address  
+</div>  
+
+<div class="address-box">  
+
+  <div class="address-icon">  
+    <i class="fa-solid fa-location-dot"></i>  
+  </div>  
+
+  <div class="address-text">  
+    Jose Panganiban<br>  
+    Camarines Norte, Philippines  
+  </div>  
+
+</div>
+
+  </section>    <!-- CONTACT ME -->    <section class="section">  <div class="section-title">  
+  Contact Me  
+</div>  
+
+<div class="icon-buttons">  
+
+  <!-- CALL -->  
+
+  <a  
+    class="icon-button call"  
+    href="tel:+639XXXXXXXXX"  
+    aria-label="Call"  
+  >  
+    <i class="fa-solid fa-phone"></i>  
+  </a>  
+
+
+  <!-- SMS -->  
+
+  <a  
+    class="icon-button sms"  
+    href="sms:+639XXXXXXXXX?body=Hello%20Jeffrey"  
+    aria-label="SMS"  
+  >  
+    <i class="fa-solid fa-comment-sms"></i>  
+  </a>  
+
+
+  <!-- MESSENGER -->  
+
+  <a  
+    class="icon-button messenger"  
+    href="https://m.me/YOUR_FACEBOOK_USERNAME"  
+    target="_blank"  
+    rel="noopener"  
+    aria-label="Messenger"  
+  >  
+    <i class="fa-brands fa-facebook-messenger"></i>  
+  </a>  
+
+
+  <!-- FACEBOOK -->  
+
+  <a  
+    class="icon-button facebook"  
+    href="https://www.facebook.com/YOUR_FACEBOOK_USERNAME"  
+    target="_blank"  
+    rel="noopener"  
+    aria-label="Facebook"  
+  >  
+    <i class="fa-brands fa-facebook-f"></i>  
+  </a>  
+
+
+  <!-- EMAIL -->  
+
+  <a  
+    class="icon-button email"  
+    href="mailto:your@email.com"  
+    aria-label="Email"  
+  >  
+    <i class="fa-solid fa-envelope"></i>  
+  </a>  
+
+
+  <!-- GOOGLE MAPS -->  
+
+  <a  
+    class="icon-button maps"  
+    href="https://www.google.com/maps/search/?api=1&query=Jose+Panganiban+Camarines+Norte"  
+    target="_blank"  
+    rel="noopener"  
+    aria-label="Google Maps"  
+  >  
+    <i class="fa-solid fa-map-location-dot"></i>  
+  </a>  
+
+</div>
+
+  </section>    <!-- OTHER PEOPLE -->    <section class="section">  <div class="section-title">  
+  Other People to Contact  
+</div>  
+
+<div class="contact-list">  
+
+
+  <!-- ROVELYN -->  
+
+  <div class="contact">  
+
+    <div class="contact-info">  
+
+      <div class="contact-avatar">  
+        👩  
+      </div>  
+
+      <div>  
+
+        <div class="contact-name">  
+          Rovelyn Solis  
+        </div>  
+
+        <div class="contact-role">  
+          Wife  
+        </div>  
+
+      </div>  
+
+    </div>  
+
+    <div class="contact-icons">  
+
+      <!-- CALL -->  
+
+      <a  
+        class="mini-icon call"  
+        href="tel:+639XXXXXXXXX"  
+        aria-label="Call Rovelyn"  
+      >  
+        <i class="fa-solid fa-phone"></i>  
+      </a>  
+
+      <!-- SMS -->  
+
+      <a  
+        class="mini-icon sms"  
+        href="sms:+639XXXXXXXXX"  
+        aria-label="SMS Rovelyn"  
+      >  
+        <i class="fa-solid fa-comment-sms"></i>  
+      </a>  
+
+      <!-- MESSENGER -->  
+
+      <a  
+        class="mini-icon messenger"  
+        href="https://m.me/ROVELYN_FACEBOOK"  
+        target="_blank"  
+        rel="noopener"  
+        aria-label="Messenger Rovelyn"  
+      >  
+        <i class="fa-brands fa-facebook-messenger"></i>  
+      </a>  
+
+    </div>  
+
+  </div>  
+
+
+  <!-- JUAN -->  
+
+  <div class="contact">  
+
+    <div class="contact-info">  
+
+      <div class="contact-avatar">  
+        👨  
+      </div>  
+
+      <div>  
+
+        <div class="contact-name">  
+          Juan Solis  
+        </div>  
+
+        <div class="contact-role">  
+          Brother  
+        </div>  
+
+      </div>  
+
+    </div>  
+
+    <div class="contact-icons">  
+
+      <!-- CALL -->  
+
+      <a  
+        class="mini-icon call"  
+        href="tel:+639XXXXXXXXX"  
+        aria-label="Call Juan"  
+      >  
+        <i class="fa-solid fa-phone"></i>  
+      </a>  
+
+      <!-- SMS -->  
+
+      <a  
+        class="mini-icon sms"  
+        href="sms:+639XXXXXXXXX"  
+        aria-label="SMS Juan"  
+      >  
+        <i class="fa-solid fa-comment-sms"></i>  
+      </a>  
+
+      <!-- MESSENGER -->  
+
+      <a  
+        class="mini-icon messenger"  
+        href="https://m.me/JUAN_FACEBOOK"  
+        target="_blank"  
+        rel="noopener"  
+        aria-label="Messenger Juan"  
+      >  
+        <i class="fa-brands fa-facebook-messenger"></i>  
+      </a>  
+
+    </div>  
+
+  </div>  
+
+</div>
+
+  </section>    <!-- MESSAGE -->    <div class="message">  If you found something belonging to me,  
+please contact me or any of the people listed above.
+
+  </div>    <div class="footer">  
+    Personal Contact Profile  
+  </div>  </div>    </main></body>  
+</html>  Pag hiwalayin css
