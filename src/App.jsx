@@ -8,7 +8,6 @@ function parseProfileInfo(text) {
   const others = {};
 
   let current = null;
-  let currentType = null;
   let currentParent = null;
 
   const lines = text.split(/\r?\n/);
@@ -20,18 +19,20 @@ function parseProfileInfo(text) {
       continue;
     }
 
+    // Ignore id="..."
     if (/^id\s*=/i.test(line)) {
       continue;
     }
 
+    // [profile][other]
     const otherMatch = line.match(
       /^\[([^\]]+)\]\[other\]$/i
     );
 
     if (otherMatch) {
       current = {};
-      currentType = "other";
-      currentParent = otherMatch[1].trim().toLowerCase();
+      currentParent =
+        otherMatch[1].trim().toLowerCase();
 
       if (!others[currentParent]) {
         others[currentParent] = [];
@@ -41,21 +42,23 @@ function parseProfileInfo(text) {
       continue;
     }
 
+    // [profile]
     const profileMatch = line.match(
       /^\[([^\]]+)\]$/i
     );
 
     if (profileMatch) {
-      const key = profileMatch[1].trim().toLowerCase();
+      const key =
+        profileMatch[1].trim().toLowerCase();
 
       current = {};
-      currentType = "profile";
       currentParent = key;
 
       profiles[key] = current;
       continue;
     }
 
+    // key=value
     if (current) {
       const separator = line.indexOf("=");
 
@@ -80,7 +83,15 @@ function parseProfileInfo(text) {
   };
 }
 
-function ProfileImage({ photo, name, small = false }) {
+/* =========================
+   PROFILE IMAGE
+========================= */
+
+function ProfileImage({
+  photo,
+  name,
+  small = false
+}) {
   if (photo) {
     return (
       <img
@@ -150,26 +161,32 @@ function MainProfile({ profile }) {
         </div>
       )}
 
+      {/* =========================
+          MAIN CONTACT ROW
+      ========================= */}
+
       <div className="main-contacts">
 
-        {/* BIG CALL BUTTON */}
+        <div className="main-contact-row">
 
-        {profile.phone && (
-          <a
-            className="call-button"
-            href={`tel:${profile.phone}`}
-          >
-            <i className="fa-solid fa-phone"></i>
+          {/* CALL WITH TEXT */}
 
-            <span>
-              Call
-            </span>
-          </a>
-        )}
+          {profile.phone && (
+            <a
+              className="call-button"
+              href={`tel:${profile.phone}`}
+              title="Call"
+              aria-label="Call"
+            >
+              <i className="fa-solid fa-phone"></i>
 
-        {/* ICON ONLY CONTACT BUTTONS */}
+              <span>
+                Call
+              </span>
+            </a>
+          )}
 
-        <div className="icon-contacts">
+          {/* SMS */}
 
           {profile.sms && (
             <a
@@ -181,6 +198,8 @@ function MainProfile({ profile }) {
               <i className="fa-solid fa-comment-sms"></i>
             </a>
           )}
+
+          {/* MESSENGER */}
 
           {profile.messenger && (
             <a
@@ -195,6 +214,8 @@ function MainProfile({ profile }) {
             </a>
           )}
 
+          {/* FACEBOOK */}
+
           {profile.facebook && (
             <a
               className="main-icon-button"
@@ -208,6 +229,8 @@ function MainProfile({ profile }) {
             </a>
           )}
 
+          {/* EMAIL */}
+
           {profile.email && (
             <a
               className="main-icon-button"
@@ -218,6 +241,8 @@ function MainProfile({ profile }) {
               <i className="fa-solid fa-envelope"></i>
             </a>
           )}
+
+          {/* GOOGLE MAPS */}
 
           {profile.maps && (
             <a
@@ -241,7 +266,7 @@ function MainProfile({ profile }) {
 }
 
 /* =========================
-   OTHER PROFILE
+   OTHER CONTACT BUTTON
 ========================= */
 
 function OtherContactButton({
@@ -253,7 +278,8 @@ function OtherContactButton({
     return null;
   }
 
-  const external = href.startsWith("http");
+  const external =
+    href.startsWith("http");
 
   return (
     <a
@@ -276,6 +302,10 @@ function OtherContactButton({
     </a>
   );
 }
+
+/* =========================
+   OTHER PROFILE
+========================= */
 
 function OtherProfile({ person }) {
   return (
@@ -307,6 +337,8 @@ function OtherProfile({ person }) {
 
       <div className="other-actions">
 
+        {/* CALL */}
+
         {person.phone && (
           <OtherContactButton
             icon="fa-solid fa-phone"
@@ -314,6 +346,8 @@ function OtherProfile({ person }) {
             href={`tel:${person.phone}`}
           />
         )}
+
+        {/* SMS */}
 
         {person.sms && (
           <OtherContactButton
@@ -323,6 +357,8 @@ function OtherProfile({ person }) {
           />
         )}
 
+        {/* MESSENGER */}
+
         {person.messenger && (
           <OtherContactButton
             icon="fa-brands fa-facebook-messenger"
@@ -330,6 +366,8 @@ function OtherProfile({ person }) {
             href={person.messenger}
           />
         )}
+
+        {/* FACEBOOK */}
 
         {person.facebook && (
           <OtherContactButton
@@ -339,6 +377,8 @@ function OtherProfile({ person }) {
           />
         )}
 
+        {/* EMAIL */}
+
         {person.email && (
           <OtherContactButton
             icon="fa-solid fa-envelope"
@@ -346,6 +386,8 @@ function OtherProfile({ person }) {
             href={`mailto:${person.email}`}
           />
         )}
+
+        {/* MAPS */}
 
         {person.maps && (
           <OtherContactButton
@@ -366,16 +408,12 @@ function OtherProfile({ person }) {
 ========================= */
 
 export default function App() {
-
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
-
     fetch("/Profile.info")
-
       .then((response) => {
-
         if (!response.ok) {
           throw new Error(
             "Profile.info not found"
@@ -384,24 +422,19 @@ export default function App() {
 
         return response.text();
       })
-
       .then((text) => {
-
         const parsed =
           parseProfileInfo(text);
 
         setData(parsed);
       })
-
       .catch((err) => {
-
         console.error(err);
 
         setError(
           "Hindi ma-load ang Profile.info"
         );
       });
-
   }, []);
 
   /* LOADING */
@@ -432,7 +465,9 @@ export default function App() {
     );
   }
 
-  /* GET PROFILE FROM URL */
+  /* =========================
+     GET PROFILE FROM URL
+  ========================= */
 
   const params =
     new URLSearchParams(
@@ -472,7 +507,9 @@ export default function App() {
     );
   }
 
-  /* GET OTHER PEOPLE */
+  /* =========================
+     OTHER PEOPLE
+  ========================= */
 
   const profileOthers =
     data.others[
