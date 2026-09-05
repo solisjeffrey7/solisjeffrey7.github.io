@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Profile.info Generator</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#111}
+.wrap{max-width:720px;margin:auto;padding:20px 14px 40px}h1{margin:0 0 6px}.desc{color:#666;margin-top:0}
+.box{background:#fff;padding:16px;border-radius:14px;margin:14px 0;box-shadow:0 2px 10px #0001}
+h2{font-size:19px;margin:0 0 12px}label{display:block;font-weight:bold;font-size:14px;margin:10px 0 5px}
+input,textarea{width:100%;padding:11px;border:1px solid #ccd0d6;border-radius:9px;font:inherit}
+textarea{min-height:110px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.other{border:1px solid #ddd;padding:13px;border-radius:12px;margin-top:12px}
+button{border:0;border-radius:9px;padding:11px 14px;margin-top:10px;font-weight:bold;font-size:15px;cursor:pointer}
+.add,.secondary{background:#e5e7eb}.primary{background:#111;color:#fff;width:100%}.secondary{width:100%}
+.remove{background:#eee;color:#b00020}.github{background:#24292f;color:#fff;width:100%}
+.status{margin-top:12px;padding:11px;border-radius:9px;background:#f0f1f3;line-height:1.4}
+.hint{font-size:13px;color:#777;line-height:1.4;margin-top:7px}
+#output{min-height:320px;font-family:monospace}
+@media(max-width:520px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Profile.info Generator</h1>
+<p class="desc">Generate at direktang mag-save sa GitHub.</p>
+
+<div class="box">
+<h2>Main Profile</h2>
+<label>Profile ID / Name</label><input id="profile" placeholder="jeffrey">
+<label>Name</label><input id="name" placeholder="Jeffrey Solis">
+<label>Subtitle</label><input id="subtitle" placeholder="Contact Profile">
+<div class="row">
+<div><label>Photo</label><input id="photo" placeholder="profile.jpg"></div>
+<div><label>Address</label><input id="address" placeholder="Jose Panganiban"></div>
+</div>
+<label>City</label><input id="city" placeholder="Camarines Norte, Philippines">
+<div class="row">
+<div><label>Phone</label><input id="phone" placeholder="+639XXXXXXXXX"></div>
+<div><label>SMS</label><input id="sms" placeholder="+639XXXXXXXXX"></div>
+</div>
+<label>Messenger</label><input id="messenger" placeholder="https://m.me/username">
+<label>Facebook</label><input id="facebook" placeholder="https://www.facebook.com/username">
+<label>Email</label><input id="email" placeholder="your@email.com">
+<label>Google Maps</label><input id="maps" placeholder="https://www.google.com/maps/search/?api=1&query=...">
+<label>Message</label><textarea id="message" placeholder="PAUMANHIN AT PAKIUSAP"></textarea>
+<div class="hint">Space → &amp;nbsp; | &amp; → &amp;amp; | &lt; → &amp;lt; | &gt; → &amp;gt;</div>
+</div>
+
+<div class="box">
+<h2>Other People</h2>
+<div id="others"></div>
+<button class="add" onclick="addOther()">+ Add Other Person</button>
+</div>
+
+<div class="box">
+<h2>GitHub</h2>
+<label>GitHub Username</label>
+<input id="ghUser" value="solisjeffrey7">
+<label>Repository</label>
+<input id="ghRepo" value="solisjeffrey7.github.io">
+<label>Branch</label>
+<input id="ghBranch" value="main">
+<label>GitHub Personal Access Token</label>
+<input id="ghToken" type="password" placeholder="github_pat_...">
+<div class="hint">
+Token is used only by this page to call GitHub's API. Huwag ilagay ang token sa GitHub repository.
+</div>
+<button class="github" onclick="saveToGitHub()">Save Profile.info to GitHub</button>
+<div id="status" class="status">Ready.</div>
+</div>
+
+<div class="box">
+<button class="primary" onclick="generate()">Generate Profile.info</button>
+<button class="secondary" onclick="copyOutput()">Copy</button>
+<button class="secondary" onclick="downloadFile()">Download Profile.info</button>
+</div>
+
+<div class="box">
+<h2>Generated Profile.info</h2>
+<textarea id="output" readonly></textarea>
+</div>
+</div>
+
+<script>
+const fields=["name","subtitle","photo","address","city","phone","sms","messenger","facebook","email","maps"];
+
+function esc(v){
+ return v.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+ .replace(/"/g,"&quot;").replace(/'/g,"&#39;").replace(/ /g,"&nbsp;");
+}
+function clean(v){
+ return v.trim().toLowerCase().replace(/[^a-z0-9_-]/g,"");
+}
+function line(a,k,v,m=false){
+ if(v.trim()) a.push(k+"="+(m?v.split(/\\r?\\n/).map(esc).join("\\n"):esc(v)));
+}
+
+function addOther(){
+ const d=document.createElement("div");
+ d.className="other";
+ d.innerHTML=`
+ <b>Other Person</b>
+ <label>Name</label><input class="o-name" placeholder="Rovelyn Solis">
+ <label>Subtitle</label><input class="o-subtitle" placeholder="Wife">
+ <div class="row">
+   <div><label>Photo</label><input class="o-photo" placeholder="rovelyn.jpg"></div>
+   <div><label>Phone</label><input class="o-phone" placeholder="+639XXXXXXXXX"></div>
+ </div>
+ <label>SMS</label><input class="o-sms" placeholder="+639XXXXXXXXX">
+ <label>Messenger</label><input class="o-messenger" placeholder="https://m.me/username">
+ <label>Facebook</label><input class="o-facebook" placeholder="https://www.facebook.com/username">
+ <label>Email</label><input class="o-email" placeholder="your@email.com">
+ <label>Google Maps</label><input class="o-maps" placeholder="https://www.google.com/maps/search/?api=1&query=...">
+ <button class="remove" onclick="this.parentElement.remove()">Remove</button>`;
+ document.getElementById("others").appendChild(d);
+}
+
+function generate(){
+ const p=clean(document.getElementById("profile").value);
+ if(!p){
+   alert("Maglagay muna ng Profile ID / Name.");
+   return "";
+ }
+ const a=["["+p+"]"];
+ fields.forEach(k=>line(a,k,document.getElementById(k).value));
+ line(a,"message",document.getElementById("message").value,true);
+
+ document.querySelectorAll(".other").forEach(d=>{
+   a.push("", "["+p+"][other]");
+   const map={
+     name:".o-name",subtitle:".o-subtitle",photo:".o-photo",
+     phone:".o-phone",sms:".o-sms",messenger:".o-messenger",
+     facebook:".o-facebook",email:".o-email",maps:".o-maps"
+   };
+   Object.entries(map).forEach(([k,s])=>{
+     const el=d.querySelector(s);
+     if(el) line(a,k,el.value);
+   });
+ });
+
+ const result=a.join("\n");
+ document.getElementById("output").value=result;
+ return result;
+}
+
+async function copyOutput(){
+ const v=generate();
+ if(!v)return;
+ try{
+   await navigator.clipboard.writeText(v);
+   setStatus("Copied successfully.");
+ }catch(e){
+   const o=document.getElementById("output");
+   o.removeAttribute("readonly");o.select();
+   document.execCommand("copy");o.setAttribute("readonly","");
+   setStatus("Copied successfully.");
+ }
+}
+
+function downloadFile(){
+ const v=generate();
+ if(!v)return;
+ const u=URL.createObjectURL(new Blob([v],{type:"text/plain;charset=utf-8"}));
+ const a=document.createElement("a");
+ a.href=u;a.download="Profile.info";a.click();
+ URL.revokeObjectURL(u);
+}
+
+function setStatus(text){
+ document.getElementById("status").textContent=text;
+}
+
+function base64Encode(str){
+ const bytes=new TextEncoder().encode(str);
+ let binary="";
+ const chunk=0x8000;
+ for(let i=0;i<bytes.length;i+=chunk){
+   binary+=String.fromCharCode(...bytes.subarray(i,i+chunk));
+ }
+ return btoa(binary);
+}
+
+async function githubRequest(url, options={}){
+ const token=document.getElementById("ghToken").value.trim();
+ const headers={
+   "Accept":"application/vnd.github+json",
+   "X-GitHub-Api-Version":"2022-11-28",
+   ...(options.headers||{})
+ };
+ if(token) headers.Authorization="Bearer "+token;
+ return fetch(url,{...options,headers});
+}
+
+async function saveToGitHub(){
+ const content=generate();
+ if(!content)return;
+
+ const user=document.getElementById("ghUser").value.trim();
+ const repo=document.getElementById("ghRepo").value.trim();
+ const branch=document.getElementById("ghBranch").value.trim()||"main";
+ const token=document.getElementById("ghToken").value.trim();
+
+ if(!user||!repo||!token){
+   setStatus("Kailangan ang GitHub username, repository at Personal Access Token.");
+   return;
+ }
+
+ setStatus("Saving to GitHub...");
+
+ const api=`https://api.github.com/repos/${encodeURIComponent(user)}/${encodeURIComponent(repo)}/contents/Profile.info`;
+
+ try{
+   let sha=null;
+
+   const get=await githubRequest(api+"?ref="+encodeURIComponent(branch));
+   if(get.ok){
+     const old=await get.json();
+     sha=old.sha;
+   }else if(get.status!==404){
+     const err=await get.json().catch(()=>({}));
+     throw new Error(err.message||("GitHub GET error "+get.status));
+   }
+
+   const body={
+     message:"Update Profile.info",
+     content:base64Encode(content),
+     branch:branch
+   };
+   if(sha) body.sha=sha;
+
+   const put=await githubRequest(api,{
+     method:"PUT",
+     headers:{"Content-Type":"application/json"},
+     body:JSON.stringify(body)
+   });
+
+   const result=await put.json();
+
+   if(!put.ok){
+     throw new Error(result.message||("GitHub error "+put.status));
+   }
+
+   setStatus("✅ Profile.info successfully saved to GitHub. GitHub Pages will update automatically.");
+ }catch(err){
+   console.error(err);
+   setStatus("❌ Error: "+err.message);
+ }
+}
+</script>
+</body>
+</html>
