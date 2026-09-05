@@ -1,704 +1,526 @@
+/* =========================================================
+   GLOBAL
+========================================================= */
+
 * {
   box-sizing: border-box;
 }
 
-html,
-body,
-#root {
+html {
   margin: 0;
   padding: 0;
-
-  width: 100%;
-  min-height: 100%;
 }
 
 body {
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-  -webkit-font-smoothing: antialiased;
-
-  text-rendering: optimizeLegibility;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f5f5;
+  color: #111;
 }
 
+button,
 a {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* =========================
-   PAGE
-========================= */
+
+/* =========================================================
+   PROFILE PAGE
+========================================================= */
 
 .profile-page {
-  min-height: 100vh;
-
   width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px 16px 30px;
+}
 
-  padding:
-    35px
-    18px
-    60px;
 
+/* =========================================================
+   MAIN PROFILE
+========================================================= */
+
+.main-profile {
   text-align: center;
 }
 
-/* =========================
-   MAIN PROFILE
-========================= */
-
-.main-profile {
-  width: 100%;
-
-  max-width: 500px;
-
-  margin: 0 auto;
-}
-
 .profile-photo {
-  width: 180px;
-  height: 180px;
-
-  object-fit: cover;
-
-  border-radius: 50%;
-
-  margin-bottom: 20px;
-
-  display: inline-flex;
-
-  align-items: center;
-  justify-content: center;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: none;
+  display: block;
+  margin: 0 auto 18px;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 16px;
 }
 
 .default-profile {
-  background: #d9dce1;
-
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ddd;
   color: #777;
-
-  font-size: 75px;
+  font-size: 70px;
 }
+
+
+/* =========================================================
+   NAME / SUBTITLE / LOCATION
+========================================================= */
 
 .profile-page h1 {
   margin: 0;
-
-  font-size: 40px;
-
-  line-height: 1.2;
-
+  font-size: 32px;
+  line-height: 1.15;
   font-weight: 700;
-
-  word-break: normal;
 }
 
 .subtitle {
-  margin-top: 8px;
-
-  font-size: 22px;
-
-  font-weight: 500;
-}
-
-.location {
-  margin-top: 18px;
-
-  margin-bottom: 28px;
-
+  margin-top: 7px;
   font-size: 19px;
-
-  line-height: 1.6;
-}
-
-.location i {
-  margin-right: 4px;
-}
-
-/* =========================
-   MAIN CONTACTS
-========================= */
-
-.main-contacts {
-  width: 100%;
-
-  margin-top: 10px;
-
-  overflow: hidden;
-}
-
-.main-contact-row {
-  width: 100%;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: clamp(4px, 2vw, 10px);
-
-  flex-wrap: nowrap;
-}
-
-/* =========================
-   CALL
-========================= */
-
-.call-button {
-  min-width: 48px;
-
-  height: 48px;
-
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 8px;
-
-  padding:
-    0
-    17px;
-
-  border-radius: 13px;
-
-  text-decoration: none;
-
-  font-size: 18px;
-
-  font-weight: 700;
-
-  flex: 0 1 auto;
-
-  transition:
-    transform 0.15s ease,
-    opacity 0.15s ease;
-}
-
-.call-button i {
-  font-size: 19px;
-
-  flex-shrink: 0;
-}
-
-.call-label {
-  white-space: nowrap;
-
-  overflow: hidden;
-
-  transition:
-    opacity 0.15s ease;
-}
-
-.call-button:active {
-  transform: scale(0.94);
-
+  line-height: 1.4;
   opacity: 0.75;
 }
 
-/* =========================
-   MAIN ICON BUTTONS
-========================= */
+.location {
+  margin-top: 10px;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   MAIN CONTACTS
+========================================================= */
+
+.main-contacts {
+  margin-top: 22px;
+}
+
+.main-contact-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.call-button,
+.main-icon-button {
+  min-height: 52px;
+  border: none;
+  border-radius: 14px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.call-button:active,
+.main-icon-button:active,
+.other-contact-button:active {
+  transform: scale(0.94);
+}
+
+.call-button {
+  padding: 0 20px;
+  gap: 9px;
+  font-size: 18px;
+  font-weight: 700;
+  background: #111;
+  color: #fff;
+}
+
+.call-label {
+  display: inline;
+}
 
 .main-icon-button {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  font-size: 21px;
+  background: #e9e9e9;
+  color: #111;
+}
 
-  display: inline-flex;
 
+/* =========================================================
+   OTHER PEOPLE
+========================================================= */
+
+.other-section {
+  margin-top: 32px;
+}
+
+.other-section h2 {
+  margin: 0 0 14px;
+  font-size: 22px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.other-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.other-profile {
+  width: 100%;
+  display: flex;
   align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  background: #fff;
+}
 
-  justify-content: center;
+.other-info {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
+.other-photo {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
   border-radius: 50%;
-
-  text-decoration: none;
-
-  font-size: 20px;
-
-  flex: 0 1 auto;
-
-  flex-shrink: 1;
-
-  transition:
-    transform 0.15s ease,
-    opacity 0.15s ease;
+  object-fit: cover;
+  object-position: center;
 }
 
-.main-icon-button:active {
-  transform: scale(0.9);
+.default-other-profile {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  border-radius: 50%;
+  background: #ddd;
+  color: #777;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
 
+.other-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.other-name {
+  font-size: 18px;
+  line-height: 1.25;
+  font-weight: 700;
+  word-break: break-word;
+}
+
+.other-subtitle {
+  margin-top: 3px;
+  font-size: 15px;
+  line-height: 1.3;
   opacity: 0.7;
+  word-break: break-word;
 }
 
-/* =========================
-   AUTO FIT
-========================= */
+.other-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
 
-/*
-   Kapag maliit ang screen,
-   lahat ng buttons ay automatic
-   liliit para manatili sa isang row.
-*/
+.other-contact-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: #e9e9e9;
+  color: #111;
+  font-size: 17px;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.lost-message {
+  margin-top: 22px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #fff;
+  text-align: left;
+}
+
+.lost-message-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.lost-message-title i {
+  margin-right: 7px;
+}
+
+.lost-message-text {
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   LOADING / ERROR
+========================================================= */
+
+.loading,
+.error {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media (max-width: 430px) {
+
+  .profile-page {
+    padding: 18px 12px 28px;
+  }
+
+  .profile-page h1 {
+    font-size: 30px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+  }
+
+  .location {
+    font-size: 16px;
+  }
+
+  .main-contact-row {
+    gap: 8px;
+  }
+
+  .call-button {
+    min-height: 50px;
+    padding: 0 17px;
+  }
+
+  .main-icon-button {
+    width: 50px;
+    height: 50px;
+  }
+
+  .other-profile {
+    padding: 10px;
+  }
+
+  .other-photo,
+  .default-other-profile {
+    width: 54px;
+    height: 54px;
+    flex-basis: 54px;
+  }
+
+  .other-name {
+    font-size: 17px;
+  }
+
+  .other-subtitle {
+    font-size: 14px;
+  }
+
+  .other-contact-button {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 365px) {
+
+  .profile-page {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .profile-page h1 {
+    font-size: 27px;
+  }
+
+  .call-button {
+    padding: 0 14px;
+    font-size: 17px;
+  }
+
+  .main-icon-button {
+    width: 46px;
+    height: 46px;
+  }
+
+  .other-actions {
+    gap: 4px;
+  }
+
+  .other-contact-button {
+    width: 35px;
+    height: 35px;
+    font-size: 15px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 320px) {
+
+  .profile-page h1 {
+    font-size: 25px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .location {
+    font-size: 15px;
+  }
 
   .main-contact-row {
     gap: 5px;
   }
 
   .call-button {
-    height: 44px;
-
-    min-width: 44px;
-
-    padding:
-      0
-      13px;
-
-    font-size: 17px;
-  }
-
-  .call-button i {
-    font-size: 18px;
+    padding: 0 11px;
+    font-size: 16px;
   }
 
   .main-icon-button {
     width: 43px;
     height: 43px;
-
-    font-size: 18px;
-  }
-}
-
-/*
-   Very small phones.
-   Call text automatically disappears.
-*/
-
-@media (max-width: 365px) {
-
-  .main-contact-row {
-    gap: 4px;
   }
 
-  .call-button {
-    width: 40px;
-    min-width: 40px;
-
-    height: 40px;
-
-    padding: 0;
+  .other-info {
+    gap: 8px;
   }
 
-  .call-label {
-    display: none;
+  .other-photo,
+  .default-other-profile {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
   }
 
-  .call-button i {
-    font-size: 17px;
-  }
-
-  .main-icon-button {
-    width: 40px;
-    height: 40px;
-
+  .other-name {
     font-size: 16px;
   }
-}
 
-/*
-   Extra small devices.
-*/
-
-@media (max-width: 320px) {
-
-  .main-contact-row {
-    gap: 3px;
+  .other-subtitle {
+    font-size: 13px;
   }
 
-  .call-button {
-    width: 37px;
-    min-width: 37px;
-
-    height: 37px;
-  }
-
-  .main-icon-button {
-    width: 37px;
-    height: 37px;
-
-    font-size: 15px;
+  .other-contact-button {
+    width: 33px;
+    height: 33px;
   }
 }
 
-/* =========================
-   OTHER PEOPLE
-========================= */
 
-.other-section {
-  width: 100%;
-
-  max-width: 500px;
-
-  margin:
-    50px
-    auto
-    0;
-
-  text-align: left;
-}
-
-.other-section h2 {
-  margin:
-    0
-    0
-    18px;
-
-  font-size: 23px;
-
-  line-height: 1.3;
-
-  text-align: center;
-}
-
-.other-list {
-  width: 100%;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 12px;
-}
-
-.other-profile {
-  width: 100%;
-
-  padding:
-    18px
-    15px;
-
-  border-radius: 14px;
-
-  text-align: center;
-}
-
-.other-info {
-  width: 100%;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 8px;
-}
-
-.other-photo {
-  width: 68px;
-  height: 68px;
-
-  flex-shrink: 0;
-
-  object-fit: cover;
-
-  border-radius: 50%;
-
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-}
-
-.default-other-profile {
-  background: #d9dce1;
-
-  color: #777;
-
-  font-size: 30px;
-}
-
-.other-text {
-  width: 100%;
-
-  min-width: 0;
-
-  text-align: center;
-}
-
-.other-name {
-  width: 100%;
-
-  margin: 0;
-
-  font-size: 19px;
-
-  line-height: 1.3;
-
-  font-weight: 700;
-
-  white-space: normal;
-
-  overflow: visible;
-
-  text-overflow: unset;
-
-  word-break: normal;
-
-  overflow-wrap: anywhere;
-}
-
-.other-subtitle {
-  margin-top: 4px;
-
-  font-size: 15px;
-
-  line-height: 1.4;
-
-  white-space: normal;
-
-  overflow: visible;
-}
-
-.other-actions {
-  width: 100%;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  flex-wrap: wrap;
-
-  gap: 9px;
-
-  margin-top: 13px;
-}
-
-.other-contact-button {
-  width: 40px;
-  height: 40px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  flex-shrink: 0;
-
-  border-radius: 50%;
-
-  text-decoration: none;
-
-  font-size: 18px;
-
-  transition:
-    transform 0.15s ease,
-    opacity 0.15s ease;
-}
-
-.other-contact-button:active {
-  transform: scale(0.9);
-
-  opacity: 0.7;
-}
-
-/* =========================
-   LOADING
-========================= */
-
-.loading {
-  min-height: 100vh;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 20px;
-
-  font-size: 22px;
-}
-
-/* =========================
-   ERROR
-========================= */
-
-.error {
-  min-height: 100vh;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 20px;
-
-  text-align: center;
-}
-
-.error h1 {
-  margin-bottom: 8px;
-
-  font-size: 32px;
-}
-
-.error p {
-  font-size: 18px;
-}
-
-/* =========================
+/* =========================================================
    DARK MODE
-========================= */
+========================================================= */
 
 @media (prefers-color-scheme: dark) {
 
-  .profile-page {
-    background: #111318;
-
-    color: #ffffff;
-  }
-
-  .subtitle,
-  .location {
-    color: #c8cbd1;
+  body {
+    background: #111;
+    color: #f5f5f5;
   }
 
   .call-button {
-    background: #1d2027;
-
-    color: #ffffff;
+    background: #fff;
+    color: #111;
   }
 
-  .call-button:hover {
-    background: #272b34;
-  }
-
-  .main-icon-button {
-    background: #292d36;
-
-    color: #ffffff;
-  }
-
-  .main-icon-button:hover {
-    background: #343944;
-  }
-
-  .other-section h2 {
-    color: #ffffff;
-  }
-
-  .other-profile {
-    background: #1d2027;
-  }
-
-  .other-subtitle {
-    color: #bfc3ca;
-  }
-
+  .main-icon-button,
   .other-contact-button {
-    background: #292d36;
-
-    color: #ffffff;
+    background: #242424;
+    color: #fff;
   }
 
-  .other-contact-button:hover {
-    background: #343944;
+  .other-profile,
+  .lost-message {
+    background: #1c1c1c;
   }
 
   .default-profile,
   .default-other-profile {
-    background: #2b2e35;
-
-    color: #9da2aa;
-  }
-
-  .loading,
-  .error {
-    background: #111318;
-
-    color: #ffffff;
+    background: #292929;
+    color: #aaa;
   }
 }
 
-/* =========================
+
+/* =========================================================
    LIGHT MODE
-========================= */
+========================================================= */
 
 @media (prefers-color-scheme: light) {
 
-  .profile-page {
-    background: #ffffff;
-
-    color: #111111;
-  }
-
-  .subtitle,
-  .location {
-    color: #555555;
+  body {
+    background: #f5f5f5;
+    color: #111;
   }
 
   .call-button {
-    background: #f1f2f4;
-
-    color: #111111;
+    background: #111;
+    color: #fff;
   }
 
-  .call-button:hover {
-    background: #e5e7eb;
-  }
-
-  .main-icon-button {
-    background: #e1e3e7;
-
-    color: #111111;
-  }
-
-  .main-icon-button:hover {
-    background: #d5d7db;
-  }
-
-  .other-profile {
-    background: #f1f2f4;
-  }
-
-  .other-subtitle {
-    color: #666666;
-  }
-
+  .main-icon-button,
   .other-contact-button {
-    background: #e1e3e7;
-
-    color: #111111;
+    background: #e9e9e9;
+    color: #111;
   }
 
-  .other-contact-button:hover {
-    background: #d5d7db;
+  .other-profile,
+  .lost-message {
+    background: #fff;
   }
 
   .default-profile,
   .default-other-profile {
-    background: #d9dce1;
-
-    color: #777777;
-  }
-
-  .loading,
-  .error {
-    background: #ffffff;
-
-    color: #111111;
+    background: #ddd;
+    color: #777;
   }
 }
