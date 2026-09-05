@@ -20,53 +20,42 @@ function parseProfileInfo(text) {
       continue;
     }
 
-    // Ignore global id line
     if (/^id\s*=/i.test(line)) {
       continue;
     }
 
-    // [profile][other]
     const otherMatch = line.match(
       /^\[([^\]]+)\]\[other\]$/i
     );
 
     if (otherMatch) {
       current = {};
-
       currentType = "other";
-      currentParent = otherMatch[1]
-        .trim()
-        .toLowerCase();
+      currentParent = otherMatch[1].trim().toLowerCase();
 
       if (!others[currentParent]) {
         others[currentParent] = [];
       }
 
       others[currentParent].push(current);
-
       continue;
     }
 
-    // [profile]
     const profileMatch = line.match(
       /^\[([^\]]+)\]$/i
     );
 
     if (profileMatch) {
-      const key = profileMatch[1]
-        .trim()
-        .toLowerCase();
+      const key = profileMatch[1].trim().toLowerCase();
 
       current = {};
       currentType = "profile";
       currentParent = key;
 
       profiles[key] = current;
-
       continue;
     }
 
-    // key=value
     if (current) {
       const separator = line.indexOf("=");
 
@@ -91,86 +80,7 @@ function parseProfileInfo(text) {
   };
 }
 
-
-// ==============================
-// MAIN CONTACT BUTTON
-// ==============================
-
-function ContactButton({
-  icon,
-  label,
-  href
-}) {
-  if (!href) {
-    return null;
-  }
-
-  const external = href.startsWith("http");
-
-  return (
-    <a
-      className="contact-button"
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={
-        external
-          ? "noopener noreferrer"
-          : undefined
-      }
-    >
-      <i className={icon}></i>
-
-      <span>
-        {label}
-      </span>
-    </a>
-  );
-}
-
-
-// ==============================
-// OTHER CONTACT ICON
-// ==============================
-
-function OtherContactButton({
-  icon,
-  href,
-  title
-}) {
-  if (!href) {
-    return null;
-  }
-
-  const external = href.startsWith("http");
-
-  return (
-    <a
-      className="other-contact-button"
-      href={href}
-      title={title}
-      aria-label={title}
-      target={external ? "_blank" : undefined}
-      rel={
-        external
-          ? "noopener noreferrer"
-          : undefined
-      }
-    >
-      <i className={icon}></i>
-    </a>
-  );
-}
-
-
-// ==============================
-// DEFAULT / REAL PHOTO
-// ==============================
-
-function ProfileImage({
-  photo,
-  name,
-  small = false
-}) {
+function ProfileImage({ photo, name, small = false }) {
   if (photo) {
     return (
       <img
@@ -198,10 +108,9 @@ function ProfileImage({
   );
 }
 
-
-// ==============================
-// MAIN PROFILE
-// ==============================
+/* =========================
+   MAIN PROFILE
+========================= */
 
 function MainProfile({ profile }) {
   return (
@@ -222,8 +131,7 @@ function MainProfile({ profile }) {
         </div>
       )}
 
-      {(profile.address ||
-        profile.city) && (
+      {(profile.address || profile.city) && (
         <div className="location">
 
           {profile.address && (
@@ -242,55 +150,89 @@ function MainProfile({ profile }) {
         </div>
       )}
 
-      <div className="contacts">
+      <div className="main-contacts">
+
+        {/* BIG CALL BUTTON */}
 
         {profile.phone && (
-          <ContactButton
-            icon="fa-solid fa-phone"
-            label="Call"
+          <a
+            className="call-button"
             href={`tel:${profile.phone}`}
-          />
+          >
+            <i className="fa-solid fa-phone"></i>
+
+            <span>
+              Call
+            </span>
+          </a>
         )}
 
-        {profile.sms && (
-          <ContactButton
-            icon="fa-solid fa-comment-sms"
-            label="SMS"
-            href={`sms:${profile.sms}`}
-          />
-        )}
+        {/* ICON ONLY CONTACT BUTTONS */}
 
-        {profile.messenger && (
-          <ContactButton
-            icon="fa-brands fa-facebook-messenger"
-            label="Messenger"
-            href={profile.messenger}
-          />
-        )}
+        <div className="icon-contacts">
 
-        {profile.facebook && (
-          <ContactButton
-            icon="fa-brands fa-facebook"
-            label="Facebook"
-            href={profile.facebook}
-          />
-        )}
+          {profile.sms && (
+            <a
+              className="main-icon-button"
+              href={`sms:${profile.sms}`}
+              title="SMS"
+              aria-label="SMS"
+            >
+              <i className="fa-solid fa-comment-sms"></i>
+            </a>
+          )}
 
-        {profile.email && (
-          <ContactButton
-            icon="fa-solid fa-envelope"
-            label="Email"
-            href={`mailto:${profile.email}`}
-          />
-        )}
+          {profile.messenger && (
+            <a
+              className="main-icon-button"
+              href={profile.messenger}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Messenger"
+              aria-label="Messenger"
+            >
+              <i className="fa-brands fa-facebook-messenger"></i>
+            </a>
+          )}
 
-        {profile.maps && (
-          <ContactButton
-            icon="fa-solid fa-map-location-dot"
-            label="Google Maps"
-            href={profile.maps}
-          />
-        )}
+          {profile.facebook && (
+            <a
+              className="main-icon-button"
+              href={profile.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Facebook"
+              aria-label="Facebook"
+            >
+              <i className="fa-brands fa-facebook"></i>
+            </a>
+          )}
+
+          {profile.email && (
+            <a
+              className="main-icon-button"
+              href={`mailto:${profile.email}`}
+              title="Email"
+              aria-label="Email"
+            >
+              <i className="fa-solid fa-envelope"></i>
+            </a>
+          )}
+
+          {profile.maps && (
+            <a
+              className="main-icon-button"
+              href={profile.maps}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Google Maps"
+              aria-label="Google Maps"
+            >
+              <i className="fa-solid fa-map-location-dot"></i>
+            </a>
+          )}
+
+        </div>
 
       </div>
 
@@ -298,10 +240,42 @@ function MainProfile({ profile }) {
   );
 }
 
+/* =========================
+   OTHER PROFILE
+========================= */
 
-// ==============================
-// OTHER PROFILE
-// ==============================
+function OtherContactButton({
+  icon,
+  href,
+  title
+}) {
+  if (!href) {
+    return null;
+  }
+
+  const external = href.startsWith("http");
+
+  return (
+    <a
+      className="other-contact-button"
+      href={href}
+      title={title}
+      aria-label={title}
+      target={
+        external
+          ? "_blank"
+          : undefined
+      }
+      rel={
+        external
+          ? "noopener noreferrer"
+          : undefined
+      }
+    >
+      <i className={icon}></i>
+    </a>
+  );
+}
 
 function OtherProfile({ person }) {
   return (
@@ -387,18 +361,14 @@ function OtherProfile({ person }) {
   );
 }
 
-
-// ==============================
-// APP
-// ==============================
+/* =========================
+   APP
+========================= */
 
 export default function App() {
 
-  const [data, setData] =
-    useState(null);
-
-  const [error, setError] =
-    useState("");
+  const [data, setData] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
 
@@ -434,13 +404,9 @@ export default function App() {
 
   }, []);
 
-
-  // ============================
-  // LOADING
-  // ============================
+  /* LOADING */
 
   if (!data && !error) {
-
     return (
       <div className="loading">
         Loading...
@@ -448,13 +414,9 @@ export default function App() {
     );
   }
 
-
-  // ============================
-  // ERROR
-  // ============================
+  /* ERROR */
 
   if (error) {
-
     return (
       <div className="error">
 
@@ -470,10 +432,7 @@ export default function App() {
     );
   }
 
-
-  // ============================
-  // GET ?profile=
-  // ============================
+  /* GET PROFILE FROM URL */
 
   const params =
     new URLSearchParams(
@@ -487,19 +446,14 @@ export default function App() {
       .toLowerCase() ||
     "jeffrey";
 
-
-  // ============================
-  // FIND PROFILE
-  // ============================
-
   const profile =
     data.profiles[
       requestedProfile
     ];
 
+  /* PROFILE NOT FOUND */
 
   if (!profile) {
-
     return (
       <div className="error">
 
@@ -518,20 +472,12 @@ export default function App() {
     );
   }
 
-
-  // ============================
-  // FIND OTHER PEOPLE
-  // ============================
+  /* GET OTHER PEOPLE */
 
   const profileOthers =
     data.others[
       requestedProfile
     ] || [];
-
-
-  // ============================
-  // DISPLAY
-  // ============================
 
   return (
     <main className="profile-page">
@@ -541,7 +487,6 @@ export default function App() {
       />
 
       {profileOthers.length > 0 && (
-
         <section className="other-section">
 
           <h2>
@@ -552,21 +497,16 @@ export default function App() {
 
             {profileOthers.map(
               (person, index) => (
-
                 <OtherProfile
-                  key={
-                    `${requestedProfile}-${index}`
-                  }
+                  key={`${requestedProfile}-${index}`}
                   person={person}
                 />
-
               )
             )}
 
           </div>
 
         </section>
-
       )}
 
     </main>
