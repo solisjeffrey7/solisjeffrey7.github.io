@@ -1,243 +1,274 @@
 import { useEffect, useState } from "react";
 
+/* =========================================================
+   HTML ENTITY DECODER
+   Supports:
+   &nbsp;
+   &amp;
+   &lt;
+   &gt;
+   &quot;
+   &#39;
+   and other HTML entities
+========================================================= */
+
+function decodeHtml(value = "") {
+  const textarea = document.createElement("textarea");
+  textarea.innerHTML = value;
+  return textarea.value;
+}
+
+
+/* =========================================================
+   PROFILE.INFO PARSER
+========================================================= */
+
 function parseProfileInfo(text) {
   const profiles = {};
-  let currentSection = null;
+
+  let currentProfile = null;
+  let currentPerson = null;
+  let currentKey = null;
 
   const lines = text.split(/\r?\n/);
 
   for (const rawLine of lines) {
-    const line = rawLine.trim();
+    const line = rawLine.trimEnd();
 
-    if (!line || line.startsWith("#") || line.startsWith(";")) {
-      continue;
-    }
+    /* ---------------------------------------------
+       Section:
+       [jeffrey]
+       [jeffrey][other]
+    --------------------------------------------- */
 
-    const sectionMatch = line.match(
+    const section = line.match(
       /^\[([^\]]+)\](?:\[([^\]]+)\])?$/
     );
 
-    if (sectionMatch) {
-      const profileName = sectionMatch[1].trim().toLowerCase();
-      const subSection = sectionMatch[2]?.trim().toLowerCase();
+    if (section) {
+      const profileId = section[1]
+        .trim()
+        .toLowerCase();
 
-      if (!profiles[profileName]) {
-        profiles[profileName] = {
+      const sectionType = section[2]
+        ?.trim()
+        .toLowerCase();
+
+      if (!profiles[profileId]) {
+        profiles[profileId] = {
           main: {},
-          others: [],
+          others: []
         };
       }
 
-      if (subSection === "other") {
-        currentSection = {
-          type: "other",
-          profile: profileName,
-          data: {},
-        };
-
-        profiles[profileName].others.push(
-          currentSection.data
-        );
+      if (sectionType === "other") {
+        currentPerson = {};
+        profiles[profileId].others.push(currentPerson);
       } else {
-        currentSection = {
-          type: "main",
-          profile: profileName,
-          data: profiles[profileName].main,
-        };
+        currentPerson = profiles[profileId].main;
       }
 
+      currentProfile = profileId;
+      currentKey = null;
+
       continue;
     }
 
-    const separator = line.indexOf("=");
+    /* Ignore anything before a section */
 
-    if (separator === -1 || !currentSection) {
+    if (!currentPerson || !currentProfile) {
       continue;
     }
 
-    const key = line
-      .slice(0, separator)
-      .trim()
-      .toLowerCase();
+    /* ---------------------------------------------
+       key=value
+    --------------------------------------------- */
 
-    const value = line
-      .slice(separator + 1)
-      .trim();
+    const equalIndex = line.indexOf("=");
 
-    currentSection.data[key] = value;
+    if (equalIndex !== -1) {
+      currentKey = line
+        .slice(0, equalIndex)
+        .trim()
+        .toLowerCase();
+
+      currentPerson[currentKey] =
+        line.slice(equalIndex + 1);
+
+      continue;
+    }
+
+    /* ---------------------------------------------
+       Multiline message
+    --------------------------------------------- */
+
+    if (
+      currentKey === "message" &&
+      line.trim()
+    ) {
+      currentPerson.message =
+        (currentPerson.message || "") +
+        "\n" +
+        line;
+    }
   }
+
+  /* ---------------------------------------------
+     Decode HTML entities
+  --------------------------------------------- */
+
+  Object.values(profiles).forEach(profile => {
+    const people = [
+      profile.main,
+      ...profile.others
+    ];
+
+    people.forEach(person => {
+      Object.keys(person).forEach(key => {
+        person[key] = decodeHtml(person[key]);
+      });
+    });
+  });
 
   return profiles;
 }
 
-function getProfileName() {
-  const params = new URLSearchParams(
-    window.location.search
-  );
 
-  return (
-    params.get("profile")?.trim() || "jeffrey"
-  );
-}
-
-function getPhoto(photo) {
-  if (!photo) {
-    return null;
-  }
-
-  if (
-    photo.startsWith("http://") ||
-    photo.startsWith("https://") ||
-    photo.startsWith("/")
-  ) {
-    return photo;
-  }
-
-  return `/${photo}`;
-}
+/* =========================================================
+   CONTACT BUTTON
+========================================================= */
 
 function ContactButton({
   href,
   icon,
   label,
-  main = false,
+  external = false
 }) {
-  if (!href) {
-    return null;
-  }
+  if (!href) return null;
 
   return (
     <a
-      className={
-        main
-          ? "main-icon-button"
-          : "other-contact-button"
-      }
+      className="contact-button"
       href={href}
-      target={
-        href.startsWith("http")
-          ? "_blank"
-          : undefined
-      }
-      rel={
-        href.startsWith("http")
-          ? "noopener noreferrer"
-          : undefined
-      }
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
       aria-label={label}
       title={label}
     >
       <i className={icon}></i>
+
+      <span className="contact-label">
+        {label}
+      </span>
     </a>
   );
 }
 
-function MainContacts({ profile }) {
+
+/* =========================================================
+   MAIN CONTACT ACTIONS
+========================================================= */
+
+function ContactActions({ profile }) {
   return (
-    <section className="main-contacts">
-      <div className="main-contact-row">
+    <div className="contact-actions">
 
-        {/* CALL */}
-        {profile.phone && (
-          <a
-            className="call-button"
-            href={`tel:${profile.phone}`}
-            aria-label="Call"
-            title="Call"
-          >
-            <i className="fa-solid fa-phone"></i>
+      {profile.phone && (
+        <ContactButton
+          href={`tel:${profile.phone}`}
+          icon="fa-solid fa-phone"
+          label="Call"
+        />
+      )}
 
-            <span className="call-label">
-              Call
-            </span>
-          </a>
-        )}
+      {profile.sms && (
+        <ContactButton
+          href={`sms:${profile.sms}`}
+          icon="fa-solid fa-comment-sms"
+          label="SMS"
+        />
+      )}
 
-        {/* SMS */}
-        {profile.sms && (
-          <ContactButton
-            href={`sms:${profile.sms}`}
-            icon="fa-solid fa-comment-sms"
-            label="SMS"
-            main
-          />
-        )}
+      {profile.messenger && (
+        <ContactButton
+          href={profile.messenger}
+          icon="fa-brands fa-facebook-messenger"
+          label="Messenger"
+          external
+        />
+      )}
 
-        {/* MESSENGER */}
-        {profile.messenger && (
-          <ContactButton
-            href={profile.messenger}
-            icon="fa-brands fa-facebook-messenger"
-            label="Messenger"
-            main
-          />
-        )}
+      {profile.facebook && (
+        <ContactButton
+          href={profile.facebook}
+          icon="fa-brands fa-facebook"
+          label="Facebook"
+          external
+        />
+      )}
 
-        {/* FACEBOOK */}
-        {profile.facebook && (
-          <ContactButton
-            href={profile.facebook}
-            icon="fa-brands fa-facebook"
-            label="Facebook"
-            main
-          />
-        )}
+      {profile.email && (
+        <ContactButton
+          href={`mailto:${profile.email}`}
+          icon="fa-solid fa-envelope"
+          label="Email"
+        />
+      )}
 
-        {/* EMAIL */}
-        {profile.email && (
-          <ContactButton
-            href={`mailto:${profile.email}`}
-            icon="fa-solid fa-envelope"
-            label="Email"
-            main
-          />
-        )}
+      {profile.maps && (
+        <ContactButton
+          href={profile.maps}
+          icon="fa-solid fa-location-dot"
+          label="Maps"
+          external
+        />
+      )}
 
-        {/* GOOGLE MAPS */}
-        {profile.maps && (
-          <ContactButton
-            href={profile.maps}
-            icon="fa-solid fa-location-dot"
-            label="Google Maps"
-            main
-          />
-        )}
-
-      </div>
-    </section>
+    </div>
   );
 }
 
-function OtherProfile({ person }) {
-  const photo = getPhoto(person.photo);
+
+/* =========================================================
+   OTHER PERSON
+========================================================= */
+
+function OtherPerson({ person }) {
+  const photo =
+    person.photo?.trim();
 
   return (
-    <div className="other-profile">
+    <div className="other-card">
 
       <div className="other-info">
 
-        {/* PHOTO */}
-        {photo ? (
-          <img
-            className="other-photo"
-            src={photo}
-            alt={
-              person.name || "Profile"
-            }
-          />
-        ) : (
-          <div className="other-photo default-other-profile">
+        <div className="other-photo">
+
+          {photo ? (
+            <img
+              src={photo}
+              alt={person.name || "Profile"}
+              onError={(e) => {
+                e.currentTarget.style.display =
+                  "none";
+
+                e.currentTarget
+                  .parentElement
+                  .classList
+                  .add("default-photo");
+              }}
+            />
+          ) : (
             <i className="fa-solid fa-user"></i>
+          )}
+
+        </div>
+
+        <div className="other-details">
+
+          <div className="other-name">
+            {person.name || "Unknown"}
           </div>
-        )}
-
-        {/* NAME + SUBTITLE */}
-        <div className="other-text">
-
-          <h3 className="other-name">
-            {person.name ||
-              "Unnamed Profile"}
-          </h3>
 
           {person.subtitle && (
             <div className="other-subtitle">
@@ -246,283 +277,461 @@ function OtherProfile({ person }) {
           )}
 
         </div>
+
       </div>
 
-      {/* OTHER CONTACT BUTTONS */}
+
       <div className="other-actions">
 
         {person.phone && (
-          <ContactButton
+          <a
             href={`tel:${person.phone}`}
-            icon="fa-solid fa-phone"
-            label="Call"
-          />
+            aria-label="Call"
+            title="Call"
+          >
+            <i className="fa-solid fa-phone"></i>
+          </a>
         )}
 
         {person.sms && (
-          <ContactButton
+          <a
             href={`sms:${person.sms}`}
-            icon="fa-solid fa-comment-sms"
-            label="SMS"
-          />
+            aria-label="SMS"
+            title="SMS"
+          >
+            <i className="fa-solid fa-comment-sms"></i>
+          </a>
         )}
 
         {person.messenger && (
-          <ContactButton
+          <a
             href={person.messenger}
-            icon="fa-brands fa-facebook-messenger"
-            label="Messenger"
-          />
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Messenger"
+            title="Messenger"
+          >
+            <i className="fa-brands fa-facebook-messenger"></i>
+          </a>
         )}
 
         {person.facebook && (
-          <ContactButton
+          <a
             href={person.facebook}
-            icon="fa-brands fa-facebook"
-            label="Facebook"
-          />
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            title="Facebook"
+          >
+            <i className="fa-brands fa-facebook"></i>
+          </a>
         )}
 
         {person.email && (
-          <ContactButton
+          <a
             href={`mailto:${person.email}`}
-            icon="fa-solid fa-envelope"
-            label="Email"
-          />
+            aria-label="Email"
+            title="Email"
+          >
+            <i className="fa-solid fa-envelope"></i>
+          </a>
         )}
 
         {person.maps && (
-          <ContactButton
+          <a
             href={person.maps}
-            icon="fa-solid fa-location-dot"
-            label="Google Maps"
-          />
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Maps"
+            title="Maps"
+          >
+            <i className="fa-solid fa-location-dot"></i>
+          </a>
         )}
 
       </div>
+
     </div>
   );
 }
 
-function App() {
-  const [profiles, setProfiles] = useState(null);
-  const [error, setError] = useState("");
+
+/* =========================================================
+   APP
+========================================================= */
+
+export default function App() {
+
+  const [profiles, setProfiles] =
+    useState({});
+
+  const [profileId, setProfileId] =
+    useState("");
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
+
+
+  /* =======================================================
+     LOAD Profile.info
+  ======================================================= */
 
   useEffect(() => {
-    fetch("/Profile.info", {
-      cache: "no-store",
-    })
-      .then((response) => {
+
+    async function loadProfile() {
+
+      try {
+
+        setLoading(true);
+        setError("");
+
+        const response =
+          await fetch(
+            "/Profile.info",
+            {
+              cache: "no-cache"
+            }
+          );
+
         if (!response.ok) {
           throw new Error(
-            "Profile.info not found"
+            `Profile.info not found (${response.status})`
           );
         }
 
-        return response.text();
-      })
-      .then((text) => {
-        setProfiles(
-          parseProfileInfo(text)
-        );
-      })
-      .catch((err) => {
+        const text =
+          await response.text();
+
+        const parsed =
+          parseProfileInfo(text);
+
+        setProfiles(parsed);
+
+        /* -----------------------------------------------
+           ?profile=jeffrey
+           ----------------------------------------------- */
+
+        const params =
+          new URLSearchParams(
+            window.location.search
+          );
+
+        const requested =
+          params
+            .get("profile")
+            ?.trim()
+            .toLowerCase();
+
+
+        const firstProfile =
+          Object.keys(parsed)[0] || "";
+
+
+        if (
+          requested &&
+          parsed[requested]
+        ) {
+
+          setProfileId(requested);
+
+        } else {
+
+          setProfileId(
+            firstProfile
+          );
+
+        }
+
+      } catch (err) {
+
         console.error(err);
+
         setError(
-          "Hindi ma-load ang Profile.info."
+          err.message ||
+          "Unable to load profile."
         );
-      });
+
+      } finally {
+
+        setLoading(false);
+
+      }
+
+    }
+
+
+    loadProfile();
+
   }, []);
 
-  {/* LOADING */}
-  if (!profiles && !error) {
+
+  /* =======================================================
+     LOADING
+  ======================================================= */
+
+  if (loading) {
+
     return (
-      <div className="loading">
-        Loading...
+      <div className="app-loading">
+        <i className="fa-solid fa-spinner fa-spin"></i>
+        <span>Loading profile...</span>
       </div>
     );
+
   }
 
-  {/* ERROR */}
+
+  /* =======================================================
+     ERROR
+  ======================================================= */
+
   if (error) {
+
     return (
-      <div className="error">
-        <h1>Oops!</h1>
-        <p>{error}</p>
-      </div>
-    );
-  }
+      <div className="app-error">
 
-  const profileName =
-    getProfileName().toLowerCase();
+        <i className="fa-solid fa-triangle-exclamation"></i>
 
-  const profile =
-    profiles[profileName]?.main;
-
-  const others =
-    profiles[profileName]?.others || [];
-
-  {/* PROFILE NOT FOUND */}
-  if (!profile) {
-    return (
-      <div className="error">
-        <h1>Profile Not Found</h1>
+        <h2>
+          Unable to load profile
+        </h2>
 
         <p>
-          Walang profile na{" "}
-          <strong>
-            {getProfileName()}
-          </strong>
-          .
+          {error}
         </p>
+
       </div>
     );
+
   }
 
-  const photo =
-    getPhoto(profile.photo);
 
-  /*
-   * IMPORTANT:
-   * WALA NANG DEFAULT MESSAGE.
-   * Lalabas lang ang Message section
-   * kapag may message= sa Profile.info.
-   */
+  const profile =
+    profiles[profileId];
+
+
+  /* =======================================================
+     PROFILE NOT FOUND
+  ======================================================= */
+
+  if (!profile) {
+
+    return (
+      <div className="app-error">
+
+        <i className="fa-solid fa-user-slash"></i>
+
+        <h2>
+          Profile Not Found
+        </h2>
+
+        <p>
+          The requested profile does not exist.
+        </p>
+
+      </div>
+    );
+
+  }
+
+
+  const main =
+    profile.main || {};
+
+  const others =
+    profile.others || [];
+
+
+  const photo =
+    main.photo?.trim();
+
+
   const message =
-    profile.message?.trim();
+    main.message?.trim();
+
+
+  /* =======================================================
+     PAGE
+  ======================================================= */
 
   return (
-    <main className="profile-page">
 
-      <div className="main-profile">
+    <main className="page">
 
-        {/* =========================
-            PROFILE
-        ========================== */}
+      <div className="profile-container">
 
-        {photo ? (
-          <img
-            className="profile-photo"
-            src={photo}
-            alt={
-              profile.name ||
-              "Profile"
-            }
-          />
-        ) : (
-          <div className="profile-photo default-profile">
-            <i className="fa-solid fa-user"></i>
-          </div>
-        )}
 
-        <h1>
-          {profile.name ||
-            "Unnamed Profile"}
-        </h1>
+        {/* ===============================================
+            MAIN PROFILE
+        =============================================== */}
 
-        {profile.subtitle && (
-          <div className="subtitle">
-            {profile.subtitle}
-          </div>
-        )}
+        <section className="profile-section">
 
-        {(profile.address ||
-          profile.city) && (
-          <div className="location">
+          <div className="profile-photo">
 
-            <i className="fa-solid fa-location-dot"></i>{" "}
+            {photo ? (
 
-            {[
-              profile.address,
-              profile.city,
-            ]
-              .filter(Boolean)
-              .join(", ")}
+              <img
+                src={photo}
+                alt={main.name || "Profile"}
+                onError={(e) => {
+
+                  e.currentTarget.style.display =
+                    "none";
+
+                  e.currentTarget
+                    .parentElement
+                    .classList
+                    .add("default-photo");
+
+                }}
+              />
+
+            ) : (
+
+              <i className="fa-solid fa-user"></i>
+
+            )}
 
           </div>
-        )}
 
-        {/* =========================
+
+          <div className="profile-name">
+
+            {main.name || "Unknown"}
+
+          </div>
+
+
+          {main.subtitle && (
+
+            <div className="profile-subtitle">
+
+              {main.subtitle}
+
+            </div>
+
+          )}
+
+
+          {(main.address || main.city) && (
+
+            <div className="profile-location">
+
+              <i className="fa-solid fa-location-dot"></i>
+
+              <span>
+
+                {[main.address, main.city]
+                  .filter(Boolean)
+                  .join(", ")}
+
+              </span>
+
+            </div>
+
+          )}
+
+        </section>
+
+
+        {/* ===============================================
             CONTACT
-            MAUNA
-        ========================== */}
+        =============================================== */}
 
-        <MainContacts
-          profile={profile}
-        /><br/>
+        <section className="contact-section">
 
-        {/* =========================
+          <ContactActions
+            profile={main}
+          />
+
+        </section>
+
+
+        {/* ===============================================
             MESSAGE
-            SUNOD SA CONTACT
-            LALABAS LANG KUNG MAY
-            message=
-        ========================== */}
+        =============================================== */}
 
         {message && (
+
           <section className="lost-message">
 
             <div className="lost-message-title">
 
-     
-            
-           
+              <i className="fa-solid fa-message"></i>
+
+              PAUMANHIN AT PAKIUSAP
+
+            </div>
+
+
             <div className="lost-message-text">
 
               {message
                 .split(/\r?\n/)
-                .map(
-                  (line, index, lines) => (
-                    <span key={index}>
+                .map((line, index, lines) => (
 
-                      {line}
+                  <span key={index}>
 
-                      {index <
-                        lines.length - 1 && (
-                        <br />
-                      )}
+                    {line}
 
-                    </span>
-                  )
-                )}
+                    {index <
+                      lines.length - 1 && (
+                      <br />
+                    )}
+
+                  </span>
+
+                ))}
 
             </div>
- </div>
 
           </section>
+
         )}
 
-        {/* =========================
+
+        {/* ===============================================
             OTHER PEOPLE
-            HULI
-        ========================== */}
+        =============================================== */}
 
         {others.length > 0 && (
-          <section className="other-section">
 
-            <h2>
+          <section className="others-section">
+
+            <div className="others-title">
+
               Other People
-            </h2>
 
-            <div className="other-list">
+            </div>
+
+
+            <div className="others-list">
 
               {others.map(
                 (person, index) => (
-                  <OtherProfile
+
+                  <OtherPerson
                     key={index}
                     person={person}
                   />
+
                 )
               )}
 
             </div>
 
           </section>
+
         )}
 
       </div>
 
     </main>
-  );
-}
 
-export default App;
+  );
+
+}
