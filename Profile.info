@@ -1,0 +1,38 @@
+# Profile database
+# URL examples:
+# /profile=jeffrey
+# /profile=rovelyn
+# /profile=juan
+
+[jeffrey]
+name=Jeffrey Solis
+subtitle=Contact Profile
+photo=profile.jpg
+address=Jose Panganiban
+city=Camarines Norte, Philippines
+phone=+639XXXXXXXXX
+sms=+639XXXXXXXXX
+messenger=https://m.me/YOUR_FACEBOOK_USERNAME
+facebook=https://www.facebook.com/YOUR_FACEBOOK_USERNAME
+email=your@email.com
+maps=https://www.google.com/maps/search/?api=1&query=Jose+Panganiban+Camarines+Norte
+
+[rovelyn]
+name=Rovelyn Solis
+subtitle=Contact Profile
+photo=rovelyn.jpg
+address=Jose Panganiban
+city=Camarines Norte, Philippines
+phone=+639XXXXXXXXX
+sms=+639XXXXXXXXX
+messenger=https://m.me/ROVELYN_FACEBOOK
+
+[juan]
+name=Juan Solis
+subtitle=Contact Profile
+photo=juan.jpg
+address=Jose Panganiban
+city=Camarines Norte, Philippines
+phone=+639XXXXXXXXX
+sms=+639XXXXXXXXX
+messenger=https://m.me/JUAN_FACEBOOK
