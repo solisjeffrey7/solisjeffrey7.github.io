@@ -1,7 +1,6 @@
 [rovelyn]
 name=Rovelyn Polopot Solis
 subtitle=Contact Profile
-photo=/rovelyn-profile.jpg
 address=Jose Panganiban
 city=Camarines Norte, Philippines
 phone=+639XXXXXXXXX
@@ -21,7 +20,6 @@ photo=profile.jpg
 [jeffrey]
 name=Jeffrey Cuya Solis
 subtitle=Contact Profile
-photo=/jeffrey-profile.jpg
 address=PUROK 2 Salvacion
 city=Jose Panganiban
 phone=+639481138565
@@ -34,6 +32,7 @@ message=Kung sakaling napulot ninyo ang item na ito, pakiusap po na k
 [jeffrey][other]
 name=Rovelyn Polopot Solis
 subtitle=Wife
-phone=+639XXXXXXXXX
-sms=+639XXXXXXXXX
+phone=+639098787489
+sms=+639098787489
+facebook=https://www.facebook.com/share/1D6Qt165gp/
 photo=/jeffrey-other-1.jpg
