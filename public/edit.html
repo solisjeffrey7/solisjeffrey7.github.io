@@ -103,6 +103,12 @@ button{
   width:100%;
 }
 
+.delete{
+  background:#dc2626;
+  color:#fff;
+  width:100%;
+}
+
 .remove{
   background:#eee;
   color:#b00020;
@@ -141,16 +147,13 @@ button{
   display:none;
 }
 
-.profile-tabs{
-  display:flex;
-  gap:7px;
-  overflow:auto;
-  padding-bottom:4px;
+.danger-box{
+  border:1px solid #fecaca;
+  background:#fff7f7;
 }
 
-.profile-tabs button{
-  white-space:nowrap;
-  margin-top:0;
+.danger-title{
+  color:#b91c1c;
 }
 
 @media(max-width:520px){
@@ -170,6 +173,7 @@ button{
 <p class="desc">
 Basahin ang current Profile.info mula GitHub, i-edit, at i-save ulit.
 </p>
+
 
 <!-- GITHUB CONNECTION -->
 
@@ -216,7 +220,8 @@ Ready.
 
 <div id="editor" class="hidden">
 
-<!-- PROFILE SELECTOR -->
+
+<!-- SELECT PROFILE -->
 
 <div class="box">
 
@@ -249,6 +254,7 @@ Ready.
 <label>Subtitle</label>
 <input id="subtitle">
 
+
 <div class="row">
 
 <div>
@@ -263,8 +269,10 @@ Ready.
 
 </div>
 
+
 <label>City</label>
 <input id="city">
+
 
 <div class="row">
 
@@ -280,6 +288,7 @@ Ready.
 
 </div>
 
+
 <label>Messenger</label>
 <input id="messenger">
 
@@ -294,6 +303,7 @@ Ready.
 
 <label>Message</label>
 <textarea id="message"></textarea>
+
 
 <div class="hint">
 Ang spaces at special characters ay automatic na ie-encode
@@ -356,6 +366,31 @@ Download Profile.info
 </div>
 
 
+<!-- DELETE PROFILE -->
+
+<div class="box danger-box">
+
+<h2 class="danger-title">
+Delete Profile
+</h2>
+
+<div class="hint">
+Permanenteng aalisin ang napiling profile at lahat ng
+<code>[profile][other]</code> nito mula sa generated file.
+Hindi ito agad mabubura sa GitHub hanggang pindutin mo ang
+<strong>Save Changes to GitHub</strong>.
+</div>
+
+<button
+  class="delete"
+  onclick="deleteProfile()"
+>
+🗑 Delete Current Profile
+</button>
+
+</div>
+
+
 <!-- OUTPUT -->
 
 <div class="box">
@@ -369,6 +404,7 @@ Download Profile.info
 
 </div>
 
+
 </div>
 
 </div>
@@ -377,7 +413,7 @@ Download Profile.info
 <script>
 
 /* =========================================================
-   GLOBAL DATA
+   GLOBAL
 ========================================================= */
 
 let data = {};
@@ -386,7 +422,7 @@ let originalFileText = "";
 
 
 /* =========================================================
-   MAIN PROFILE FIELDS
+   FIELDS
 ========================================================= */
 
 const fields = [
@@ -405,7 +441,7 @@ const fields = [
 
 
 /* =========================================================
-   HTML ENCODE
+   ENCODE
 ========================================================= */
 
 function esc(v){
@@ -419,20 +455,23 @@ function esc(v){
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#39;")
     .replace(/ /g,"&nbsp;");
+
 }
 
 
 /* =========================================================
-   HTML DECODE
+   DECODE
 ========================================================= */
 
 function decodeValue(v){
 
-  const ta = document.createElement("textarea");
+  const ta =
+    document.createElement("textarea");
 
   ta.innerHTML = v;
 
   return ta.value;
+
 }
 
 
@@ -446,11 +485,12 @@ function cleanProfile(v){
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9_-]/g,"");
+
 }
 
 
 /* =========================================================
-   ADD NORMAL LINE
+   ADD LINE
 ========================================================= */
 
 function line(a,k,v,m=false){
@@ -463,28 +503,33 @@ function line(a,k,v,m=false){
     return;
   }
 
+
   if(m){
 
-    const lines = String(v)
-      .split(/\r?\n/)
-      .map(x => esc(x));
+    const lines =
+      String(v)
+        .split(/\r?\n/)
+        .map(x => esc(x));
 
     a.push(
-      k + "=" + lines.join("\n")
+      k + "=" +
+      lines.join("\n")
     );
 
   }else{
 
     a.push(
-      k + "=" + esc(v)
+      k + "=" +
+      esc(v)
     );
 
   }
+
 }
 
 
 /* =========================================================
-   PARSE Profile.info
+   PARSE FILE
 ========================================================= */
 
 function parseInfo(text){
@@ -494,28 +539,35 @@ function parseInfo(text){
   let current = null;
   let currentKey = null;
 
-  const lines = text.split(/\r?\n/);
+
+  const lines =
+    text.split(/\r?\n/);
+
 
   for(const raw of lines){
 
-    const lineText = raw.trimEnd();
+    const lineText =
+      raw.trimEnd();
+
 
     const section =
       lineText.match(
         /^\[([^\]]+)\](?:\[([^\]]+)\])?$/
       );
 
+
     if(section){
 
       const p =
         section[1]
-        .trim()
-        .toLowerCase();
+          .trim()
+          .toLowerCase();
 
       const sub =
         section[2]
-        ?.trim()
-        .toLowerCase();
+          ?.trim()
+          .toLowerCase();
+
 
       if(!result[p]){
 
@@ -526,36 +578,47 @@ function parseInfo(text){
 
       }
 
+
       if(sub === "other"){
 
         current = {};
 
-        result[p].others.push(current);
+        result[p].others.push(
+          current
+        );
 
       }else{
 
-        current = result[p].main;
+        current =
+          result[p].main;
 
       }
+
 
       currentKey = null;
 
       continue;
+
     }
+
 
     if(!current){
       continue;
     }
 
-    const eq = lineText.indexOf("=");
+
+    const eq =
+      lineText.indexOf("=");
+
 
     if(eq >= 0){
 
       currentKey =
         lineText
-        .slice(0,eq)
-        .trim()
-        .toLowerCase();
+          .slice(0,eq)
+          .trim()
+          .toLowerCase();
+
 
       current[currentKey] =
         lineText.slice(eq + 1);
@@ -567,8 +630,11 @@ function parseInfo(text){
       if(
         current.message === undefined
       ){
+
         current.message = "";
+
       }
+
 
       current.message +=
         "\n" + lineText;
@@ -578,32 +644,36 @@ function parseInfo(text){
   }
 
 
-  /* Decode HTML entities */
+  /* Decode entities */
 
-  Object.values(result).forEach(p => {
+  Object.values(result)
+    .forEach(p => {
 
-    [
-      p.main,
-      ...p.others
-    ].forEach(o => {
+      [
+        p.main,
+        ...p.others
+      ].forEach(o => {
 
-      Object.keys(o).forEach(k => {
+        Object.keys(o)
+          .forEach(k => {
 
-        o[k] = decodeValue(o[k]);
+            o[k] =
+              decodeValue(o[k]);
+
+          });
 
       });
 
     });
 
-  });
-
 
   return result;
+
 }
 
 
 /* =========================================================
-   SET INPUT VALUE
+   SET VALUE
 ========================================================= */
 
 function setValue(id,value){
@@ -617,11 +687,12 @@ function setValue(id,value){
       value || "";
 
   }
+
 }
 
 
 /* =========================================================
-   SAVE CURRENT FORM INTO DATA
+   CAPTURE CURRENT FORM
 ========================================================= */
 
 function captureCurrentProfile(){
@@ -630,20 +701,19 @@ function captureCurrentProfile(){
     return;
   }
 
+
   const newId =
     cleanProfile(
-      document.getElementById("profile").value
+      document
+        .getElementById("profile")
+        .value
     );
+
 
   if(!newId){
     return;
   }
 
-  const oldData =
-    data[selectedProfile] || {
-      main:{},
-      others:[]
-    };
 
   const profileData = {
     main:{},
@@ -651,7 +721,7 @@ function captureCurrentProfile(){
   };
 
 
-  /* Main fields */
+  /* Main */
 
   fields.forEach(k => {
 
@@ -671,6 +741,7 @@ function captureCurrentProfile(){
   const message =
     document.getElementById("message");
 
+
   if(message){
 
     profileData.main.message =
@@ -679,9 +750,10 @@ function captureCurrentProfile(){
   }
 
 
-  /* Other people */
+  /* Others */
 
   const map = {
+
     name:".o-name",
     subtitle:".o-subtitle",
     photo:".o-photo",
@@ -691,6 +763,7 @@ function captureCurrentProfile(){
     facebook:".o-facebook",
     email:".o-email",
     maps:".o-maps"
+
   };
 
 
@@ -699,6 +772,7 @@ function captureCurrentProfile(){
     .forEach(d => {
 
       const person = {};
+
 
       Object.entries(map)
         .forEach(([k,s]) => {
@@ -715,6 +789,7 @@ function captureCurrentProfile(){
 
         });
 
+
       profileData.others.push(
         person
       );
@@ -722,7 +797,7 @@ function captureCurrentProfile(){
     });
 
 
-  /* If profile ID changed */
+  /* Profile ID changed */
 
   if(newId !== selectedProfile){
 
@@ -745,7 +820,7 @@ function captureCurrentProfile(){
 
 
 /* =========================================================
-   FILL MAIN PROFILE
+   FILL MAIN
 ========================================================= */
 
 function fillMain(){
@@ -753,14 +828,17 @@ function fillMain(){
   const p =
     data[selectedProfile];
 
+
   if(!p){
     return;
   }
+
 
   setValue(
     "profile",
     selectedProfile
   );
+
 
   fields.forEach(k => {
 
@@ -771,6 +849,7 @@ function fillMain(){
 
   });
 
+
   setValue(
     "message",
     p.main.message
@@ -779,6 +858,7 @@ function fillMain(){
 
   const container =
     document.getElementById("others");
+
 
   container.innerHTML = "";
 
@@ -798,14 +878,19 @@ function fillMain(){
 
 function switchProfile(){
 
-  /* Save edits before switching */
+  /*
+    IMPORTANT:
+    Save current edits before changing profile.
+  */
 
   captureCurrentProfile();
 
+
   selectedProfile =
-    document.getElementById(
-      "profileSelect"
-    ).value;
+    document
+      .getElementById("profileSelect")
+      .value;
+
 
   fillMain();
 
@@ -815,7 +900,7 @@ function switchProfile(){
 
 
 /* =========================================================
-   POPULATE PROFILE SELECT
+   POPULATE SELECT
 ========================================================= */
 
 function populateProfiles(){
@@ -824,6 +909,7 @@ function populateProfiles(){
     document.getElementById(
       "profileSelect"
     );
+
 
   select.innerHTML = "";
 
@@ -836,8 +922,10 @@ function populateProfiles(){
           "option"
         );
 
+
       option.value = p;
       option.textContent = p;
+
 
       select.appendChild(
         option
@@ -857,13 +945,14 @@ function populateProfiles(){
   select.value =
     selectedProfile;
 
+
   fillMain();
 
 }
 
 
 /* =========================================================
-   ADD OTHER PERSON
+   ADD OTHER
 ========================================================= */
 
 function addOther(person={}){
@@ -871,7 +960,9 @@ function addOther(person={}){
   const d =
     document.createElement("div");
 
-  d.className = "other";
+
+  d.className =
+    "other";
 
 
   d.innerHTML = `
@@ -944,6 +1035,7 @@ function addOther(person={}){
       const el =
         d.querySelector(s);
 
+
       if(el){
 
         el.value =
@@ -957,6 +1049,142 @@ function addOther(person={}){
   document
     .getElementById("others")
     .appendChild(d);
+
+}
+
+
+/* =========================================================
+   DELETE PROFILE
+========================================================= */
+
+function deleteProfile(){
+
+  captureCurrentProfile();
+
+
+  const profiles =
+    Object.keys(data);
+
+
+  if(!selectedProfile){
+
+    alert(
+      "Walang napiling profile."
+    );
+
+    return;
+
+  }
+
+
+  /*
+    Prevent deleting the final profile.
+  */
+
+  if(profiles.length <= 1){
+
+    alert(
+      "Hindi puwedeng burahin ang huling profile.\n\n" +
+      "Kailangan may kahit isang profile na manatili."
+    );
+
+    return;
+
+  }
+
+
+  const p =
+    data[selectedProfile];
+
+
+  const personCount =
+    p.others
+      ? p.others.length
+      : 0;
+
+
+  const confirmText =
+    "⚠️ DELETE PROFILE\n\n" +
+
+    "Profile: " +
+    selectedProfile +
+    "\n\n" +
+
+    "Ang profile na ito at " +
+    personCount +
+    " Other People ay aalisin.\n\n" +
+
+    "Sigurado ka bang gusto mong ituloy?";
+
+
+  const firstConfirm =
+    confirm(confirmText);
+
+
+  if(!firstConfirm){
+
+    return;
+
+  }
+
+
+  /*
+    Second confirmation.
+  */
+
+  const secondConfirm =
+    prompt(
+      'I-type ang "' +
+      selectedProfile +
+      '" para kumpirmahin ang deletion:'
+    );
+
+
+  if(
+    secondConfirm === null
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    secondConfirm.trim().toLowerCase() !==
+    selectedProfile.toLowerCase()
+  ){
+
+    alert(
+      "❌ Hindi tugma ang profile name. Hindi binura."
+    );
+
+    return;
+
+  }
+
+
+  /* Delete */
+
+  delete data[selectedProfile];
+
+
+  const remaining =
+    Object.keys(data);
+
+
+  selectedProfile =
+    remaining[0];
+
+
+  populateProfiles();
+
+  generate();
+
+
+  setStatus(
+    "🗑 Profile deleted locally. " +
+    "Pindutin ang Save Changes to GitHub para tuluyang alisin sa GitHub."
+  );
 
 }
 
@@ -986,7 +1214,9 @@ function generate(){
 
 
   const a = [
-    "[" + selectedProfile + "]"
+    "[" +
+    selectedProfile +
+    "]"
   ];
 
 
@@ -1049,7 +1279,8 @@ function generate(){
 
   document
     .getElementById("output")
-    .value = result;
+    .value =
+      result;
 
 
   return result;
@@ -1062,8 +1293,6 @@ function generate(){
 ========================================================= */
 
 function buildCompleteFile(){
-
-  /* Capture current edits first */
 
   captureCurrentProfile();
 
@@ -1079,7 +1308,9 @@ function buildCompleteFile(){
 
 
       const a = [
-        "[" + p + "]"
+        "[" +
+        p +
+        "]"
       ];
 
 
@@ -1152,7 +1383,7 @@ function buildCompleteFile(){
 
 
 /* =========================================================
-   BASE64 UTF-8
+   BASE64
 ========================================================= */
 
 function base64Encode(str){
@@ -1160,6 +1391,7 @@ function base64Encode(str){
   const bytes =
     new TextEncoder()
       .encode(str);
+
 
   let binary = "";
 
@@ -1250,7 +1482,7 @@ function setStatus(t){
 
 
 /* =========================================================
-   LOAD Profile.info FROM GITHUB
+   LOAD FROM GITHUB
 ========================================================= */
 
 async function loadFromGitHub(){
@@ -1261,17 +1493,21 @@ async function loadFromGitHub(){
       .value
       .trim();
 
+
   const repo =
     document
       .getElementById("ghRepo")
       .value
       .trim();
 
+
   const branch =
     document
       .getElementById("ghBranch")
       .value
-      .trim() || "main";
+      .trim() ||
+      "main";
+
 
   const token =
     document
@@ -1302,8 +1538,9 @@ async function loadFromGitHub(){
 
   try{
 
-    /* IMPORTANT:
-       Profile.info is inside public/
+    /*
+      IMPORTANT:
+      Profile.info is inside public/
     */
 
     const url =
@@ -1326,7 +1563,8 @@ async function loadFromGitHub(){
 
       throw new Error(
         obj.message ||
-        ("GitHub error " + res.status)
+        ("GitHub error " +
+         res.status)
       );
 
     }
@@ -1388,7 +1626,6 @@ async function loadFromGitHub(){
 
     populateProfiles();
 
-
     generate();
 
 
@@ -1399,6 +1636,7 @@ async function loadFromGitHub(){
   }catch(e){
 
     console.error(e);
+
 
     setStatus(
       "❌ Error: " +
@@ -1411,7 +1649,7 @@ async function loadFromGitHub(){
 
 
 /* =========================================================
-   SAVE Profile.info TO GITHUB
+   SAVE TO GITHUB
 ========================================================= */
 
 async function saveToGitHub(){
@@ -1437,17 +1675,21 @@ async function saveToGitHub(){
       .value
       .trim();
 
+
   const repo =
     document
       .getElementById("ghRepo")
       .value
       .trim();
 
+
   const branch =
     document
       .getElementById("ghBranch")
       .value
-      .trim() || "main";
+      .trim() ||
+      "main";
+
 
   const token =
     document
@@ -1477,8 +1719,8 @@ async function saveToGitHub(){
 
 
   /*
-     IMPORTANT:
-     Profile.info is inside public/
+    IMPORTANT:
+    Profile.info is inside public/
   */
 
   const api =
@@ -1508,6 +1750,7 @@ async function saveToGitHub(){
       const old =
         await get.json();
 
+
       sha =
         old.sha;
 
@@ -1530,7 +1773,7 @@ async function saveToGitHub(){
     }
 
 
-    /* PUT updated file */
+    /* PUT */
 
     const body = {
 
@@ -1598,6 +1841,7 @@ async function saveToGitHub(){
   }catch(e){
 
     console.error(e);
+
 
     setStatus(
       "❌ Error: " +
