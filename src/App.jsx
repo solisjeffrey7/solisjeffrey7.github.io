@@ -463,8 +463,7 @@ function App() {
 
             <div className="lost-message-title">
 
-              <i className="fa-solid fa-message"></i>
-
+     
             
            
             <div className="lost-message-text">
