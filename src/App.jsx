@@ -161,6 +161,21 @@ function MainProfile({ profile }) {
           RESPONSIVE CONTACT ROW
       ========================= */}
 
+
+{profile.message && (
+  <div className="lost-message">
+    <div className="lost-message-title">
+      <i className="fa-solid fa-hand-holding-heart"></i>
+      PAUMANHIN AT PAKIUSAP
+    </div>
+
+    <div className="lost-message-text">
+      {profile.message}
+    </div>
+  </div>
+)}
+
+
       <div className="main-contacts">
 
         <div className="main-contact-row">
