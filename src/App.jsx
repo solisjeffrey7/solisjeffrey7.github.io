@@ -3,16 +3,22 @@ import "./App.css";
 
 function App() {
   const [profile, setProfile] = useState(null);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const username = params.get("profile") || "jeffrey";
+    const username = (params.get("profile") || "jeffrey")
+      .trim()
+      .toLowerCase();
 
-    fetch("./Profile.info")
+    fetch("/Profile.info")
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Hindi makita ang Profile.info");
+          throw new Error(
+            "Hindi makita ang Profile.info (" +
+              response.status +
+              ")"
+          );
         }
 
         return response.text();
@@ -21,15 +27,23 @@ function App() {
         const profiles = {};
         let current = null;
 
-        text.split(/\r?\n/).forEach((line) => {
-          line = line.trim();
+        const lines = text.split(/\r?\n/);
 
-          if (!line || line.startsWith("#")) return;
+        for (const rawLine of lines) {
+          const line = rawLine.trim();
+
+          if (!line || line.startsWith("#")) {
+            continue;
+          }
 
           if (line.startsWith("[") && line.endsWith("]")) {
-            current = line.slice(1, -1).trim().toLowerCase();
+            current = line
+              .slice(1, -1)
+              .trim()
+              .toLowerCase();
+
             profiles[current] = {};
-            return;
+            continue;
           }
 
           if (current && line.includes("=")) {
@@ -37,7 +51,8 @@ function App() {
 
             const key = line
               .slice(0, index)
-              .trim();
+              .trim()
+              .toLowerCase();
 
             const value = line
               .slice(index + 1)
@@ -45,17 +60,15 @@ function App() {
 
             profiles[current][key] = value;
           }
-        });
+        }
 
-        const data = profiles[username.toLowerCase()];
-
-        if (!data) {
+        if (!profiles[username]) {
           throw new Error(
-            `Profile "${username}" not found`
+            `Profile "${username}" not found sa Profile.info`
           );
         }
 
-        setProfile(data);
+        setProfile(profiles[username]);
       })
       .catch((err) => {
         setError(err.message);
@@ -74,7 +87,7 @@ function App() {
   if (!profile) {
     return (
       <div className="loading">
-        Loading...
+        Loading Profile...
       </div>
     );
   }
@@ -84,8 +97,8 @@ function App() {
 
       <img
         className="profile-photo"
-        src={`./${profile.photo || "profile.jpg"}`}
-        alt={profile.name}
+        src={`/` + (profile.photo || "profile.jpg")}
+        alt={profile.name || "Profile"}
       />
 
       <h1>{profile.name}</h1>
@@ -96,11 +109,13 @@ function App() {
         </p>
       )}
 
-      <p className="location">
-        📍 {profile.address}
-        <br />
-        {profile.city}
-      </p>
+      {(profile.address || profile.city) && (
+        <p className="location">
+          📍 {profile.address}
+          {profile.address && profile.city && <br />}
+          {profile.city}
+        </p>
+      )}
 
       <div className="contacts">
 
@@ -159,7 +174,6 @@ function App() {
         )}
 
       </div>
-
     </main>
   );
 }
