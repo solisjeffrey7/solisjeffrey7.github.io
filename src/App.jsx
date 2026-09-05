@@ -3,6 +3,9 @@ import "./App.css";
 
 const DEFAULT_ICON = "fa-solid fa-user";
 
+const DEFAULT_MESSAGE =
+  "Kung sakaling napulot ninyo ang item na ito, pakiusap po na kontakin ako gamit ang mga contact button sa page na ito. Malaking tulong po ang inyong kabutihan upang maibalik ito sa akin. Maraming salamat po sa inyong tulong at katapatan. ❤️";
+
 function parseProfileInfo(text) {
   const profiles = {};
   const others = {};
@@ -10,23 +13,16 @@ function parseProfileInfo(text) {
   let current = null;
   let currentParent = null;
 
-  const lines = text.split(/\r?\n/);
-
-  for (const rawLine of lines) {
+  for (const rawLine of text.split(/\r?\n/)) {
     const line = rawLine.trim();
 
     if (!line || line.startsWith("#")) {
       continue;
     }
 
-    // Ignore optional id="..."
     if (/^id\s*=/i.test(line)) {
       continue;
     }
-
-    // =========================
-    // [profile][other]
-    // =========================
 
     const otherMatch = line.match(
       /^\[([^\]]+)\]\[other\]$/i
@@ -36,9 +32,7 @@ function parseProfileInfo(text) {
       current = {};
 
       currentParent =
-        otherMatch[1]
-          .trim()
-          .toLowerCase();
+        otherMatch[1].trim().toLowerCase();
 
       if (!others[currentParent]) {
         others[currentParent] = [];
@@ -49,22 +43,15 @@ function parseProfileInfo(text) {
       continue;
     }
 
-    // =========================
-    // [profile]
-    // =========================
-
     const profileMatch = line.match(
       /^\[([^\]]+)\]$/i
     );
 
     if (profileMatch) {
       const key =
-        profileMatch[1]
-          .trim()
-          .toLowerCase();
+        profileMatch[1].trim().toLowerCase();
 
       current = {};
-
       currentParent = key;
 
       profiles[key] = current;
@@ -72,13 +59,8 @@ function parseProfileInfo(text) {
       continue;
     }
 
-    // =========================
-    // key=value
-    // =========================
-
     if (current) {
-      const separator =
-        line.indexOf("=");
+      const separator = line.indexOf("=");
 
       if (separator !== -1) {
         const key = line
@@ -88,8 +70,7 @@ function parseProfileInfo(text) {
 
         const value = line
           .substring(separator + 1)
-          .trim()
-          .replace(/^\uFEFF/, "");
+          .trim();
 
         current[key] = value;
       }
@@ -103,7 +84,7 @@ function parseProfileInfo(text) {
 }
 
 /* =========================
-   PROFILE IMAGE
+   IMAGE
 ========================= */
 
 function ProfileImage({
@@ -143,31 +124,27 @@ function ProfileImage({
 ========================= */
 
 function MainProfile({ profile }) {
+  const message =
+    profile.message?.trim() ||
+    DEFAULT_MESSAGE;
+
   return (
     <section className="main-profile">
-
-      {/* PHOTO */}
 
       <ProfileImage
         photo={profile.photo}
         name={profile.name}
       />
 
-      {/* NAME */}
-
       <h1>
         {profile.name || "Unnamed Profile"}
       </h1>
-
-      {/* SUBTITLE */}
 
       {profile.subtitle && (
         <div className="subtitle">
           {profile.subtitle}
         </div>
       )}
-
-      {/* LOCATION */}
 
       {(profile.address || profile.city) && (
         <div className="location">
@@ -192,30 +169,26 @@ function MainProfile({ profile }) {
           MESSAGE
       ========================= */}
 
-      {profile.message?.trim() && (
-        <div className="lost-message">
+      <div className="lost-message">
 
-          <div className="lost-message-title">
-            <i className="fa-solid fa-hand-holding-heart"></i>
-            PAUMANHIN AT PAKIUSAP
-          </div>
-
-          <div className="lost-message-text">
-            {profile.message}
-          </div>
-
+        <div className="lost-message-title">
+          <i className="fa-solid fa-hand-holding-heart"></i>
+          PAUMANHIN AT PAKIUSAP
         </div>
-      )}
+
+        <div className="lost-message-text">
+          {message}
+        </div>
+
+      </div>
 
       {/* =========================
-          MAIN CONTACTS
+          CONTACT BUTTONS
       ========================= */}
 
       <div className="main-contacts">
 
         <div className="main-contact-row">
-
-          {/* CALL */}
 
           {profile.phone && (
             <a
@@ -232,8 +205,6 @@ function MainProfile({ profile }) {
             </a>
           )}
 
-          {/* SMS */}
-
           {profile.sms && (
             <a
               className="main-icon-button"
@@ -244,8 +215,6 @@ function MainProfile({ profile }) {
               <i className="fa-solid fa-comment-sms"></i>
             </a>
           )}
-
-          {/* MESSENGER */}
 
           {profile.messenger && (
             <a
@@ -260,8 +229,6 @@ function MainProfile({ profile }) {
             </a>
           )}
 
-          {/* FACEBOOK */}
-
           {profile.facebook && (
             <a
               className="main-icon-button"
@@ -275,8 +242,6 @@ function MainProfile({ profile }) {
             </a>
           )}
 
-          {/* EMAIL */}
-
           {profile.email && (
             <a
               className="main-icon-button"
@@ -287,8 +252,6 @@ function MainProfile({ profile }) {
               <i className="fa-solid fa-envelope"></i>
             </a>
           )}
-
-          {/* GOOGLE MAPS */}
 
           {profile.maps && (
             <a
@@ -383,8 +346,6 @@ function OtherProfile({ person }) {
 
       <div className="other-actions">
 
-        {/* CALL */}
-
         {person.phone && (
           <OtherContactButton
             icon="fa-solid fa-phone"
@@ -392,8 +353,6 @@ function OtherProfile({ person }) {
             href={`tel:${person.phone}`}
           />
         )}
-
-        {/* SMS */}
 
         {person.sms && (
           <OtherContactButton
@@ -403,8 +362,6 @@ function OtherProfile({ person }) {
           />
         )}
 
-        {/* MESSENGER */}
-
         {person.messenger && (
           <OtherContactButton
             icon="fa-brands fa-facebook-messenger"
@@ -412,8 +369,6 @@ function OtherProfile({ person }) {
             href={person.messenger}
           />
         )}
-
-        {/* FACEBOOK */}
 
         {person.facebook && (
           <OtherContactButton
@@ -423,8 +378,6 @@ function OtherProfile({ person }) {
           />
         )}
 
-        {/* EMAIL */}
-
         {person.email && (
           <OtherContactButton
             icon="fa-solid fa-envelope"
@@ -432,8 +385,6 @@ function OtherProfile({ person }) {
             href={`mailto:${person.email}`}
           />
         )}
-
-        {/* GOOGLE MAPS */}
 
         {person.maps && (
           <OtherContactButton
@@ -454,21 +405,12 @@ function OtherProfile({ person }) {
 ========================= */
 
 export default function App() {
-  const [data, setData] =
-    useState(null);
-
-  const [error, setError] =
-    useState("");
-
-  /* =========================
-     LOAD PROFILE.INFO
-  ========================= */
+  const [data, setData] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-
     fetch("/Profile.info")
       .then((response) => {
-
         if (!response.ok) {
           throw new Error(
             "Profile.info not found"
@@ -477,31 +419,30 @@ export default function App() {
 
         return response.text();
       })
-
       .then((text) => {
-
         const parsed =
           parseProfileInfo(text);
 
+        console.log(
+          "Loaded profiles:",
+          parsed.profiles
+        );
+
+        console.log(
+          "Jeffrey message:",
+          parsed.profiles.jeffrey?.message
+        );
+
         setData(parsed);
-
       })
-
       .catch((err) => {
-
         console.error(err);
 
         setError(
           "Hindi ma-load ang Profile.info"
         );
-
       });
-
   }, []);
-
-  /* =========================
-     LOADING
-  ========================= */
 
   if (!data && !error) {
     return (
@@ -511,31 +452,14 @@ export default function App() {
     );
   }
 
-  /* =========================
-     ERROR
-  ========================= */
-
   if (error) {
     return (
       <div className="error">
-
-        <h1>
-          Error
-        </h1>
-
-        <p>
-          {error}
-        </p>
-
+        <h1>Error</h1>
+        <p>{error}</p>
       </div>
     );
   }
-
-  /* =========================
-     URL PROFILE
-     
-     ?profile=jeffrey
-  ========================= */
 
   const params =
     new URLSearchParams(
@@ -549,18 +473,10 @@ export default function App() {
       .toLowerCase() ||
     "jeffrey";
 
-  /* =========================
-     FIND PROFILE
-  ========================= */
-
   const profile =
     data.profiles[
       requestedProfile
     ];
-
-  /* =========================
-     PROFILE NOT FOUND
-  ========================= */
 
   if (!profile) {
     return (
@@ -581,29 +497,17 @@ export default function App() {
     );
   }
 
-  /* =========================
-     FIND OTHER PEOPLE
-  ========================= */
-
   const profileOthers =
     data.others[
       requestedProfile
     ] || [];
 
-  /* =========================
-     DISPLAY
-  ========================= */
-
   return (
     <main className="profile-page">
-
-      {/* MAIN PROFILE */}
 
       <MainProfile
         profile={profile}
       />
-
-      {/* OTHER PEOPLE */}
 
       {profileOthers.length > 0 && (
         <section className="other-section">
