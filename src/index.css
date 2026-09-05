@@ -46,15 +46,13 @@ a {
 }
 
 .profile-photo {
-  width: auto;
-  max-width: 100%;
-  height: auto;
-  max-height: none;
+  width: 180px;
+  height: 180px;
   display: block;
   margin: 0 auto 18px;
-  object-fit: contain;
+  border-radius: 50%;
+  object-fit: cover;
   object-position: center;
-  border-radius: 16px;
 }
 
 .default-profile {
