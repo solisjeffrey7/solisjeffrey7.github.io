@@ -4,120 +4,416 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Profile.info Editor</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#111}
-.wrap{max-width:760px;margin:auto;padding:18px 14px 40px}
-h1{margin:0 0 5px;font-size:27px}.desc{margin:0 0 18px;color:#666}
-.box{background:#fff;padding:16px;border-radius:14px;margin:14px 0;box-shadow:0 2px 10px #0001}
-h2{font-size:19px;margin:0 0 12px}
-label{display:block;font-weight:700;font-size:14px;margin:10px 0 5px}
-input,textarea,select{width:100%;padding:11px;border:1px solid #ccd0d6;border-radius:9px;font:inherit;background:#fff}
-textarea{min-height:120px;resize:vertical}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-button{border:0;border-radius:9px;padding:11px 14px;margin-top:10px;font-weight:bold;font-size:15px;cursor:pointer}
-.primary{background:#111;color:#fff;width:100%}.github{background:#24292f;color:#fff;width:100%}
-.secondary,.add{background:#e5e7eb;width:100%}.remove{background:#eee;color:#b00020}
-.other{border:1px solid #ddd;padding:13px;border-radius:12px;margin-top:12px}
-.hint{font-size:13px;color:#777;line-height:1.45;margin-top:7px}
-.status{padding:11px;border-radius:9px;background:#f0f1f3;margin-top:12px;line-height:1.45}
-#output{min-height:320px;font-family:monospace;white-space:pre}
-.hidden{display:none}
-.profile-tabs{display:flex;gap:7px;overflow:auto;padding-bottom:4px}
-.profile-tabs button{white-space:nowrap;margin-top:0}
-@media(max-width:520px){.row{grid-template-columns:1fr}}
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f3f4f6;
+  color:#111;
+}
+
+.wrap{
+  max-width:760px;
+  margin:auto;
+  padding:18px 14px 40px;
+}
+
+h1{
+  margin:0 0 5px;
+  font-size:27px;
+}
+
+.desc{
+  margin:0 0 18px;
+  color:#666;
+}
+
+.box{
+  background:#fff;
+  padding:16px;
+  border-radius:14px;
+  margin:14px 0;
+  box-shadow:0 2px 10px #0001;
+}
+
+h2{
+  font-size:19px;
+  margin:0 0 12px;
+}
+
+label{
+  display:block;
+  font-weight:700;
+  font-size:14px;
+  margin:10px 0 5px;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  padding:11px;
+  border:1px solid #ccd0d6;
+  border-radius:9px;
+  font:inherit;
+  background:#fff;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+button{
+  border:0;
+  border-radius:9px;
+  padding:11px 14px;
+  margin-top:10px;
+  font-weight:bold;
+  font-size:15px;
+  cursor:pointer;
+}
+
+.primary{
+  background:#111;
+  color:#fff;
+  width:100%;
+}
+
+.github{
+  background:#24292f;
+  color:#fff;
+  width:100%;
+}
+
+.secondary,
+.add{
+  background:#e5e7eb;
+  width:100%;
+}
+
+.remove{
+  background:#eee;
+  color:#b00020;
+}
+
+.other{
+  border:1px solid #ddd;
+  padding:13px;
+  border-radius:12px;
+  margin-top:12px;
+}
+
+.hint{
+  font-size:13px;
+  color:#777;
+  line-height:1.45;
+  margin-top:7px;
+}
+
+.status{
+  padding:11px;
+  border-radius:9px;
+  background:#f0f1f3;
+  margin-top:12px;
+  line-height:1.45;
+  word-break:break-word;
+}
+
+#output{
+  min-height:320px;
+  font-family:monospace;
+  white-space:pre;
+}
+
+.hidden{
+  display:none;
+}
+
+.profile-tabs{
+  display:flex;
+  gap:7px;
+  overflow:auto;
+  padding-bottom:4px;
+}
+
+.profile-tabs button{
+  white-space:nowrap;
+  margin-top:0;
+}
+
+@media(max-width:520px){
+  .row{
+    grid-template-columns:1fr;
+  }
+}
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
+
 <h1>Profile.info Editor</h1>
-<p class="desc">Basahin ang current Profile.info mula GitHub, i-edit, at i-save ulit.</p>
+
+<p class="desc">
+Basahin ang current Profile.info mula GitHub, i-edit, at i-save ulit.
+</p>
+
+<!-- GITHUB CONNECTION -->
 
 <div class="box">
+
 <h2>GitHub Connection</h2>
+
 <label>GitHub Username</label>
 <input id="ghUser" value="solisjeffrey7">
+
 <label>Repository</label>
 <input id="ghRepo" value="solisjeffrey7.github.io">
+
 <label>Branch</label>
 <input id="ghBranch" value="main">
+
 <label>GitHub Personal Access Token</label>
-<input id="ghToken" type="password" placeholder="github_pat_...">
-<div class="hint">Hindi ini-store ng page ang token. Ginagamit lang ito para sa GitHub API request.</div>
-<button class="github" onclick="loadFromGitHub()">Read Current Profile.info</button>
-<div id="status" class="status">Ready.</div>
+<input
+  id="ghToken"
+  type="password"
+  placeholder="github_pat_..."
+>
+
+<div class="hint">
+Ginagamit lamang ang token para sa GitHub API request.
+Huwag i-share ang token.
 </div>
+
+<button
+  class="github"
+  onclick="loadFromGitHub()"
+>
+Read Current Profile.info
+</button>
+
+<div id="status" class="status">
+Ready.
+</div>
+
+</div>
+
+
+<!-- EDITOR -->
 
 <div id="editor" class="hidden">
 
+<!-- PROFILE SELECTOR -->
+
 <div class="box">
+
 <h2>Select Profile</h2>
-<select id="profileSelect" onchange="selectProfile()"></select>
+
+<select
+  id="profileSelect"
+  onchange="switchProfile()"
+></select>
+
 </div>
+
+
+<!-- MAIN PROFILE -->
 
 <div class="box">
+
 <h2>Main Profile</h2>
+
 <label>Profile ID / Name</label>
-<input id="profile" placeholder="jeffrey">
 
-<label>Name</label><input id="name">
-<label>Subtitle</label><input id="subtitle">
+<input
+  id="profile"
+  placeholder="jeffrey"
+>
+
+<label>Name</label>
+<input id="name">
+
+<label>Subtitle</label>
+<input id="subtitle">
 
 <div class="row">
-<div><label>Photo</label><input id="photo"></div>
-<div><label>Address</label><input id="address"></div>
+
+<div>
+<label>Photo</label>
+<input id="photo">
 </div>
 
-<label>City</label><input id="city">
+<div>
+<label>Address</label>
+<input id="address">
+</div>
+
+</div>
+
+<label>City</label>
+<input id="city">
 
 <div class="row">
-<div><label>Phone</label><input id="phone"></div>
-<div><label>SMS</label><input id="sms"></div>
+
+<div>
+<label>Phone</label>
+<input id="phone">
 </div>
 
-<label>Messenger</label><input id="messenger">
-<label>Facebook</label><input id="facebook">
-<label>Email</label><input id="email">
-<label>Google Maps</label><input id="maps">
-<label>Message</label><textarea id="message"></textarea>
+<div>
+<label>SMS</label>
+<input id="sms">
+</div>
+
+</div>
+
+<label>Messenger</label>
+<input id="messenger">
+
+<label>Facebook</label>
+<input id="facebook">
+
+<label>Email</label>
+<input id="email">
+
+<label>Google Maps</label>
+<input id="maps">
+
+<label>Message</label>
+<textarea id="message"></textarea>
 
 <div class="hint">
-Kapag nag-save, ang spaces at special characters ay automatic na ie-encode.
-</div>
+Ang spaces at special characters ay automatic na ie-encode
+kapag nag-generate.
 </div>
 
+</div>
+
+
+<!-- OTHER PEOPLE -->
+
 <div class="box">
+
 <h2>Other People</h2>
+
 <div id="others"></div>
-<button class="add" onclick="addOther()">+ Add Other Person</button>
+
+<button
+  class="add"
+  onclick="addOther()"
+>
++ Add Other Person
+</button>
+
 </div>
 
-<div class="box">
-<button class="primary" onclick="generate()">Generate Profile.info</button>
-<button class="github" onclick="saveToGitHub()">Save Changes to GitHub</button>
-<button class="secondary" onclick="copyOutput()">Copy</button>
-<button class="secondary" onclick="downloadFile()">Download Profile.info</button>
-</div>
+
+<!-- ACTIONS -->
 
 <div class="box">
+
+<button
+  class="primary"
+  onclick="generate()"
+>
+Generate Profile.info
+</button>
+
+<button
+  class="github"
+  onclick="saveToGitHub()"
+>
+Save Changes to GitHub
+</button>
+
+<button
+  class="secondary"
+  onclick="copyOutput()"
+>
+Copy
+</button>
+
+<button
+  class="secondary"
+  onclick="downloadFile()"
+>
+Download Profile.info
+</button>
+
+</div>
+
+
+<!-- OUTPUT -->
+
+<div class="box">
+
 <h2>Generated Profile.info</h2>
-<textarea id="output" readonly></textarea>
+
+<textarea
+  id="output"
+  readonly
+></textarea>
+
 </div>
 
 </div>
+
 </div>
+
 
 <script>
+
+/* =========================================================
+   GLOBAL DATA
+========================================================= */
+
 let data = {};
 let selectedProfile = "";
+let originalFileText = "";
+
+
+/* =========================================================
+   MAIN PROFILE FIELDS
+========================================================= */
 
 const fields = [
-  "name","subtitle","photo","address","city",
-  "phone","sms","messenger","facebook","email","maps"
+  "name",
+  "subtitle",
+  "photo",
+  "address",
+  "city",
+  "phone",
+  "sms",
+  "messenger",
+  "facebook",
+  "email",
+  "maps"
 ];
 
+
+/* =========================================================
+   HTML ENCODE
+========================================================= */
+
 function esc(v){
-  return v.replace(/&/g,"&amp;")
+
+  v = String(v ?? "");
+
+  return v
+    .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
@@ -125,378 +421,1289 @@ function esc(v){
     .replace(/ /g,"&nbsp;");
 }
 
+
+/* =========================================================
+   HTML DECODE
+========================================================= */
+
 function decodeValue(v){
-  const ta=document.createElement("textarea");
-  ta.innerHTML=v;
+
+  const ta = document.createElement("textarea");
+
+  ta.innerHTML = v;
+
   return ta.value;
 }
 
+
+/* =========================================================
+   CLEAN PROFILE ID
+========================================================= */
+
 function cleanProfile(v){
-  return v.trim().toLowerCase().replace(/[^a-z0-9_-]/g,"");
+
+  return String(v || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]/g,"");
 }
 
+
+/* =========================================================
+   ADD NORMAL LINE
+========================================================= */
+
 function line(a,k,v,m=false){
-  if(!v || !v.trim()) return;
+
+  if(
+    v === undefined ||
+    v === null ||
+    !String(v).trim()
+  ){
+    return;
+  }
+
   if(m){
-    a.push(k+"="+v.split(/\r?\n/).map(esc).join("\n"));
+
+    const lines = String(v)
+      .split(/\r?\n/)
+      .map(x => esc(x));
+
+    a.push(
+      k + "=" + lines.join("\n")
+    );
+
   }else{
-    a.push(k+"="+esc(v));
+
+    a.push(
+      k + "=" + esc(v)
+    );
+
   }
 }
 
-function parseInfo(text){
-  const result={};
-  let current=null;
-  let currentKey=null;
 
-  const lines=text.split(/\r?\n/);
+/* =========================================================
+   PARSE Profile.info
+========================================================= */
+
+function parseInfo(text){
+
+  const result = {};
+
+  let current = null;
+  let currentKey = null;
+
+  const lines = text.split(/\r?\n/);
 
   for(const raw of lines){
-    const lineText=raw.trimEnd();
 
-    const section=lineText.match(/^\[([^\]]+)\](?:\[([^\]]+)\])?$/);
+    const lineText = raw.trimEnd();
+
+    const section =
+      lineText.match(
+        /^\[([^\]]+)\](?:\[([^\]]+)\])?$/
+      );
+
     if(section){
-      const p=section[1].trim().toLowerCase();
-      const sub=section[2]?.trim().toLowerCase();
 
-      if(!result[p]) result[p]={main:{},others:[]};
+      const p =
+        section[1]
+        .trim()
+        .toLowerCase();
 
-      if(sub==="other"){
-        current={};
-        result[p].others.push(current);
-      }else{
-        current=result[p].main;
+      const sub =
+        section[2]
+        ?.trim()
+        .toLowerCase();
+
+      if(!result[p]){
+
+        result[p] = {
+          main:{},
+          others:[]
+        };
+
       }
-      currentKey=null;
+
+      if(sub === "other"){
+
+        current = {};
+
+        result[p].others.push(current);
+
+      }else{
+
+        current = result[p].main;
+
+      }
+
+      currentKey = null;
+
       continue;
     }
 
-    if(!current) continue;
-
-    const eq=lineText.indexOf("=");
-    if(eq>=0){
-      currentKey=lineText.slice(0,eq).trim().toLowerCase();
-      current[currentKey]=lineText.slice(eq+1);
-    }else if(currentKey==="message" && lineText.trim()){
-      current.message += "\n"+lineText;
+    if(!current){
+      continue;
     }
+
+    const eq = lineText.indexOf("=");
+
+    if(eq >= 0){
+
+      currentKey =
+        lineText
+        .slice(0,eq)
+        .trim()
+        .toLowerCase();
+
+      current[currentKey] =
+        lineText.slice(eq + 1);
+
+    }else if(
+      currentKey === "message"
+    ){
+
+      if(
+        current.message === undefined
+      ){
+        current.message = "";
+      }
+
+      current.message +=
+        "\n" + lineText;
+
+    }
+
   }
 
-  // Decode HTML entities for editing.
-  Object.values(result).forEach(p=>{
-    [p.main,...p.others].forEach(o=>{
-      Object.keys(o).forEach(k=>{
-        o[k]=decodeValue(o[k]);
+
+  /* Decode HTML entities */
+
+  Object.values(result).forEach(p => {
+
+    [
+      p.main,
+      ...p.others
+    ].forEach(o => {
+
+      Object.keys(o).forEach(k => {
+
+        o[k] = decodeValue(o[k]);
+
       });
+
     });
+
   });
+
 
   return result;
 }
+
+
+/* =========================================================
+   SET INPUT VALUE
+========================================================= */
 
 function setValue(id,value){
-  const el=document.getElementById(id);
-  if(el) el.value=value||"";
+
+  const el =
+    document.getElementById(id);
+
+  if(el){
+
+    el.value =
+      value || "";
+
+  }
 }
+
+
+/* =========================================================
+   SAVE CURRENT FORM INTO DATA
+========================================================= */
+
+function captureCurrentProfile(){
+
+  if(!selectedProfile){
+    return;
+  }
+
+  const newId =
+    cleanProfile(
+      document.getElementById("profile").value
+    );
+
+  if(!newId){
+    return;
+  }
+
+  const oldData =
+    data[selectedProfile] || {
+      main:{},
+      others:[]
+    };
+
+  const profileData = {
+    main:{},
+    others:[]
+  };
+
+
+  /* Main fields */
+
+  fields.forEach(k => {
+
+    const el =
+      document.getElementById(k);
+
+    if(el){
+
+      profileData.main[k] =
+        el.value;
+
+    }
+
+  });
+
+
+  const message =
+    document.getElementById("message");
+
+  if(message){
+
+    profileData.main.message =
+      message.value;
+
+  }
+
+
+  /* Other people */
+
+  const map = {
+    name:".o-name",
+    subtitle:".o-subtitle",
+    photo:".o-photo",
+    phone:".o-phone",
+    sms:".o-sms",
+    messenger:".o-messenger",
+    facebook:".o-facebook",
+    email:".o-email",
+    maps:".o-maps"
+  };
+
+
+  document
+    .querySelectorAll(".other")
+    .forEach(d => {
+
+      const person = {};
+
+      Object.entries(map)
+        .forEach(([k,s]) => {
+
+          const el =
+            d.querySelector(s);
+
+          if(el){
+
+            person[k] =
+              el.value;
+
+          }
+
+        });
+
+      profileData.others.push(
+        person
+      );
+
+    });
+
+
+  /* If profile ID changed */
+
+  if(newId !== selectedProfile){
+
+    delete data[selectedProfile];
+
+    data[newId] =
+      profileData;
+
+    selectedProfile =
+      newId;
+
+  }else{
+
+    data[selectedProfile] =
+      profileData;
+
+  }
+
+}
+
+
+/* =========================================================
+   FILL MAIN PROFILE
+========================================================= */
 
 function fillMain(){
-  const p=data[selectedProfile];
-  if(!p) return;
 
-  setValue("profile",selectedProfile);
-
-  fields.forEach(k=>setValue(k,p.main[k]));
-  setValue("message",p.main.message);
-
-  document.getElementById("others").innerHTML="";
-  p.others.forEach(person=>addOther(person));
-}
-
-function selectProfile(){
-  selectedProfile=document.getElementById("profileSelect").value;
-  fillMain();
-  generate();
-}
-
-function populateProfiles(){
-  const select=document.getElementById("profileSelect");
-  select.innerHTML="";
-
-  Object.keys(data).forEach(p=>{
-    const option=document.createElement("option");
-    option.value=p;
-    option.textContent=p;
-    select.appendChild(option);
-  });
-
-  if(!data[selectedProfile]){
-    selectedProfile=Object.keys(data)[0]||"";
-  }
-
-  select.value=selectedProfile;
-  fillMain();
-}
-
-function addOther(person={}){
-  const d=document.createElement("div");
-  d.className="other";
-
-  d.innerHTML=`
-    <b>Other Person</b>
-    <label>Name</label><input class="o-name">
-    <label>Subtitle</label><input class="o-subtitle">
-    <div class="row">
-      <div><label>Photo</label><input class="o-photo"></div>
-      <div><label>Phone</label><input class="o-phone"></div>
-    </div>
-    <label>SMS</label><input class="o-sms">
-    <label>Messenger</label><input class="o-messenger">
-    <label>Facebook</label><input class="o-facebook">
-    <label>Email</label><input class="o-email">
-    <label>Google Maps</label><input class="o-maps">
-    <button class="remove" onclick="this.parentElement.remove()">Remove</button>
-  `;
-
-  const map={
-    name:".o-name",subtitle:".o-subtitle",photo:".o-photo",
-    phone:".o-phone",sms:".o-sms",messenger:".o-messenger",
-    facebook:".o-facebook",email:".o-email",maps:".o-maps"
-  };
-
-  Object.entries(map).forEach(([k,s])=>{
-    const el=d.querySelector(s);
-    if(el) el.value=person[k]||"";
-  });
-
-  document.getElementById("others").appendChild(d);
-}
-
-function generate(){
-  let p=cleanProfile(document.getElementById("profile").value);
+  const p =
+    data[selectedProfile];
 
   if(!p){
-    alert("Maglagay muna ng Profile ID.");
-    return "";
-  }
-
-  selectedProfile=p;
-
-  if(!data[p]) data[p]={main:{},others:[]};
-
-  const a=["["+p+"]"];
-
-  fields.forEach(k=>{
-    line(a,k,document.getElementById(k).value);
-  });
-
-  line(a,"message",document.getElementById("message").value,true);
-
-  document.querySelectorAll(".other").forEach(d=>{
-    a.push("");
-    a.push("["+p+"][other]");
-
-    const map={
-      name:".o-name",subtitle:".o-subtitle",photo:".o-photo",
-      phone:".o-phone",sms:".o-sms",messenger:".o-messenger",
-      facebook:".o-facebook",email:".o-email",maps:".o-maps"
-    };
-
-    Object.entries(map).forEach(([k,s])=>{
-      const el=d.querySelector(s);
-      if(el) line(a,k,el.value);
-    });
-  });
-
-  const result=a.join("\n");
-  document.getElementById("output").value=result;
-  return result;
-}
-
-function buildCompleteFile(){
-  generate();
-
-  const current=selectedProfile;
-  const sections=[];
-
-  Object.keys(data).forEach(p=>{
-    if(p!==current){
-      const old=data[p];
-      const a=["["+p+"]"];
-
-      fields.forEach(k=>line(a,k,old.main[k]));
-      line(a,"message",old.main.message,true);
-
-      old.others.forEach(person=>{
-        a.push("");
-        a.push("["+p+"][other]");
-
-        ["name","subtitle","photo","phone","sms","messenger","facebook","email","maps"]
-        .forEach(k=>line(a,k,person[k]));
-      });
-
-      sections.push(a.join("\n"));
-    }
-  });
-
-  sections.push(document.getElementById("output").value);
-  return sections.filter(Boolean).join("\n\n");
-}
-
-function base64Encode(str){
-  const bytes=new TextEncoder().encode(str);
-  let binary="";
-  const chunk=0x8000;
-  for(let i=0;i<bytes.length;i+=chunk){
-    binary+=String.fromCharCode(...bytes.subarray(i,i+chunk));
-  }
-  return btoa(binary);
-}
-
-async function githubRequest(url,options={}){
-  const token=document.getElementById("ghToken").value.trim();
-
-  const headers={
-    "Accept":"application/vnd.github+json",
-    "X-GitHub-Api-Version":"2022-11-28",
-    ...(options.headers||{})
-  };
-
-  if(token) headers.Authorization="Bearer "+token;
-
-  return fetch(url,{...options,headers});
-}
-
-function setStatus(t){
-  document.getElementById("status").textContent=t;
-}
-
-async function loadFromGitHub(){
-  const user=document.getElementById("ghUser").value.trim();
-  const repo=document.getElementById("ghRepo").value.trim();
-  const branch=document.getElementById("ghBranch").value.trim()||"main";
-  const token=document.getElementById("ghToken").value.trim();
-
-  if(!user||!repo||!token){
-    setStatus("❌ Ilagay ang username, repository at token.");
     return;
   }
 
-  setStatus("Reading current Profile.info...");
-
-  try{
-    const url=`https://api.github.com/repos/${encodeURIComponent(user)}/${encodeURIComponent(repo)}/contents/Profile.info?ref=${encodeURIComponent(branch)}`;
-    const res=await githubRequest(url);
-    const obj=await res.json();
-
-    if(!res.ok) throw new Error(obj.message||("GitHub error "+res.status));
-
-    if(!obj.content) throw new Error("Walang file content na nakuha.");
-
-    const binary=atob(obj.content.replace(/\n/g,""));
-    const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
-    const text=new TextDecoder().decode(bytes);
-
-    data=parseInfo(text);
-    selectedProfile=Object.keys(data)[0]||"";
-
-    if(!selectedProfile) throw new Error("Walang profile section sa Profile.info.");
-
-    document.getElementById("editor").classList.remove("hidden");
-    populateProfiles();
-    document.getElementById("output").value=text;
-
-    setStatus("✅ Current Profile.info loaded. Puwede mo nang i-edit.");
-  }catch(e){
-    console.error(e);
-    setStatus("❌ Error: "+e.message);
-  }
-}
-
-async function saveToGitHub(){
-  const content=buildCompleteFile();
-
-  const user=document.getElementById("ghUser").value.trim();
-  const repo=document.getElementById("ghRepo").value.trim();
-  const branch=document.getElementById("ghBranch").value.trim()||"main";
-  const token=document.getElementById("ghToken").value.trim();
-
-  if(!user||!repo||!token){
-    setStatus("❌ Ilagay ang username, repository at token.");
-    return;
-  }
-
-  setStatus("Saving changes to GitHub...");
-
-  const api=`https://api.github.com/repos/${encodeURIComponent(user)}/${encodeURIComponent(repo)}/contents/Profile.info`;
-
-  try{
-    const get=await githubRequest(api+"?ref="+encodeURIComponent(branch));
-    let sha=null;
-
-    if(get.ok){
-      const old=await get.json();
-      sha=old.sha;
-    }else if(get.status!==404){
-      const err=await get.json().catch(()=>({}));
-      throw new Error(err.message||("GitHub GET error "+get.status));
-    }
-
-    const body={
-      message:"Update Profile.info",
-      content:base64Encode(content),
-      branch:branch
-    };
-
-    if(sha) body.sha=sha;
-
-    const put=await githubRequest(api,{
-      method:"PUT",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(body)
-    });
-
-    const result=await put.json();
-
-    if(!put.ok){
-      throw new Error(result.message||("GitHub error "+put.status));
-    }
-
-    setStatus("✅ Saved! GitHub Pages will deploy the updated Profile.info automatically.");
-  }catch(e){
-    console.error(e);
-    setStatus("❌ Error: "+e.message);
-  }
-}
-
-async function copyOutput(){
-  const v=generate();
-  if(!v)return;
-
-  try{
-    await navigator.clipboard.writeText(v);
-    setStatus("Copied.");
-  }catch(e){
-    const o=document.getElementById("output");
-    o.select();
-    document.execCommand("copy");
-    setStatus("Copied.");
-  }
-}
-
-function downloadFile(){
-  const v=buildCompleteFile();
-  if(!v)return;
-
-  const u=URL.createObjectURL(
-    new Blob([v],{type:"text/plain;charset=utf-8"})
+  setValue(
+    "profile",
+    selectedProfile
   );
 
-  const a=document.createElement("a");
-  a.href=u;
-  a.download="Profile.info";
-  a.click();
-  URL.revokeObjectURL(u);
+  fields.forEach(k => {
+
+    setValue(
+      k,
+      p.main[k]
+    );
+
+  });
+
+  setValue(
+    "message",
+    p.main.message
+  );
+
+
+  const container =
+    document.getElementById("others");
+
+  container.innerHTML = "";
+
+
+  p.others.forEach(person => {
+
+    addOther(person);
+
+  });
+
 }
+
+
+/* =========================================================
+   SWITCH PROFILE
+========================================================= */
+
+function switchProfile(){
+
+  /* Save edits before switching */
+
+  captureCurrentProfile();
+
+  selectedProfile =
+    document.getElementById(
+      "profileSelect"
+    ).value;
+
+  fillMain();
+
+  generate();
+
+}
+
+
+/* =========================================================
+   POPULATE PROFILE SELECT
+========================================================= */
+
+function populateProfiles(){
+
+  const select =
+    document.getElementById(
+      "profileSelect"
+    );
+
+  select.innerHTML = "";
+
+
+  Object.keys(data)
+    .forEach(p => {
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+      option.value = p;
+      option.textContent = p;
+
+      select.appendChild(
+        option
+      );
+
+    });
+
+
+  if(!data[selectedProfile]){
+
+    selectedProfile =
+      Object.keys(data)[0] || "";
+
+  }
+
+
+  select.value =
+    selectedProfile;
+
+  fillMain();
+
+}
+
+
+/* =========================================================
+   ADD OTHER PERSON
+========================================================= */
+
+function addOther(person={}){
+
+  const d =
+    document.createElement("div");
+
+  d.className = "other";
+
+
+  d.innerHTML = `
+
+    <b>Other Person</b>
+
+    <label>Name</label>
+    <input class="o-name">
+
+    <label>Subtitle</label>
+    <input class="o-subtitle">
+
+    <div class="row">
+
+      <div>
+        <label>Photo</label>
+        <input class="o-photo">
+      </div>
+
+      <div>
+        <label>Phone</label>
+        <input class="o-phone">
+      </div>
+
+    </div>
+
+    <label>SMS</label>
+    <input class="o-sms">
+
+    <label>Messenger</label>
+    <input class="o-messenger">
+
+    <label>Facebook</label>
+    <input class="o-facebook">
+
+    <label>Email</label>
+    <input class="o-email">
+
+    <label>Google Maps</label>
+    <input class="o-maps">
+
+    <button
+      class="remove"
+      onclick="this.parentElement.remove()"
+    >
+      Remove
+    </button>
+
+  `;
+
+
+  const map = {
+
+    name:".o-name",
+    subtitle:".o-subtitle",
+    photo:".o-photo",
+    phone:".o-phone",
+    sms:".o-sms",
+    messenger:".o-messenger",
+    facebook:".o-facebook",
+    email:".o-email",
+    maps:".o-maps"
+
+  };
+
+
+  Object.entries(map)
+    .forEach(([k,s]) => {
+
+      const el =
+        d.querySelector(s);
+
+      if(el){
+
+        el.value =
+          person[k] || "";
+
+      }
+
+    });
+
+
+  document
+    .getElementById("others")
+    .appendChild(d);
+
+}
+
+
+/* =========================================================
+   GENERATE CURRENT PROFILE
+========================================================= */
+
+function generate(){
+
+  captureCurrentProfile();
+
+
+  if(!selectedProfile){
+
+    alert(
+      "Maglagay muna ng Profile ID."
+    );
+
+    return "";
+
+  }
+
+
+  const p =
+    data[selectedProfile];
+
+
+  const a = [
+    "[" + selectedProfile + "]"
+  ];
+
+
+  fields.forEach(k => {
+
+    line(
+      a,
+      k,
+      p.main[k]
+    );
+
+  });
+
+
+  line(
+    a,
+    "message",
+    p.main.message,
+    true
+  );
+
+
+  p.others.forEach(person => {
+
+    a.push("");
+
+    a.push(
+      "[" +
+      selectedProfile +
+      "][other]"
+    );
+
+
+    [
+      "name",
+      "subtitle",
+      "photo",
+      "phone",
+      "sms",
+      "messenger",
+      "facebook",
+      "email",
+      "maps"
+    ].forEach(k => {
+
+      line(
+        a,
+        k,
+        person[k]
+      );
+
+    });
+
+  });
+
+
+  const result =
+    a.join("\n");
+
+
+  document
+    .getElementById("output")
+    .value = result;
+
+
+  return result;
+
+}
+
+
+/* =========================================================
+   BUILD COMPLETE FILE
+========================================================= */
+
+function buildCompleteFile(){
+
+  /* Capture current edits first */
+
+  captureCurrentProfile();
+
+
+  const sections = [];
+
+
+  Object.keys(data)
+    .forEach(p => {
+
+      const profile =
+        data[p];
+
+
+      const a = [
+        "[" + p + "]"
+      ];
+
+
+      fields.forEach(k => {
+
+        line(
+          a,
+          k,
+          profile.main[k]
+        );
+
+      });
+
+
+      line(
+        a,
+        "message",
+        profile.main.message,
+        true
+      );
+
+
+      profile.others
+        .forEach(person => {
+
+          a.push("");
+
+          a.push(
+            "[" +
+            p +
+            "][other]"
+          );
+
+
+          [
+            "name",
+            "subtitle",
+            "photo",
+            "phone",
+            "sms",
+            "messenger",
+            "facebook",
+            "email",
+            "maps"
+          ].forEach(k => {
+
+            line(
+              a,
+              k,
+              person[k]
+            );
+
+          });
+
+        });
+
+
+      sections.push(
+        a.join("\n")
+      );
+
+    });
+
+
+  return sections
+    .filter(Boolean)
+    .join("\n\n");
+
+}
+
+
+/* =========================================================
+   BASE64 UTF-8
+========================================================= */
+
+function base64Encode(str){
+
+  const bytes =
+    new TextEncoder()
+      .encode(str);
+
+  let binary = "";
+
+  const chunk = 0x8000;
+
+
+  for(
+    let i=0;
+    i<bytes.length;
+    i+=chunk
+  ){
+
+    binary +=
+      String.fromCharCode(
+        ...bytes.subarray(
+          i,
+          i + chunk
+        )
+      );
+
+  }
+
+
+  return btoa(binary);
+
+}
+
+
+/* =========================================================
+   GITHUB REQUEST
+========================================================= */
+
+async function githubRequest(
+  url,
+  options={}
+){
+
+  const token =
+    document
+      .getElementById("ghToken")
+      .value
+      .trim();
+
+
+  const headers = {
+
+    "Accept":
+      "application/vnd.github+json",
+
+    "X-GitHub-Api-Version":
+      "2022-11-28",
+
+    ...(options.headers || {})
+
+  };
+
+
+  if(token){
+
+    headers.Authorization =
+      "Bearer " + token;
+
+  }
+
+
+  return fetch(
+    url,
+    {
+      ...options,
+      headers
+    }
+  );
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function setStatus(t){
+
+  document
+    .getElementById("status")
+    .textContent = t;
+
+}
+
+
+/* =========================================================
+   LOAD Profile.info FROM GITHUB
+========================================================= */
+
+async function loadFromGitHub(){
+
+  const user =
+    document
+      .getElementById("ghUser")
+      .value
+      .trim();
+
+  const repo =
+    document
+      .getElementById("ghRepo")
+      .value
+      .trim();
+
+  const branch =
+    document
+      .getElementById("ghBranch")
+      .value
+      .trim() || "main";
+
+  const token =
+    document
+      .getElementById("ghToken")
+      .value
+      .trim();
+
+
+  if(
+    !user ||
+    !repo ||
+    !token
+  ){
+
+    setStatus(
+      "❌ Ilagay ang username, repository at token."
+    );
+
+    return;
+
+  }
+
+
+  setStatus(
+    "Reading current Profile.info..."
+  );
+
+
+  try{
+
+    /* IMPORTANT:
+       Profile.info is inside public/
+    */
+
+    const url =
+      `https://api.github.com/repos/` +
+      `${encodeURIComponent(user)}/` +
+      `${encodeURIComponent(repo)}/` +
+      `contents/public/Profile.info?ref=` +
+      `${encodeURIComponent(branch)}`;
+
+
+    const res =
+      await githubRequest(url);
+
+
+    const obj =
+      await res.json();
+
+
+    if(!res.ok){
+
+      throw new Error(
+        obj.message ||
+        ("GitHub error " + res.status)
+      );
+
+    }
+
+
+    if(!obj.content){
+
+      throw new Error(
+        "Walang file content na nakuha."
+      );
+
+    }
+
+
+    const binary =
+      atob(
+        obj.content.replace(/\n/g,"")
+      );
+
+
+    const bytes =
+      Uint8Array.from(
+        binary,
+        c => c.charCodeAt(0)
+      );
+
+
+    const text =
+      new TextDecoder()
+        .decode(bytes);
+
+
+    originalFileText =
+      text;
+
+
+    data =
+      parseInfo(text);
+
+
+    selectedProfile =
+      Object.keys(data)[0] || "";
+
+
+    if(!selectedProfile){
+
+      throw new Error(
+        "Walang profile section sa Profile.info."
+      );
+
+    }
+
+
+    document
+      .getElementById("editor")
+      .classList
+      .remove("hidden");
+
+
+    populateProfiles();
+
+
+    generate();
+
+
+    setStatus(
+      "✅ Profile.info loaded. Puwede mo nang i-edit."
+    );
+
+  }catch(e){
+
+    console.error(e);
+
+    setStatus(
+      "❌ Error: " +
+      e.message
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   SAVE Profile.info TO GITHUB
+========================================================= */
+
+async function saveToGitHub(){
+
+  const content =
+    buildCompleteFile();
+
+
+  if(!content){
+
+    setStatus(
+      "❌ Walang content na ise-save."
+    );
+
+    return;
+
+  }
+
+
+  const user =
+    document
+      .getElementById("ghUser")
+      .value
+      .trim();
+
+  const repo =
+    document
+      .getElementById("ghRepo")
+      .value
+      .trim();
+
+  const branch =
+    document
+      .getElementById("ghBranch")
+      .value
+      .trim() || "main";
+
+  const token =
+    document
+      .getElementById("ghToken")
+      .value
+      .trim();
+
+
+  if(
+    !user ||
+    !repo ||
+    !token
+  ){
+
+    setStatus(
+      "❌ Ilagay ang username, repository at token."
+    );
+
+    return;
+
+  }
+
+
+  setStatus(
+    "Saving changes to GitHub..."
+  );
+
+
+  /*
+     IMPORTANT:
+     Profile.info is inside public/
+  */
+
+  const api =
+    `https://api.github.com/repos/` +
+    `${encodeURIComponent(user)}/` +
+    `${encodeURIComponent(repo)}/` +
+    `contents/public/Profile.info`;
+
+
+  try{
+
+    /* Get current SHA */
+
+    const get =
+      await githubRequest(
+        api +
+        "?ref=" +
+        encodeURIComponent(branch)
+      );
+
+
+    let sha = null;
+
+
+    if(get.ok){
+
+      const old =
+        await get.json();
+
+      sha =
+        old.sha;
+
+    }else if(
+      get.status !== 404
+    ){
+
+      const err =
+        await get
+          .json()
+          .catch(() => ({}));
+
+
+      throw new Error(
+        err.message ||
+        ("GitHub GET error " +
+         get.status)
+      );
+
+    }
+
+
+    /* PUT updated file */
+
+    const body = {
+
+      message:
+        "Update Profile.info",
+
+      content:
+        base64Encode(content),
+
+      branch:
+        branch
+
+    };
+
+
+    if(sha){
+
+      body.sha =
+        sha;
+
+    }
+
+
+    const put =
+      await githubRequest(
+        api,
+        {
+          method:"PUT",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify(body)
+        }
+      );
+
+
+    const result =
+      await put.json();
+
+
+    if(!put.ok){
+
+      throw new Error(
+        result.message ||
+        ("GitHub error " +
+         put.status)
+      );
+
+    }
+
+
+    originalFileText =
+      content;
+
+
+    setStatus(
+      "✅ Saved successfully! GitHub Pages will deploy the update."
+    );
+
+
+  }catch(e){
+
+    console.error(e);
+
+    setStatus(
+      "❌ Error: " +
+      e.message
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   COPY
+========================================================= */
+
+async function copyOutput(){
+
+  const v =
+    generate();
+
+
+  if(!v){
+    return;
+  }
+
+
+  try{
+
+    await navigator
+      .clipboard
+      .writeText(v);
+
+
+    setStatus(
+      "Copied."
+    );
+
+  }catch(e){
+
+    const o =
+      document
+        .getElementById("output");
+
+
+    o.select();
+
+
+    document.execCommand(
+      "copy"
+    );
+
+
+    setStatus(
+      "Copied."
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+function downloadFile(){
+
+  const v =
+    buildCompleteFile();
+
+
+  if(!v){
+    return;
+  }
+
+
+  const u =
+    URL.createObjectURL(
+      new Blob(
+        [v],
+        {
+          type:
+            "text/plain;charset=utf-8"
+        }
+      )
+    );
+
+
+  const a =
+    document.createElement("a");
+
+
+  a.href = u;
+
+  a.download =
+    "Profile.info";
+
+
+  a.click();
+
+
+  URL.revokeObjectURL(u);
+
+}
+
 </script>
+
 </body>
 </html>
