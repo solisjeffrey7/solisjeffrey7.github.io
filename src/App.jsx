@@ -622,38 +622,38 @@ function QRButton() {
         aria-label="Show QR Code"
 
         style={{
-          position: "fixed",
-          top: "14px",
-          right: "14px",
+  position: "absolute",
+  top: "5px",
+  right: "5px",
 
-          width: "44px",
-          height: "44px",
+  width: "44px",
+  height: "44px",
 
-          padding: 0,
-          margin: 0,
+  padding: 0,
+  margin: 0,
 
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 
-          border: "none",
-          borderRadius: "50%",
+  border: "none",
+  borderRadius: "50%",
 
-          background: "#ffffff",
-          color: "#111111",
+  background: "#ffffff",
+  color: "#111111",
 
-          fontSize: "20px",
+  fontSize: "20px",
 
-          zIndex: 2147483647,
+  zIndex: 100,
 
-          cursor: "pointer",
+  cursor: "pointer",
 
-          boxShadow:
-            "0 2px 10px rgba(0,0,0,.25)",
+  boxShadow:
+    "0 2px 10px rgba(0,0,0,.25)",
 
-          WebkitTapHighlightColor:
-            "transparent"
-        }}
+  WebkitTapHighlightColor:
+    "transparent"
+}}
       >
 
         <i className="fa-solid fa-qrcode"></i>
