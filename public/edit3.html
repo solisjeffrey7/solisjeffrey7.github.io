@@ -372,9 +372,13 @@ button:disabled{
   </div>
 
 
-  <!-- GITHUB -->
+  <!-- GITHUB CONNECTION -->
+  <!-- ONLY THIS BOX WILL DISAPPEAR AFTER SUCCESSFUL READ -->
 
-  <div class="box">
+  <div
+    class="box"
+    id="githubBox"
+  >
 
     <h2>GitHub Connection</h2>
 
@@ -419,9 +423,27 @@ button:disabled{
       Read Current Profile.info
     </button>
 
-    <div id="status" class="status"></div>
+  </div>
 
-    <div id="progress" class="progress">
+
+  <!-- STATUS / PROGRESS -->
+  <!-- KEPT OUTSIDE GITHUB BOX SO IT DOES NOT DISAPPEAR -->
+
+  <div
+    class="box"
+    id="statusBox"
+    style="display:none;"
+  >
+
+    <div
+      id="status"
+      class="status"
+    ></div>
+
+    <div
+      id="progress"
+      class="progress"
+    >
 
       <div class="progress-bar">
 
@@ -442,7 +464,10 @@ button:disabled{
   </div>
 
 
-  <div id="editor">
+  <div
+    id="editor"
+    style="display:none;"
+  >
 
 
     <!-- PROFILE SELECT -->
@@ -805,16 +830,32 @@ function scrollToProgress(){
 
 function setStatus(message){
 
+  const statusBox =
+    document.getElementById(
+      "statusBox"
+    );
+
   const status =
     document.getElementById(
       "status"
     );
 
-  status.textContent =
-    message;
+  if(statusBox){
 
-  status.style.display =
-    "block";
+    statusBox.style.display =
+      "block";
+
+  }
+
+  if(status){
+
+    status.textContent =
+      message;
+
+    status.style.display =
+      "block";
+
+  }
 
   scrollToProgress();
 
@@ -825,6 +866,11 @@ function showProgress(
   percent,
   text
 ){
+
+  const statusBox =
+    document.getElementById(
+      "statusBox"
+    );
 
   const progress =
     document.getElementById(
@@ -840,6 +886,14 @@ function showProgress(
     document.getElementById(
       "progressText"
     );
+
+
+  if(statusBox){
+
+    statusBox.style.display =
+      "block";
+
+  }
 
 
   progress.style.display =
@@ -1075,10 +1129,6 @@ function compressImage(
               img.height;
 
 
-            /*
-             * Resize only if
-             * larger than 1200.
-             */
             if(
               width > maxSize ||
               height > maxSize
@@ -1134,11 +1184,6 @@ function compressImage(
               );
 
 
-            /*
-             * White background for
-             * transparent PNGs converted
-             * to JPEG.
-             */
             ctx.fillStyle =
               "#ffffff";
 
@@ -1175,9 +1220,6 @@ function compressImage(
                 }
 
 
-                /*
-                 * Always upload JPEG.
-                 */
                 const compressedFile =
                   new File(
                     [
@@ -1535,13 +1577,6 @@ function captureCurrentProfile(){
     data[selectedProfile];
 
 
-  /*
-   * IMPORTANT:
-   *
-   * Keep existing photo.
-   * Do NOT read a nonexistent
-   * #photo field.
-   */
   const existingPhoto =
     profile.main.photo ||
     "";
@@ -1591,10 +1626,6 @@ function captureCurrentProfile(){
     ).value;
 
 
-  /*
-   * Keep pending photo file
-   * for current profile.
-   */
   if(mainPhotoFile){
 
     main._photoFile =
@@ -1614,9 +1645,6 @@ function captureCurrentProfile(){
     main;
 
 
-  /*
-   * Capture other people.
-   */
   const others = [];
 
 
@@ -1646,9 +1674,6 @@ function captureCurrentProfile(){
           );
 
 
-        /*
-         * Keep old photo.
-         */
         if(
           box.dataset.existingPhoto
         ){
@@ -1742,9 +1767,6 @@ function fillMain(){
   );
 
 
-  /*
-   * Restore current profile photo.
-   */
   mainPhotoFile =
     main._photoFile ||
     null;
@@ -1836,9 +1858,6 @@ function fillMain(){
   }
 
 
-  /*
-   * Load other people.
-   */
   const container =
     document.getElementById(
       "others"
@@ -1875,10 +1894,6 @@ function switchProfile(){
   }
 
 
-  /*
-   * Save current profile first.
-   * This preserves its photo.
-   */
   captureCurrentProfile();
 
 
@@ -2761,9 +2776,6 @@ async function githubRequest(
   let url;
 
 
-  /*
-   * Tree API.
-   */
   if(
     path.startsWith(
       "/git/trees/"
@@ -2890,9 +2902,6 @@ async function uploadPhotoToGitHub(
   preferredName
 ){
 
-  /*
-   * COMPRESS FIRST
-   */
   setStatus(
     "🖼️ Compressing image...\n\n" +
     "Original: " +
@@ -2961,9 +2970,6 @@ async function uploadPhotoToGitHub(
     compressed.file;
 
 
-  /*
-   * Always use .jpg.
-   */
   const baseName =
     cleanFileName(
       preferredName ||
@@ -3694,11 +3700,7 @@ async function loadFromGitHub(){
 
 
     /*
-     * ==================================
-     *
      * DELETE UNUSED IMAGES HERE ONLY.
-     *
-     * ==================================
      */
     const cleanup =
       await cleanupUnusedImages(
@@ -3753,11 +3755,54 @@ async function loadFromGitHub(){
     );
 
 
+    /*
+     * ==================================
+     *
+     * LOGIN SUCCESS
+     *
+     * ONLY GITHUB CONNECTION DISAPPEARS.
+     *
+     * ALL OTHER UI REMAINS.
+     *
+     * ==================================
+     */
+
+    document.getElementById(
+      "githubBox"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "editor"
+    ).style.display =
+      "block";
+
+
   }catch(error){
 
     console.error(
       error
     );
+
+
+    /*
+     * LOGIN FAILED:
+     *
+     * GitHub box stays visible.
+     * Editor stays hidden.
+     */
+
+    document.getElementById(
+      "githubBox"
+    ).style.display =
+      "block";
+
+
+    document.getElementById(
+      "editor"
+    ).style.display =
+      "none";
 
 
     setStatus(
@@ -3801,16 +3846,9 @@ async function saveToGitHub(){
 
   try{
 
-    /*
-     * Save current fields.
-     */
     captureCurrentProfile();
 
 
-    /*
-     * AUTOMATICALLY SCROLL TO STATUS
-     * WHEN SAVE IS PRESSED.
-     */
     scrollToProgress();
 
 
@@ -3833,10 +3871,8 @@ async function saveToGitHub(){
 
 
     /*
-     * ==================================
      * STEP 1
      * MAIN PHOTOS
-     * ==================================
      */
 
     setStatus(
@@ -3970,10 +4006,8 @@ async function saveToGitHub(){
 
 
     /*
-     * ==================================
      * STEP 2
      * OTHER PHOTOS
-     * ==================================
      */
 
     setStatus(
@@ -4086,10 +4120,8 @@ async function saveToGitHub(){
 
 
     /*
-     * ==================================
      * STEP 3
      * BUILD
-     * ==================================
      */
 
     setStatus(
@@ -4125,10 +4157,8 @@ async function saveToGitHub(){
 
 
     /*
-     * ==================================
      * STEP 4
      * SAVE PROFILE.INFO
-     * ==================================
      */
 
     setStatus(
