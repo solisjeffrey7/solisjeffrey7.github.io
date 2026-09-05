@@ -1109,5 +1109,3 @@ return (
 
 );
 }
-
-Yung qr lang ang baguhin
