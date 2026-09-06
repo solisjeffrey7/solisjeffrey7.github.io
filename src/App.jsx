@@ -509,8 +509,394 @@ function LostMessage({ message }) {
 
 
 /* =========================================================
+   SAVE CONTACT / VCARD
+========================================================= */
+
+function SaveContact({ profile }) {
+
+  const data = profile.data;
+
+
+  /* -----------------------------------------------
+     ESCAPE VCARD TEXT
+  ----------------------------------------------- */
+
+  function escapeVCard(value = "") {
+
+    return String(value)
+      .replace(/\\/g, "\\\\")
+      .replace(/\r?\n/g, "\\n")
+      .replace(/;/g, "\\;")
+      .replace(/,/g, "\\,");
+  }
+
+
+  /* -----------------------------------------------
+     GET IMAGE AS BASE64
+  ----------------------------------------------- */
+
+  async function getPhotoBase64(photoUrl) {
+
+    if (!photoUrl) {
+      return null;
+    }
+
+    try {
+
+      const response =
+        await fetch(photoUrl, {
+          mode: "cors",
+          cache: "no-cache"
+        });
+
+      if (!response.ok) {
+        throw new Error(
+          `Image HTTP ${response.status}`
+        );
+      }
+
+      const blob =
+        await response.blob();
+
+
+      const base64 =
+        await new Promise(
+          (resolve, reject) => {
+
+            const reader =
+              new FileReader();
+
+            reader.onloadend = () => {
+
+              const result =
+                reader.result || "";
+
+              const commaIndex =
+                result.indexOf(",");
+
+              if (
+                commaIndex === -1
+              ) {
+                reject(
+                  new Error(
+                    "Invalid image data"
+                  )
+                );
+
+                return;
+              }
+
+              resolve(
+                result.substring(
+                  commaIndex + 1
+                )
+              );
+            };
+
+
+            reader.onerror = () => {
+
+              reject(
+                new Error(
+                  "Unable to read image"
+                )
+              );
+
+            };
+
+
+            reader.readAsDataURL(
+              blob
+            );
+
+          }
+        );
+
+
+      let mime =
+        blob.type ||
+        "image/jpeg";
+
+
+      let imageType =
+        "JPEG";
+
+
+      if (
+        mime.includes("png")
+      ) {
+        imageType = "PNG";
+      }
+
+
+      return {
+        base64,
+        imageType
+      };
+
+    } catch (error) {
+
+      console.warn(
+        "Profile photo could not be embedded:",
+        error
+      );
+
+      return null;
+    }
+  }
+
+
+  /* -----------------------------------------------
+     SAVE VCARD
+  ----------------------------------------------- */
+
+  async function saveVCard() {
+
+    try {
+
+      const name =
+        data.name ||
+        profile.name ||
+        "Contact";
+
+
+      const phone =
+        data.phone?.trim() ||
+        "";
+
+
+      const email =
+        data.email
+          ?.trim()
+          .replace(
+            /^mailto:/i,
+            ""
+          ) ||
+        "";
+
+
+      const address =
+        data.address?.trim() ||
+        "";
+
+
+      const city =
+        data.city?.trim() ||
+        "";
+
+
+      const facebook =
+        data.facebook?.trim() ||
+        "";
+
+
+      const messenger =
+        data.messenger?.trim() ||
+        "";
+
+
+      const profileUrl =
+        typeof window !== "undefined"
+          ? window.location.href
+          : "";
+
+
+      const photoUrl =
+        data.photo?.trim() ||
+        "";
+
+
+      /* -----------------------------------------
+         PROFILE PHOTO
+      ----------------------------------------- */
+
+      let photoLine = "";
+
+
+      if (photoUrl) {
+
+        const photo =
+          await getPhotoBase64(
+            photoUrl
+          );
+
+
+        if (photo) {
+
+          photoLine =
+            `PHOTO;ENCODING=b;TYPE=${photo.imageType}:${photo.base64}`;
+
+        }
+      }
+
+
+      /* -----------------------------------------
+         VCARD
+      ----------------------------------------- */
+
+      const vcardLines = [
+
+        "BEGIN:VCARD",
+
+        "VERSION:3.0",
+
+        `FN:${escapeVCard(name)}`,
+
+        `N:${escapeVCard(name)};;;;`,
+
+        phone
+          ? `TEL;TYPE=CELL:${escapeVCard(phone)}`
+          : "",
+
+        email
+          ? `EMAIL;TYPE=INTERNET:${escapeVCard(email)}`
+          : "",
+
+        address || city
+          ? `ADR;TYPE=HOME:;;${escapeVCard(
+              address
+            )};${escapeVCard(city)};;;`
+          : "",
+
+        facebook
+          ? `item1.URL:${escapeVCard(facebook)}`
+          : "",
+
+        facebook
+          ? `item1.X-ABLabel:Facebook`
+          : "",
+
+        messenger
+          ? `item2.URL:${escapeVCard(messenger)}`
+          : "",
+
+        messenger
+          ? `item2.X-ABLabel:Messenger`
+          : "",
+
+        profileUrl
+          ? `item3.URL:${escapeVCard(profileUrl)}`
+          : "",
+
+        profileUrl
+          ? `item3.X-ABLabel:Profile`
+          : "",
+
+        photoLine,
+
+        "END:VCARD"
+
+      ].filter(Boolean);
+
+
+      const vcard =
+        vcardLines.join("\r\n") +
+        "\r\n";
+
+
+      /* -----------------------------------------
+         CREATE FILE
+      ----------------------------------------- */
+
+      const blob =
+        new Blob(
+          [vcard],
+          {
+            type:
+              "text/vcard;charset=utf-8"
+          }
+        );
+
+
+      const url =
+        URL.createObjectURL(blob);
+
+
+      const safeName =
+        name
+          .replace(
+            /[<>:"/\\|?*\x00-\x1F]/g,
+            ""
+          )
+          .trim() ||
+        "Contact";
+
+
+      const link =
+        document.createElement("a");
+
+
+      link.href = url;
+
+      link.download =
+        `${safeName}.vcf`;
+
+
+      document.body.appendChild(
+        link
+      );
+
+
+      link.click();
+
+
+      document.body.removeChild(
+        link
+      );
+
+
+      setTimeout(() => {
+
+        URL.revokeObjectURL(
+          url
+        );
+
+      }, 1000);
+
+
+    } catch (error) {
+
+      console.error(
+        "vCard error:",
+        error
+      );
+
+
+      alert(
+        "Unable to create contact."
+      );
+
+    }
+
+  }
+
+
+  return (
+
+    <section className="save-contact-section">
+
+      <button
+        type="button"
+        className="save-contact-button"
+        onClick={saveVCard}
+      >
+
+        <i className="fa-solid fa-user-plus"></i>
+
+        <span>
+          Save Contact
+        </span>
+
+      </button>
+
+    </section>
+
+  );
+}
+
+
+/* =========================================================
    QR CODE BUTTON + POPUP
-   QR LANG ANG BINAGO
 ========================================================= */
 
 function QRButton() {
@@ -567,47 +953,70 @@ function QRButton() {
         await fetch(qrUrl);
 
       if (!response.ok) {
+
         throw new Error(
           "Unable to download QR"
         );
+
       }
+
 
       const blob =
         await response.blob();
 
+
       const blobUrl =
         URL.createObjectURL(blob);
+
 
       const link =
         document.createElement("a");
 
-      link.href = blobUrl;
+
+      link.href =
+        blobUrl;
+
 
       link.download =
         "profile-qr-code.png";
 
-      document.body.appendChild(link);
+
+      document.body.appendChild(
+        link
+      );
+
 
       link.click();
 
-      document.body.removeChild(link);
 
-      URL.revokeObjectURL(blobUrl);
+      document.body.removeChild(
+        link
+      );
+
+
+      URL.revokeObjectURL(
+        blobUrl
+      );
+
 
     } catch (error) {
 
       console.error(error);
 
+
       window.open(
         qrUrl,
         "_blank"
       );
+
     }
+
   }
 
 
   return (
     <>
+
       {/* =================================================
           QR BUTTON
       ================================================= */}
@@ -622,38 +1031,38 @@ function QRButton() {
         aria-label="Show QR Code"
 
         style={{
-  position: "absolute",
-  top: "5px",
-  right: "5px",
+          position: "absolute",
+          top: "5px",
+          right: "5px",
 
-  width: "44px",
-  height: "44px",
+          width: "44px",
+          height: "44px",
 
-  padding: 0,
-  margin: 0,
+          padding: 0,
+          margin: 0,
 
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
 
-  border: "none",
-  borderRadius: "50%",
+          border: "none",
+          borderRadius: "50%",
 
-  background: "#ffffff",
-  color: "#111111",
+          background: "#ffffff",
+          color: "#111111",
 
-  fontSize: "20px",
+          fontSize: "20px",
 
-  zIndex: 100,
+          zIndex: 100,
 
-  cursor: "pointer",
+          cursor: "pointer",
 
-  boxShadow:
-    "0 2px 10px rgba(0,0,0,.25)",
+          boxShadow:
+            "0 2px 10px rgba(0,0,0,.25)",
 
-  WebkitTapHighlightColor:
-    "transparent"
-}}
+          WebkitTapHighlightColor:
+            "transparent"
+        }}
       >
 
         <i className="fa-solid fa-qrcode"></i>
@@ -855,7 +1264,9 @@ function QRButton() {
                   fontSize: "13px"
                 }}
               >
+
                 Loading QR...
+
               </div>
 
             )}
@@ -1035,16 +1446,22 @@ function MainProfile({
   const addressParts = [];
 
   if (data.address?.trim()) {
+
     addressParts.push(
       data.address.trim()
     );
+
   }
 
+
   if (data.city?.trim()) {
+
     addressParts.push(
       data.city.trim()
     );
+
   }
+
 
   const location =
     addressParts.join(", ");
@@ -1053,7 +1470,9 @@ function MainProfile({
   return (
     <>
 
-      {/* MAIN PROFILE */}
+      {/* =================================================
+          MAIN PROFILE
+      ================================================= */}
 
       <section className="main-profile">
 
@@ -1109,21 +1528,37 @@ function MainProfile({
       </section>
 
 
-      {/* CONTACT BUTTONS */}
+      {/* =================================================
+          CONTACT BUTTONS
+      ================================================= */}
 
       <MainContacts
         profile={profile}
       />
 
 
-      {/* MESSAGE */}
+      {/* =================================================
+          MESSAGE
+      ================================================= */}
 
       <LostMessage
         message={data.message}
       />
 
 
-      {/* OTHER CONTACTS */}
+      {/* =================================================
+          SAVE CONTACT
+          DIRECTLY AFTER MESSAGE
+      ================================================= */}
+
+      <SaveContact
+        profile={profile}
+      />
+
+
+      {/* =================================================
+          OTHER CONTACTS
+      ================================================= */}
 
       {profile.others.length > 0 && (
 
@@ -1241,7 +1676,7 @@ export default function App() {
 
 
         /* -----------------------------------------
-           Requested profile
+           REQUESTED PROFILE
         ----------------------------------------- */
 
         if (requestedProfile) {
@@ -1274,8 +1709,7 @@ export default function App() {
 
 
         /* -----------------------------------------
-           If Jeffrey doesn't exist,
-           use first profile
+           IF JEFFREY DOESN'T EXIST
         ----------------------------------------- */
 
         if (!profileToShow) {
@@ -1355,7 +1789,6 @@ export default function App() {
       <div className="error">
         {error}
       </div>
-
     );
 
   }
@@ -1371,7 +1804,6 @@ export default function App() {
       <div className="error">
         Profile not found.
       </div>
-
     );
 
   }
