@@ -1213,7 +1213,7 @@ a {
 }
 
 .save-contact-button {
-  width: 100%;
+  width: 80%;
   min-height: 52px;
 
   display: flex;
