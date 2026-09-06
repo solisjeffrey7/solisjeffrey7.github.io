@@ -1214,7 +1214,7 @@ a {
 }
 
 .save-contact-button {
-  width: 80%;
+  width: 100%;
   min-height: 52px;
 
   display: flex;
