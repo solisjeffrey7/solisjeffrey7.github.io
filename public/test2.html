@@ -2,12 +2,20 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>BobotEditha.net - QR WiFi Manager</title>
 
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script
+        src="https://unpkg.com/html5-qrcode"
+        type="text/javascript"
+    ></script>
 
     <style>
 
@@ -27,6 +35,7 @@
         ===================================================== */
 
         :root {
+
             --bg: #0b0f14;
             --card: #121820;
             --card2: #18212b;
@@ -43,6 +52,7 @@
             --info: #3da5ff;
 
             --radius: 14px;
+
         }
 
 
@@ -51,6 +61,7 @@
         ===================================================== */
 
         :root[data-theme="light"] {
+
             --bg: #f4f6f8;
             --card: #ffffff;
             --card2: #f0f3f6;
@@ -65,6 +76,7 @@
             --danger: #e53935;
             --warning: #f5b800;
             --info: #1689e8;
+
         }
 
 
@@ -73,6 +85,7 @@
         ===================================================== */
 
         :root[data-theme="dark"] {
+
             --bg: #0b0f14;
             --card: #121820;
             --card2: #18212b;
@@ -87,16 +100,18 @@
             --danger: #ff4d4d;
             --warning: #ffc107;
             --info: #3da5ff;
+
         }
 
 
         /* =====================================================
-           AUTO THEME
+           AUTO LIGHT
         ===================================================== */
 
         @media (prefers-color-scheme: light) {
 
             :root[data-theme="auto"] {
+
                 --bg: #f4f6f8;
                 --card: #ffffff;
                 --card2: #f0f3f6;
@@ -111,14 +126,20 @@
                 --danger: #e53935;
                 --warning: #f5b800;
                 --info: #1689e8;
+
             }
 
         }
 
 
+        /* =====================================================
+           AUTO DARK
+        ===================================================== */
+
         @media (prefers-color-scheme: dark) {
 
             :root[data-theme="auto"] {
+
                 --bg: #0b0f14;
                 --card: #121820;
                 --card2: #18212b;
@@ -133,6 +154,7 @@
                 --danger: #ff4d4d;
                 --warning: #ffc107;
                 --info: #3da5ff;
+
             }
 
         }
@@ -143,14 +165,21 @@
         ===================================================== */
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
             background: var(--bg);
             color: var(--text);
+
             min-height: 100vh;
 
             transition:
                 background 0.2s ease,
                 color 0.2s ease;
+
         }
 
 
@@ -159,6 +188,7 @@
         ===================================================== */
 
         header {
+
             position: sticky;
             top: 0;
             z-index: 100;
@@ -172,74 +202,122 @@
             padding: 0 15px;
 
             background: rgba(11, 15, 20, 0.96);
-            border-bottom: 1px solid var(--border);
+
+            border-bottom:
+                1px solid var(--border);
 
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+
         }
 
+
         :root[data-theme="light"] header {
-            background: rgba(255, 255, 255, 0.96);
+
+            background:
+                rgba(255, 255, 255, 0.96);
+
         }
+
 
         @media (prefers-color-scheme: light) {
 
             :root[data-theme="auto"] header {
-                background: rgba(255, 255, 255, 0.96);
+
+                background:
+                    rgba(255, 255, 255, 0.96);
+
             }
 
         }
 
+
         .logo {
+
             font-size: 18px;
             font-weight: 800;
+
             letter-spacing: 1px;
+
         }
+
 
         .header-right {
+
             display: flex;
+
             align-items: center;
+
             gap: 8px;
+
         }
 
-        .theme-select {
+
+        /* =====================================================
+           THEME BUTTON
+        ===================================================== */
+
+        .theme-btn {
+
             height: 40px;
+
+            min-width: 58px;
 
             padding: 0 10px;
 
-            border: 1px solid var(--border);
+            border:
+                1px solid var(--border);
+
             border-radius: 10px;
 
             background: var(--card);
+
             color: var(--text);
 
             font-size: 13px;
             font-weight: 700;
 
-            outline: none;
             cursor: pointer;
+
         }
 
-        .theme-select:focus {
-            border-color: var(--primary);
+
+        .theme-btn:active {
+
+            transform: scale(0.95);
+
         }
+
+
+        /* =====================================================
+           SETTINGS BUTTON
+        ===================================================== */
 
         .icon-btn {
+
             width: 40px;
             height: 40px;
 
-            border: 1px solid var(--border);
+            border:
+                1px solid var(--border);
+
             border-radius: 10px;
 
             background: var(--card);
+
             color: var(--text);
 
             font-size: 20px;
+
             cursor: pointer;
+
         }
 
+
         .icon-btn:active {
+
             transform: scale(0.95);
+
         }
 
 
@@ -248,11 +326,16 @@
         ===================================================== */
 
         main {
+
             width: 100%;
+
             max-width: 700px;
 
             margin: auto;
-            padding: 20px 15px 40px;
+
+            padding:
+                20px 15px 40px;
+
         }
 
 
@@ -261,18 +344,29 @@
         ===================================================== */
 
         .card {
+
             background: var(--card);
-            border: 1px solid var(--border);
+
+            border:
+                1px solid var(--border);
+
             border-radius: var(--radius);
 
             padding: 16px;
+
             margin-bottom: 15px;
+
         }
 
+
         .card-title {
+
             font-size: 16px;
+
             font-weight: 700;
+
             margin-bottom: 12px;
+
         }
 
 
@@ -281,24 +375,38 @@
         ===================================================== */
 
         #qr-reader {
+
             width: 100%;
+
             overflow: hidden;
 
             border-radius: 12px;
+
             background: #000;
+
         }
+
 
         #qr-reader video {
+
             width: 100% !important;
+
             border-radius: 12px;
+
         }
+
 
         #qr-reader__scan_region {
+
             min-height: 260px;
+
         }
 
+
         #qr-reader__dashboard {
+
             display: none !important;
+
         }
 
 
@@ -307,56 +415,98 @@
         ===================================================== */
 
         .buttons {
+
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
             gap: 10px;
 
             margin-top: 12px;
+
         }
 
+
         button {
+
             border: 0;
+
             border-radius: 10px;
 
             min-height: 45px;
-            padding: 10px 12px;
+
+            padding:
+                10px 12px;
 
             background: var(--card2);
-            border: 1px solid var(--border);
+
+            border:
+                1px solid var(--border);
 
             color: var(--text);
+
             font-size: 14px;
+
             font-weight: 700;
 
             cursor: pointer;
+
         }
+
 
         button:active {
+
             transform: scale(0.97);
+
         }
+
 
         .primary {
+
             background: var(--primary);
+
             color: #00150d;
-            border-color: var(--primary);
+
+            border-color:
+                var(--primary);
+
         }
+
 
         .danger {
+
             background: var(--danger);
+
             color: white;
-            border-color: var(--danger);
+
+            border-color:
+                var(--danger);
+
         }
+
 
         .warning {
+
             background: var(--warning);
+
             color: #111;
-            border-color: var(--warning);
+
+            border-color:
+                var(--warning);
+
         }
 
+
         .info {
+
             background: var(--info);
+
             color: white;
-            border-color: var(--info);
+
+            border-color:
+                var(--info);
+
         }
 
 
@@ -365,38 +515,59 @@
         ===================================================== */
 
         .status {
+
             display: flex;
+
             align-items: center;
+
             gap: 9px;
 
             padding: 12px;
 
             border-radius: 10px;
+
             background: var(--card2);
 
             font-size: 14px;
+
         }
 
+
         .status-dot {
+
             width: 10px;
             height: 10px;
 
             border-radius: 50%;
+
             background: var(--muted);
 
             flex-shrink: 0;
+
         }
+
 
         .status-dot.online {
-            background: var(--primary);
+
+            background:
+                var(--primary);
+
         }
+
 
         .status-dot.error {
-            background: var(--danger);
+
+            background:
+                var(--danger);
+
         }
 
+
         .status-dot.warning {
-            background: var(--warning);
+
+            background:
+                var(--warning);
+
         }
 
 
@@ -405,33 +576,58 @@
         ===================================================== */
 
         #userInfo {
+
             display: none;
+
         }
+
 
         .user-grid {
+
             display: grid;
-            grid-template-columns: 1fr 1fr;
+
+            grid-template-columns:
+                1fr 1fr;
+
             gap: 10px;
+
         }
+
 
         .info-box {
+
             padding: 12px;
 
-            background: var(--card2);
-            border: 1px solid var(--border);
+            background:
+                var(--card2);
+
+            border:
+                1px solid var(--border);
+
             border-radius: 10px;
+
         }
+
 
         .info-label {
+
             color: var(--muted);
+
             font-size: 12px;
+
             margin-bottom: 5px;
+
         }
 
+
         .info-value {
+
             font-size: 15px;
+
             font-weight: 700;
+
             word-break: break-word;
+
         }
 
 
@@ -440,10 +636,13 @@
         ===================================================== */
 
         #log {
+
             white-space: pre-wrap;
+
             word-break: break-word;
 
             min-height: 100px;
+
             max-height: 400px;
 
             overflow-y: auto;
@@ -451,14 +650,20 @@
             padding: 12px;
 
             background: #070a0e;
-            border: 1px solid var(--border);
+
+            border:
+                1px solid var(--border);
+
             border-radius: 10px;
 
             color: #c8d2dc;
 
             font-family: monospace;
+
             font-size: 12px;
+
             line-height: 1.5;
+
         }
 
 
@@ -467,38 +672,61 @@
         ===================================================== */
 
         .modal {
+
             position: fixed;
+
             inset: 0;
+
             z-index: 999;
 
             display: none;
+
             align-items: center;
+
             justify-content: center;
 
             padding: 15px;
 
-            background: rgba(0, 0, 0, 0.75);
+            background:
+                rgba(0, 0, 0, 0.75);
+
         }
+
 
         .modal.show {
+
             display: flex;
+
         }
 
+
         .modal-box {
+
             width: 100%;
+
             max-width: 450px;
 
-            background: var(--card);
-            border: 1px solid var(--border);
+            background:
+                var(--card);
+
+            border:
+                1px solid var(--border);
+
             border-radius: 16px;
 
             padding: 20px;
+
         }
 
+
         .modal-title {
+
             font-size: 19px;
+
             font-weight: 800;
+
             margin-bottom: 18px;
+
         }
 
 
@@ -507,46 +735,70 @@
         ===================================================== */
 
         .field {
+
             margin-bottom: 14px;
+
         }
 
+
         .field label {
+
             display: block;
 
             color: var(--muted);
+
             font-size: 13px;
 
             margin-bottom: 6px;
+
         }
+
 
         .input-row {
+
             display: flex;
+
             gap: 5px;
+
         }
 
+
         input {
+
             width: 100%;
 
             padding: 12px;
 
-            background: #0b1016;
+            background: var(--card2);
+
             color: var(--text);
 
-            border: 1px solid var(--border);
+            border:
+                1px solid var(--border);
+
             border-radius: 9px;
 
             outline: none;
 
             font-size: 14px;
+
         }
+
 
         input:focus {
-            border-color: var(--primary);
+
+            border-color:
+                var(--primary);
+
         }
 
+
         .eye {
+
             width: 48px;
+
             flex-shrink: 0;
+
         }
 
 
@@ -555,18 +807,26 @@
         ===================================================== */
 
         .remember {
+
             display: flex;
+
             align-items: center;
+
             gap: 8px;
 
             margin-bottom: 15px;
 
             color: var(--muted);
+
             font-size: 13px;
+
         }
 
+
         .remember input {
+
             width: auto;
+
         }
 
 
@@ -575,13 +835,21 @@
         ===================================================== */
 
         .modal-buttons {
+
             display: grid;
-            grid-template-columns: 1fr 1fr;
+
+            grid-template-columns:
+                1fr 1fr;
+
             gap: 8px;
+
         }
 
+
         .modal-buttons .full {
+
             grid-column: 1 / -1;
+
         }
 
 
@@ -590,52 +858,85 @@
         ===================================================== */
 
         #planModal .modal-box {
+
             max-width: 500px;
+
         }
+
 
         #plans {
+
             display: grid;
+
             gap: 10px;
+
         }
 
+
         .plan {
+
             text-align: left;
 
             padding: 14px;
 
-            background: var(--card2);
-            border: 1px solid var(--border);
+            background:
+                var(--card2);
+
+            border:
+                1px solid var(--border);
 
             border-radius: 12px;
+
         }
+
 
         .plan-name {
+
             font-size: 16px;
+
             font-weight: 800;
+
         }
 
+
         .plan-description {
+
             margin-top: 5px;
 
             color: var(--muted);
+
             font-size: 13px;
+
         }
 
+
         .plan-bottom {
+
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
 
             margin-top: 10px;
+
         }
+
 
         .plan-duration {
-            color: var(--primary);
+
+            color:
+                var(--primary);
+
             font-weight: 700;
+
         }
 
+
         .plan-price {
+
             font-weight: 800;
+
         }
 
 
@@ -644,6 +945,7 @@
         ===================================================== */
 
         #temporaryQrScanner {
+
             position: fixed;
 
             width: 1px;
@@ -653,9 +955,11 @@
             top: -10000px;
 
             opacity: 0;
+
             pointer-events: none;
 
             overflow: hidden;
+
         }
 
 
@@ -666,34 +970,62 @@
         @media (max-width: 500px) {
 
             header {
+
                 padding: 0 10px;
+
             }
+
 
             main {
-                padding: 12px 10px 30px;
+
+                padding:
+                    12px 10px 30px;
+
             }
+
 
             .buttons {
-                grid-template-columns: 1fr 1fr 1fr;
+
+                grid-template-columns:
+                    1fr 1fr 1fr;
+
             }
+
 
             .user-grid {
-                grid-template-columns: 1fr;
+
+                grid-template-columns:
+                    1fr;
+
             }
+
 
             .logo {
+
                 font-size: 16px;
+
             }
 
-            .theme-select {
+
+            .theme-btn {
+
                 height: 38px;
+
+                min-width: 52px;
+
                 padding: 0 7px;
+
                 font-size: 12px;
+
             }
+
 
             .icon-btn {
+
                 width: 38px;
+
                 height: 38px;
+
             }
 
         }
@@ -716,28 +1048,17 @@
         BobotEditha.net
     </div>
 
+
     <div class="header-right">
 
-        <select
-            id="themeSelect"
-            class="theme-select"
-            onchange="setTheme(this.value)"
-            title="Theme"
+        <button
+            class="theme-btn"
+            id="themeButton"
+            onclick="cycleTheme()"
+            title="Change Theme"
         >
-
-            <option value="auto">
-                Auto
-            </option>
-
-            <option value="light">
-                Light
-            </option>
-
-            <option value="dark">
-                Dark
-            </option>
-
-        </select>
+            Auto
+        </button>
 
 
         <button
@@ -770,6 +1091,7 @@
             QR Scanner
         </div>
 
+
         <div id="qr-reader"></div>
 
 
@@ -782,6 +1104,7 @@
                 🖼 Gallery
             </button>
 
+
             <button
                 class="warning"
                 id="flashButton"
@@ -789,6 +1112,7 @@
             >
                 🔦 Flash
             </button>
+
 
             <button
                 class="danger"
@@ -812,12 +1136,14 @@
             MikroTik Status
         </div>
 
+
         <div class="status">
 
             <span
                 id="statusDot"
                 class="status-dot"
             ></span>
+
 
             <span id="statusText">
                 Not connected
@@ -830,7 +1156,7 @@
 
     <!-- =====================================================
          USER INFORMATION
-    ====================================================== -->
+    ===================================================== -->
 
     <div
         class="card"
@@ -841,7 +1167,9 @@
             User Information
         </div>
 
+
         <div class="user-grid">
+
 
             <div class="info-box">
 
@@ -937,6 +1265,7 @@
             Activity Log
         </div>
 
+
         <div id="log"></div>
 
     </div>
@@ -962,6 +1291,7 @@
 >
 
     <div class="modal-box">
+
 
         <div class="modal-title">
             MikroTik Settings
@@ -1005,6 +1335,7 @@
                 Password
             </label>
 
+
             <div class="input-row">
 
                 <input
@@ -1013,6 +1344,7 @@
                     placeholder="Password"
                     autocomplete="current-password"
                 >
+
 
                 <button
                     class="eye"
@@ -1048,12 +1380,14 @@
                 Connect
             </button>
 
+
             <button
                 class="danger"
                 onclick="clearSavedSettings()"
             >
                 Clear
             </button>
+
 
             <button
                 class="full"
@@ -1080,13 +1414,16 @@
 
     <div class="modal-box">
 
+
         <div class="modal-title">
             Select WiFi Plan
         </div>
 
+
         <div id="plans">
             Loading plans...
         </div>
+
 
         <div style="margin-top:15px">
 
@@ -1105,10 +1442,11 @@
 
 
 <!-- =========================================================
-     EXTERNAL JAVASCRIPT
+     JAVASCRIPT
 ========================================================= -->
 
 <script src="script.js"></script>
+
 
 </body>
 
