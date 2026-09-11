@@ -201,7 +201,8 @@
 
             padding: 0 15px;
 
-            background: rgba(11, 15, 20, 0.96);
+            background:
+                rgba(11, 15, 20, 0.96);
 
             border-bottom:
                 1px solid var(--border);
@@ -390,7 +391,7 @@
 
 
         /* =====================================================
-           ACTUAL QR READER
+           ACTUAL CAMERA
         ===================================================== */
 
         #qr-reader {
@@ -435,8 +436,6 @@
 
         /* =====================================================
            DARK TRANSPARENT OVERLAY
-           
-           The area outside the QR square becomes darker.
         ===================================================== */
 
         .qr-overlay {
@@ -449,27 +448,8 @@
 
             pointer-events: none;
 
-            background: rgba(0, 0, 0, 0.48);
-
-            /*
-                Cut out the center area.
-                The QR area stays transparent.
-            */
-
-            -webkit-mask:
-                linear-gradient(#000 0 0) content-box,
-                linear-gradient(#000 0 0);
-
-            -webkit-mask-composite: xor;
-
-            mask:
-                linear-gradient(#000 0 0) content-box,
-                linear-gradient(#000 0 0);
-
-            mask-composite: exclude;
-
-            padding:
-                calc(50% - 110px);
+            background:
+                rgba(0, 0, 0, 0.48);
 
         }
 
@@ -495,6 +475,24 @@
 
             pointer-events: none;
 
+            /*
+               Transparent center
+               Dark outside comes from the overlay
+            */
+
+            background: transparent;
+
+            /*
+               This removes the dark overlay
+               from the scanner window.
+            */
+
+            box-shadow:
+                0 0 0 100vmax
+                rgba(0, 0, 0, 0.48);
+
+            overflow: hidden;
+
         }
 
 
@@ -514,10 +512,12 @@
 
             border-style: solid;
 
+            z-index: 30;
+
             filter:
                 drop-shadow(
                     0 0 5px
-                    rgba(0, 208, 132, 0.65)
+                    rgba(0, 208, 132, 0.75)
                 );
 
         }
@@ -591,6 +591,94 @@
 
             border-radius:
                 0 0 6px 0;
+
+        }
+
+
+        /* =====================================================
+           ANIMATED SCANNING LINE
+        ===================================================== */
+
+        .qr-frame::after {
+
+            content: "";
+
+            position: absolute;
+
+            left: 12px;
+            right: 12px;
+
+            top: 8px;
+
+            height: 2px;
+
+            z-index: 25;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent 0%,
+                    var(--primary) 25%,
+                    var(--primary) 75%,
+                    transparent 100%
+                );
+
+            box-shadow:
+                0 0 6px var(--primary),
+                0 0 14px var(--primary);
+
+            opacity: 0.95;
+
+            animation:
+                scanLine 2.2s
+                ease-in-out
+                infinite;
+
+        }
+
+
+        /* =====================================================
+           SCANNER LINE ANIMATION
+        ===================================================== */
+
+        @keyframes scanLine {
+
+            0% {
+
+                top: 8px;
+
+                opacity: 0.25;
+
+            }
+
+            10% {
+
+                opacity: 1;
+
+            }
+
+            50% {
+
+                top:
+                    calc(100% - 10px);
+
+                opacity: 1;
+
+            }
+
+            90% {
+
+                opacity: 1;
+
+            }
+
+            100% {
+
+                top: 8px;
+
+                opacity: 0.25;
+
+            }
 
         }
 
@@ -1215,7 +1303,9 @@
             }
 
 
-            /* QR FRAME MOBILE */
+            /* =================================================
+               MOBILE QR FRAME
+            ================================================= */
 
             .qr-frame {
 
@@ -1229,20 +1319,6 @@
 
                 width: 34px;
                 height: 34px;
-
-                border-width: 4px;
-
-            }
-
-
-            .qr-overlay {
-
-                /*
-                   Match the 190px mobile frame
-                */
-
-                padding:
-                    calc(50% - 95px);
 
             }
 
@@ -1311,12 +1387,12 @@
 
 
         <!-- =================================================
-             CAMERA + SCANNER FRAME
+             CAMERA
         ================================================== -->
 
         <div class="qr-camera">
 
-            <!-- Actual camera -->
+            <!-- Actual html5-qrcode scanner -->
             <div id="qr-reader"></div>
 
 
@@ -1324,21 +1400,28 @@
             <div class="qr-overlay"></div>
 
 
-            <!-- Four L-shaped corners -->
+            <!-- Scanner frame -->
             <div class="qr-frame">
 
+                <!-- Top Left -->
                 <span
                     class="corner top-left"
                 ></span>
 
+
+                <!-- Top Right -->
                 <span
                     class="corner top-right"
                 ></span>
 
+
+                <!-- Bottom Left -->
                 <span
                     class="corner bottom-left"
                 ></span>
 
+
+                <!-- Bottom Right -->
                 <span
                     class="corner bottom-right"
                 ></span>
@@ -1349,7 +1432,7 @@
 
 
         <!-- =================================================
-             CAMERA BUTTONS
+             BUTTONS
         ================================================== -->
 
         <div class="buttons">
@@ -1385,7 +1468,7 @@
 
     <!-- =====================================================
          STATUS
-    ====================================================== -->
+    ===================================================== -->
 
     <div class="card">
 
@@ -1413,7 +1496,7 @@
 
     <!-- =====================================================
          USER INFORMATION
-    ====================================================== -->
+    ===================================================== -->
 
     <div
         class="card"
