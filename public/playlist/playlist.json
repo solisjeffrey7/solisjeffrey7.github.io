@@ -1,12 +1,29 @@
 {
-  "title": "Karaoke Jukebox2",
+  "title": "Karaoke Jukebox - All Time Favorite Tagalog Songs",
   "videos": [
     {
       "title": "214",
       "artist": "Rivermaya",
       "video": "videos/214.mp4",
-      "thumbnail": "thumbnails/214.jpg",
       "description": "Rivermaya - 214"
+    },
+    {
+      "title": "Himala",
+      "artist": "Rivermaya",
+      "video": "videos/himala.mp4",
+      "description": "Rivermaya - Himala"
+    },
+    {
+      "title": "Elesi",
+      "artist": "Rivermaya",
+      "video": "videos/elesi.mp4",
+      "description": "Rivermaya - Elesi"
+    },
+    {
+      "title": "Liwanag sa Dilim",
+      "artist": "Rivermaya",
+      "video": "videos/liwanag-sa-dilim.mp4",
+      "description": "Rivermaya - Liwanag sa Dilim"
     },
     {
       "title": "Beer",
@@ -15,17 +32,376 @@
       "description": "Itchyworms - Beer"
     },
     {
+      "title": "Akin Ka Na Lang",
+      "artist": "Itchyworms",
+      "video": "videos/akin-ka-na-lang.mp4",
+      "description": "Itchyworms - Akin Ka Na Lang"
+    },
+    {
+      "title": "Huwag Ka Sanang Magagalit",
+      "artist": "Eraserheads",
+      "video": "videos/huwag-ka-sanang-magagalit.mp4",
+      "description": "Eraserheads - Huwag Ka Sanang Magagalit"
+    },
+    {
+      "title": "Ang Huling El Bimbo",
+      "artist": "Eraserheads",
+      "video": "videos/ang-huling-el-bimbo.mp4",
+      "description": "Eraserheads - Ang Huling El Bimbo"
+    },
+    {
+      "title": "With a Smile",
+      "artist": "Eraserheads",
+      "video": "videos/with-a-smile.mp4",
+      "description": "Eraserheads - With a Smile"
+    },
+    {
+      "title": "Pare Ko",
+      "artist": "Eraserheads",
+      "video": "videos/pare-ko.mp4",
+      "description": "Eraserheads - Pare Ko"
+    },
+    {
+      "title": "Alapaap",
+      "artist": "Eraserheads",
+      "video": "videos/alapaap.mp4",
+      "description": "Eraserheads - Alapaap"
+    },
+    {
+      "title": "Magasin",
+      "artist": "Eraserheads",
+      "video": "videos/magasin.mp4",
+      "description": "Eraserheads - Magasin"
+    },
+    {
       "title": "Harana",
       "artist": "Parokya ni Edgar",
       "video": "videos/harana.mp4",
-      "thumbnail": "thumbnails/harana.jpg",
       "description": "Parokya ni Edgar - Harana"
+    },
+    {
+      "title": "Halaga",
+      "artist": "Parokya ni Edgar",
+      "video": "videos/halaga.mp4",
+      "description": "Parokya ni Edgar - Halaga"
+    },
+    {
+      "title": "Your Song",
+      "artist": "Parokya ni Edgar",
+      "video": "videos/your-song.mp4",
+      "description": "Parokya ni Edgar - Your Song"
+    },
+    {
+      "title": "Pangarap Lang Kita",
+      "artist": "Parokya ni Edgar",
+      "video": "videos/pangarap-lang-kita.mp4",
+      "description": "Parokya ni Edgar - Pangarap Lang Kita"
+    },
+    {
+      "title": "Bulong",
+      "artist": "Kamikazee",
+      "video": "videos/bulong.mp4",
+      "description": "Kamikazee - Bulong"
     },
     {
       "title": "Huling Sayaw",
       "artist": "Kamikazee",
       "video": "videos/huling-sayaw.mp4",
       "description": "Kamikazee - Huling Sayaw"
+    },
+    {
+      "title": "Narda",
+      "artist": "Kamikazee",
+      "video": "videos/narda.mp4",
+      "description": "Kamikazee - Narda"
+    },
+    {
+      "title": "Dahil Ikaw",
+      "artist": "True Faith",
+      "video": "videos/dahil-ikaw.mp4",
+      "description": "True Faith - Dahil Ikaw"
+    },
+    {
+      "title": "Perfect",
+      "artist": "True Faith",
+      "video": "videos/perfect.mp4",
+      "description": "True Faith - Perfect"
+    },
+    {
+      "title": "Before I Let You Go",
+      "artist": "Freestyle",
+      "video": "videos/before-i-let-you-go.mp4",
+      "description": "Freestyle - Before I Let You Go"
+    },
+    {
+      "title": "This Time",
+      "artist": "Freestyle",
+      "video": "videos/this-time.mp4",
+      "description": "Freestyle - This Time"
+    },
+    {
+      "title": "So Slow",
+      "artist": "Freestyle",
+      "video": "videos/so-slow.mp4",
+      "description": "Freestyle - So Slow"
+    },
+    {
+      "title": "Kahit Kailan",
+      "artist": "South Border",
+      "video": "videos/kahit-kailan.mp4",
+      "description": "South Border - Kahit Kailan"
+    },
+    {
+      "title": "Rainbow",
+      "artist": "South Border",
+      "video": "videos/rainbow.mp4",
+      "description": "South Border - Rainbow"
+    },
+    {
+      "title": "Ikaw Nga",
+      "artist": "South Border",
+      "video": "videos/ikaw-nga.mp4",
+      "description": "South Border - Ikaw Nga"
+    },
+    {
+      "title": "Hanggang Kailan",
+      "artist": "Orange & Lemons",
+      "video": "videos/hanggang-kailan.mp4",
+      "description": "Orange & Lemons - Hanggang Kailan"
+    },
+    {
+      "title": "Heaven Knows",
+      "artist": "Orange & Lemons",
+      "video": "videos/heaven-knows.mp4",
+      "description": "Orange & Lemons - Heaven Knows"
+    },
+    {
+      "title": "Yakap Sa Dilim",
+      "artist": "Orange & Lemons",
+      "video": "videos/yakap-sa-dilim.mp4",
+      "description": "Orange & Lemons - Yakap Sa Dilim"
+    },
+    {
+      "title": "Kahit Maputi Na Ang Buhok Ko",
+      "artist": "Rey Valera",
+      "video": "videos/kahit-maputi-na-ang-buhok-ko.mp4",
+      "description": "Rey Valera - Kahit Maputi Na Ang Buhok Ko"
+    },
+    {
+      "title": "Pangako Sa'yo",
+      "artist": "Vina Morales",
+      "video": "videos/pangako-sa-yo.mp4",
+      "description": "Pangako Sa'yo"
+    },
+    {
+      "title": "Ikaw Lamang",
+      "artist": "Silent Sanctuary",
+      "video": "videos/ikaw-lamang.mp4",
+      "description": "Silent Sanctuary - Ikaw Lamang"
+    },
+    {
+      "title": "Kundiman",
+      "artist": "Silent Sanctuary",
+      "video": "videos/kundiman.mp4",
+      "description": "Silent Sanctuary - Kundiman"
+    },
+    {
+      "title": "Baliw",
+      "artist": "Ebe Dancel",
+      "video": "videos/baliw.mp4",
+      "description": "Ebe Dancel - Baliw"
+    },
+    {
+      "title": "Burnout",
+      "artist": "Sugarfree",
+      "video": "videos/burnout.mp4",
+      "description": "Sugarfree - Burnout"
+    },
+    {
+      "title": "Hari ng Sablay",
+      "artist": "Sugarfree",
+      "video": "videos/hari-ng-sablay.mp4",
+      "description": "Sugarfree - Hari ng Sablay"
+    },
+    {
+      "title": "Prom",
+      "artist": "Sugarfree",
+      "video": "videos/prom.mp4",
+      "description": "Sugarfree - Prom"
+    },
+    {
+      "title": "Makita Kang Muli",
+      "artist": "Sugarfree",
+      "video": "videos/makita-kang-muli.mp4",
+      "description": "Sugarfree - Makita Kang Muli"
+    },
+    {
+      "title": "Bawat Daan",
+      "artist": "Ebe Dancel",
+      "video": "videos/bawat-daan.mp4",
+      "description": "Ebe Dancel - Bawat Daan"
+    },
+    {
+      "title": "Sa'yo",
+      "artist": "Munimuni",
+      "video": "videos/sayo.mp4",
+      "description": "Munimuni - Sa'yo"
+    },
+    {
+      "title": "Tadhana",
+      "artist": "Up Dharma Down",
+      "video": "videos/tadhana.mp4",
+      "description": "Up Dharma Down - Tadhana"
+    },
+    {
+      "title": "Unti-Unti",
+      "artist": "Up Dharma Down",
+      "video": "videos/unti-unti.mp4",
+      "description": "Up Dharma Down - Unti-Unti"
+    },
+    {
+      "title": "Dahan",
+      "artist": "December Avenue",
+      "video": "videos/dahan.mp4",
+      "description": "December Avenue - Dahan"
+    },
+    {
+      "title": "Kahit 'Di Mo Alam",
+      "artist": "December Avenue",
+      "video": "videos/kahit-di-mo-alam.mp4",
+      "description": "December Avenue - Kahit 'Di Mo Alam"
+    },
+    {
+      "title": "Sa Ngalan ng Pag-ibig",
+      "artist": "December Avenue",
+      "video": "videos/sa-ngalan-ng-pag-ibig.mp4",
+      "description": "December Avenue - Sa Ngalan ng Pag-ibig"
+    },
+    {
+      "title": "Kung 'Di Rin Lang Ikaw",
+      "artist": "December Avenue",
+      "video": "videos/kung-di-rin-lang-ikaw.mp4",
+      "description": "December Avenue - Kung 'Di Rin Lang Ikaw"
+    },
+    {
+      "title": "Mundo",
+      "artist": "IV of Spades",
+      "video": "videos/mundo.mp4",
+      "description": "IV of Spades - Mundo"
+    },
+    {
+      "title": "Come Inside of My Heart",
+      "artist": "IV of Spades",
+      "video": "videos/come-inside-of-my-heart.mp4",
+      "description": "IV of Spades - Come Inside of My Heart"
+    },
+    {
+      "title": "Bawat Piyesa",
+      "artist": "Munimuni",
+      "video": "videos/bawat-piyesa.mp4",
+      "description": "Munimuni - Bawat Piyesa"
+    },
+    {
+      "title": "Ikaw At Ako",
+      "artist": "Johnoy Danao",
+      "video": "videos/ikaw-at-ako.mp4",
+      "description": "Johnoy Danao - Ikaw At Ako"
+    },
+    {
+      "title": "Dati",
+      "artist": "Sam Concepcion, Tippy Dos Santos & Quest",
+      "video": "videos/dati.mp4",
+      "description": "Dati"
+    },
+    {
+      "title": "Kahit Anong Sabihin Ng Iba",
+      "artist": "Eraserheads",
+      "video": "videos/kahit-anong-sabihin-ng-iba.mp4",
+      "description": "Eraserheads"
+    },
+    {
+      "title": "Minsan",
+      "artist": "Eraserheads",
+      "video": "videos/minsan.mp4",
+      "description": "Eraserheads - Minsan"
+    },
+    {
+      "title": "Toyang",
+      "artist": "Eraserheads",
+      "video": "videos/toyang.mp4",
+      "description": "Eraserheads - Toyang"
+    },
+    {
+      "title": "Ligaya",
+      "artist": "Eraserheads",
+      "video": "videos/ligaya.mp4",
+      "description": "Eraserheads - Ligaya"
+    },
+    {
+      "title": "Kailan",
+      "artist": "Smokey Mountain",
+      "video": "videos/kailan.mp4",
+      "description": "Smokey Mountain - Kailan"
+    },
+    {
+      "title": "Maging Sino Ka Man",
+      "artist": "Erik Santos",
+      "video": "videos/maging-sino-ka-man.mp4",
+      "description": "Maging Sino Ka Man"
+    },
+    {
+      "title": "Hanggang",
+      "artist": "Wency Cornejo",
+      "video": "videos/hanggang.mp4",
+      "description": "Wency Cornejo - Hanggang"
+    },
+    {
+      "title": "Magbalik",
+      "artist": "Callalily",
+      "video": "videos/magbalik.mp4",
+      "description": "Callalily - Magbalik"
+    },
+    {
+      "title": "Di Na Babalik",
+      "artist": "Ang Bandang Shirley",
+      "video": "videos/di-na-babalik.mp4",
+      "description": "Ang Bandang Shirley - Di Na Babalik"
+    },
+    {
+      "title": "Pusong Bato",
+      "artist": "Aira Lipata",
+      "video": "videos/pusong-bato.mp4",
+      "description": "Pusong Bato"
+    },
+    {
+      "title": "Kahit Kailan",
+      "artist": "South Border",
+      "video": "videos/kahit-kailan.mp4",
+      "description": "South Border - Kahit Kailan"
+    },
+    {
+      "title": "Sana Maulit Muli",
+      "artist": "Gary Valenciano",
+      "video": "videos/sana-maulit-muli.mp4",
+      "description": "Gary Valenciano - Sana Maulit Muli"
+    },
+    {
+      "title": "Nandito Ako",
+      "artist": "Ogie Alcasid",
+      "video": "videos/nandito-ako.mp4",
+      "description": "Ogie Alcasid - Nandito Ako"
+    },
+    {
+      "title": "Hanggang Ngayon",
+      "artist": "Kyla",
+      "video": "videos/hanggang-ngayon.mp4",
+      "description": "Kyla - Hanggang Ngayon"
+    },
+    {
+      "title": "Ikaw Pala",
+      "artist": "Sugarfree",
+      "video": "videos/ikaw-pala.mp4",
+      "description": "Sugarfree - Ikaw Pala"
     }
   ]
 }
