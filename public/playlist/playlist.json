@@ -1,17 +1,24 @@
 {
-  "title": "My Video Playlist",
+  "title": "Karaoke Jukebox",
   "videos": [
     {
-      "title": "Big Buck Bunny",
-      "video": "https://media.w3.org/2010/05/sintel/trailer.mp4",
-      "thumbnail": "thumbnails/video1.jpg",
-      "description": "Sample HTML5 video."
+      "title": "214",
+      "artist": "Rivermaya",
+      "video": "karaoke/214.mp4",
+      "thumbnail": "thumbnails/214.jpg",
+      "description": "Rivermaya - 214"
     },
     {
-      "title": "Sintel Trailer",
-      "video": "https://media.w3.org/2010/05/bunny/trailer.mp4",
-      "thumbnail": "thumbnails/video2.jpg",
-      "description": "Second sample video."
+      "title": "Beer",
+      "artist": "Itchyworms",
+      "video": "karaoke/beer.mp4",
+      "description": "Itchyworms - Beer"
+    },
+    {
+      "title": "Harana",
+      "artist": "Parokya ni Edgar",
+      "video": "karaoke/harana.mp4",
+      "description": "Parokya ni Edgar - Harana"
     }
   ]
 }
