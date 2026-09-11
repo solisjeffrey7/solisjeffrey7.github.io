@@ -9,13 +9,13 @@
     },
     {
       "title": "Episode 2 - Introduction",
-      "video": "videos/video2.mp4",
+      "video": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
       "thumbnail": "thumbnails/video2.jpg",
       "description": "Introduction and basic information."
     },
     {
       "title": "Episode 3 - Tutorial",
-      "video": "videos/video3.mp4",
+      "video": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
       "thumbnail": "thumbnails/video3.jpg",
       "description": "Step-by-step tutorial."
     }
