@@ -342,7 +342,7 @@
 
 
         /* =====================================================
-           USER INFO
+           USER INFORMATION
         ====================================================== */
 
         #userInfo {
@@ -658,8 +658,15 @@
 
 
         /* =====================================================
-           PLAN
+           PLANS
         ====================================================== */
+
+        #plansContainer {
+
+            width: 100%;
+
+        }
+
 
         .plan {
 
@@ -676,12 +683,23 @@
 
             cursor: pointer;
 
+            transition:
+                .15s ease;
+
         }
 
 
         .plan:hover {
 
             background: #2d2d2d;
+
+        }
+
+
+        .plan:active {
+
+            transform:
+                scale(.99);
 
         }
 
@@ -697,6 +715,8 @@
 
         .plan-name {
 
+            font-size: 15px;
+
             font-weight: bold;
 
         }
@@ -709,6 +729,30 @@
             color: #aaa;
 
             font-size: 12px;
+
+        }
+
+
+        .plan-price {
+
+            margin-top: 7px;
+
+            color: #00ff88;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+        }
+
+
+        .no-plans {
+
+            padding: 15px;
+
+            color: #ff5555;
+
+            text-align: center;
 
         }
 
@@ -767,16 +811,12 @@
 <div class="container">
 
 
-    <!-- =====================================================
-         CAMERA
-    ====================================================== -->
+    <!-- CAMERA -->
 
     <div id="qr-reader"></div>
 
 
-    <!-- =====================================================
-         BUTTONS
-    ====================================================== -->
+    <!-- BUTTONS -->
 
     <div class="buttons">
 
@@ -799,9 +839,7 @@
     </div>
 
 
-    <!-- =====================================================
-         GALLERY INPUT
-    ====================================================== -->
+    <!-- GALLERY INPUT -->
 
     <input
         id="galleryInput"
@@ -811,9 +849,7 @@
     >
 
 
-    <!-- =====================================================
-         STATUS
-    ====================================================== -->
+    <!-- STATUS -->
 
     <div
         id="status"
@@ -824,7 +860,7 @@
 
 
     <!-- =====================================================
-         USER INFO
+         USER INFORMATION
     ====================================================== -->
 
     <div id="userInfo">
@@ -916,9 +952,7 @@
     </div>
 
 
-    <!-- =====================================================
-         LOG
-    ====================================================== -->
+    <!-- LOG -->
 
     <div class="log-title">
         Activity Log
@@ -953,8 +987,6 @@
         </div>
 
 
-        <!-- API URL -->
-
         <div class="form-group">
 
             <label>
@@ -972,8 +1004,6 @@
         </div>
 
 
-        <!-- USERNAME -->
-
         <div class="form-group">
 
             <label>
@@ -990,8 +1020,6 @@
 
         </div>
 
-
-        <!-- PASSWORD -->
 
         <div class="form-group">
 
@@ -1023,9 +1051,7 @@
         </div>
 
 
-        <!-- =================================================
-             REMEMBER ME
-        ================================================== -->
+        <!-- REMEMBER ME -->
 
         <label class="remember-row">
 
@@ -1040,8 +1066,6 @@
 
         </label>
 
-
-        <!-- BUTTONS -->
 
         <div class="modal-buttons">
 
@@ -1093,86 +1117,12 @@
         </div>
 
 
-        <div
-            class="plan"
-            data-value="1h"
-            onclick="selectPlan(this)"
-        >
+        <!-- Plans generated from plan.json -->
 
-            <div class="plan-name">
-                FREE 1HR
-            </div>
+        <div id="plansContainer">
 
-            <div class="plan-info">
-                Add 1 hour
-            </div>
-
-        </div>
-
-
-        <div
-            class="plan"
-            data-value="3d"
-            onclick="selectPlan(this)"
-        >
-
-            <div class="plan-name">
-                3 DAYS
-            </div>
-
-            <div class="plan-info">
-                Add 3 days
-            </div>
-
-        </div>
-
-
-        <div
-            class="plan"
-            data-value="7d"
-            onclick="selectPlan(this)"
-        >
-
-            <div class="plan-name">
-                7 DAYS
-            </div>
-
-            <div class="plan-info">
-                Add 7 days
-            </div>
-
-        </div>
-
-
-        <div
-            class="plan"
-            data-value="15d"
-            onclick="selectPlan(this)"
-        >
-
-            <div class="plan-name">
-                15 DAYS
-            </div>
-
-            <div class="plan-info">
-                Add 15 days
-            </div>
-
-        </div>
-
-
-        <div
-            class="plan"
-            data-value="30d"
-            onclick="selectPlan(this)"
-        >
-
-            <div class="plan-name">
-                30 DAYS
-            </div>
-
-            <div class="plan-info">
-                Add 30 days
+            <div class="no-plans">
+                Loading plans...
             </div>
 
         </div>
@@ -1219,11 +1169,15 @@ let scanBusy = false;
 
 let selectedPlan = "";
 
+let selectedPlanData = null;
+
 let planResolver = null;
+
+let plans = [];
 
 
 /* =========================================================
-   STORAGE KEY
+   STORAGE
 ========================================================= */
 
 const CONFIG_KEY =
@@ -1270,6 +1224,258 @@ function log(
 
     box.scrollTop =
         box.scrollHeight;
+
+}
+
+
+/* =========================================================
+   LOAD PLAN.JSON
+========================================================= */
+
+async function loadPlans() {
+
+    const container =
+        document.getElementById(
+            "plansContainer"
+        );
+
+
+    try {
+
+        const response =
+            await fetch(
+                "plan.json",
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        plans =
+            Array.isArray(
+                data.plans
+            )
+                ? data.plans
+                : [];
+
+
+        /*
+           Only enabled plans.
+        */
+
+        plans =
+            plans.filter(
+                plan =>
+                    plan.enabled !== false
+            );
+
+
+        renderPlans();
+
+
+        log(
+            plans.length +
+            " plan(s) loaded from plan.json.",
+            "success"
+        );
+
+
+    } catch (error) {
+
+        plans = [];
+
+
+        container.innerHTML =
+
+            '<div class="no-plans">' +
+
+            'Unable to load plan.json<br>' +
+
+            '<small>' +
+
+            error.message +
+
+            '</small>' +
+
+            '</div>';
+
+
+        log(
+            "Failed to load plan.json: " +
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER PLANS
+========================================================= */
+
+function renderPlans() {
+
+    const container =
+        document.getElementById(
+            "plansContainer"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (!plans.length) {
+
+        container.innerHTML =
+
+            '<div class="no-plans">' +
+
+            'No enabled plans found.' +
+
+            '</div>';
+
+        return;
+
+    }
+
+
+    plans.forEach(
+        plan => {
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+
+            element.className =
+                "plan";
+
+
+            element.dataset.id =
+                plan.id;
+
+
+            element.onclick =
+                () => selectPlan(
+                    element
+                );
+
+
+            const name =
+                document.createElement(
+                    "div"
+                );
+
+
+            name.className =
+                "plan-name";
+
+
+            name.textContent =
+                plan.name ||
+                plan.duration ||
+                plan.id;
+
+
+            const description =
+                document.createElement(
+                    "div"
+                );
+
+
+            description.className =
+                "plan-info";
+
+
+            description.textContent =
+                plan.description ||
+                (
+                    "Add " +
+                    plan.duration
+                );
+
+
+            element.appendChild(
+                name
+            );
+
+
+            element.appendChild(
+                description
+            );
+
+
+            /*
+               Show price only if
+               price is supplied.
+            */
+
+            if (
+                plan.price !== undefined &&
+                plan.price !== null
+            ) {
+
+                const price =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                price.className =
+                    "plan-price";
+
+
+                if (
+                    Number(plan.price) ===
+                    0
+                ) {
+
+                    price.textContent =
+                        "FREE";
+
+                } else {
+
+                    price.textContent =
+                        "₱" +
+                        Number(
+                            plan.price
+                        ).toLocaleString(
+                            "en-PH"
+                        );
+
+                }
+
+
+                element.appendChild(
+                    price
+                );
+
+            }
+
+
+            container.appendChild(
+                element
+            );
+
+        }
+    );
 
 }
 
@@ -1396,12 +1602,6 @@ function saveSettings() {
     };
 
 
-    /*
-       Save configuration
-       only if Remember Me
-       is checked.
-    */
-
     if (remember) {
 
         try {
@@ -1447,18 +1647,13 @@ function saveSettings() {
 
     } else {
 
-        /*
-           Remove previously
-           saved configuration.
-        */
-
         localStorage.removeItem(
             CONFIG_KEY
         );
 
 
         log(
-            "Remember Me is OFF. Configuration will not be saved."
+            "Remember Me is OFF."
         );
 
     }
@@ -1467,7 +1662,6 @@ function saveSettings() {
     updateStatus();
 
     closeSettings();
-
 
     testConnection();
 
@@ -1482,10 +1676,6 @@ function clearSettings() {
 
     mikrotik = null;
 
-
-    /*
-       Remove saved config.
-    */
 
     localStorage.removeItem(
         CONFIG_KEY
@@ -1573,10 +1763,6 @@ function loadSavedSettings() {
         }
 
 
-        /*
-           Restore fields.
-        */
-
         document
             .getElementById(
                 "apiUrl"
@@ -1609,11 +1795,6 @@ function loadSavedSettings() {
                 true;
 
 
-        /*
-           Restore active
-           MikroTik config.
-        */
-
         mikrotik = {
 
             apiUrl:
@@ -1636,10 +1817,6 @@ function loadSavedSettings() {
             "success"
         );
 
-
-        /*
-           Test automatically.
-        */
 
         testConnection();
 
@@ -1988,7 +2165,7 @@ async function onScanSuccess(
 
 
 /* =========================================================
-   PROCESS QR CONTENT
+   PROCESS QR
 ========================================================= */
 
 async function processQrContent(
@@ -2054,6 +2231,7 @@ async function processQrContent(
             error.message,
             "error"
         );
+
 
         scanBusy = false;
 
@@ -2201,20 +2379,22 @@ async function updateHotspotUser(
 
                 "-",
 
-                oldComment || "-"
+                oldComment ||
+                "-"
 
             );
 
 
             /*
-               Select plan.
+               Select plan from
+               plan.json.
             */
 
-            const validity =
+            const selected =
                 await selectValidity();
 
 
-            if (!validity) {
+            if (!selected) {
 
                 log(
                     "Plan selection cancelled.",
@@ -2231,6 +2411,10 @@ async function updateHotspotUser(
             }
 
 
+            const validity =
+                selected.duration;
+
+
             const addMilliseconds =
                 validityToMilliseconds(
                     validity
@@ -2242,10 +2426,6 @@ async function updateHotspotUser(
                     addMilliseconds
                 );
 
-
-            /*
-               New expiration.
-            */
 
             let newExpiration;
 
@@ -2303,10 +2483,6 @@ async function updateHotspotUser(
                 );
 
 
-            /*
-               Update display.
-            */
-
             showUserInfo(
 
                 username,
@@ -2324,9 +2500,31 @@ async function updateHotspotUser(
 
             log(
                 "Plan Selected: " +
-                validity,
+                selected.name,
                 "success"
             );
+
+
+            log(
+                "Duration: " +
+                validity
+            );
+
+
+            if (
+                selected.price !== undefined
+            ) {
+
+                log(
+                    "Price: ₱" +
+                    Number(
+                        selected.price
+                    ).toLocaleString(
+                        "en-PH"
+                    )
+                );
+
+            }
 
 
             log(
@@ -2400,6 +2598,9 @@ async function updateHotspotUser(
             await runScript3();
 
 
+            finishScan();
+
+
             return;
 
         }
@@ -2436,11 +2637,11 @@ async function updateHotspotUser(
         );
 
 
-        const validity =
+        const selected =
             await selectValidity();
 
 
-        if (!validity) {
+        if (!selected) {
 
             log(
                 "Plan selection cancelled.",
@@ -2453,6 +2654,10 @@ async function updateHotspotUser(
             return;
 
         }
+
+
+        const validity =
+            selected.duration;
 
 
         const addMilliseconds =
@@ -2506,9 +2711,31 @@ async function updateHotspotUser(
 
         log(
             "Plan Selected: " +
-            validity,
+            selected.name,
             "success"
         );
+
+
+        log(
+            "Duration: " +
+            validity
+        );
+
+
+        if (
+            selected.price !== undefined
+        ) {
+
+            log(
+                "Price: ₱" +
+                Number(
+                    selected.price
+                ).toLocaleString(
+                    "en-PH"
+                )
+            );
+
+        }
 
 
         log(
@@ -2571,6 +2798,9 @@ async function updateHotspotUser(
         await runScript3();
 
 
+        finishScan();
+
+
     } catch (error) {
 
         log(
@@ -2579,8 +2809,19 @@ async function updateHotspotUser(
             "error"
         );
 
+
+        scanBusy = false;
+
     }
 
+}
+
+
+/* =========================================================
+   FINISH SCAN
+========================================================= */
+
+function finishScan() {
 
     setTimeout(
         () => {
@@ -2875,54 +3116,6 @@ function formatDuration(
 
 
 /* =========================================================
-   RUN SCRIPT3
-========================================================= */
-
-async function runScript3() {
-
-    try {
-
-        log(
-            "Running script3..."
-        );
-
-
-        await apiRequest(
-
-            "/system/script/run",
-
-            "POST",
-
-            {
-
-                ".id":
-                    "*script3"
-
-            }
-
-        );
-
-
-        log(
-            "script3 executed successfully.",
-            "success"
-        );
-
-
-    } catch (error) {
-
-        log(
-            "script3 warning: " +
-            error.message,
-            "warning"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
    PLAN SELECTOR
 ========================================================= */
 
@@ -2933,6 +3126,9 @@ function selectValidity() {
 
             selectedPlan =
                 "";
+
+            selectedPlanData =
+                null;
 
             planResolver =
                 resolve;
@@ -2997,7 +3193,15 @@ function selectPlan(
 
 
     selectedPlan =
-        element.dataset.value;
+        element.dataset.id;
+
+
+    selectedPlanData =
+        plans.find(
+            plan =>
+                plan.id ===
+                selectedPlan
+        );
 
 }
 
@@ -3008,7 +3212,10 @@ function selectPlan(
 
 function confirmPlan() {
 
-    if (!selectedPlan) {
+    if (
+        !selectedPlan ||
+        !selectedPlanData
+    ) {
 
         alert(
             "Please select a plan."
@@ -3030,7 +3237,7 @@ function confirmPlan() {
     if (planResolver) {
 
         planResolver(
-            selectedPlan
+            selectedPlanData
         );
 
         planResolver =
@@ -3129,9 +3336,7 @@ async function scanGallery(
 
 
     /*
-       Temporary invisible scanner.
-       Hindi lalabas ang image
-       sa camera preview.
+       Invisible temporary scanner.
     */
 
     const tempContainer =
@@ -3189,7 +3394,7 @@ async function scanGallery(
 
 
         /*
-           Log immediately.
+           Log QR content immediately.
         */
 
         log(
@@ -3545,7 +3750,7 @@ window.addEventListener(
             );
 
 
-        const plans =
+        const plansModal =
             document.getElementById(
                 "planModal"
             );
@@ -3563,7 +3768,7 @@ window.addEventListener(
 
         if (
             event.target ===
-            plans
+            plansModal
         ) {
 
             cancelPlan();
@@ -3677,13 +3882,19 @@ log(
 
 
 log(
-    "Open ⚙️ to configure MikroTik."
+    "Loading plan.json..."
 );
 
 
 /*
-   Restore Remember Me
-   configuration first.
+   Load external plans.
+*/
+
+loadPlans();
+
+
+/*
+   Restore saved configuration.
 */
 
 loadSavedSettings();
