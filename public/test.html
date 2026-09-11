@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>MikroTik QR Test</title>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+}
+
+.header {
+    height: 60px;
+    background: #111;
+    border-bottom: 1px solid #333;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 15px;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.settings {
+    width: 42px;
+    height: 42px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #222;
+    color: white;
+
+    font-size: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+
+    margin: auto;
+    padding: 15px;
+}
+
+#qr-reader {
+    width: 100%;
+    max-width: 360px;
+
+    margin: 10px auto;
+
+    background: #111;
+
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+.btn {
+    flex: 1;
+
+    padding: 13px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #222;
+    color: white;
+
+    font-weight: bold;
+}
+
+.btn:active {
+    transform: scale(.97);
+}
+
+#gallery {
+    display: none;
+}
+
+.status {
+    margin-top: 15px;
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    background: #111;
+
+    border: 1px solid #333;
+
+    text-align: center;
+
+    font-size: 13px;
+}
+
+.online {
+    color: #00ff88;
+}
+
+.error {
+    color: #ff5555;
+}
+
+.warning {
+    color: #ffaa00;
+}
+
+.log-title {
+    margin-top: 20px;
+    margin-bottom: 8px;
+
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#log {
+    height: 220px;
+
+    overflow-y: auto;
+
+    padding: 12px;
+
+    background: #111;
+
+    border: 1px solid #333;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+#log p {
+    margin-bottom: 5px;
+    word-break: break-word;
+}
+
+.success {
+    color: #00ff88;
+}
+
+.errorText {
+    color: #ff5555;
+}
+
+.warningText {
+    color: #ffaa00;
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.modal {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
+    background: rgba(0,0,0,.8);
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 15px;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 420px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 20px;
+
+    background: #151515;
+
+    border: 1px solid #444;
+
+    border-radius: 15px;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: bold;
+
+    margin-bottom: 20px;
+}
+
+
+/* =====================================================
+   PLANS
+===================================================== */
+
+.plan {
+    padding: 15px;
+
+    margin-bottom: 10px;
+
+    background: #222;
+
+    border: 1px solid #444;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+
+.plan.selected {
+    background: #063b70;
+    border-color: #008cff;
+}
+
+.plan-name {
+    font-weight: bold;
+}
+
+.plan-info {
+    color: #aaa;
+
+    margin-top: 4px;
+
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   TEST USERS
+===================================================== */
+
+.test-user {
+    padding: 10px;
+
+    margin-top: 10px;
+
+    background: #222;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+}
+
+.test-user button {
+    margin-top: 7px;
+
+    padding: 7px 10px;
+
+    border: none;
+    border-radius: 6px;
+
+    background: #007bff;
+
+    color: white;
+}
+
+
+/* =====================================================
+   BUTTON ROW
+===================================================== */
+
+.modal-buttons {
+    display: flex;
+    gap: 8px;
+
+    margin-top: 20px;
+}
+
+.modal-btn {
+    flex: 1;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+}
+
+.blue {
+    background: #007bff;
+    color: white;
+}
+
+.gray {
+    background: #333;
+    color: white;
+}
+
+.red {
+    background: #b52b2b;
+    color: white;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="header">
+
+    <div class="title">
+        MikroTik QR TEST
+    </div>
+
+    <button
+        class="settings"
+        onclick="openSettings()"
+    >
+        ⚙️
+    </button>
+
+</header>
+
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     QR
+===================================================== -->
+
+<div id="qr-reader"></div>
+
+
+<div class="buttons">
+
+    <button
+        class="btn"
+        onclick="openGallery()"
+    >
+        🖼️ Gallery
+    </button>
+
+    <button
+        class="btn"
+        onclick="toggleFlash()"
+    >
+        🔦 Flash
+    </button>
+
+</div>
+
+
+<input
+    type="file"
+    id="gallery"
+    accept="image/*"
+    onchange="scanGallery(event)"
+>
+
+
+<!-- =====================================================
+     STATUS
+===================================================== -->
+
+<div
+    id="status"
+    class="status online"
+>
+    TEST API ONLINE
+</div>
+
+
+<!-- =====================================================
+     LOG
+===================================================== -->
+
+<div class="log-title">
+    Activity Log
+</div>
+
+<div id="log"></div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     SETTINGS MODAL
+===================================================== -->
+
+<div
+    id="settingsModal"
+    class="modal"
+>
+
+<div class="modal-content">
+
+<div class="modal-title">
+    MikroTik API Configuration
+</div>
+
+
+<p style="
+    color:#aaa;
+    font-size:13px;
+    line-height:1.5;
+">
+
+This is TEST MODE.
+
+No real MikroTik connection is
+used.
+
+The configuration below is only
+for testing the interface.
+
+</p>
+
+
+<div class="modal-buttons">
+
+<button
+    class="modal-btn blue"
+    onclick="testApi()"
+>
+    Test API
+</button>
+
+<button
+    class="modal-btn red"
+    onclick="closeSettings()"
+>
+    Close
+</button>
+
+</div>
+
+
+<!-- =====================================================
+     TEST USERS
+===================================================== -->
+
+<div
+    style="
+        margin-top:20px;
+        font-weight:bold;
+    "
+>
+    Fake MikroTik Users
+</div>
+
+
+<div
+    id="users"
+></div>
+
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+     PLAN MODAL
+===================================================== -->
+
+<div
+    id="planModal"
+    class="modal"
+>
+
+<div class="modal-content">
+
+<div class="modal-title">
+    Select Plan
+</div>
+
+
+<div
+    class="plan"
+    data-value="1h"
+    onclick="selectPlan(this)"
+>
+
+<div class="plan-name">
+    FREE 1HR
+</div>
+
+<div class="plan-info">
+    Unli Internet — 1 hour
+</div>
+
+</div>
+
+
+<div
+    class="plan"
+    data-value="3d"
+    onclick="selectPlan(this)"
+>
+
+<div class="plan-name">
+    3 DAYS
+</div>
+
+<div class="plan-info">
+    Unli Internet — 3 days
+</div>
+
+</div>
+
+
+<div
+    class="plan"
+    data-value="7d"
+    onclick="selectPlan(this)"
+>
+
+<div class="plan-name">
+    7 DAYS
+</div>
+
+<div class="plan-info">
+    Unli Internet — 7 days
+</div>
+
+</div>
+
+
+<div
+    class="plan"
+    data-value="15d"
+    onclick="selectPlan(this)"
+>
+
+<div class="plan-name">
+    15 DAYS
+</div>
+
+<div class="plan-info">
+    Unli Internet — 15 days
+</div>
+
+</div>
+
+
+<div
+    class="plan"
+    data-value="30d"
+    onclick="selectPlan(this)"
+>
+
+<div class="plan-name">
+    30 DAYS
+</div>
+
+<div class="plan-info">
+    Unli Internet — 30 days
+</div>
+
+</div>
+
+
+<div class="modal-buttons">
+
+<button
+    class="modal-btn blue"
+    onclick="confirmPlan()"
+>
+    OK
+</button>
+
+<button
+    class="modal-btn red"
+    onclick="cancelPlan()"
+>
+    Cancel
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   FAKE MIKROTIK DATABASE
+===================================================== */
+
+let fakeUsers = [
+
+    {
+        id: "*1",
+        name: "testuser",
+        password: "123456",
+        comment: "dec/31/2026 12:00:00",
+        profile: "General"
+    },
+
+    {
+        id: "*2",
+        name: "jeffrey",
+        password: "1234",
+        comment: "dec/25/2026 12:00:00",
+        profile: "General"
+    }
+
+];
+
+
+let selectedPlan = "";
+
+let planResolver = null;
+
+let scanBusy = false;
+
+let scanner = null;
+
+let videoTrack = null;
+
+
+/* =====================================================
+   LOG
+===================================================== */
+
+function log(
+    message,
+    type = ""
+) {
+
+    const p =
+        document.createElement(
+            "p"
+        );
+
+    p.textContent =
+        message;
+
+    if (type) {
+        p.className = type;
+    }
+
+    const box =
+        document.getElementById(
+            "log"
+        );
+
+    box.appendChild(p);
+
+    box.scrollTop =
+        box.scrollHeight;
+
+}
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+function openSettings() {
+
+    renderUsers();
+
+    document
+        .getElementById(
+            "settingsModal"
+        )
+        .style.display =
+            "flex";
+
+}
+
+
+function closeSettings() {
+
+    document
+        .getElementById(
+            "settingsModal"
+        )
+        .style.display =
+            "none";
+
+}
+
+
+/* =====================================================
+   TEST API
+===================================================== */
+
+function testApi() {
+
+    log(
+        "Connecting to TEST MikroTik API..."
+    );
+
+    setTimeout(
+        () => {
+
+            log(
+                "TEST API connection successful.",
+                "success"
+            );
+
+            log(
+                "RouterOS version: 7.x TEST"
+            );
+
+        },
+        500
+    );
+
+}
+
+
+/* =====================================================
+   RENDER USERS
+===================================================== */
+
+function renderUsers() {
+
+    const container =
+        document.getElementById(
+            "users"
+        );
+
+    container.innerHTML = "";
+
+
+    fakeUsers.forEach(
+        user => {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.className =
+                "test-user";
+
+
+            div.innerHTML = `
+
+                <b>${escapeHtml(user.name)}</b>
+
+                <br>
+
+                Password:
+                ${escapeHtml(user.password)}
+
+                <br>
+
+                Expiration:
+                ${escapeHtml(user.comment)}
+
+                <br>
+
+                Profile:
+                ${escapeHtml(user.profile)}
+
+                <br>
+
+                <button
+                    onclick="deleteTestUser('${user.id}')"
+                >
+                    Delete
+                </button>
+
+            `;
+
+
+            container.appendChild(
+                div
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   DELETE USER
+===================================================== */
+
+function deleteTestUser(id) {
+
+    fakeUsers =
+        fakeUsers.filter(
+            user =>
+                user.id !== id
+        );
+
+    renderUsers();
+
+    log(
+        "Test user deleted.",
+        "warning"
+    );
+
+}
+
+
+/* =====================================================
+   QR PARAMETERS
+===================================================== */
+
+function getParams(
+    parameter,
+    url
+) {
+
+    try {
+
+        const parsed =
+            new URL(url);
+
+        return parsed
+            .searchParams
+            .get(parameter);
+
+    } catch {
+
+        return null;
+
+    }
+
+}
+
+
+/* =====================================================
+   QR SUCCESS
+===================================================== */
+
+async function onScanSuccess(
+    decodedText
+) {
+
+    if (scanBusy) {
+        return;
+    }
+
+    scanBusy = true;
+
+
+    log(
+        "QR CODE DETECTED",
+        "success"
+    );
+
+
+    log(
+        decodedText
+    );
+
+
+    const username =
+        getParams(
+            "username",
+            decodedText
+        );
+
+
+    const password =
+        getParams(
+            "password",
+            decodedText
+        );
+
+
+    if (
+        !username ||
+        !password
+    ) {
+
+        log(
+            "QR does not contain username/password.",
+            "errorText"
+        );
+
+        scanBusy = false;
+
+        return;
+
+    }
+
+
+    log(
+        "Ticket Username: " +
+        username
+    );
+
+
+    const validity =
+        await selectValidity();
+
+
+    if (!validity) {
+
+        log(
+            "Plan cancelled.",
+            "warningText"
+        );
+
+        scanBusy = false;
+
+        return;
+
+    }
+
+
+    log(
+        "Selected Plan: " +
+        validity,
+        "success"
+    );
+
+
+    await fakeMikrotikUpdate(
+        username,
+        password,
+        validity
+    );
+
+
+    setTimeout(
+        () => {
+
+            scanBusy = false;
+
+        },
+        1500
+    );
+
+}
+
+
+/* =====================================================
+   FAKE MIKROTIK API
+===================================================== */
+
+async function fakeMikrotikUpdate(
+    username,
+    password,
+    validity
+) {
+
+    log(
+        "GET /ip/hotspot/user"
+    );
+
+
+    await delay(500);
+
+
+    const existing =
+        fakeUsers.find(
+            user =>
+                user.name ===
+                username
+        );
+
+
+    /* =================================================
+       NEW USER
+    ================================================= */
+
+    if (!existing) {
+
+        log(
+            "User not found."
+        );
+
+
+        log(
+            "Creating new hotspot user..."
+        );
+
+
+        await delay(500);
+
+
+        const expire =
+            addTime(
+                new Date(),
+                validity
+            );
+
+
+        fakeUsers.push({
+
+            id:
+                "*" +
+                (
+                    fakeUsers.length +
+                    1
+                ),
+
+            name:
+                username,
+
+            password:
+                password,
+
+            comment:
+                expire,
+
+            profile:
+                "General"
+
+        });
+
+
+        log(
+            "User created successfully.",
+            "success"
+        );
+
+
+        log(
+            "Expiration: " +
+            expire,
+            "success"
+        );
+
+
+        await runScript3();
+
+
+        return;
+
+    }
+
+
+    /* =================================================
+       EXISTING USER
+    ================================================= */
+
+    log(
+        "Existing user found."
+    );
+
+
+    log(
+        "Current expiration: " +
+        existing.comment
+    );
+
+
+    const newExpire =
+        addTime(
+            existing.comment,
+            validity
+        );
+
+
+    existing.comment =
+        newExpire;
+
+
+    existing.password =
+        password;
+
+
+    await delay(500);
+
+
+    log(
+        "User updated successfully.",
+        "success"
+    );
+
+
+    log(
+        "New expiration: " +
+        newExpire,
+        "success"
+    );
+
+
+    await runScript3();
+
+}
+
+
+/* =====================================================
+   SCRIPT3
+===================================================== */
+
+async function runScript3() {
+
+    log(
+        "POST /system/script/run"
+    );
+
+
+    await delay(300);
+
+
+    log(
+        "script3 executed successfully.",
+        "success"
+    );
+
+}
+
+
+/* =====================================================
+   DELAY
+===================================================== */
+
+function delay(ms) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                ms
+            )
+    );
+
+}
+
+
+/* =====================================================
+   PLAN
+===================================================== */
+
+function selectValidity() {
+
+    return new Promise(
+        resolve => {
+
+            selectedPlan = "";
+
+            planResolver =
+                resolve;
+
+
+            document
+                .querySelectorAll(
+                    ".plan"
+                )
+                .forEach(
+                    plan => {
+
+                        plan.classList
+                            .remove(
+                                "selected"
+                            );
+
+                    }
+                );
+
+
+            document
+                .getElementById(
+                    "planModal"
+                )
+                .style.display =
+                    "flex";
+
+        }
+    );
+
+}
+
+
+function selectPlan(
+    element
+) {
+
+    document
+        .querySelectorAll(
+            ".plan"
+        )
+        .forEach(
+            plan => {
+
+                plan.classList
+                    .remove(
+                        "selected"
+                    );
+
+            }
+        );
+
+
+    element.classList.add(
+        "selected"
+    );
+
+
+    selectedPlan =
+        element.dataset.value;
+
+}
+
+
+function confirmPlan() {
+
+    if (!selectedPlan) {
+
+        alert(
+            "Please select a plan."
+        );
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "planModal"
+        )
+        .style.display =
+            "none";
+
+
+    if (planResolver) {
+
+        planResolver(
+            selectedPlan
+        );
+
+        planResolver =
+            null;
+
+    }
+
+}
+
+
+function cancelPlan() {
+
+    document
+        .getElementById(
+            "planModal"
+        )
+        .style.display =
+            "none";
+
+
+    if (planResolver) {
+
+        planResolver(
+            null
+        );
+
+        planResolver =
+            null;
+
+    }
+
+}
+
+
+/* =====================================================
+   ADD TIME
+===================================================== */
+
+function addTime(
+    target,
+    validity
+) {
+
+    let date;
+
+
+    if (
+        target instanceof Date
+    ) {
+
+        date =
+            new Date(target);
+
+    } else {
+
+        date =
+            parseDate(
+                target
+            );
+
+
+        if (!date) {
+
+            date =
+                new Date();
+
+        }
+
+    }
+
+
+    const units = {
+
+        d:
+            24 *
+            60 *
+            60 *
+            1000,
+
+        h:
+            60 *
+            60 *
+            1000,
+
+        m:
+            60 *
+            1000,
+
+        s:
+            1000
+
+    };
+
+
+    /*
+       If expiration is already expired,
+       start from NOW.
+    */
+
+    if (
+        date.getTime() <
+        Date.now()
+    ) {
+
+        date =
+            new Date();
+
+    }
+
+
+    const regex =
+        /(\d+)([dhms])/g;
+
+
+    let match;
+
+
+    while (
+        (
+            match =
+            regex.exec(
+                validity
+            )
+        ) !== null
+    ) {
+
+        const value =
+            parseInt(
+                match[1],
+                10
+            );
+
+
+        const unit =
+            match[2];
+
+
+        date.setTime(
+            date.getTime() +
+            value *
+            units[unit]
+        );
+
+    }
+
+
+    return formatDate(
+        date
+    );
+
+}
+
+
+/* =====================================================
+   PARSE DATE
+===================================================== */
+
+function parseDate(
+    value
+) {
+
+    const regex =
+        /^([a-zA-Z]{3})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})$/;
+
+
+    const match =
+        String(value)
+            .match(
+                regex
+            );
+
+
+    if (!match) {
+
+        return null;
+
+    }
+
+
+    const months = {
+
+        jan: 0,
+        feb: 1,
+        mar: 2,
+        apr: 3,
+        may: 4,
+        jun: 5,
+        jul: 6,
+        aug: 7,
+        sep: 8,
+        oct: 9,
+        nov: 10,
+        dec: 11
+
+    };
+
+
+    const month =
+        months[
+            match[1]
+                .toLowerCase()
+        ];
+
+
+    if (
+        month === undefined
+    ) {
+
+        return null;
+
+    }
+
+
+    return new Date(
+
+        Number(match[3]),
+
+        month,
+
+        Number(match[2]),
+
+        Number(match[4]),
+
+        Number(match[5]),
+
+        Number(match[6])
+
+    );
+
+}
+
+
+/* =====================================================
+   FORMAT DATE
+===================================================== */
+
+function formatDate(
+    date
+) {
+
+    const months = [
+
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "may",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "oct",
+        "nov",
+        "dec"
+
+    ];
+
+
+    return (
+
+        months[
+            date.getMonth()
+        ] +
+
+        "/" +
+
+        String(
+            date.getDate()
+        ).padStart(
+            2,
+            "0"
+        ) +
+
+        "/" +
+
+        date.getFullYear() +
+
+        " " +
+
+        String(
+            date.getHours()
+        ).padStart(
+            2,
+            "0"
+        ) +
+
+        ":" +
+
+        String(
+            date.getMinutes()
+        ).padStart(
+            2,
+            "0"
+        ) +
+
+        ":" +
+
+        String(
+            date.getSeconds()
+        ).padStart(
+            2,
+            "0"
+        )
+
+    );
+
+}
+
+
+/* =====================================================
+   GALLERY
+===================================================== */
+
+function openGallery() {
+
+    document
+        .getElementById(
+            "gallery"
+        )
+        .click();
+
+}
+
+
+async function scanGallery(
+    event
+) {
+
+    const file =
+        event.target.files[0];
+
+
+    if (!file) {
+        return;
+    }
+
+
+    if (scanBusy) {
+        return;
+    }
+
+
+    scanBusy = true;
+
+
+    log(
+        "Scanning gallery..."
+    );
+
+
+    const imageScanner =
+        new Html5Qrcode(
+            "qr-reader"
+        );
+
+
+    try {
+
+        const decoded =
+            await imageScanner.scanFile(
+                file,
+                true
+            );
+
+
+        await onScanSuccess(
+            decoded
+        );
+
+
+    } catch {
+
+        log(
+            "No QR code found.",
+            "errorText"
+        );
+
+        scanBusy = false;
+
+    }
+
+
+    event.target.value = "";
+
+}
+
+
+/* =====================================================
+   FLASH
+===================================================== */
+
+async function toggleFlash() {
+
+    try {
+
+        const video =
+            document.querySelector(
+                "#qr-reader video"
+            );
+
+
+        if (
+            !video ||
+            !video.srcObject
+        ) {
+
+            log(
+                "Camera is not ready.",
+                "warningText"
+            );
+
+            return;
+
+        }
+
+
+        videoTrack =
+            video.srcObject
+                .getVideoTracks()[0];
+
+
+        const capabilities =
+            videoTrack
+                .getCapabilities();
+
+
+        if (!capabilities.torch) {
+
+            log(
+                "Torch is not supported.",
+                "warningText"
+            );
+
+            return;
+
+        }
+
+
+        const current =
+            videoTrack
+                .getSettings()
+                .torch;
+
+
+        await videoTrack
+            .applyConstraints({
+
+                advanced: [
+
+                    {
+                        torch:
+                            !current
+                    }
+
+                ]
+
+            });
+
+
+        log(
+            current
+                ? "Flashlight OFF."
+                : "Flashlight ON."
+        );
+
+    } catch (error) {
+
+        log(
+            "Flashlight error: " +
+            error.message,
+            "errorText"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   START SCANNER
+===================================================== */
+
+async function startScanner() {
+
+    log(
+        "Starting camera..."
+    );
+
+
+    scanner =
+        new Html5Qrcode(
+            "qr-reader"
+        );
+
+
+    try {
+
+        await scanner.start(
+
+            {
+                facingMode:
+                    "environment"
+            },
+
+            {
+                fps: 10,
+                qrbox: 250
+            },
+
+            onScanSuccess,
+
+            () => {}
+
+        );
+
+
+        log(
+            "Camera ready.",
+            "success"
+        );
+
+    } catch (error) {
+
+        log(
+            "Camera error: " +
+            error,
+            "errorText"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   MODAL CLICK
+===================================================== */
+
+window.addEventListener(
+    "click",
+    event => {
+
+        const settings =
+            document.getElementById(
+                "settingsModal"
+            );
+
+        const plans =
+            document.getElementById(
+                "planModal"
+            );
+
+
+        if (
+            event.target ===
+            settings
+        ) {
+
+            closeSettings();
+
+        }
+
+
+        if (
+            event.target ===
+            plans
+        ) {
+
+            cancelPlan();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   START
+===================================================== */
+
+log(
+    "TEST MODE initialized."
+);
+
+log(
+    "No real MikroTik connection is being used."
+);
+
+log(
+    "Use a QR containing username and password."
+);
+
+startScanner();
+
+</script>
+
+</body>
+
+</html>
