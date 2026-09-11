@@ -3,1187 +3,1408 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
 <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
 >
-    <meta
-        name="description"
-        content="BobotEditha.net QR WiFi Manager"
-    >
 
-    <title>BobotEditha.net - QR WiFi Manager</title>
+<meta
+    name="description"
+    content="BobotEditha.net QR WiFi Manager"
+>
 
+<title>BobotEditha.net - QR WiFi Manager</title>
 
-    <!-- =====================================================
-         HTML5 QR CODE
-    ====================================================== -->
+<script
+    src="https://unpkg.com/html5-qrcode"
+    type="text/javascript">
+</script>
 
-    <script
-        src="https://unpkg.com/html5-qrcode"
-        type="text/javascript"
-    ></script>
 
+<style>
 
-    <!-- =====================================================
-         STYLE
-    ====================================================== -->
+/* =====================================================
+   RESET
+===================================================== */
 
-    <style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
 
+html {
+    width: 100%;
+    min-height: 100%;
+}
 
-        /* =====================================================
-           RESET
-        ===================================================== */
+body {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
 
+/* =====================================================
+   THEME
+===================================================== */
 
-        /* =====================================================
-           THEME VARIABLES
-        ===================================================== */
+:root {
 
-        :root {
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --card2: #f0f2f5;
+    --border: #dfe3e8;
 
-            --bg: #f4f6f8;
-            --card: #ffffff;
-            --card2: #f0f2f5;
-            --border: #dfe3e8;
+    --text: #15191e;
+    --muted: #69737d;
 
-            --text: #15191e;
-            --muted: #69737d;
+    --primary: #00b86b;
+    --primary-dark: #00995a;
 
-            --primary: #00b86b;
-            --primary-dark: #00995a;
+    --danger: #e5484d;
+    --warning: #e5a900;
+    --info: #2684ff;
 
-            --danger: #e5484d;
-            --warning: #e5a900;
-            --info: #2684ff;
+    --input: #ffffff;
+    --log-bg: #f5f6f8;
 
-            --input: #ffffff;
-            --log-bg: #f5f6f8;
+    --radius: 11px;
+}
 
-            --radius: 10px;
-        }
 
+/* =====================================================
+   DARK MODE
+===================================================== */
 
-        /* =====================================================
-           DARK MODE
-        ===================================================== */
+html[data-theme="dark"] {
 
-        html[data-theme="dark"] {
+    --bg: #0b0f14;
+    --card: #11171e;
+    --card2: #171e26;
+    --border: #252e38;
 
-            --bg: #0b0f14;
-            --card: #11171e;
-            --card2: #171e26;
-            --border: #252e38;
+    --text: #f1f4f7;
+    --muted: #929eaa;
 
-            --text: #f1f4f7;
-            --muted: #929eaa;
+    --primary: #00d084;
+    --primary-dark: #00aa6b;
 
-            --primary: #00d084;
-            --primary-dark: #00aa6b;
+    --danger: #ff5055;
+    --warning: #ffc107;
+    --info: #3d9bff;
 
-            --danger: #ff5055;
-            --warning: #ffc107;
-            --info: #3d9bff;
+    --input: #0c1117;
+    --log-bg: #070a0e;
+}
 
-            --input: #0c1117;
-            --log-bg: #070a0e;
-        }
 
+/* =====================================================
+   AUTO DARK MODE
+===================================================== */
 
-        /* =====================================================
-           AUTO DARK MODE
-        ===================================================== */
+@media (prefers-color-scheme: dark) {
 
-        @media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]) {
 
-            html:not([data-theme="light"]) {
+        --bg: #0b0f14;
+        --card: #11171e;
+        --card2: #171e26;
+        --border: #252e38;
 
-                --bg: #0b0f14;
-                --card: #11171e;
-                --card2: #171e26;
-                --border: #252e38;
+        --text: #f1f4f7;
+        --muted: #929eaa;
 
-                --text: #f1f4f7;
-                --muted: #929eaa;
+        --primary: #00d084;
+        --primary-dark: #00aa6b;
 
-                --primary: #00d084;
-                --primary-dark: #00aa6b;
+        --danger: #ff5055;
+        --warning: #ffc107;
+        --info: #3d9bff;
 
-                --danger: #ff5055;
-                --warning: #ffc107;
-                --info: #3d9bff;
+        --input: #0c1117;
+        --log-bg: #070a0e;
+    }
+}
 
-                --input: #0c1117;
-                --log-bg: #070a0e;
-            }
 
-        }
+/* =====================================================
+   COLOR SCHEME
+===================================================== */
 
+html {
+    color-scheme: light;
+}
 
-        /* =====================================================
-           COLOR SCHEME
-        ===================================================== */
+html[data-theme="dark"] {
+    color-scheme: dark;
+}
 
-        html {
-            color-scheme: light;
-        }
+@media (prefers-color-scheme: dark) {
 
-        html[data-theme="dark"] {
-            color-scheme: dark;
-        }
+    html:not([data-theme="light"]) {
+        color-scheme: dark;
+    }
+}
 
-        @media (prefers-color-scheme: dark) {
 
-            html:not([data-theme="light"]) {
-                color-scheme: dark;
-            }
+/* =====================================================
+   BODY
+===================================================== */
 
-        }
+body {
 
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
-        /* =====================================================
-           BODY
-        ===================================================== */
+    background:
+        var(--bg);
 
-        body {
+    color:
+        var(--text);
 
-            font-family:
-                Inter,
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Arial,
-                sans-serif;
+    font-size:
+        14px;
 
-            background: var(--bg);
+    line-height:
+        1.4;
 
-            color: var(--text);
+    transition:
+        background .2s ease,
+        color .2s ease;
+}
 
-            min-height: 100vh;
 
-            transition:
-                background .2s ease,
-                color .2s ease;
-        }
+/* =====================================================
+   HEADER
+===================================================== */
 
+header {
 
-        /* =====================================================
-           HEADER
-        ===================================================== */
+    position: sticky;
 
-        header {
+    top: 0;
 
-            position: sticky;
+    z-index: 100;
 
-            top: 0;
+    width: 100%;
 
-            z-index: 100;
+    height: 54px;
 
-            height: 52px;
+    display: flex;
 
-            display: flex;
+    align-items: center;
 
-            align-items: center;
+    justify-content: space-between;
 
-            justify-content: space-between;
+    padding:
+        0 13px;
 
-            padding: 0 12px;
+    padding-top:
+        env(safe-area-inset-top);
 
-            background: var(--card);
+    background:
+        var(--card);
 
-            border-bottom:
-                1px solid var(--border);
-        }
+    border-bottom:
+        1px solid var(--border);
+}
 
 
-        .logo {
+.logo {
 
-            font-size: 15px;
+    font-size:
+        16px;
 
-            font-weight: 800;
+    font-weight:
+        800;
 
-            letter-spacing: .3px;
+    letter-spacing:
+        .2px;
 
-            white-space: nowrap;
-        }
+    white-space:
+        nowrap;
+}
 
 
-        .header-right {
+.header-right {
 
-            display: flex;
+    display: flex;
 
-            align-items: center;
+    align-items: center;
 
-            gap: 5px;
-        }
+    gap: 6px;
+}
 
 
-        /* =====================================================
-           ICON BUTTON
-        ===================================================== */
+/* =====================================================
+   HEADER ICON
+===================================================== */
 
-        .icon-btn {
+.icon-btn {
 
-            width: 34px;
+    width: 38px;
 
-            height: 34px;
+    height: 38px;
 
-            display: inline-flex;
+    min-height: 38px;
 
-            align-items: center;
+    padding: 0;
 
-            justify-content: center;
+    display: flex;
 
-            padding: 0;
+    align-items: center;
 
-            border:
-                1px solid var(--border);
+    justify-content: center;
 
-            border-radius: 8px;
+    background:
+        var(--card2);
 
-            background: var(--card2);
+    color:
+        var(--text);
 
-            color: var(--text);
+    border:
+        1px solid var(--border);
 
-            cursor: pointer;
-        }
+    border-radius:
+        9px;
+}
 
 
-        .icon-btn svg {
+.icon-btn svg {
 
-            width: 17px;
+    width: 18px;
 
-            height: 17px;
+    height: 18px;
 
-            stroke: currentColor;
+    fill: none;
 
-            fill: none;
+    stroke:
+        currentColor;
 
-            stroke-width: 1.8;
+    stroke-width:
+        1.8;
 
-            stroke-linecap: round;
+    stroke-linecap:
+        round;
 
-            stroke-linejoin: round;
-        }
+    stroke-linejoin:
+        round;
+}
 
 
-        .icon-btn:active {
+/* =====================================================
+   MAIN
+===================================================== */
 
-            transform: scale(.95);
-        }
+main {
 
+    width: 100%;
 
-        /* =====================================================
-           MAIN
-        ===================================================== */
+    max-width: none;
 
-        main {
+    margin: 0;
 
-            width: 100%;
+    padding:
+        10px
+        10px
+        calc(
+            25px +
+            env(safe-area-inset-bottom)
+        );
+}
 
-            max-width: 620px;
 
-            margin: auto;
+/* =====================================================
+   CARD
+===================================================== */
 
-            padding:
-                12px
-                10px
-                30px;
-        }
+.card {
 
+    width: 100%;
 
-        /* =====================================================
-           CARD
-        ===================================================== */
+    background:
+        var(--card);
 
-        .card {
+    border:
+        1px solid var(--border);
 
-            background: var(--card);
+    border-radius:
+        var(--radius);
 
-            border:
-                1px solid var(--border);
+    padding:
+        12px;
 
-            border-radius: var(--radius);
+    margin-bottom:
+        9px;
+}
 
-            padding: 12px;
 
-            margin-bottom: 9px;
-        }
+.card-title {
 
+    font-size:
+        14px;
 
-        .card-title {
+    font-weight:
+        700;
 
-            display: flex;
+    margin-bottom:
+        9px;
+}
 
-            align-items: center;
 
-            font-size: 13px;
+/* =====================================================
+   QR READER
+===================================================== */
 
-            font-weight: 750;
+#qr-reader {
 
-            margin-bottom: 9px;
-        }
+    width: 100%;
 
+    overflow: hidden;
 
-        /* =====================================================
-           QR SCANNER
-        ===================================================== */
+    background:
+        #000;
 
-        #qr-reader {
+    border-radius:
+        9px;
 
-            width: 100%;
+    border:
+        1px solid var(--border);
+}
 
-            overflow: hidden;
 
-            border-radius: 9px;
+#qr-reader video {
 
-            background: #000;
+    display: block;
 
-            border:
-                1px solid var(--border);
-        }
+    width: 100% !important;
 
+    height: auto !important;
 
-        #qr-reader video {
+    object-fit: cover;
 
-            display: block;
+    border-radius:
+        9px;
+}
 
-            width: 100% !important;
 
-            border-radius: 9px;
-        }
+#qr-reader__scan_region {
 
+    min-height:
+        250px;
+}
 
-        #qr-reader__scan_region {
 
-            min-height: 220px;
-        }
+#qr-reader__dashboard {
 
+    display:
+        none !important;
+}
 
-        #qr-reader__dashboard {
 
-            display: none !important;
-        }
+/* =====================================================
+   BUTTON GROUP
+===================================================== */
 
+.buttons {
 
-        /* =====================================================
-           BUTTONS
-        ===================================================== */
+    width: 100%;
 
-        .buttons {
+    display: grid;
 
-            display: grid;
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
 
-            grid-template-columns:
-                repeat(3, 1fr);
+    gap:
+        7px;
 
-            gap: 6px;
+    margin-top:
+        8px;
+}
 
-            margin-top: 7px;
-        }
 
+/* =====================================================
+   BUTTON
+===================================================== */
 
-        button {
+button {
 
-            min-height: 38px;
+    min-width:
+        0;
 
-            padding:
-                7px
-                9px;
+    min-height:
+        42px;
 
-            border:
-                1px solid var(--border);
+    padding:
+        9px
+        7px;
 
-            border-radius: 8px;
+    border:
+        1px solid var(--border);
 
-            background: var(--card2);
+    border-radius:
+        9px;
 
-            color: var(--text);
+    background:
+        var(--card2);
 
-            font-family: inherit;
+    color:
+        var(--text);
 
-            font-size: 12px;
+    font-family:
+        inherit;
 
-            font-weight: 700;
+    font-size:
+        13px;
 
-            cursor: pointer;
+    font-weight:
+        700;
 
-            transition:
-                transform .12s ease,
-                opacity .12s ease,
-                background .15s ease;
-        }
+    line-height:
+        1.2;
 
+    cursor:
+        pointer;
 
-        button:active {
+    touch-action:
+        manipulation;
 
-            transform: scale(.97);
-        }
+    transition:
+        transform .1s ease,
+        opacity .1s ease;
+}
 
 
-        button svg {
+button:active {
 
-            width: 15px;
+    transform:
+        scale(.97);
+}
 
-            height: 15px;
 
-            vertical-align: -3px;
+button svg {
 
-            margin-right: 4px;
+    width:
+        16px;
 
-            stroke: currentColor;
+    height:
+        16px;
 
-            fill: none;
+    margin-right:
+        4px;
 
-            stroke-width: 1.8;
+    vertical-align:
+        -3px;
 
-            stroke-linecap: round;
+    fill:
+        none;
 
-            stroke-linejoin: round;
-        }
+    stroke:
+        currentColor;
 
+    stroke-width:
+        1.8;
 
-        .primary {
+    stroke-linecap:
+        round;
 
-            background: var(--primary);
+    stroke-linejoin:
+        round;
+}
 
-            color: #00150d;
 
-            border-color:
-                var(--primary);
-        }
+/* =====================================================
+   BUTTON COLORS
+===================================================== */
 
+.primary {
 
-        .primary:hover {
+    background:
+        var(--primary);
 
-            background:
-                var(--primary-dark);
-        }
+    color:
+        #00150d;
 
+    border-color:
+        var(--primary);
+}
 
-        .danger {
 
-            background: var(--danger);
+.primary:hover {
 
-            color: #fff;
+    background:
+        var(--primary-dark);
+}
 
-            border-color:
-                var(--danger);
-        }
 
+.danger {
 
-        .warning {
+    background:
+        var(--danger);
 
-            background: var(--warning);
+    color:
+        #fff;
 
-            color: #111;
+    border-color:
+        var(--danger);
+}
 
-            border-color:
-                var(--warning);
-        }
 
+.warning {
 
-        .info {
+    background:
+        var(--warning);
 
-            background: var(--info);
+    color:
+        #111;
 
-            color: #fff;
+    border-color:
+        var(--warning);
+}
 
-            border-color:
-                var(--info);
-        }
 
+.info {
 
-        /* =====================================================
-           STATUS
-        ===================================================== */
+    background:
+        var(--info);
 
-        .status {
+    color:
+        #fff;
 
-            display: flex;
+    border-color:
+        var(--info);
+}
 
-            align-items: center;
 
-            gap: 7px;
+/* =====================================================
+   STATUS
+===================================================== */
 
-            min-height: 38px;
+.status {
 
-            padding:
-                8px
-                10px;
+    width: 100%;
 
-            border-radius: 8px;
+    min-height:
+        42px;
 
-            background: var(--card2);
+    display: flex;
 
-            font-size: 12px;
-        }
+    align-items: center;
 
+    gap:
+        8px;
 
-        .status-dot {
+    padding:
+        9px
+        11px;
 
-            width: 8px;
+    background:
+        var(--card2);
 
-            height: 8px;
+    border-radius:
+        9px;
 
-            flex-shrink: 0;
+    font-size:
+        13px;
+}
 
-            border-radius: 50%;
 
-            background: var(--muted);
-        }
+.status-dot {
 
+    width:
+        9px;
 
-        .status-dot.online {
+    height:
+        9px;
 
-            background:
-                var(--primary);
+    flex-shrink:
+        0;
 
-            box-shadow:
-                0 0 0 3px
-                rgba(0,208,132,.10);
-        }
+    border-radius:
+        50%;
 
+    background:
+        var(--muted);
+}
 
-        .status-dot.error {
 
-            background:
-                var(--danger);
+.status-dot.online {
 
-            box-shadow:
-                0 0 0 3px
-                rgba(229,72,77,.10);
-        }
+    background:
+        var(--primary);
+}
 
 
-        .status-dot.warning {
+.status-dot.error {
 
-            background:
-                var(--warning);
+    background:
+        var(--danger);
+}
 
-            box-shadow:
-                0 0 0 3px
-                rgba(229,169,0,.10);
-        }
 
+.status-dot.warning {
 
-        /* =====================================================
-           USER INFORMATION
-        ===================================================== */
+    background:
+        var(--warning);
+}
 
-        #userInfo {
 
-            display: none;
-        }
+/* =====================================================
+   USER INFORMATION
+===================================================== */
 
+#userInfo {
 
-        .user-grid {
+    display:
+        none;
+}
 
-            display: grid;
 
-            grid-template-columns:
-                repeat(2, 1fr);
+.user-grid {
 
-            gap: 6px;
-        }
+    width:
+        100%;
 
+    display:
+        grid;
 
-        .info-box {
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
 
-            padding: 9px;
+    gap:
+        7px;
+}
 
-            background: var(--card2);
 
-            border:
-                1px solid var(--border);
+.info-box {
 
-            border-radius: 8px;
-        }
+    min-width:
+        0;
 
+    padding:
+        10px;
 
-        .info-label {
+    background:
+        var(--card2);
 
-            color: var(--muted);
+    border:
+        1px solid var(--border);
 
-            font-size: 10px;
+    border-radius:
+        8px;
+}
 
-            margin-bottom: 3px;
-        }
 
+.info-label {
 
-        .info-value {
+    color:
+        var(--muted);
 
-            font-size: 12px;
+    font-size:
+        11px;
 
-            font-weight: 750;
+    margin-bottom:
+        3px;
+}
 
-            word-break: break-word;
-        }
 
+.info-value {
 
-        /* =====================================================
-           LOG
-        ===================================================== */
+    font-size:
+        13px;
 
-        #log {
+    font-weight:
+        700;
 
-            white-space: pre-wrap;
+    word-break:
+        break-word;
 
-            word-break: break-word;
+    overflow-wrap:
+        anywhere;
+}
 
-            min-height: 75px;
 
-            max-height: 260px;
+/* =====================================================
+   LOG
+===================================================== */
 
-            overflow-y: auto;
+#log {
 
-            padding: 9px;
+    width:
+        100%;
 
-            background: var(--log-bg);
+    min-height:
+        85px;
 
-            border:
-                1px solid var(--border);
+    max-height:
+        280px;
 
-            border-radius: 8px;
+    overflow-y:
+        auto;
 
-            color: var(--muted);
+    padding:
+        10px;
 
-            font-family:
-                "SFMono-Regular",
-                Consolas,
-                "Liberation Mono",
-                monospace;
+    background:
+        var(--log-bg);
 
-            font-size: 10px;
+    color:
+        var(--muted);
 
-            line-height: 1.45;
-        }
+    border:
+        1px solid var(--border);
 
+    border-radius:
+        8px;
 
-        /* =====================================================
-           MODAL
-        ===================================================== */
+    white-space:
+        pre-wrap;
 
-        .modal {
+    word-break:
+        break-word;
 
-            position: fixed;
+    font-family:
+        monospace;
 
-            inset: 0;
+    font-size:
+        11px;
 
-            z-index: 999;
+    line-height:
+        1.5;
+}
 
-            display: none;
 
-            align-items: center;
+/* =====================================================
+   MODAL
+===================================================== */
 
-            justify-content: center;
+.modal {
 
-            padding: 12px;
+    position:
+        fixed;
 
-            background:
-                rgba(0,0,0,.68);
+    inset:
+        0;
 
-            backdrop-filter:
-                blur(4px);
-        }
+    z-index:
+        999;
 
+    width:
+        100%;
 
-        .modal.show {
+    height:
+        100%;
 
-            display: flex;
-        }
+    display:
+        none;
 
+    align-items:
+        center;
 
-        .modal-box {
+    justify-content:
+        center;
 
-            width: 100%;
+    padding:
+        12px;
 
-            max-width: 410px;
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            .68
+        );
 
-            max-height: 90vh;
+    backdrop-filter:
+        blur(3px);
+}
 
-            overflow-y: auto;
 
-            background: var(--card);
+.modal.show {
 
-            border:
-                1px solid var(--border);
+    display:
+        flex;
+}
 
-            border-radius: 12px;
 
-            padding: 14px;
+.modal-box {
 
-            box-shadow:
-                0 15px 50px
-                rgba(0,0,0,.25);
-        }
+    width:
+        100%;
 
+    max-width:
+        430px;
 
-        .modal-title {
+    max-height:
+        90vh;
 
-            font-size: 16px;
+    overflow-y:
+        auto;
 
-            font-weight: 800;
+    background:
+        var(--card);
 
-            margin-bottom: 14px;
-        }
+    color:
+        var(--text);
 
+    border:
+        1px solid var(--border);
 
-        /* =====================================================
-           INPUT
-        ===================================================== */
+    border-radius:
+        12px;
 
-        .field {
+    padding:
+        14px;
+}
 
-            margin-bottom: 10px;
-        }
 
+.modal-title {
 
-        .field label {
+    font-size:
+        17px;
 
-            display: block;
+    font-weight:
+        800;
 
-            color: var(--muted);
+    margin-bottom:
+        14px;
+}
 
-            font-size: 11px;
 
-            margin-bottom: 4px;
-        }
+/* =====================================================
+   INPUT
+===================================================== */
 
+.field {
 
-        .input-row {
+    margin-bottom:
+        11px;
+}
 
-            display: flex;
 
-            gap: 5px;
-        }
+.field label {
 
+    display:
+        block;
 
-        input {
+    color:
+        var(--muted);
 
-            width: 100%;
+    font-size:
+        12px;
 
-            min-height: 38px;
+    margin-bottom:
+        5px;
+}
 
-            padding:
-                8px
-                10px;
 
-            background: var(--input);
+.input-row {
 
-            color: var(--text);
+    width:
+        100%;
 
-            border:
-                1px solid var(--border);
+    display:
+        flex;
 
-            border-radius: 8px;
+    gap:
+        6px;
+}
 
-            outline: none;
 
-            font-family: inherit;
+input,
+select {
 
-            font-size: 12px;
+    width:
+        100%;
 
-            transition:
-                border-color .15s ease;
-        }
+    min-width:
+        0;
 
+    min-height:
+        42px;
 
-        input:focus {
+    padding:
+        9px
+        11px;
 
-            border-color:
-                var(--primary);
-        }
+    background:
+        var(--input);
 
+    color:
+        var(--text);
 
-        .eye {
+    border:
+        1px solid var(--border);
 
-            width: 38px;
+    border-radius:
+        8px;
 
-            min-width: 38px;
+    outline:
+        none;
 
-            padding: 0;
+    font-family:
+        inherit;
 
-            display: flex;
+    font-size:
+        14px;
+}
 
-            align-items: center;
 
-            justify-content: center;
-        }
+input:focus,
+select:focus {
 
+    border-color:
+        var(--primary);
+}
 
-        .eye svg {
 
-            width: 16px;
+/* =====================================================
+   PASSWORD BUTTON
+===================================================== */
 
-            height: 16px;
+.eye {
 
-            margin: 0;
+    width:
+        42px;
 
-            stroke: currentColor;
+    min-width:
+        42px;
 
-            fill: none;
+    min-height:
+        42px;
 
-            stroke-width: 1.8;
+    padding:
+        0;
 
-            stroke-linecap: round;
+    display:
+        flex;
 
-            stroke-linejoin: round;
-        }
+    align-items:
+        center;
 
+    justify-content:
+        center;
+}
 
-        /* =====================================================
-           SELECT
-        ===================================================== */
 
-        select {
+.eye svg {
 
-            width: 100%;
+    width:
+        18px;
 
-            min-height: 38px;
+    height:
+        18px;
 
-            padding:
-                8px
-                10px;
+    margin:
+        0;
 
-            background: var(--input);
+    fill:
+        none;
 
-            color: var(--text);
+    stroke:
+        currentColor;
 
-            border:
-                1px solid var(--border);
+    stroke-width:
+        1.8;
 
-            border-radius: 8px;
+    stroke-linecap:
+        round;
 
-            outline: none;
+    stroke-linejoin:
+        round;
+}
 
-            font-family: inherit;
 
-            font-size: 12px;
+/* =====================================================
+   REMEMBER ME
+===================================================== */
 
-            cursor: pointer;
-        }
+.remember {
 
+    display:
+        flex;
 
-        select:focus {
+    align-items:
+        center;
 
-            border-color:
-                var(--primary);
-        }
+    gap:
+        8px;
 
+    margin-bottom:
+        12px;
 
-        /* =====================================================
-           CHECKBOX
-        ===================================================== */
+    color:
+        var(--muted);
 
-        .remember {
+    font-size:
+        13px;
+}
 
-            display: flex;
 
-            align-items: center;
+.remember input {
 
-            gap: 6px;
+    width:
+        16px;
 
-            margin-bottom: 11px;
+    min-height:
+        16px;
 
-            color: var(--muted);
+    accent-color:
+        var(--primary);
+}
 
-            font-size: 11px;
-        }
 
+/* =====================================================
+   MODAL BUTTONS
+===================================================== */
 
-        .remember input {
+.modal-buttons {
 
-            width: 14px;
+    width:
+        100%;
 
-            min-height: 14px;
+    display:
+        grid;
 
-            accent-color:
-                var(--primary);
-        }
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
 
+    gap:
+        7px;
+}
 
-        /* =====================================================
-           MODAL BUTTONS
-        ===================================================== */
 
-        .modal-buttons {
+.modal-buttons .full {
 
-            display: grid;
+    grid-column:
+        1 / -1;
+}
 
-            grid-template-columns:
-                1fr 1fr;
 
-            gap: 6px;
-        }
+/* =====================================================
+   PLANS
+===================================================== */
 
+#planModal .modal-box {
 
-        .modal-buttons .full {
+    max-width:
+        430px;
+}
 
-            grid-column:
-                1 / -1;
-        }
 
+#plans {
 
-        /* =====================================================
-           PLAN MODAL
-        ===================================================== */
+    display:
+        grid;
 
-        #planModal .modal-box {
+    gap:
+        7px;
+}
 
-            max-width: 430px;
-        }
 
+.plan {
 
-        #plans {
+    width:
+        100%;
 
-            display: grid;
+    min-height:
+        auto;
 
-            gap: 6px;
-        }
+    padding:
+        11px;
 
+    text-align:
+        left;
 
-        .plan {
+    background:
+        var(--card2);
 
-            width: 100%;
+    border:
+        1px solid var(--border);
 
-            min-height: auto;
+    border-radius:
+        9px;
+}
 
-            text-align: left;
 
-            padding: 10px;
+.plan:hover {
 
-            background: var(--card2);
+    border-color:
+        var(--primary);
+}
 
-            border:
-                1px solid var(--border);
 
-            border-radius: 9px;
-        }
+.plan-name {
 
+    font-size:
+        14px;
 
-        .plan:hover {
+    font-weight:
+        800;
+}
 
-            border-color:
-                var(--primary);
-        }
 
+.plan-description {
 
-        .plan-name {
+    margin-top:
+        4px;
 
-            font-size: 13px;
+    color:
+        var(--muted);
 
-            font-weight: 800;
-        }
+    font-size:
+        12px;
+}
 
 
-        .plan-description {
+.plan-bottom {
 
-            margin-top: 3px;
+    display:
+        flex;
 
-            color: var(--muted);
+    align-items:
+        center;
 
-            font-size: 10px;
-        }
+    justify-content:
+        space-between;
 
+    margin-top:
+        8px;
+}
 
-        .plan-bottom {
 
-            display: flex;
+.plan-duration {
 
-            justify-content: space-between;
+    color:
+        var(--primary);
 
-            align-items: center;
+    font-size:
+        12px;
 
-            margin-top: 7px;
-        }
+    font-weight:
+        700;
+}
 
 
-        .plan-duration {
+.plan-price {
 
-            color: var(--primary);
+    font-size:
+        13px;
 
-            font-size: 11px;
+    font-weight:
+        800;
+}
 
-            font-weight: 750;
-        }
 
+/* =====================================================
+   HIDDEN GALLERY SCANNER
+===================================================== */
 
-        .plan-price {
+#temporaryQrScanner {
 
-            font-size: 12px;
+    position:
+        fixed;
 
-            font-weight: 800;
-        }
+    width:
+        1px;
 
+    height:
+        1px;
 
-        /* =====================================================
-           HIDDEN GALLERY SCANNER
-        ===================================================== */
+    left:
+        -10000px;
 
-        #temporaryQrScanner {
+    top:
+        -10000px;
 
-            position: fixed;
+    opacity:
+        0;
 
-            width: 1px;
+    pointer-events:
+        none;
 
-            height: 1px;
+    overflow:
+        hidden;
+}
 
-            left: -10000px;
 
-            top: -10000px;
+/* =====================================================
+   MOBILE
+===================================================== */
 
-            opacity: 0;
+@media (max-width: 600px) {
 
-            pointer-events: none;
+    main {
 
-            overflow: hidden;
-        }
+        width:
+            100%;
 
+        padding:
+            8px
+            8px
+            calc(
+                22px +
+                env(safe-area-inset-bottom)
+            );
+    }
 
-        /* =====================================================
-           SCROLLBAR
-        ===================================================== */
 
-        ::-webkit-scrollbar {
+    .card {
 
-            width: 5px;
-        }
+        padding:
+            11px;
 
+        margin-bottom:
+            7px;
+    }
 
-        ::-webkit-scrollbar-track {
 
-            background: transparent;
-        }
+    .card-title {
 
+        font-size:
+            14px;
+    }
 
-        ::-webkit-scrollbar-thumb {
 
-            background: var(--border);
+    #qr-reader__scan_region {
 
-            border-radius: 10px;
-        }
+        min-height:
+            240px;
+    }
 
 
-        /* =====================================================
-           MOBILE
-        ===================================================== */
+    .buttons {
 
-        @media (max-width: 500px) {
+        gap:
+            6px;
+    }
 
-            header {
 
-                height: 50px;
+    button {
 
-                padding:
-                    0 10px;
-            }
+        min-height:
+            42px;
 
+        font-size:
+            12px;
+    }
 
-            main {
+}
 
-                padding:
-                    9px
-                    8px
-                    25px;
-            }
 
+/* =====================================================
+   SMALL PHONE
+===================================================== */
 
-            .card {
+@media (max-width: 380px) {
 
-                padding: 10px;
+    main {
 
-                margin-bottom: 7px;
-            }
+        padding:
+            7px
+            7px
+            22px;
+    }
 
 
-            .buttons {
+    .card {
 
-                gap: 5px;
-            }
+        padding:
+            9px;
+    }
 
 
-            button {
+    .buttons {
 
-                min-height: 36px;
+        gap:
+            5px;
+    }
 
-                padding:
-                    6px
-                    5px;
 
-                font-size: 11px;
-            }
+    button {
 
+        min-height:
+            40px;
 
-            button svg {
+        padding:
+            7px
+            4px;
 
-                width: 14px;
+        font-size:
+            11px;
+    }
 
-                height: 14px;
 
-                margin-right: 2px;
-            }
+    button svg {
 
+        width:
+            14px;
 
-            .user-grid {
+        height:
+            14px;
 
-                grid-template-columns:
-                    1fr;
-            }
+        margin-right:
+            2px;
+    }
 
+}
 
-            .logo {
 
-                font-size: 14px;
-            }
+/* =====================================================
+   EXTRA SMALL
+===================================================== */
 
-        }
+@media (max-width: 330px) {
 
+    .buttons {
 
-        /* =====================================================
-           VERY SMALL SCREEN
-        ===================================================== */
+        grid-template-columns:
+            1fr 1fr;
+    }
 
-        @media (max-width: 350px) {
 
-            .buttons {
+    .buttons button:last-child {
 
-                grid-template-columns:
-                    1fr;
-            }
+        grid-column:
+            1 / -1;
+    }
 
-        }
+}
 
 
-        /* =====================================================
-           REDUCE MOTION
-        ===================================================== */
+/* =====================================================
+   REDUCE MOTION
+===================================================== */
 
-        @media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce) {
 
-            * {
+    * {
 
-                transition:
-                    none !important;
-            }
+        transition:
+            none !important;
 
-        }
+        animation:
+            none !important;
+    }
 
-    </style>
+}
+
+</style>
 
 </head>
 
@@ -1191,9 +1412,9 @@
 <body>
 
 
-<!-- =========================================================
+<!-- =====================================================
      HEADER
-========================================================= -->
+===================================================== -->
 
 <header>
 
@@ -1210,8 +1431,6 @@
             title="MikroTik Settings"
             type="button"
         >
-
-            <!-- SETTINGS SVG -->
 
             <svg viewBox="0 0 24 24">
 
@@ -1232,16 +1451,16 @@
 </header>
 
 
-<!-- =========================================================
+<!-- =====================================================
      MAIN
-========================================================= -->
+===================================================== -->
 
 <main>
 
 
-    <!-- =====================================================
-         QR CARD
-    ====================================================== -->
+    <!-- =================================================
+         QR SCANNER
+    ================================================== -->
 
     <div class="card">
 
@@ -1351,9 +1570,9 @@
     </div>
 
 
-    <!-- =====================================================
+    <!-- =================================================
          STATUS
-    ====================================================== -->
+    ================================================== -->
 
     <div class="card">
 
@@ -1379,9 +1598,9 @@
     </div>
 
 
-    <!-- =====================================================
+    <!-- =================================================
          USER INFORMATION
-    ====================================================== -->
+    ================================================== -->
 
     <div
         class="card"
@@ -1481,15 +1700,16 @@
     </div>
 
 
-    <!-- =====================================================
+    <!-- =================================================
          ACTIVITY LOG
-    ====================================================== -->
+    ================================================== -->
 
     <div class="card">
 
         <div class="card-title">
             Activity Log
         </div>
+
 
         <div id="log"></div>
 
@@ -1499,16 +1719,16 @@
 </main>
 
 
-<!-- =========================================================
+<!-- =====================================================
      TEMPORARY QR SCANNER
-========================================================= -->
+===================================================== -->
 
 <div id="temporaryQrScanner"></div>
 
 
-<!-- =========================================================
+<!-- =====================================================
      SETTINGS MODAL
-========================================================= -->
+===================================================== -->
 
 <div
     class="modal"
@@ -1654,7 +1874,7 @@
         </label>
 
 
-        <!-- BUTTONS -->
+        <!-- MODAL BUTTONS -->
 
         <div class="modal-buttons">
 
@@ -1700,9 +1920,9 @@
 </div>
 
 
-<!-- =========================================================
+<!-- =====================================================
      PLAN MODAL
-========================================================= -->
+===================================================== -->
 
 <div
     class="modal"
@@ -1742,16 +1962,11 @@
 </div>
 
 
-<!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
-
 <script>
 
-
-/* =========================================================
+/* =====================================================
    GLOBAL VARIABLES
-========================================================= */
+===================================================== */
 
 let mikrotik = {
 
@@ -1773,9 +1988,9 @@ let scanner = null;
 let scanBusy = false;
 
 
-/* =========================================================
+/* =====================================================
    THEME
-========================================================= */
+===================================================== */
 
 function setTheme(theme) {
 
@@ -1808,9 +2023,9 @@ function setTheme(theme) {
 }
 
 
-/* =========================================================
+/* =====================================================
    LOAD THEME
-========================================================= */
+===================================================== */
 
 function loadTheme() {
 
@@ -1828,7 +2043,8 @@ function loadTheme() {
 
     if (select) {
 
-        select.value = saved;
+        select.value =
+            saved;
 
     }
 
@@ -1853,9 +2069,9 @@ function loadTheme() {
 }
 
 
-/* =========================================================
+/* =====================================================
    LOG
-========================================================= */
+===================================================== */
 
 function log(message) {
 
@@ -1880,9 +2096,9 @@ function log(message) {
 }
 
 
-/* =========================================================
+/* =====================================================
    STATUS
-========================================================= */
+===================================================== */
 
 function setStatus(
     text,
@@ -1891,7 +2107,8 @@ function setStatus(
 
     document.getElementById(
         "statusText"
-    ).textContent = text;
+    ).textContent =
+        text;
 
 
     const dot =
@@ -1915,9 +2132,9 @@ function setStatus(
 }
 
 
-/* =========================================================
+/* =====================================================
    LOAD PLANS
-========================================================= */
+===================================================== */
 
 async function loadPlans() {
 
@@ -1927,7 +2144,8 @@ async function loadPlans() {
             await fetch(
                 "plan.json",
                 {
-                    cache: "no-store"
+                    cache:
+                        "no-store"
                 }
             );
 
@@ -1975,9 +2193,14 @@ async function loadPlans() {
             "plans"
         ).innerHTML =
 
-            `<div style="color:var(--danger)">
+            `<div
+                style="
+                    color:var(--danger);
+                    font-size:13px;
+                "
+            >
                 Failed to load plan.json
-             </div>`;
+            </div>`;
 
 
         log(
@@ -1990,9 +2213,9 @@ async function loadPlans() {
 }
 
 
-/* =========================================================
+/* =====================================================
    RENDER PLANS
-========================================================= */
+===================================================== */
 
 function renderPlans() {
 
@@ -2092,9 +2315,9 @@ function renderPlans() {
 }
 
 
-/* =========================================================
+/* =====================================================
    HTML ESCAPE
-========================================================= */
+===================================================== */
 
 function escapeHtml(value) {
 
@@ -2128,9 +2351,9 @@ function escapeHtml(value) {
 }
 
 
-/* =========================================================
+/* =====================================================
    SETTINGS
-========================================================= */
+===================================================== */
 
 function openSettings() {
 
@@ -2154,9 +2377,9 @@ function closeSettings() {
 }
 
 
-/* =========================================================
+/* =====================================================
    PASSWORD SHOW / HIDE
-========================================================= */
+===================================================== */
 
 function togglePassword() {
 
@@ -2227,9 +2450,9 @@ function togglePassword() {
 }
 
 
-/* =========================================================
+/* =====================================================
    SAVE SETTINGS
-========================================================= */
+===================================================== */
 
 function saveSettings() {
 
@@ -2275,15 +2498,17 @@ function saveSettings() {
 
     localStorage.setItem(
         "mikrotik_qr_config",
-        JSON.stringify(config)
+        JSON.stringify(
+            config
+        )
     );
 
 }
 
 
-/* =========================================================
+/* =====================================================
    LOAD SAVED SETTINGS
-========================================================= */
+===================================================== */
 
 function loadSavedSettings() {
 
@@ -2299,7 +2524,9 @@ function loadSavedSettings() {
 
 
         const config =
-            JSON.parse(saved);
+            JSON.parse(
+                saved
+            );
 
 
         document.getElementById(
@@ -2356,9 +2583,9 @@ function loadSavedSettings() {
 }
 
 
-/* =========================================================
+/* =====================================================
    CLEAR SETTINGS
-========================================================= */
+===================================================== */
 
 function clearSavedSettings() {
 
@@ -2369,22 +2596,26 @@ function clearSavedSettings() {
 
     document.getElementById(
         "apiUrl"
-    ).value = "";
+    ).value =
+        "";
 
 
     document.getElementById(
         "mtUsername"
-    ).value = "";
+    ).value =
+        "";
 
 
     document.getElementById(
         "mtPassword"
-    ).value = "";
+    ).value =
+        "";
 
 
     document.getElementById(
         "rememberMe"
-    ).checked = false;
+    ).checked =
+        false;
 
 
     mikrotik = {
@@ -2409,9 +2640,9 @@ function clearSavedSettings() {
 }
 
 
-/* =========================================================
+/* =====================================================
    CONNECT MIKROTIK
-========================================================= */
+===================================================== */
 
 async function connectMikrotik() {
 
@@ -2486,12 +2717,6 @@ async function connectMikrotik() {
 
     try {
 
-        /*
-         * Small connection test.
-         *
-         * Does NOT download hotspot users.
-         */
-
         const response =
             await mtFetch(
                 "/system/identity"
@@ -2554,9 +2779,9 @@ async function connectMikrotik() {
 }
 
 
-/* =========================================================
+/* =====================================================
    MIKROTIK FETCH
-========================================================= */
+===================================================== */
 
 async function mtFetch(
     endpoint,
@@ -2617,9 +2842,9 @@ async function mtFetch(
 }
 
 
-/* =========================================================
+/* =====================================================
    QR SUCCESS
-========================================================= */
+===================================================== */
 
 function onScanSuccess(
     decodedText
@@ -2633,21 +2858,26 @@ function onScanSuccess(
 
     log("");
 
+
     log(
         "================================="
     );
+
 
     log(
         "QR CODE SCANNED"
     );
 
+
     log(
         "================================="
     );
 
+
     log(
         decodedText
     );
+
 
     log(
         "================================="
@@ -2706,7 +2936,7 @@ function onScanSuccess(
         );
 
 
-        awaitStopScanner();
+        stopScannerAndOpenPlan();
 
 
     } catch (error) {
@@ -2730,11 +2960,11 @@ function onScanSuccess(
 }
 
 
-/* =========================================================
-   STOP SCANNER HELPER
-========================================================= */
+/* =====================================================
+   STOP CAMERA AND OPEN PLAN
+===================================================== */
 
-async function awaitStopScanner() {
+async function stopScannerAndOpenPlan() {
 
     await stopScanner();
 
@@ -2748,9 +2978,9 @@ async function awaitStopScanner() {
 }
 
 
-/* =========================================================
-   QR ERROR
-========================================================= */
+/* =====================================================
+   QR FAILURE
+===================================================== */
 
 function onScanFailure(
     errorMessage
@@ -2758,17 +2988,14 @@ function onScanFailure(
 
     /*
      * Intentionally empty.
-     *
-     * Scanner repeatedly calls this
-     * while searching for QR.
      */
 
 }
 
 
-/* =========================================================
+/* =====================================================
    START SCANNER
-========================================================= */
+===================================================== */
 
 async function startScanner() {
 
@@ -2795,10 +3022,6 @@ async function startScanner() {
 
         }
 
-
-        /*
-         * Prefer back camera.
-         */
 
         let cameraId =
             cameras[0].id;
@@ -2828,7 +3051,8 @@ async function startScanner() {
 
             {
 
-                fps: 10,
+                fps:
+                    10,
 
                 qrbox:
                     function(
@@ -2840,14 +3064,17 @@ async function startScanner() {
                             Math.min(
                                 width,
                                 height
-                            ) * 0.70;
+                            ) *
+                            .70;
 
 
                         return {
 
-                            width: size,
+                            width:
+                                size,
 
-                            height: size
+                            height:
+                                size
 
                         };
 
@@ -2888,9 +3115,9 @@ async function startScanner() {
 }
 
 
-/* =========================================================
+/* =====================================================
    STOP SCANNER
-========================================================= */
+===================================================== */
 
 async function stopScanner() {
 
@@ -2926,7 +3153,8 @@ async function stopScanner() {
     }
 
 
-    scanner = null;
+    scanner =
+        null;
 
 
     currentFlashTrack =
@@ -2960,16 +3188,18 @@ async function stopScanner() {
 }
 
 
-/* =========================================================
+/* =====================================================
    RESTART SCANNER
-========================================================= */
+===================================================== */
 
 async function restartScanner() {
 
-    scanBusy = false;
+    scanBusy =
+        false;
 
 
-    currentQR = null;
+    currentQR =
+        null;
 
 
     closePlanModal();
@@ -2989,16 +3219,17 @@ async function restartScanner() {
 }
 
 
-/* =========================================================
+/* =====================================================
    FINISH SCAN
-========================================================= */
+===================================================== */
 
 function finishScan() {
 
     setTimeout(
         () => {
 
-            scanBusy = false;
+            scanBusy =
+                false;
 
             startScanner();
 
@@ -3009,9 +3240,9 @@ function finishScan() {
 }
 
 
-/* =========================================================
-   GALLERY QR SCANNER
-========================================================= */
+/* =====================================================
+   GALLERY QR
+===================================================== */
 
 async function scanGallery() {
 
@@ -3057,7 +3288,8 @@ async function scanGallery() {
             }
 
 
-            scanBusy = true;
+            scanBusy =
+                true;
 
 
             log("");
@@ -3080,20 +3312,9 @@ async function scanGallery() {
 
             try {
 
-                /*
-                 * Temporary invisible scanner.
-                 *
-                 * Selected image is NOT displayed
-                 * inside the visible camera area.
-                 */
-
-                const tempId =
-                    "temporaryQrScanner";
-
-
                 const tempScanner =
                     new Html5Qrcode(
-                        tempId
+                        "temporaryQrScanner"
                     );
 
 
@@ -3159,9 +3380,9 @@ async function scanGallery() {
 }
 
 
-/* =========================================================
+/* =====================================================
    PROCESS GALLERY QR
-========================================================= */
+===================================================== */
 
 function processGalleryQR(
     decodedText
@@ -3225,7 +3446,6 @@ function processGalleryQR(
             "show"
         );
 
-
     } catch (error) {
 
         log(
@@ -3247,9 +3467,9 @@ function processGalleryQR(
 }
 
 
-/* =========================================================
+/* =====================================================
    PLAN MODAL
-========================================================= */
+===================================================== */
 
 function closePlanModal() {
 
@@ -3262,9 +3482,9 @@ function closePlanModal() {
 }
 
 
-/* =========================================================
+/* =====================================================
    PROCESS USER
-========================================================= */
+===================================================== */
 
 async function processUser(
     username,
@@ -3349,17 +3569,7 @@ async function processUser(
     try {
 
         /*
-         * =================================================
-         * IMPORTANT OPTIMIZATION
-         * =================================================
-         *
-         * Only request the specific username.
-         *
-         * No:
-         *
-         * GET /ip/hotspot/user
-         *
-         * which would download all users.
+         * Only query the requested username.
          */
 
         const queryName =
@@ -3437,7 +3647,8 @@ async function processUser(
 
 
         const currentExpiration =
-            user.comment || "";
+            user.comment ||
+            "";
 
 
         const currentMs =
@@ -3483,7 +3694,7 @@ async function processUser(
 
 
         /* =================================================
-           CALCULATE PLAN
+           CALCULATE
         ================================================= */
 
         const addMs =
@@ -3504,28 +3715,20 @@ async function processUser(
         let newExpirationMs;
 
 
-        /*
-         * Active expiration:
-         *
-         * current expiration + new plan
-         *
-         * Expired:
-         *
-         * now + new plan
-         */
-
         if (
             currentMs !== null &&
             currentMs > now
         ) {
 
             newExpirationMs =
-                currentMs + addMs;
+                currentMs +
+                addMs;
 
         } else {
 
             newExpirationMs =
-                now + addMs;
+                now +
+                addMs;
 
         }
 
@@ -3533,7 +3736,8 @@ async function processUser(
         const newTimeLeft =
             Math.max(
                 0,
-                newExpirationMs - now
+                newExpirationMs -
+                now
             );
 
 
@@ -3544,7 +3748,7 @@ async function processUser(
 
 
         /* =================================================
-           DISPLAY INFO
+           DISPLAY
         ================================================= */
 
         document.getElementById(
@@ -3613,7 +3817,7 @@ async function processUser(
 
 
         /* =================================================
-           UPDATE USER
+           UPDATE
         ================================================= */
 
         setStatus(
@@ -3699,7 +3903,7 @@ async function processUser(
 
 
         /* =================================================
-           RUN SCRIPT
+           SCRIPT 3
         ================================================= */
 
         await runScript3();
@@ -3744,9 +3948,9 @@ async function processUser(
 }
 
 
-/* =========================================================
+/* =====================================================
    CREATE USER
-========================================================= */
+===================================================== */
 
 async function createUser(
     username,
@@ -3780,9 +3984,9 @@ async function createUser(
         );
 
 
-    /* =====================================================
+    /* =================================================
        DISPLAY
-    ===================================================== */
+    ================================================= */
 
     document.getElementById(
         "infoCurrentTime"
@@ -3804,9 +4008,9 @@ async function createUser(
         expirationText;
 
 
-    /* =====================================================
+    /* =================================================
        LOG
-    ===================================================== */
+    ================================================= */
 
     log(
         `Plan Selected: ${plan.name}`
@@ -3850,9 +4054,9 @@ async function createUser(
     );
 
 
-    /* =====================================================
+    /* =================================================
        CREATE
-    ===================================================== */
+    ================================================= */
 
     const response =
         await mtFetch(
@@ -3926,10 +4130,6 @@ async function createUser(
     );
 
 
-    /* =====================================================
-       RUN SCRIPT
-    ===================================================== */
-
     await runScript3();
 
 
@@ -3944,9 +4144,9 @@ async function createUser(
 }
 
 
-/* =========================================================
+/* =====================================================
    RUN SCRIPT 3
-========================================================= */
+===================================================== */
 
 async function runScript3() {
 
@@ -3986,6 +4186,7 @@ async function runScript3() {
                 `script3 HTTP ${response.status}`
             );
 
+
             return;
 
         }
@@ -3998,11 +4199,6 @@ async function runScript3() {
 
     } catch (error) {
 
-        /*
-         * Do not fail the successful user operation
-         * if script3 has an issue.
-         */
-
         log(
             "script3 ERROR: " +
             error.message
@@ -4013,9 +4209,9 @@ async function runScript3() {
 }
 
 
-/* =========================================================
-   VALIDITY TO MILLISECONDS
-========================================================= */
+/* =====================================================
+   VALIDITY
+===================================================== */
 
 function validityToMilliseconds(
     value
@@ -4088,9 +4284,9 @@ function validityToMilliseconds(
 }
 
 
-/* =========================================================
-   PARSE MIKROTIK EXPIRATION
-========================================================= */
+/* =====================================================
+   PARSE EXPIRATION
+===================================================== */
 
 function parseExpiration(
     value
@@ -4191,9 +4387,9 @@ function parseExpiration(
 }
 
 
-/* =========================================================
+/* =====================================================
    FORMAT DATE
-========================================================= */
+===================================================== */
 
 function formatDate(
     timestamp
@@ -4277,9 +4473,9 @@ function formatDate(
 }
 
 
-/* =========================================================
+/* =====================================================
    FORMAT DURATION
-========================================================= */
+===================================================== */
 
 function formatDuration(
     milliseconds
@@ -4297,7 +4493,8 @@ function formatDuration(
 
     let totalSeconds =
         Math.floor(
-            milliseconds / 1000
+            milliseconds /
+            1000
         );
 
 
@@ -4374,9 +4571,9 @@ function formatDuration(
 }
 
 
-/* =========================================================
+/* =====================================================
    FLASHLIGHT
-========================================================= */
+===================================================== */
 
 async function toggleFlash() {
 
@@ -4455,39 +4652,19 @@ async function toggleFlash() {
             );
 
 
-        if (!enabled) {
+        flashButton.innerHTML = `
 
-            flashButton.innerHTML = `
+            <svg viewBox="0 0 24 24">
 
-                <svg viewBox="0 0 24 24">
+                <path
+                    d="M9 2h6l-1 7h4l-7 13 1-9H8L9 2Z"
+                />
 
-                    <path
-                        d="M9 2h6l-1 7h4l-7 13 1-9H8L9 2Z"
-                    />
+            </svg>
 
-                </svg>
+            ${!enabled ? "Flash ON" : "Flash"}
 
-                Flash ON
-
-            `;
-
-        } else {
-
-            flashButton.innerHTML = `
-
-                <svg viewBox="0 0 24 24">
-
-                    <path
-                        d="M9 2h6l-1 7h4l-7 13 1-9H8L9 2Z"
-                    />
-
-                </svg>
-
-                Flash
-
-            `;
-
-        }
+        `;
 
 
     } catch (error) {
@@ -4505,9 +4682,9 @@ async function toggleFlash() {
 }
 
 
-/* =========================================================
+/* =====================================================
    GET VIDEO TRACK
-========================================================= */
+===================================================== */
 
 function getVideoTrack() {
 
@@ -4539,9 +4716,9 @@ function getVideoTrack() {
 }
 
 
-/* =========================================================
-   CLOSE MODAL WHEN CLICKING BACKDROP
-========================================================= */
+/* =====================================================
+   BACKDROP CLOSE
+===================================================== */
 
 document.getElementById(
     "settingsModal"
@@ -4550,7 +4727,8 @@ document.getElementById(
     function(event) {
 
         if (
-            event.target === this
+            event.target ===
+            this
         ) {
 
             closeSettings();
@@ -4568,7 +4746,8 @@ document.getElementById(
     function(event) {
 
         if (
-            event.target === this
+            event.target ===
+            this
         ) {
 
             closePlanModal();
@@ -4579,9 +4758,9 @@ document.getElementById(
 );
 
 
-/* =========================================================
+/* =====================================================
    INITIALIZE
-========================================================= */
+===================================================== */
 
 async function init() {
 
@@ -4604,12 +4783,11 @@ async function init() {
 }
 
 
-/* =========================================================
+/* =====================================================
    START
-========================================================= */
+===================================================== */
 
 init();
-
 
 </script>
 
