@@ -1,7 +1,7 @@
 /* =========================================================
    BOBOTEDITHA.NET
    QR WIFI MANAGER
-   JAVASCRIPT
+   SCRIPT.JS
 ========================================================= */
 
 
@@ -40,26 +40,17 @@ const THEMES = [
 function setTheme(theme) {
 
     if (!THEMES.includes(theme)) {
-
         theme = "auto";
-
     }
 
-
-    document.documentElement.setAttribute(
-        "data-theme",
-        theme
-    );
-
+    document.documentElement.dataset.theme = theme;
 
     localStorage.setItem(
         "mikrotik_theme",
         theme
     );
 
-
     updateThemeButton(theme);
-
 }
 
 
@@ -68,18 +59,12 @@ function updateThemeButton(theme) {
     const button =
         document.getElementById("themeButton");
 
-
     if (!button) {
-
         return;
-
     }
 
-
     button.textContent =
-        theme.charAt(0).toUpperCase() +
-        theme.slice(1);
-
+        theme.toUpperCase();
 }
 
 
@@ -90,32 +75,33 @@ function cycleTheme() {
             "mikrotik_theme"
         ) || "auto";
 
-
-    const index =
+    let index =
         THEMES.indexOf(current);
 
+    if (index === -1) {
+        index = 0;
+    }
 
-    const next =
-        THEMES[
-            (index + 1) % THEMES.length
-        ];
+    index++;
 
+    if (index >= THEMES.length) {
+        index = 0;
+    }
 
-    setTheme(next);
-
+    setTheme(
+        THEMES[index]
+    );
 }
 
 
 function loadTheme() {
 
-    const savedTheme =
+    const saved =
         localStorage.getItem(
             "mikrotik_theme"
         ) || "auto";
 
-
-    setTheme(savedTheme);
-
+    setTheme(saved);
 }
 
 
@@ -128,25 +114,18 @@ function log(message) {
     const el =
         document.getElementById("log");
 
-
     if (!el) {
-
         return;
-
     }
-
 
     const time =
         new Date().toLocaleTimeString();
 
-
     el.textContent +=
         `[${time}] ${message}\n`;
 
-
     el.scrollTop =
         el.scrollHeight;
-
 }
 
 
@@ -164,37 +143,29 @@ function setStatus(
             "statusText"
         );
 
-
     const statusDot =
         document.getElementById(
             "statusDot"
         );
 
-
     if (statusText) {
 
         statusText.textContent =
             text;
-
     }
-
 
     if (statusDot) {
 
         statusDot.className =
             "status-dot";
 
-
         if (type) {
 
             statusDot.classList.add(
                 type
             );
-
         }
-
     }
-
 }
 
 
@@ -214,34 +185,27 @@ async function loadPlans() {
                 }
             );
 
-
         if (!response.ok) {
 
             throw new Error(
                 "Failed to load plan.json"
             );
-
         }
-
 
         const data =
             await response.json();
-
 
         if (Array.isArray(data)) {
 
             plans = data;
 
-        }
-        else {
+        } else {
 
             plans =
                 Array.isArray(data.plans)
                     ? data.plans
                     : [];
-
         }
-
 
         plans =
             plans.filter(
@@ -249,9 +213,7 @@ async function loadPlans() {
                     plan.enabled !== false
             );
 
-
         renderPlans();
-
 
         log(
             `Loaded ${plans.length} WiFi plans.`
@@ -264,22 +226,17 @@ async function loadPlans() {
             `Plan loading error: ${error.message}`
         );
 
-
         const plansElement =
             document.getElementById(
                 "plans"
             );
 
-
         if (plansElement) {
 
-            plansElement.innerHTML =
+            plansElement.textContent =
                 "Failed to load plans.";
-
         }
-
     }
-
 }
 
 
@@ -294,16 +251,11 @@ function renderPlans() {
             "plans"
         );
 
-
     if (!container) {
-
         return;
-
     }
 
-
     container.innerHTML = "";
-
 
     if (!plans.length) {
 
@@ -311,9 +263,7 @@ function renderPlans() {
             "No plans available.";
 
         return;
-
     }
-
 
     plans.forEach(plan => {
 
@@ -322,16 +272,16 @@ function renderPlans() {
                 "button"
             );
 
-
         button.className =
             "plan";
 
+        button.type =
+            "button";
 
         const price =
             Number(plan.price) === 0
                 ? "FREE"
                 : `₱${plan.price}`;
-
 
         button.innerHTML = `
 
@@ -340,13 +290,17 @@ function renderPlans() {
             </div>
 
             <div class="plan-description">
-                ${escapeHtml(plan.description || "")}
+                ${escapeHtml(
+                    plan.description || ""
+                )}
             </div>
 
             <div class="plan-bottom">
 
                 <span class="plan-duration">
-                    ${escapeHtml(plan.duration)}
+                    ${escapeHtml(
+                        plan.duration || ""
+                    )}
                 </span>
 
                 <span class="plan-price">
@@ -357,13 +311,11 @@ function renderPlans() {
 
         `;
 
-
         button.addEventListener(
             "click",
             async () => {
 
                 closePlanModal();
-
 
                 if (
                     currentQR &&
@@ -376,19 +328,14 @@ function renderPlans() {
                         currentQR.password,
                         plan
                     );
-
                 }
-
             }
         );
-
 
         container.appendChild(
             button
         );
-
     });
-
 }
 
 
@@ -399,12 +346,26 @@ function renderPlans() {
 function escapeHtml(value) {
 
     return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 }
 
 
@@ -418,8 +379,9 @@ function openSettings() {
         .getElementById(
             "settingsModal"
         )
-        .classList.add("show");
-
+        .classList.add(
+            "show"
+        );
 }
 
 
@@ -429,8 +391,9 @@ function closeSettings() {
         .getElementById(
             "settingsModal"
         )
-        .classList.remove("show");
-
+        .classList.remove(
+            "show"
+        );
 }
 
 
@@ -441,19 +404,14 @@ function togglePassword() {
             "mtPassword"
         );
 
-
     if (!input) {
-
         return;
-
     }
-
 
     input.type =
         input.type === "password"
             ? "text"
             : "password";
-
 }
 
 
@@ -465,29 +423,33 @@ function saveSettings() {
 
     const apiUrl =
         document
-            .getElementById("apiUrl")
+            .getElementById(
+                "apiUrl"
+            )
             .value
             .trim();
-
 
     const username =
         document
-            .getElementById("mtUsername")
+            .getElementById(
+                "mtUsername"
+            )
             .value
             .trim();
 
-
     const password =
         document
-            .getElementById("mtPassword")
+            .getElementById(
+                "mtPassword"
+            )
             .value;
-
 
     const remember =
         document
-            .getElementById("rememberMe")
+            .getElementById(
+                "rememberMe"
+            )
             .checked;
-
 
     if (!remember) {
 
@@ -496,20 +458,19 @@ function saveSettings() {
         );
 
         return;
-
     }
-
 
     localStorage.setItem(
         "mikrotik_qr_config",
         JSON.stringify({
+
             apiUrl,
             username,
             password,
             remember: true
+
         })
     );
-
 }
 
 
@@ -526,41 +487,32 @@ function loadSavedSettings() {
                 "mikrotik_qr_config"
             );
 
-
         if (!saved) {
-
             return;
-
         }
-
 
         const config =
             JSON.parse(saved);
-
 
         document.getElementById(
             "apiUrl"
         ).value =
             config.apiUrl || "";
 
-
         document.getElementById(
             "mtUsername"
         ).value =
             config.username || "";
-
 
         document.getElementById(
             "mtPassword"
         ).value =
             config.password || "";
 
-
         document.getElementById(
             "rememberMe"
         ).checked =
             config.remember === true;
-
 
         if (
             config.apiUrl &&
@@ -579,7 +531,6 @@ function loadSavedSettings() {
                     config.password
 
             };
-
         }
 
     }
@@ -589,9 +540,7 @@ function loadSavedSettings() {
             "Saved settings error:",
             error
         );
-
     }
-
 }
 
 
@@ -605,26 +554,21 @@ function clearSavedSettings() {
         "mikrotik_qr_config"
     );
 
-
     document.getElementById(
         "apiUrl"
     ).value = "";
-
 
     document.getElementById(
         "mtUsername"
     ).value = "";
 
-
     document.getElementById(
         "mtPassword"
     ).value = "";
 
-
     document.getElementById(
         "rememberMe"
     ).checked = false;
-
 
     mikrotik = {
 
@@ -634,17 +578,14 @@ function clearSavedSettings() {
 
     };
 
-
     setStatus(
         "Not connected",
         ""
     );
 
-
     log(
         "Saved MikroTik settings cleared."
     );
-
 }
 
 
@@ -656,24 +597,30 @@ async function connectMikrotik() {
 
     const apiUrl =
         document
-            .getElementById("apiUrl")
+            .getElementById(
+                "apiUrl"
+            )
             .value
             .trim()
-            .replace(/\/+$/, "");
-
+            .replace(
+                /\/+$/,
+                ""
+            );
 
     const username =
         document
-            .getElementById("mtUsername")
+            .getElementById(
+                "mtUsername"
+            )
             .value
             .trim();
 
-
     const password =
         document
-            .getElementById("mtPassword")
+            .getElementById(
+                "mtPassword"
+            )
             .value;
-
 
     if (!apiUrl) {
 
@@ -683,9 +630,7 @@ async function connectMikrotik() {
         );
 
         return;
-
     }
-
 
     if (!username) {
 
@@ -695,9 +640,7 @@ async function connectMikrotik() {
         );
 
         return;
-
     }
-
 
     mikrotik = {
 
@@ -707,20 +650,16 @@ async function connectMikrotik() {
 
     };
 
-
     saveSettings();
-
 
     setStatus(
         "Connecting...",
         "warning"
     );
 
-
     log(
         `Connecting to ${apiUrl}`
     );
-
 
     try {
 
@@ -729,28 +668,23 @@ async function connectMikrotik() {
                 "/system/identity"
             );
 
-
         const identity =
             Array.isArray(data)
                 ? data[0]
                 : data;
 
-
         const name =
             identity?.name ||
             "MikroTik";
-
 
         setStatus(
             `Connected: ${name}`,
             "online"
         );
 
-
         log(
             `Connected to ${name}.`
         );
-
 
         closeSettings();
 
@@ -762,13 +696,10 @@ async function connectMikrotik() {
             "error"
         );
 
-
         log(
             `Connection error: ${error.message}`
         );
-
     }
-
 }
 
 
@@ -786,9 +717,7 @@ async function mtFetch(
         throw new Error(
             "MikroTik API is not configured."
         );
-
     }
-
 
     const url =
         mikrotik.apiUrl.replace(
@@ -797,12 +726,10 @@ async function mtFetch(
         ) +
         endpoint;
 
-
     const headers =
         new Headers(
             options.headers || {}
         );
-
 
     headers.set(
         "Authorization",
@@ -812,12 +739,10 @@ async function mtFetch(
         )
     );
 
-
     headers.set(
         "Content-Type",
         "application/json"
     );
-
 
     const response =
         await fetch(
@@ -828,13 +753,10 @@ async function mtFetch(
             }
         );
 
-
     const text =
         await response.text();
 
-
     let data = null;
-
 
     if (text) {
 
@@ -846,18 +768,15 @@ async function mtFetch(
         }
         catch {
 
-            data = text;
-
+            data =
+                text;
         }
-
     }
-
 
     if (!response.ok) {
 
         let message =
             `HTTP ${response.status}`;
-
 
         if (
             data &&
@@ -875,19 +794,51 @@ async function mtFetch(
 
             message =
                 String(data);
-
         }
-
 
         throw new Error(
             message
         );
-
     }
 
-
     return data;
+}
 
+
+/* =========================================================
+   PARSE QR
+========================================================= */
+
+function parseQR(
+    decodedText
+) {
+
+    const url =
+        new URL(decodedText);
+
+    const username =
+        url.searchParams.get(
+            "username"
+        );
+
+    const password =
+        url.searchParams.get(
+            "password"
+        );
+
+    if (!username || !password) {
+
+        throw new Error(
+            "QR does not contain username and password."
+        );
+    }
+
+    return {
+
+        username,
+        password
+
+    };
 }
 
 
@@ -900,14 +851,10 @@ async function onScanSuccess(
 ) {
 
     if (scanBusy) {
-
         return;
-
     }
 
-
     scanBusy = true;
-
 
     try {
 
@@ -915,53 +862,24 @@ async function onScanSuccess(
             `QR detected: ${decodedText}`
         );
 
+        const qr =
+            parseQR(decodedText);
 
-        const url =
-            new URL(decodedText);
-
-
-        const username =
-            url.searchParams.get(
-                "username"
-            );
-
-
-        const password =
-            url.searchParams.get(
-                "password"
-            );
-
-
-        if (!username || !password) {
-
-            throw new Error(
-                "QR does not contain username and password."
-            );
-
-        }
-
-
-        currentQR = {
-
-            username,
-            password
-
-        };
-
+        currentQR = qr;
 
         log(
-            `QR user: ${username}`
+            `QR user: ${qr.username}`
         );
 
-
         await stopScanner();
-
 
         document
             .getElementById(
                 "planModal"
             )
-            .classList.add("show");
+            .classList.add(
+                "show"
+            );
 
     }
     catch (error) {
@@ -969,7 +887,6 @@ async function onScanSuccess(
         log(
             `Invalid QR: ${error.message}`
         );
-
 
         setStatus(
             "Invalid QR code",
@@ -982,7 +899,6 @@ async function onScanSuccess(
         scanBusy = false;
 
     }
-
 }
 
 
@@ -990,12 +906,14 @@ async function onScanSuccess(
    QR SCAN FAILURE
 ========================================================= */
 
-function onScanFailure(errorMessage) {
+function onScanFailure(
+    errorMessage
+) {
 
     /*
-       Ignore normal QR scan failures.
-       html5-qrcode calls this continuously
-       while looking for a QR code.
+       Normal QR scanning produces
+       many temporary failures.
+       We intentionally ignore them.
     */
 
 }
@@ -1015,29 +933,26 @@ async function startScanner() {
 
         }
 
-
         scanner =
             new Html5Qrcode(
                 "qr-reader"
             );
 
-
         const cameras =
             await Html5Qrcode.getCameras();
 
-
-        if (!cameras || !cameras.length) {
+        if (
+            !cameras ||
+            !cameras.length
+        ) {
 
             throw new Error(
                 "No camera found."
             );
-
         }
-
 
         let cameraId =
             cameras[0].id;
-
 
         const rearCamera =
             cameras.find(
@@ -1049,30 +964,29 @@ async function startScanner() {
                             ""
                         ).toLowerCase();
 
-
                     return (
+
                         label.includes(
                             "back"
                         ) ||
+
                         label.includes(
                             "rear"
                         ) ||
+
                         label.includes(
                             "environment"
                         )
-                    );
 
+                    );
                 }
             );
-
 
         if (rearCamera) {
 
             cameraId =
                 rearCamera.id;
-
         }
-
 
         await scanner.start(
 
@@ -1082,10 +996,11 @@ async function startScanner() {
                 fps: 10,
 
                 qrbox: {
+
                     width: "70%",
                     height: "70%"
-                }
 
+                }
             },
 
             onScanSuccess,
@@ -1094,16 +1009,13 @@ async function startScanner() {
 
         );
 
-
         currentFlashTrack =
             getVideoTrack();
-
 
         setStatus(
             "Camera ready",
             "online"
         );
-
 
         log(
             "QR scanner started."
@@ -1117,13 +1029,10 @@ async function startScanner() {
             "error"
         );
 
-
         log(
             `Camera error: ${error.message}`
         );
-
     }
-
 }
 
 
@@ -1148,9 +1057,7 @@ async function stopScanner() {
                     "Scanner stop:",
                     error
                 );
-
             }
-
 
             try {
 
@@ -1163,12 +1070,9 @@ async function stopScanner() {
                     "Scanner clear:",
                     error
                 );
-
             }
 
-
             scanner = null;
-
         }
 
     }
@@ -1178,12 +1082,9 @@ async function stopScanner() {
             "Stop scanner error:",
             error
         );
-
     }
 
-
     currentFlashTrack = null;
-
 }
 
 
@@ -1197,23 +1098,25 @@ async function restartScanner() {
 
     currentQR = null;
 
-
     closePlanModal();
 
+    const userInfo =
+        document.getElementById(
+            "userInfo"
+        );
 
-    document.getElementById(
-        "userInfo"
-    ).style.display = "none";
+    if (userInfo) {
 
+        userInfo.style.display =
+            "none";
+    }
 
     setStatus(
         "Restarting camera...",
         "warning"
     );
 
-
     await stopScanner();
-
 
     setTimeout(
         () => {
@@ -1223,7 +1126,6 @@ async function restartScanner() {
         },
         300
     );
-
 }
 
 
@@ -1238,7 +1140,6 @@ function finishScan() {
     scanBusy = false;
 
     closePlanModal();
-
 }
 
 
@@ -1253,12 +1154,11 @@ function scanGallery() {
             "input"
         );
 
-
-    input.type = "file";
+    input.type =
+        "file";
 
     input.accept =
         "image/*";
-
 
     input.addEventListener(
         "change",
@@ -1267,24 +1167,18 @@ function scanGallery() {
             const file =
                 event.target.files?.[0];
 
-
             if (!file) {
-
                 return;
-
             }
-
 
             log(
                 `Scanning gallery image: ${file.name}`
             );
 
-
             const tempScanner =
                 new Html5Qrcode(
                     "temporaryQrScanner"
                 );
-
 
             try {
 
@@ -1294,9 +1188,7 @@ function scanGallery() {
                         false
                     );
 
-
                 await tempScanner.clear();
-
 
                 await processGalleryQR(
                     decodedText
@@ -1312,29 +1204,23 @@ function scanGallery() {
                 }
                 catch {
 
-                    // Ignore cleanup errors.
+                    // Ignore cleanup error.
 
                 }
-
 
                 log(
                     `Gallery QR error: ${error.message}`
                 );
 
-
                 setStatus(
                     "No valid QR found",
                     "error"
                 );
-
             }
-
         }
     );
 
-
     input.click();
-
 }
 
 
@@ -1352,50 +1238,22 @@ async function processGalleryQR(
             `Gallery QR detected: ${decodedText}`
         );
 
+        const qr =
+            parseQR(decodedText);
 
-        const url =
-            new URL(decodedText);
-
-
-        const username =
-            url.searchParams.get(
-                "username"
-            );
-
-
-        const password =
-            url.searchParams.get(
-                "password"
-            );
-
-
-        if (!username || !password) {
-
-            throw new Error(
-                "QR does not contain username and password."
-            );
-
-        }
-
-
-        currentQR = {
-
-            username,
-            password
-
-        };
-
+        currentQR = qr;
 
         log(
-            `QR user: ${username}`
+            `QR user: ${qr.username}`
         );
-
 
         document
             .getElementById(
                 "planModal"
             )
-            .classList.add("show");
+            .classList.add(
+                "show"
+            );
 
     }
     catch (error) {
@@ -1404,14 +1262,11 @@ async function processGalleryQR(
             `Invalid gallery QR: ${error.message}`
         );
 
-
         setStatus(
             "Invalid QR code",
             "error"
         );
-
     }
-
 }
 
 
@@ -1428,7 +1283,6 @@ function closePlanModal() {
         .classList.remove(
             "show"
         );
-
 }
 
 
@@ -1452,13 +1306,10 @@ async function processUser(
             "error"
         );
 
-
         openSettings();
 
         return;
-
     }
-
 
     if (!plan) {
 
@@ -1468,68 +1319,62 @@ async function processUser(
         );
 
         return;
-
     }
-
 
     const userInfo =
         document.getElementById(
             "userInfo"
         );
 
-
     userInfo.style.display =
         "block";
-
 
     document.getElementById(
         "infoUsername"
     ).textContent =
         username;
 
-
     document.getElementById(
         "infoPlan"
     ).textContent =
         `${plan.name} (${plan.duration})`;
-
 
     document.getElementById(
         "infoCurrentTime"
     ).textContent =
         "Checking...";
 
-
     document.getElementById(
         "infoTotal"
     ).textContent =
         "Calculating...";
-
 
     document.getElementById(
         "infoExpiration"
     ).textContent =
         "Calculating...";
 
-
     setStatus(
         "Processing user...",
         "warning"
     );
-
 
     log(
         `Processing user: ${username}`
     );
 
 
-    try {
+    /* =====================================================
+       EXACT USER LOOKUP
+       
+       IMPORTANT:
+       This does NOT request the complete
+       /ip/hotspot/user list.
 
-        /*
-           Exact username lookup.
-           This avoids downloading the entire
-           hotspot user list.
-        */
+       Only the specified username is requested.
+    ===================================================== */
+
+    try {
 
         const result =
             await mtFetch(
@@ -1537,18 +1382,42 @@ async function processUser(
             );
 
 
-        const users =
-            Array.isArray(result)
-                ? result
-                : [];
+        /* =================================================
+           HANDLE MIKROTIK RESPONSE
+        ================================================= */
+
+        let user = null;
 
 
-        const user =
-            users.find(
-                item =>
-                    item.name === username
-            );
+        /*
+           RouterOS REST normally returns
+           an array for this query.
+        */
 
+        if (Array.isArray(result)) {
+
+            if (result.length > 0) {
+
+                user =
+                    result[0];
+
+            }
+
+        }
+        else if (
+            result &&
+            typeof result === "object"
+        ) {
+
+            user =
+                result;
+
+        }
+
+
+        /* =================================================
+           USER NOT FOUND
+        ================================================= */
 
         if (!user) {
 
@@ -1556,18 +1425,19 @@ async function processUser(
                 `User ${username} not found. Creating user.`
             );
 
-
             await createUser(
                 username,
                 password,
                 plan
             );
 
-
             return;
-
         }
 
+
+        /* =================================================
+           USER FOUND
+        ================================================= */
 
         log(
             `Existing user found: ${username}`
@@ -1604,6 +1474,15 @@ async function processUser(
             );
 
 
+        if (!planDuration) {
+
+            throw new Error(
+                `Invalid plan duration: ${plan.duration}`
+            );
+
+        }
+
+
         const newExpiration =
             Math.max(
                 currentExpiration || now,
@@ -1633,6 +1512,10 @@ async function processUser(
             );
 
 
+        /* =================================================
+           UPDATE UI
+        ================================================= */
+
         document.getElementById(
             "infoCurrentTime"
         ).textContent =
@@ -1653,24 +1536,31 @@ async function processUser(
             newExpirationText;
 
 
+        /* =================================================
+           LOG
+        ================================================= */
+
         log(
             `Current time left: ${currentText}`
         );
 
-
         log(
             `Adding plan: ${plan.duration}`
         );
-
 
         log(
             `New expiration: ${newExpirationText}`
         );
 
 
+        /* =================================================
+           UPDATE ONLY THIS USER
+        ================================================= */
+
         await mtFetch(
             `/ip/hotspot/user/${encodeURIComponent(user[".id"])}`,
             {
+
                 method: "PATCH",
 
                 body: JSON.stringify({
@@ -1691,6 +1581,10 @@ async function processUser(
             `User ${username} updated successfully.`
         );
 
+
+        /* =================================================
+           RUN SCRIPT3
+        ================================================= */
 
         await runScript3();
 
@@ -1723,13 +1617,10 @@ async function processUser(
             "error"
         );
 
-
         log(
             `User processing error: ${error.message}`
         );
-
     }
-
 }
 
 
@@ -1802,9 +1693,14 @@ async function createUser(
     );
 
 
+    /* =====================================================
+       CREATE ONLY ONE USER
+    ===================================================== */
+
     await mtFetch(
         "/ip/hotspot/user",
         {
+
             method: "PUT",
 
             body: JSON.stringify({
@@ -1854,7 +1750,6 @@ async function createUser(
         },
         1500
     );
-
 }
 
 
@@ -1869,6 +1764,7 @@ async function runScript3() {
         await mtFetch(
             "/system/script/run",
             {
+
                 method: "POST",
 
                 body: JSON.stringify({
@@ -1890,16 +1786,14 @@ async function runScript3() {
     catch (error) {
 
         /*
-           Script3 failure does not fail
-           the main user operation.
+           script3 failure does not
+           fail the main operation.
         */
 
         log(
             `script3 error: ${error.message}`
         );
-
     }
-
 }
 
 
@@ -1960,20 +1854,24 @@ function validityToMilliseconds(
 
     if (unit === "h") {
 
-        return amount * 60 * minute;
+        return amount *
+            60 *
+            minute;
 
     }
 
 
     if (unit === "d") {
 
-        return amount * 24 * 60 * minute;
+        return amount *
+            24 *
+            60 *
+            minute;
 
     }
 
 
     return 0;
-
 }
 
 
@@ -2036,7 +1934,9 @@ function parseExpiration(
 
 
     const month =
-        months[match[1]];
+        months[
+            match[1]
+        ];
 
 
     if (month === undefined) {
@@ -2047,23 +1947,33 @@ function parseExpiration(
 
 
     const day =
-        Number(match[2]);
+        Number(
+            match[2]
+        );
 
 
     const year =
-        Number(match[3]);
+        Number(
+            match[3]
+        );
 
 
     const hour =
-        Number(match[4]);
+        Number(
+            match[4]
+        );
 
 
     const minute =
-        Number(match[5]);
+        Number(
+            match[5]
+        );
 
 
     const second =
-        Number(match[6]);
+        Number(
+            match[6]
+        );
 
 
     const date =
@@ -2081,10 +1991,11 @@ function parseExpiration(
         date.getTime();
 
 
-    return Number.isNaN(timestamp)
+    return Number.isNaN(
+        timestamp
+    )
         ? null
         : timestamp;
-
 }
 
 
@@ -2097,7 +2008,9 @@ function formatDate(
 ) {
 
     const date =
-        new Date(timestamp);
+        new Date(
+            timestamp
+        );
 
 
     const months = [
@@ -2121,25 +2034,47 @@ function formatDate(
     const pad =
         number =>
             String(number)
-                .padStart(2, "0");
+                .padStart(
+                    2,
+                    "0"
+                );
 
 
     return (
 
-        months[date.getMonth()] +
+        months[
+            date.getMonth()
+        ] +
+
         "/" +
-        pad(date.getDate()) +
+
+        pad(
+            date.getDate()
+        ) +
+
         "/" +
+
         date.getFullYear() +
+
         " " +
-        pad(date.getHours()) +
+
+        pad(
+            date.getHours()
+        ) +
+
         ":" +
-        pad(date.getMinutes()) +
+
+        pad(
+            date.getMinutes()
+        ) +
+
         ":" +
-        pad(date.getSeconds())
+
+        pad(
+            date.getSeconds()
+        )
 
     );
-
 }
 
 
@@ -2253,7 +2188,6 @@ async function toggleFlash() {
             );
 
             return;
-
         }
 
 
@@ -2271,7 +2205,6 @@ async function toggleFlash() {
             );
 
             return;
-
         }
 
 
@@ -2286,19 +2219,23 @@ async function toggleFlash() {
         await track.applyConstraints({
 
             advanced: [
+
                 {
                     torch:
                         !enabled
                 }
+
             ]
 
         });
 
 
         log(
+
             !enabled
                 ? "Flashlight ON."
                 : "Flashlight OFF."
+
         );
 
     }
@@ -2307,9 +2244,7 @@ async function toggleFlash() {
         log(
             `Flashlight error: ${error.message}`
         );
-
     }
-
 }
 
 
@@ -2348,7 +2283,6 @@ function getVideoTrack() {
 
 
     return tracks[0] || null;
-
 }
 
 
@@ -2360,20 +2294,15 @@ function init() {
 
     loadTheme();
 
-
     log(
         "QR WiFi Manager started."
     );
 
-
     loadSavedSettings();
-
 
     loadPlans();
 
-
     startScanner();
-
 }
 
 
