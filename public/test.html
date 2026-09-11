@@ -157,6 +157,8 @@
 
         #qr-reader video {
 
+            width: 100% !important;
+
             border-radius: 15px;
 
         }
@@ -282,7 +284,7 @@
         #log {
 
             width: 100%;
-            height: 230px;
+            height: 250px;
 
             overflow-y: auto;
 
@@ -648,12 +650,16 @@
 <div class="container">
 
 
-    <!-- QR CAMERA -->
+    <!-- =====================================================
+         CAMERA QR SCANNER
+    ====================================================== -->
 
     <div id="qr-reader"></div>
 
 
-    <!-- BUTTONS -->
+    <!-- =====================================================
+         BUTTONS
+    ====================================================== -->
 
     <div class="buttons">
 
@@ -668,12 +674,15 @@
         <button
             class="main-btn"
             onclick="toggleFlash()"
+            id="flashButton"
         >
             🔦 Flash
         </button>
 
     </div>
 
+
+    <!-- Hidden file input -->
 
     <input
         id="galleryInput"
@@ -683,7 +692,9 @@
     >
 
 
-    <!-- STATUS -->
+    <!-- =====================================================
+         STATUS
+    ====================================================== -->
 
     <div
         id="status"
@@ -693,7 +704,9 @@
     </div>
 
 
-    <!-- LOG -->
+    <!-- =====================================================
+         LOG
+    ====================================================== -->
 
     <div class="log-title">
         Activity Log
@@ -858,6 +871,8 @@
         </div>
 
 
+        <!-- 1 HOUR -->
+
         <div
             class="plan"
             data-value="1h"
@@ -874,6 +889,8 @@
 
         </div>
 
+
+        <!-- 3 DAYS -->
 
         <div
             class="plan"
@@ -892,6 +909,8 @@
         </div>
 
 
+        <!-- 7 DAYS -->
+
         <div
             class="plan"
             data-value="7d"
@@ -909,6 +928,8 @@
         </div>
 
 
+        <!-- 15 DAYS -->
+
         <div
             class="plan"
             data-value="15d"
@@ -925,6 +946,8 @@
 
         </div>
 
+
+        <!-- 30 DAYS -->
 
         <div
             class="plan"
@@ -971,7 +994,7 @@
 <script>
 
 /* =========================================================
-   VARIABLES
+   GLOBAL VARIABLES
 ========================================================= */
 
 let mikrotik = null;
@@ -997,7 +1020,9 @@ function log(
 ) {
 
     const p =
-        document.createElement("p");
+        document.createElement(
+            "p"
+        );
 
 
     p.textContent =
@@ -1018,7 +1043,9 @@ function log(
         );
 
 
-    box.appendChild(p);
+    box.appendChild(
+        p
+    );
 
 
     box.scrollTop =
@@ -1120,10 +1147,6 @@ function saveSettings() {
     }
 
 
-    /*
-       Automatically remove trailing /
-    */
-
     apiUrl =
         apiUrl.replace(
             /\/+$/,
@@ -1155,10 +1178,6 @@ function saveSettings() {
         "success"
     );
 
-
-    /*
-       Test connection
-    */
 
     testConnection();
 
@@ -1199,7 +1218,7 @@ function clearSettings() {
 
 
     log(
-        "MikroTik configuration cleared.",
+        "MikroTik API configuration cleared.",
         "warning"
     );
 
@@ -1273,7 +1292,7 @@ function togglePassword() {
 
 
 /* =========================================================
-   MIKROTIK API REQUEST
+   API REQUEST
 ========================================================= */
 
 async function apiRequest(
@@ -1299,7 +1318,6 @@ async function apiRequest(
     const options = {
 
         method:
-
             method,
 
         headers: {
@@ -1408,7 +1426,7 @@ async function apiRequest(
 async function testConnection() {
 
     log(
-        "Testing MikroTik API connection..."
+        "Testing MikroTik REST API..."
     );
 
 
@@ -1426,19 +1444,18 @@ async function testConnection() {
         );
 
 
-        if (data) {
+        if (
+            Array.isArray(data) &&
+            data[0]
+        ) {
 
-            if (data[0]) {
-
-                log(
-                    "RouterOS version: " +
-                    (
-                        data[0].version ||
-                        "Unknown"
-                    )
-                );
-
-            }
+            log(
+                "RouterOS version: " +
+                (
+                    data[0].version ||
+                    "Unknown"
+                )
+            );
 
         }
 
@@ -1456,7 +1473,7 @@ async function testConnection() {
 
 
 /* =========================================================
-   QR PARAMETERS
+   GET QR PARAMETER
 ========================================================= */
 
 function getParams(
@@ -1467,7 +1484,9 @@ function getParams(
     try {
 
         const parsed =
-            new URL(url);
+            new URL(
+                url
+            );
 
 
         return parsed
@@ -1486,7 +1505,7 @@ function getParams(
 
 
 /* =========================================================
-   QR SCAN
+   CAMERA QR SUCCESS
 ========================================================= */
 
 async function onScanSuccess(
@@ -1504,85 +1523,142 @@ async function onScanSuccess(
 
 
     log(
-        "QR Code detected.",
+        "================================"
+    );
+
+
+    log(
+        "QR CODE DETECTED",
         "success"
     );
 
 
     log(
+        decodedText,
+        "success"
+    );
+
+
+    log(
+        "================================"
+    );
+
+
+    await processQrContent(
         decodedText
     );
 
-
-    const username =
-        getParams(
-            "username",
-            decodedText
-        );
+}
 
 
-    const password =
-        getParams(
-            "password",
-            decodedText
-        );
+/* =========================================================
+   PROCESS QR CONTENT
+========================================================= */
+
+async function processQrContent(
+    decodedText
+) {
+
+    try {
+
+        /*
+           Extract parameters
+        */
+
+        const username =
+            getParams(
+                "username",
+                decodedText
+            );
 
 
-    if (
-        !username ||
-        !password
-    ) {
+        const password =
+            getParams(
+                "password",
+                decodedText
+            );
+
+
+        if (
+            !username ||
+            !password
+        ) {
+
+            log(
+                "Invalid QR code.",
+                "error"
+            );
+
+
+            log(
+                "username or password not found.",
+                "error"
+            );
+
+
+            scanBusy = false;
+
+            return;
+
+        }
+
 
         log(
-            "Invalid QR code. username/password not found.",
+            "Username: " +
+            username
+        );
+
+
+        /*
+           Select plan
+        */
+
+        const validity =
+            await selectValidity();
+
+
+        if (!validity) {
+
+            log(
+                "Plan selection cancelled.",
+                "warning"
+            );
+
+
+            scanBusy = false;
+
+            return;
+
+        }
+
+
+        log(
+            "Selected Plan: " +
+            validity,
+            "success"
+        );
+
+
+        /*
+           Update MikroTik
+        */
+
+        await updateHotspotUser(
+            username,
+            password,
+            validity
+        );
+
+
+    } catch (error) {
+
+        log(
+            "Processing error: " +
+            error.message,
             "error"
         );
 
-
-        scanBusy = false;
-
-        return;
-
     }
-
-
-    log(
-        "Ticket Username: " +
-        username
-    );
-
-
-    const validity =
-        await selectValidity();
-
-
-    if (!validity) {
-
-        log(
-            "Plan selection cancelled.",
-            "warning"
-        );
-
-
-        scanBusy = false;
-
-        return;
-
-    }
-
-
-    log(
-        "Selected plan: " +
-        validity,
-        "success"
-    );
-
-
-    await updateHotspotUser(
-        username,
-        password,
-        validity
-    );
 
 
     setTimeout(
@@ -1627,13 +1703,9 @@ async function updateHotspotUser(
     try {
 
         log(
-            "Checking MikroTik hotspot user..."
+            "GET /ip/hotspot/user"
         );
 
-
-        /*
-           GET all hotspot users
-        */
 
         const users =
             await apiRequest(
@@ -1641,14 +1713,14 @@ async function updateHotspotUser(
             );
 
 
-        const userList =
+        const list =
             Array.isArray(users)
                 ? users
                 : [];
 
 
         const existing =
-            userList.find(
+            list.find(
                 user =>
                     user.name ===
                     username
@@ -1662,7 +1734,12 @@ async function updateHotspotUser(
         if (!existing) {
 
             log(
-                "User does not exist. Creating user..."
+                "User does not exist."
+            );
+
+
+            log(
+                "Creating hotspot user..."
             );
 
 
@@ -1674,8 +1751,11 @@ async function updateHotspotUser(
 
 
             await apiRequest(
+
                 "/ip/hotspot/user",
+
                 "PUT",
+
                 {
 
                     name:
@@ -1691,6 +1771,7 @@ async function updateHotspotUser(
                         "General"
 
                 }
+
             );
 
 
@@ -1707,10 +1788,6 @@ async function updateHotspotUser(
             );
 
 
-            /*
-               Run RouterOS script3
-            */
-
             await runScript3();
 
 
@@ -1724,52 +1801,32 @@ async function updateHotspotUser(
         ================================================== */
 
         log(
-            "User already exists."
+            "Existing user found.",
+            "success"
         );
 
 
         const oldComment =
-            existing.comment || "";
+            existing.comment ||
+            "";
 
 
         log(
             "Current expiration: " +
-            oldComment
+            (
+                oldComment ||
+                "none"
+            )
         );
 
 
-        let newExpire;
+        const newExpire =
+            addTime(
+                oldComment ||
+                new Date(),
+                validity
+            );
 
-
-        /*
-           If old comment is not a valid
-           remaining-time/date value,
-           start from NOW.
-        */
-
-        if (!oldComment.trim()) {
-
-            newExpire =
-                addTime(
-                    new Date(),
-                    validity
-                );
-
-        } else {
-
-            newExpire =
-                addTime(
-                    oldComment.trim(),
-                    validity
-                );
-
-        }
-
-
-        /*
-           RouterOS REST API uses
-           .id to identify the user.
-        */
 
         await apiRequest(
 
@@ -1808,6 +1865,7 @@ async function updateHotspotUser(
 
         await runScript3();
 
+
     } catch (error) {
 
         log(
@@ -1830,15 +1888,9 @@ async function runScript3() {
     try {
 
         log(
-            "Running RouterOS script3..."
+            "Running script3..."
         );
 
-
-        /*
-           RouterOS REST API:
-           
-           /system/script/run
-        */
 
         await apiRequest(
 
@@ -1857,17 +1909,12 @@ async function runScript3() {
 
 
         log(
-            "script3 executed.",
+            "script3 executed successfully.",
             "success"
         );
 
 
     } catch (error) {
-
-        /*
-           Don't fail the whole transaction
-           if script3 is unavailable.
-        */
 
         log(
             "script3 warning: " +
@@ -1881,99 +1928,460 @@ async function runScript3() {
 
 
 /* =========================================================
-   GET REMAINING TIME
+   PLAN SELECTOR
 ========================================================= */
 
-function getRemainingTime(
-    targetDate
+function selectValidity() {
+
+    return new Promise(
+        resolve => {
+
+            selectedPlan =
+                "";
+
+            planResolver =
+                resolve;
+
+
+            document
+                .querySelectorAll(
+                    ".plan"
+                )
+                .forEach(
+                    plan => {
+
+                        plan.classList
+                            .remove(
+                                "selected"
+                            );
+
+                    }
+                );
+
+
+            document
+                .getElementById(
+                    "planModal"
+                )
+                .style.display =
+                    "flex";
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SELECT PLAN
+========================================================= */
+
+function selectPlan(
+    element
 ) {
 
-    const now =
-        new Date();
-
-
-    const target =
-        new Date(
-            targetDate
-        );
-
-
-    const difference =
-        target - now;
-
-
-    if (
-        isNaN(
-            target.getTime()
+    document
+        .querySelectorAll(
+            ".plan"
         )
-    ) {
+        .forEach(
+            plan => {
 
-        return null;
+                plan.classList
+                    .remove(
+                        "selected"
+                    );
 
-    }
-
-
-    if (
-        difference <= 0
-    ) {
-
-        return "0d 0h 0m 0s";
-
-    }
-
-
-    const seconds =
-        Math.floor(
-            (
-                difference /
-                1000
-            ) % 60
+            }
         );
 
 
-    const minutes =
-        Math.floor(
-            (
-                difference /
-                1000 /
-                60
-            ) % 60
-        );
-
-
-    const hours =
-        Math.floor(
-            (
-                difference /
-                1000 /
-                60 /
-                60
-            ) % 24
-        );
-
-
-    const days =
-        Math.floor(
-            difference /
-            (
-                1000 *
-                60 *
-                60 *
-                24
-            )
-        );
-
-
-    return (
-        days +
-        "d " +
-        hours +
-        "h " +
-        minutes +
-        "m " +
-        seconds +
-        "s"
+    element.classList.add(
+        "selected"
     );
+
+
+    selectedPlan =
+        element.dataset.value;
+
+}
+
+
+/* =========================================================
+   CONFIRM PLAN
+========================================================= */
+
+function confirmPlan() {
+
+    if (!selectedPlan) {
+
+        alert(
+            "Please select a plan."
+        );
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "planModal"
+        )
+        .style.display =
+            "none";
+
+
+    if (planResolver) {
+
+        planResolver(
+            selectedPlan
+        );
+
+        planResolver =
+            null;
+
+    }
+
+}
+
+
+/* =========================================================
+   CANCEL PLAN
+========================================================= */
+
+function cancelPlan() {
+
+    document
+        .getElementById(
+            "planModal"
+        )
+        .style.display =
+            "none";
+
+
+    if (planResolver) {
+
+        planResolver(
+            null
+        );
+
+        planResolver =
+            null;
+
+    }
+
+}
+
+
+/* =========================================================
+   GALLERY
+========================================================= */
+
+function openGallery() {
+
+    document
+        .getElementById(
+            "galleryInput"
+        )
+        .click();
+
+}
+
+
+/* =========================================================
+   GALLERY QR SCANNER
+========================================================= */
+
+async function scanGallery(
+    event
+) {
+
+    const file =
+        event.target.files[0];
+
+
+    if (!file) {
+
+        return;
+
+    }
+
+
+    if (scanBusy) {
+
+        event.target.value = "";
+
+        return;
+
+    }
+
+
+    scanBusy = true;
+
+
+    log(
+        "Gallery image selected."
+    );
+
+
+    log(
+        "Scanning QR..."
+    );
+
+
+    /*
+       Create a temporary
+       invisible scanner.
+
+       The selected image will
+       NOT appear in the visible
+       #qr-reader.
+    */
+
+    const tempContainer =
+        document.createElement(
+            "div"
+        );
+
+
+    tempContainer.id =
+        "temporaryQrScanner";
+
+
+    tempContainer.style.position =
+        "fixed";
+
+
+    tempContainer.style.left =
+        "-99999px";
+
+
+    tempContainer.style.top =
+        "-99999px";
+
+
+    tempContainer.style.width =
+        "1px";
+
+
+    tempContainer.style.height =
+        "1px";
+
+
+    tempContainer.style.overflow =
+        "hidden";
+
+
+    document.body.appendChild(
+        tempContainer
+    );
+
+
+    const imageScanner =
+        new Html5Qrcode(
+            "temporaryQrScanner"
+        );
+
+
+    try {
+
+        /*
+           Scan image directly.
+        */
+
+        const decodedText =
+            await imageScanner.scanFile(
+                file,
+                false
+            );
+
+
+        /*
+           IMPORTANT:
+           Log decoded content
+           immediately.
+        */
+
+        log(
+            "================================"
+        );
+
+
+        log(
+            "QR CODE FROM GALLERY",
+            "success"
+        );
+
+
+        log(
+            decodedText,
+            "success"
+        );
+
+
+        log(
+            "================================"
+        );
+
+
+        /*
+           Process QR.
+        */
+
+        await processQrContent(
+            decodedText
+        );
+
+
+    } catch (error) {
+
+        log(
+            "No QR code found in selected image.",
+            "error"
+        );
+
+
+        scanBusy = false;
+
+    } finally {
+
+        /*
+           Clear temporary scanner.
+        */
+
+        try {
+
+            await imageScanner.clear();
+
+        } catch {
+
+        }
+
+
+        /*
+           Remove temporary
+           scanner container.
+        */
+
+        tempContainer.remove();
+
+
+        /*
+           Reset file input.
+        */
+
+        event.target.value = "";
+
+    }
+
+}
+
+
+/* =========================================================
+   FLASHLIGHT
+========================================================= */
+
+async function toggleFlash() {
+
+    try {
+
+        if (!videoTrack) {
+
+            const video =
+                document.querySelector(
+                    "#qr-reader video"
+                );
+
+
+            if (
+                !video ||
+                !video.srcObject
+            ) {
+
+                log(
+                    "Camera is not ready.",
+                    "warning"
+                );
+
+                return;
+
+            }
+
+
+            videoTrack =
+                video.srcObject
+                    .getVideoTracks()[0];
+
+        }
+
+
+        const capabilities =
+            videoTrack.getCapabilities();
+
+
+        if (!capabilities.torch) {
+
+            log(
+                "Flashlight is not supported.",
+                "warning"
+            );
+
+            return;
+
+        }
+
+
+        const current =
+            videoTrack
+                .getSettings()
+                .torch ||
+            false;
+
+
+        await videoTrack
+            .applyConstraints({
+
+                advanced: [
+
+                    {
+
+                        torch:
+                            !current
+
+                    }
+
+                ]
+
+            });
+
+
+        document
+            .getElementById(
+                "flashButton"
+            )
+            .textContent =
+                current
+                    ? "🔦 Flash"
+                    : "💡 Flash";
+
+
+        log(
+            current
+                ? "Flashlight OFF."
+                : "Flashlight ON."
+        );
+
+
+    } catch (error) {
+
+        log(
+            "Flashlight error: " +
+            error.message,
+            "error"
+        );
+
+    }
 
 }
 
@@ -1983,114 +2391,63 @@ function getRemainingTime(
 ========================================================= */
 
 function addTime(
-    targetDate,
-    timeToAdd
+    target,
+    validity
 ) {
 
+    let date;
+
+
     /*
-       If targetDate is already a
-       valid Date object
+       Existing Date object
     */
 
     if (
-        targetDate instanceof Date
+        target instanceof Date
     ) {
 
-        const units = {
-
-            d:
-                24 *
-                60 *
-                60 *
-                1000,
-
-            h:
-                60 *
-                60 *
-                1000,
-
-            m:
-                60 *
-                1000,
-
-            s:
-                1000
-
-        };
-
-
-        const date =
+        date =
             new Date(
-                targetDate
+                target
             );
 
+    } else {
 
-        const regex =
-            /(\d+)([dhms])/g;
-
-
-        let match;
-
-
-        while (
-            (
-                match =
-                regex.exec(
-                    timeToAdd
-                )
-            ) !== null
-        ) {
-
-            const value =
-                parseInt(
-                    match[1],
-                    10
-                );
-
-
-            const unit =
-                match[2];
-
-
-            date.setTime(
-                date.getTime() +
-                (
-                    value *
-                    units[unit]
+        date =
+            parseExpiration(
+                String(
+                    target
                 )
             );
+
+
+        /*
+           Invalid expiration
+           = start from NOW
+        */
+
+        if (!date) {
+
+            date =
+                new Date();
 
         }
-
-
-        return formatDate(
-            date
-        );
 
     }
 
 
     /*
-       Existing expiration
-       stored as:
-       
-       jan/01/2026 12:00:00
+       Expired user
+       = start from NOW
     */
 
-    const target =
-        parseExpiration(
-            String(
-                targetDate
-            )
-        );
+    if (
+        date.getTime() <
+        Date.now()
+    ) {
 
-
-    if (!target) {
-
-        return addTime(
-            new Date(),
-            timeToAdd
-        );
+        date =
+            new Date();
 
     }
 
@@ -2118,12 +2475,6 @@ function addTime(
     };
 
 
-    const date =
-        new Date(
-            target
-        );
-
-
     const regex =
         /(\d+)([dhms])/g;
 
@@ -2135,7 +2486,7 @@ function addTime(
         (
             match =
             regex.exec(
-                timeToAdd
+                validity
             )
         ) !== null
     ) {
@@ -2152,29 +2503,13 @@ function addTime(
 
 
         date.setTime(
+
             date.getTime() +
             (
                 value *
                 units[unit]
             )
-        );
 
-    }
-
-
-    /*
-       If expiration is already past,
-       add validity from NOW instead.
-    */
-
-    if (
-        target.getTime() <
-        Date.now()
-    ) {
-
-        return addTime(
-            new Date(),
-            timeToAdd
         );
 
     }
@@ -2194,13 +2529,6 @@ function addTime(
 function parseExpiration(
     value
 ) {
-
-    /*
-       Format:
-
-       jan/01/2026 12:00:00
-
-    */
 
     const regex =
         /^([a-zA-Z]{3})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})$/;
@@ -2308,65 +2636,51 @@ function formatDate(
     ];
 
 
-    const month =
+    return (
+
         months[
             date.getMonth()
-        ];
+        ] +
 
+        "/" +
 
-    const day =
         String(
             date.getDate()
         ).padStart(
             2,
             "0"
-        );
+        ) +
 
+        "/" +
 
-    const year =
-        date.getFullYear();
+        date.getFullYear() +
 
+        " " +
 
-    const hours =
         String(
             date.getHours()
         ).padStart(
             2,
             "0"
-        );
+        ) +
 
+        ":" +
 
-    const minutes =
         String(
             date.getMinutes()
         ).padStart(
             2,
             "0"
-        );
+        ) +
 
+        ":" +
 
-    const seconds =
         String(
             date.getSeconds()
         ).padStart(
             2,
             "0"
-        );
-
-
-    return (
-
-        month +
-        "/" +
-        day +
-        "/" +
-        year +
-        " " +
-        hours +
-        ":" +
-        minutes +
-        ":" +
-        seconds
+        )
 
     );
 
@@ -2374,321 +2688,7 @@ function formatDate(
 
 
 /* =========================================================
-   GALLERY
-========================================================= */
-
-function openGallery() {
-
-    document
-        .getElementById(
-            "galleryInput"
-        )
-        .click();
-
-}
-
-
-async function scanGallery(
-    event
-) {
-
-    const file =
-        event.target.files[0];
-
-
-    if (!file) {
-
-        return;
-
-    }
-
-
-    if (scanBusy) {
-
-        return;
-
-    }
-
-
-    scanBusy = true;
-
-
-    log(
-        "Scanning gallery image..."
-    );
-
-
-    const imageScanner =
-        new Html5Qrcode(
-            "qr-reader"
-        );
-
-
-    try {
-
-        const decodedText =
-            await imageScanner.scanFile(
-                file,
-                true
-            );
-
-
-        await onScanSuccess(
-            decodedText
-        );
-
-
-    } catch {
-
-        log(
-            "No QR code found in image.",
-            "error"
-        );
-
-
-        scanBusy = false;
-
-    }
-
-
-    event.target.value = "";
-
-}
-
-
-/* =========================================================
-   FLASHLIGHT
-========================================================= */
-
-async function toggleFlash() {
-
-    try {
-
-        if (!videoTrack) {
-
-            const video =
-                document.querySelector(
-                    "#qr-reader video"
-                );
-
-
-            if (
-                !video ||
-                !video.srcObject
-            ) {
-
-                log(
-                    "Camera is not ready.",
-                    "warning"
-                );
-
-                return;
-
-            }
-
-
-            videoTrack =
-                video.srcObject
-                    .getVideoTracks()[0];
-
-        }
-
-
-        const capabilities =
-            videoTrack
-                .getCapabilities();
-
-
-        if (!capabilities.torch) {
-
-            log(
-                "Flashlight is not supported.",
-                "warning"
-            );
-
-            return;
-
-        }
-
-
-        const settings =
-            videoTrack
-                .getSettings();
-
-
-        await videoTrack
-            .applyConstraints({
-
-                advanced: [
-
-                    {
-
-                        torch:
-                            !settings.torch
-
-                    }
-
-                ]
-
-            });
-
-
-        log(
-            settings.torch
-                ? "Flashlight OFF."
-                : "Flashlight ON."
-        );
-
-    } catch (error) {
-
-        log(
-            "Flashlight error: " +
-            error.message,
-            "error"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   PLAN SELECTOR
-========================================================= */
-
-function selectValidity() {
-
-    return new Promise(
-        resolve => {
-
-            selectedPlan =
-                "";
-
-            planResolver =
-                resolve;
-
-
-            document
-                .querySelectorAll(
-                    ".plan"
-                )
-                .forEach(
-                    plan => {
-
-                        plan.classList
-                            .remove(
-                                "selected"
-                            );
-
-                    }
-                );
-
-
-            document
-                .getElementById(
-                    "planModal"
-                )
-                .style.display =
-                    "flex";
-
-        }
-    );
-
-}
-
-
-function selectPlan(
-    element
-) {
-
-    document
-        .querySelectorAll(
-            ".plan"
-        )
-        .forEach(
-            plan => {
-
-                plan.classList
-                    .remove(
-                        "selected"
-                    );
-
-            }
-        );
-
-
-    element.classList.add(
-        "selected"
-    );
-
-
-    selectedPlan =
-        element.dataset.value;
-
-}
-
-
-function confirmPlan() {
-
-    if (!selectedPlan) {
-
-        alert(
-            "Please select a plan."
-        );
-
-        return;
-
-    }
-
-
-    document
-        .getElementById(
-            "planModal"
-        )
-        .style.display =
-            "none";
-
-
-    if (planResolver) {
-
-        planResolver(
-            selectedPlan
-        );
-
-        planResolver =
-            null;
-
-    }
-
-}
-
-
-function cancelPlan() {
-
-    document
-        .getElementById(
-            "planModal"
-        )
-        .style.display =
-            "none";
-
-
-    if (planResolver) {
-
-        planResolver(
-            null
-        );
-
-        planResolver =
-            null;
-
-    }
-
-}
-
-
-/* =========================================================
-   OUTSIDE MODAL CLICK
+   MODAL OUTSIDE CLICK
 ========================================================= */
 
 window.addEventListener(
@@ -2757,6 +2757,7 @@ async function startScanner() {
             },
 
             {
+
                 fps: 10,
 
                 qrbox: 250
