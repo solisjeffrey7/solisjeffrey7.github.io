@@ -26,17 +26,20 @@
 
 
     <!-- =====================================================
-         THEME
+         LOAD THEME BEFORE PAGE RENDER
     ====================================================== -->
 
     <script>
 
         (function () {
 
-            const savedTheme =
-                localStorage.getItem("mikrotik_theme") || "auto";
+            const theme =
+                localStorage.getItem(
+                    "mikrotik_theme"
+                ) || "auto";
 
-            document.documentElement.dataset.theme = savedTheme;
+            document.documentElement.dataset.theme =
+                theme;
 
         })();
 
@@ -78,6 +81,7 @@
 
         body {
 
+            width: 100%;
             min-height: 100vh;
 
             font-family:
@@ -93,29 +97,42 @@
             background: var(--bg);
             color: var(--text);
 
+            overflow-x: hidden;
+
             transition:
                 background .2s ease,
                 color .2s ease;
 
-            overflow-x: hidden;
+        }
+
+
+        button,
+        input,
+        select {
+
+            font-family: inherit;
 
         }
 
 
         /* =================================================
-           THEME VARIABLES
+           LIGHT THEME
         ================================================= */
 
         :root {
 
             --bg: #f4f5f7;
+
             --card: #ffffff;
+
             --border: #e1e4e8;
 
             --text: #17191c;
+
             --muted: #70757d;
 
             --button: #f0f1f3;
+
             --button-hover: #e5e7ea;
 
             --input: #ffffff;
@@ -123,6 +140,7 @@
             --primary: #1677ff;
 
             --success: #18a058;
+
             --danger: #e53935;
 
             color-scheme: light;
@@ -130,18 +148,24 @@
         }
 
 
-        /* DARK */
+        /* =================================================
+           DARK THEME
+        ================================================= */
 
         :root[data-theme="dark"] {
 
             --bg: #101214;
+
             --card: #181b1f;
+
             --border: #2a2f35;
 
             --text: #f1f3f5;
+
             --muted: #9299a3;
 
             --button: #22262b;
+
             --button-hover: #2c3137;
 
             --input: #20242a;
@@ -149,6 +173,7 @@
             --primary: #4d9cff;
 
             --success: #32c77a;
+
             --danger: #ff5c57;
 
             color-scheme: dark;
@@ -156,20 +181,26 @@
         }
 
 
-        /* AUTO LIGHT */
+        /* =================================================
+           AUTO LIGHT
+        ================================================= */
 
         @media (prefers-color-scheme: light) {
 
             :root[data-theme="auto"] {
 
                 --bg: #f4f5f7;
+
                 --card: #ffffff;
+
                 --border: #e1e4e8;
 
                 --text: #17191c;
+
                 --muted: #70757d;
 
                 --button: #f0f1f3;
+
                 --button-hover: #e5e7ea;
 
                 --input: #ffffff;
@@ -177,6 +208,7 @@
                 --primary: #1677ff;
 
                 --success: #18a058;
+
                 --danger: #e53935;
 
                 color-scheme: light;
@@ -186,20 +218,26 @@
         }
 
 
-        /* AUTO DARK */
+        /* =================================================
+           AUTO DARK
+        ================================================= */
 
         @media (prefers-color-scheme: dark) {
 
             :root[data-theme="auto"] {
 
                 --bg: #101214;
+
                 --card: #181b1f;
+
                 --border: #2a2f35;
 
                 --text: #f1f3f5;
+
                 --muted: #9299a3;
 
                 --button: #22262b;
+
                 --button-hover: #2c3137;
 
                 --input: #20242a;
@@ -207,6 +245,7 @@
                 --primary: #4d9cff;
 
                 --success: #32c77a;
+
                 --danger: #ff5c57;
 
                 color-scheme: dark;
@@ -223,23 +262,31 @@
         header {
 
             width: 100%;
-            height: 54px;
 
-            padding-top: env(safe-area-inset-top);
+            min-height: 62px;
+
+            padding-top:
+                env(safe-area-inset-top);
+
+            padding-left: 14px;
+
+            padding-right: 10px;
 
             display: flex;
-            align-items: center;
-            justify-content: space-between;
 
-            padding-left: 12px;
-            padding-right: 8px;
+            align-items: center;
+
+            justify-content: space-between;
 
             background: var(--card);
 
-            border-bottom: 1px solid var(--border);
+            border-bottom:
+                1px solid var(--border);
 
             position: sticky;
+
             top: 0;
+
             z-index: 100;
 
         }
@@ -248,9 +295,11 @@
         .brand {
 
             display: flex;
+
             align-items: center;
 
-            font-size: 15px;
+            font-size: 17px;
+
             font-weight: 700;
 
             white-space: nowrap;
@@ -260,20 +309,27 @@
 
         .settings-button {
 
-            width: 40px;
-            height: 40px;
+            width: 46px;
+
+            height: 46px;
 
             display: flex;
+
             align-items: center;
+
             justify-content: center;
 
             border: 0;
-            border-radius: 10px;
+
+            border-radius: 11px;
 
             background: transparent;
+
             color: var(--text);
 
             cursor: pointer;
+
+            touch-action: manipulation;
 
         }
 
@@ -285,9 +341,11 @@
         }
 
 
-        svg {
+        .settings-button svg {
 
-            display: block;
+            width: 22px;
+
+            height: 22px;
 
         }
 
@@ -299,12 +357,19 @@
         main {
 
             width: 100%;
-            max-width: none;
+
+            max-width: 900px;
+
+            margin: 0 auto;
 
             padding:
-                10px
-                10px
-                calc(20px + env(safe-area-inset-bottom));
+
+                12px
+                clamp(10px, 3vw, 20px)
+                calc(
+                    24px +
+                    env(safe-area-inset-bottom)
+                );
 
         }
 
@@ -319,29 +384,31 @@
 
             background: var(--card);
 
-            border: 1px solid var(--border);
+            border:
+                1px solid var(--border);
 
-            border-radius: 12px;
+            border-radius: 13px;
 
-            padding: 12px;
+            padding: 14px;
 
-            margin-bottom: 10px;
+            margin-bottom: 12px;
 
         }
 
 
         .card-title {
 
-            font-size: 13px;
+            font-size: 14px;
+
             font-weight: 700;
 
-            margin-bottom: 9px;
+            margin-bottom: 10px;
 
         }
 
 
         /* =================================================
-           QR SCANNER
+           QR READER
         ================================================= */
 
         #reader {
@@ -350,9 +417,10 @@
 
             overflow: hidden;
 
-            border: 1px solid var(--border) !important;
+            border:
+                1px solid var(--border) !important;
 
-            border-radius: 10px;
+            border-radius: 11px;
 
             background: #000;
 
@@ -362,9 +430,12 @@
         #reader video {
 
             width: 100% !important;
+
             height: auto !important;
 
             display: block;
+
+            object-fit: cover;
 
         }
 
@@ -390,47 +461,42 @@
         }
 
 
-        #reader__camera_selection {
-
-            max-width: 100%;
-
-        }
-
-
         /* =================================================
-           BUTTONS
+           ACTION BUTTONS
         ================================================= */
 
         .buttons {
 
+            width: 100%;
+
             display: grid;
 
             grid-template-columns:
-                repeat(3, 1fr);
+                repeat(
+                    3,
+                    minmax(0, 1fr)
+                );
 
-            gap: 7px;
+            gap: 9px;
 
-            margin-top: 9px;
-
-        }
-
-
-        button {
-
-            font: inherit;
+            margin-top: 10px;
 
         }
 
 
         .btn {
 
-            min-height: 42px;
+            width: 100%;
 
-            padding: 8px 9px;
+            min-height: 48px;
 
-            border: 1px solid var(--border);
+            padding:
+                9px 10px;
 
-            border-radius: 9px;
+            border:
+                1px solid var(--border);
+
+            border-radius: 10px;
 
             background: var(--button);
 
@@ -439,47 +505,67 @@
             display: flex;
 
             align-items: center;
+
             justify-content: center;
 
-            gap: 6px;
+            gap: 7px;
 
             cursor: pointer;
 
-            font-size: 13px;
+            font-size: 14px;
+
             font-weight: 600;
+
+            touch-action: manipulation;
+
+            -webkit-tap-highlight-color:
+                transparent;
+
+        }
+
+
+        .btn:hover {
+
+            background:
+                var(--button-hover);
 
         }
 
 
         .btn:active {
 
-            transform: scale(.98);
-            background: var(--button-hover);
+            transform:
+                scale(.98);
 
         }
 
 
         .btn.primary {
 
-            background: var(--primary);
-            border-color: var(--primary);
+            background:
+                var(--primary);
 
-            color: #fff;
+            border-color:
+                var(--primary);
+
+            color: #ffffff;
 
         }
 
 
         .btn.danger {
 
-            color: var(--danger);
+            color:
+                var(--danger);
 
         }
 
 
         .btn svg {
 
-            width: 17px;
-            height: 17px;
+            width: 19px;
+
+            height: 19px;
 
             flex-shrink: 0;
 
@@ -496,19 +582,23 @@
 
             align-items: center;
 
-            gap: 8px;
+            gap: 9px;
+
+            min-height: 30px;
 
         }
 
 
         .status-dot {
 
-            width: 9px;
-            height: 9px;
+            width: 10px;
+
+            height: 10px;
 
             border-radius: 50%;
 
-            background: var(--danger);
+            background:
+                var(--danger);
 
             flex-shrink: 0;
 
@@ -517,14 +607,15 @@
 
         .status-dot.online {
 
-            background: var(--success);
+            background:
+                var(--success);
 
         }
 
 
         #statusText {
 
-            font-size: 13px;
+            font-size: 14px;
 
             color: var(--muted);
 
@@ -532,7 +623,7 @@
 
 
         /* =================================================
-           INFO
+           USER INFO
         ================================================= */
 
         .info-grid {
@@ -540,44 +631,49 @@
             display: grid;
 
             grid-template-columns:
-                1fr 1fr;
+                repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
 
-            gap: 8px;
+            gap: 9px;
 
         }
 
 
         .info-item {
 
-            padding: 9px;
-
-            border-radius: 9px;
-
-            background: var(--button);
-
             min-width: 0;
+
+            padding: 11px;
+
+            border-radius: 10px;
+
+            background:
+                var(--button);
 
         }
 
 
         .info-label {
 
+            font-size: 12px;
+
             color: var(--muted);
 
-            font-size: 11px;
-
-            margin-bottom: 3px;
+            margin-bottom: 4px;
 
         }
 
 
         .info-value {
 
-            font-size: 13px;
+            font-size: 14px;
 
             font-weight: 600;
 
-            overflow-wrap: anywhere;
+            overflow-wrap:
+                anywhere;
 
         }
 
@@ -597,6 +693,8 @@
                 monospace;
 
             font-size: 11px;
+
+            line-height: 1.5;
 
             color: var(--muted);
 
@@ -624,11 +722,18 @@
             display: none;
 
             align-items: center;
+
             justify-content: center;
 
             padding: 12px;
 
-            background: rgba(0, 0, 0, .45);
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .45
+                );
 
             z-index: 1000;
 
@@ -644,20 +749,24 @@
 
         .modal-box {
 
-            width: 100%;
-            max-width: 420px;
+            width: min(
+                100%,
+                460px
+            );
 
-            max-height: 90vh;
+            max-height: 92vh;
 
             overflow-y: auto;
 
-            background: var(--card);
+            padding: 16px;
 
-            border: 1px solid var(--border);
+            background:
+                var(--card);
+
+            border:
+                1px solid var(--border);
 
             border-radius: 14px;
-
-            padding: 14px;
 
         }
 
@@ -667,6 +776,7 @@
             display: flex;
 
             align-items: center;
+
             justify-content: space-between;
 
             margin-bottom: 14px;
@@ -676,7 +786,8 @@
 
         .modal-title {
 
-            font-size: 15px;
+            font-size: 16px;
+
             font-weight: 700;
 
         }
@@ -684,16 +795,21 @@
 
         .close {
 
-            width: 36px;
-            height: 36px;
+            width: 38px;
+
+            height: 38px;
 
             border: 0;
-            border-radius: 8px;
 
-            background: var(--button);
-            color: var(--text);
+            border-radius: 9px;
 
-            font-size: 20px;
+            background:
+                var(--button);
+
+            color:
+                var(--text);
+
+            font-size: 21px;
 
             cursor: pointer;
 
@@ -706,7 +822,7 @@
 
         .field {
 
-            margin-bottom: 11px;
+            margin-bottom: 13px;
 
         }
 
@@ -715,10 +831,11 @@
 
             display: block;
 
-            font-size: 12px;
+            font-size: 13px;
+
             font-weight: 600;
 
-            margin-bottom: 5px;
+            margin-bottom: 6px;
 
         }
 
@@ -728,21 +845,25 @@
 
             width: 100%;
 
-            min-height: 42px;
+            min-height: 46px;
 
-            padding: 9px 10px;
+            padding:
+                10px 11px;
 
-            border: 1px solid var(--border);
+            border:
+                1px solid var(--border);
 
-            border-radius: 9px;
+            border-radius: 10px;
 
-            background: var(--input);
+            background:
+                var(--input);
 
-            color: var(--text);
+            color:
+                var(--text);
 
             outline: none;
 
-            font: inherit;
+            font-size: 14px;
 
         }
 
@@ -750,10 +871,15 @@
         .field input:focus,
         .field select:focus {
 
-            border-color: var(--primary);
+            border-color:
+                var(--primary);
 
         }
 
+
+        /* =================================================
+           PASSWORD
+        ================================================= */
 
         .password-box {
 
@@ -764,7 +890,7 @@
 
         .password-box input {
 
-            padding-right: 45px;
+            padding-right: 48px;
 
         }
 
@@ -774,20 +900,25 @@
             position: absolute;
 
             right: 5px;
-            top: 3px;
+
+            top: 5px;
 
             width: 36px;
+
             height: 36px;
 
             border: 0;
 
-            background: transparent;
+            background:
+                transparent;
 
-            color: var(--muted);
+            color:
+                var(--muted);
 
             display: flex;
 
             align-items: center;
+
             justify-content: center;
 
             cursor: pointer;
@@ -795,8 +926,17 @@
         }
 
 
+        .eye-button svg {
+
+            width: 20px;
+
+            height: 20px;
+
+        }
+
+
         /* =================================================
-           CHECKBOX
+           REMEMBER ME
         ================================================= */
 
         .remember {
@@ -807,19 +947,22 @@
 
             gap: 8px;
 
-            margin: 8px 0 13px;
+            margin:
+                8px 0 14px;
 
-            font-size: 12px;
+            font-size: 13px;
 
-            color: var(--muted);
+            color:
+                var(--muted);
 
         }
 
 
         .remember input {
 
-            width: 16px;
-            height: 16px;
+            width: 17px;
+
+            height: 17px;
 
         }
 
@@ -833,9 +976,19 @@
             display: grid;
 
             grid-template-columns:
-                1fr 1fr;
+                repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
 
-            gap: 7px;
+            gap: 8px;
+
+        }
+
+
+        .modal-buttons .btn {
+
+            min-height: 46px;
 
         }
 
@@ -848,7 +1001,7 @@
 
             display: grid;
 
-            gap: 7px;
+            gap: 9px;
 
         }
 
@@ -857,33 +1010,40 @@
 
             width: 100%;
 
+            padding: 13px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 11px;
+
+            background:
+                var(--button);
+
+            color:
+                var(--text);
+
             text-align: left;
 
-            padding: 11px;
-
-            border: 1px solid var(--border);
-
-            border-radius: 10px;
-
-            background: var(--button);
-
-            color: var(--text);
-
             cursor: pointer;
+
+            touch-action: manipulation;
 
         }
 
 
         .plan:active {
 
-            transform: scale(.99);
+            transform:
+                scale(.99);
 
         }
 
 
         .plan-name {
 
-            font-size: 13px;
+            font-size: 14px;
+
             font-weight: 700;
 
         }
@@ -891,22 +1051,24 @@
 
         .plan-description {
 
-            font-size: 11px;
+            font-size: 12px;
 
-            color: var(--muted);
+            color:
+                var(--muted);
 
-            margin-top: 3px;
+            margin-top: 4px;
 
         }
 
 
         .plan-price {
 
-            font-size: 12px;
+            font-size: 13px;
 
-            color: var(--primary);
+            color:
+                var(--primary);
 
-            margin-top: 5px;
+            margin-top: 6px;
 
             font-weight: 700;
 
@@ -933,6 +1095,7 @@
             top: -99999px;
 
             width: 1px;
+
             height: 1px;
 
             overflow: hidden;
@@ -941,27 +1104,106 @@
 
 
         /* =================================================
-           SMALL SCREEN
+           TABLET / DESKTOP
         ================================================= */
 
-        @media (max-width: 360px) {
+        @media (min-width: 600px) {
 
             main {
 
-                padding-left: 7px;
-                padding-right: 7px;
+                padding-left: 20px;
+
+                padding-right: 20px;
 
             }
 
 
             .card {
 
-                padding: 10px;
+                padding: 16px;
+
+            }
+
+
+            .buttons {
+
+                gap: 10px;
 
             }
 
 
             .btn {
+
+                min-height: 50px;
+
+            }
+
+        }
+
+
+        /* =================================================
+           SMALL PHONE
+        ================================================= */
+
+        @media (max-width: 380px) {
+
+            header {
+
+                min-height: 58px;
+
+                padding-left: 11px;
+
+                padding-right: 7px;
+
+            }
+
+
+            .brand {
+
+                font-size: 16px;
+
+            }
+
+
+            .settings-button {
+
+                width: 43px;
+
+                height: 43px;
+
+            }
+
+
+            main {
+
+                padding-left: 8px;
+
+                padding-right: 8px;
+
+            }
+
+
+            .card {
+
+                padding: 11px;
+
+            }
+
+
+            .buttons {
+
+                gap: 6px;
+
+            }
+
+
+            .btn {
+
+                min-height: 46px;
+
+                padding-left: 5px;
+
+                padding-right: 5px;
 
                 font-size: 12px;
 
@@ -970,8 +1212,40 @@
 
             .btn svg {
 
-                width: 15px;
-                height: 15px;
+                width: 17px;
+
+                height: 17px;
+
+            }
+
+        }
+
+
+        /* =================================================
+           VERY SMALL PHONE
+        ================================================= */
+
+        @media (max-width: 320px) {
+
+            .brand {
+
+                font-size: 15px;
+
+            }
+
+
+            .btn {
+
+                font-size: 11px;
+
+            }
+
+
+            .btn svg {
+
+                width: 16px;
+
+                height: 16px;
 
             }
 
@@ -991,8 +1265,11 @@
 
     <header>
 
+
         <div class="brand">
+
             BobotEditha.net
+
         </div>
 
 
@@ -1005,8 +1282,6 @@
             <!-- GEAR SVG -->
 
             <svg
-                width="20"
-                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -1015,7 +1290,11 @@
                 stroke-linejoin="round"
             >
 
-                <circle cx="12" cy="12" r="3"></circle>
+                <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                ></circle>
 
                 <path
                     d="
@@ -1079,13 +1358,16 @@
 
 
         <!-- =================================================
-             QR CARD
+             QR SCANNER CARD
         ================================================== -->
 
         <section class="card">
 
+
             <div class="card-title">
+
                 Scan WiFi QR
+
             </div>
 
 
@@ -1153,7 +1435,15 @@
                     >
 
                         <path
-                            d="M13 2 3 14h9l-1 8 10-12h-9z"
+                            d="
+                            M13 2
+                            3 14
+                            h9
+                            l-1 8
+                            10-12
+                            h-9
+                            z
+                            "
                         ></path>
 
                     </svg>
@@ -1201,17 +1491,21 @@
 
 
         <!-- =================================================
-             STATUS
+             MIKROTIK STATUS
         ================================================== -->
 
         <section class="card">
 
+
             <div class="card-title">
+
                 MikroTik Status
+
             </div>
 
 
             <div class="status-row">
+
 
                 <span
                     id="statusDot"
@@ -1220,8 +1514,11 @@
 
 
                 <span id="statusText">
+
                     Not connected
+
                 </span>
+
 
             </div>
 
@@ -1230,7 +1527,7 @@
 
 
         <!-- =================================================
-             USER INFO
+             USER INFORMATION
         ================================================== -->
 
         <section
@@ -1238,8 +1535,11 @@
             class="card hidden"
         >
 
+
             <div class="card-title">
+
                 User Information
+
             </div>
 
 
@@ -1249,14 +1549,19 @@
                 <div class="info-item">
 
                     <div class="info-label">
+
                         Username
+
                     </div>
+
 
                     <div
                         id="username"
                         class="info-value"
                     >
+
                         —
+
                     </div>
 
                 </div>
@@ -1265,14 +1570,19 @@
                 <div class="info-item">
 
                     <div class="info-label">
+
                         Current Time Left
+
                     </div>
+
 
                     <div
                         id="currentTime"
                         class="info-value"
                     >
+
                         —
+
                     </div>
 
                 </div>
@@ -1281,14 +1591,19 @@
                 <div class="info-item">
 
                     <div class="info-label">
+
                         Plan to Add
+
                     </div>
+
 
                     <div
                         id="planToAdd"
                         class="info-value"
                     >
+
                         —
+
                     </div>
 
                 </div>
@@ -1297,14 +1612,19 @@
                 <div class="info-item">
 
                     <div class="info-label">
+
                         New Total Time
+
                     </div>
+
 
                     <div
                         id="newTotal"
                         class="info-value"
                     >
+
                         —
+
                     </div>
 
                 </div>
@@ -1313,14 +1633,19 @@
                 <div class="info-item">
 
                     <div class="info-label">
+
                         New Expiration
+
                     </div>
+
 
                     <div
                         id="newExpiration"
                         class="info-value"
                     >
+
                         —
+
                     </div>
 
                 </div>
@@ -1338,14 +1663,20 @@
 
         <section class="card">
 
+
             <div class="card-title">
+
                 Activity Log
+
             </div>
 
 
             <div id="log">
+
                 Ready.
+
             </div>
+
 
         </section>
 
@@ -1369,16 +1700,23 @@
     <div
         id="settingsModal"
         class="modal"
-        onclick="if(event.target===this)closeSettings()"
+        onclick="
+            if(event.target===this)
+            closeSettings()
+        "
     >
+
 
         <div class="modal-box">
 
 
             <div class="modal-header">
 
+
                 <div class="modal-title">
+
                     Settings
+
                 </div>
 
 
@@ -1386,19 +1724,27 @@
                     class="close"
                     onclick="closeSettings()"
                 >
+
                     ×
+
                 </button>
+
 
             </div>
 
 
-            <!-- API -->
+
+            <!-- API URL -->
 
             <div class="field">
 
+
                 <label>
+
                     MikroTik API URL
+
                 </label>
+
 
                 <input
                     id="apiUrl"
@@ -1407,16 +1753,22 @@
                     autocomplete="off"
                 >
 
+
             </div>
+
 
 
             <!-- USERNAME -->
 
             <div class="field">
 
+
                 <label>
+
                     Username
+
                 </label>
+
 
                 <input
                     id="apiUser"
@@ -1425,19 +1777,25 @@
                     autocomplete="username"
                 >
 
+
             </div>
+
 
 
             <!-- PASSWORD -->
 
             <div class="field">
 
+
                 <label>
+
                     Password
+
                 </label>
 
 
                 <div class="password-box">
+
 
                     <input
                         id="apiPassword"
@@ -1453,8 +1811,8 @@
                         aria-label="Show password"
                     >
 
+
                         <svg
-                            id="eyeIcon"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
@@ -1464,7 +1822,13 @@
                         >
 
                             <path
-                                d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"
+                                d="
+                                M2 12
+                                s3.5-7 10-7
+                                10 7 10 7
+                                -3.5 7-10 7
+                                S2 12 2 12Z
+                                "
                             ></path>
 
                             <circle
@@ -1475,19 +1839,26 @@
 
                         </svg>
 
+
                     </button>
+
 
                 </div>
 
+
             </div>
+
 
 
             <!-- THEME -->
 
             <div class="field">
 
+
                 <label>
+
                     Theme
+
                 </label>
 
 
@@ -1497,39 +1868,56 @@
                 >
 
                     <option value="auto">
+
                         Auto
+
                     </option>
+
 
                     <option value="light">
+
                         Light
+
                     </option>
 
+
                     <option value="dark">
+
                         Dark
+
                     </option>
+
 
                 </select>
 
+
             </div>
+
 
 
             <!-- REMEMBER -->
 
             <label class="remember">
 
+
                 <input
                     id="rememberMe"
                     type="checkbox"
                 >
 
+
                 <span>
+
                     Remember settings
+
                 </span>
+
 
             </label>
 
 
-            <!-- BUTTONS -->
+
+            <!-- MODAL BUTTONS -->
 
             <div class="modal-buttons">
 
@@ -1538,7 +1926,9 @@
                     class="btn primary"
                     onclick="connectMikrotik()"
                 >
+
                     Connect
+
                 </button>
 
 
@@ -1546,7 +1936,9 @@
                     class="btn danger"
                     onclick="clearSavedSettings()"
                 >
+
                     Clear
+
                 </button>
 
 
@@ -1554,13 +1946,17 @@
                     class="btn"
                     onclick="closeSettings()"
                 >
+
                     Cancel
+
                 </button>
 
 
             </div>
 
+
         </div>
+
 
     </div>
 
@@ -1573,16 +1969,23 @@
     <div
         id="planModal"
         class="modal"
-        onclick="if(event.target===this)closePlanModal()"
+        onclick="
+            if(event.target===this)
+            closePlanModal()
+        "
     >
+
 
         <div class="modal-box">
 
 
             <div class="modal-header">
 
+
                 <div class="modal-title">
+
                     Select Plan
+
                 </div>
 
 
@@ -1590,8 +1993,11 @@
                     class="close"
                     onclick="closePlanModal()"
                 >
+
                     ×
+
                 </button>
+
 
             </div>
 
@@ -1600,10 +2006,14 @@
                 id="plans"
                 class="plans"
             >
+
                 Loading...
+
             </div>
 
+
         </div>
+
 
     </div>
 
@@ -1617,7 +2027,7 @@
 
 
         /* =================================================
-           VARIABLES
+           GLOBAL VARIABLES
         ================================================= */
 
         let html5QrCode = null;
@@ -1642,15 +2052,23 @@
 
         function log(message) {
 
-            const el = document.getElementById("log");
+            const el =
+                document.getElementById(
+                    "log"
+                );
+
 
             const time =
-                new Date().toLocaleTimeString();
+                new Date()
+                    .toLocaleTimeString();
+
 
             el.textContent +=
                 `\n[${time}] ${message}`;
 
-            el.scrollTop = el.scrollHeight;
+
+            el.scrollTop =
+                el.scrollHeight;
 
         }
 
@@ -1698,7 +2116,8 @@
             }
 
 
-            document.documentElement.dataset.theme =
+            document.documentElement
+                .dataset.theme =
                 theme;
 
 
@@ -1721,7 +2140,9 @@
             }
 
 
-            log(`Theme: ${theme}`);
+            log(
+                "Theme: " + theme
+            );
 
         }
 
@@ -1748,8 +2169,12 @@
         function openSettings() {
 
             document
-                .getElementById("settingsModal")
-                .classList.add("show");
+                .getElementById(
+                    "settingsModal"
+                )
+                .classList.add(
+                    "show"
+                );
 
         }
 
@@ -1758,8 +2183,12 @@
         function closeSettings() {
 
             document
-                .getElementById("settingsModal")
-                .classList.remove("show");
+                .getElementById(
+                    "settingsModal"
+                )
+                .classList.remove(
+                    "show"
+                );
 
         }
 
@@ -1840,6 +2269,10 @@
 
 
 
+        /* =================================================
+           LOAD SETTINGS
+        ================================================= */
+
         function loadSavedSettings() {
 
             try {
@@ -1884,13 +2317,19 @@
 
             catch (error) {
 
-                console.error(error);
+                console.error(
+                    error
+                );
 
             }
 
         }
 
 
+
+        /* =================================================
+           CLEAR SETTINGS
+        ================================================= */
 
         function clearSavedSettings() {
 
@@ -1920,19 +2359,20 @@
 
 
             setStatus(
-                "Settings cleared",
-                false
+                "Settings cleared"
             );
 
 
-            log("Saved settings cleared.");
+            log(
+                "Saved settings cleared."
+            );
 
         }
 
 
 
         /* =================================================
-           MIKROTIK CONNECT
+           CONNECT MIKROTIK
         ================================================= */
 
         async function connectMikrotik() {
@@ -1978,7 +2418,8 @@
 
                 const response =
                     await fetch(
-                        url + "/system/resource",
+                        url +
+                        "/system/resource",
                         {
 
                             method: "GET",
@@ -2119,6 +2560,7 @@
 
             if (scanBusy) return;
 
+
             scanBusy = true;
 
 
@@ -2141,14 +2583,15 @@
 
         function onScanFailure() {
 
-            /* Intentionally empty */
+            /* QR scanning continuously
+               tries again */
 
         }
 
 
 
         /* =================================================
-           START SCANNER
+           START CAMERA
         ================================================= */
 
         async function startScanner() {
@@ -2167,33 +2610,43 @@
                 await html5QrCode.start(
 
                     {
-                        facingMode: "environment"
+                        facingMode:
+                            "environment"
                     },
 
                     {
+
                         fps: 10,
 
-                        qrbox: function (
-                            width,
-                            height
-                        ) {
+                        qrbox:
+                            function (
+                                width,
+                                height
+                            ) {
 
-                            const size =
-                                Math.min(
-                                    width,
-                                    height
-                                ) * .70;
+                                const size =
+                                    Math.min(
+                                        width,
+                                        height
+                                    ) * .70;
 
-                            return {
-                                width: size,
-                                height: size
-                            };
 
-                        }
+                                return {
+
+                                    width:
+                                        size,
+
+                                    height:
+                                        size
+
+                                };
+
+                            }
 
                     },
 
                     onScanSuccess,
+
                     onScanFailure
 
                 );
@@ -2214,6 +2667,7 @@
 
                 scannerRunning = false;
 
+
                 log(
                     "Camera error: " +
                     error
@@ -2226,7 +2680,7 @@
 
 
         /* =================================================
-           STOP SCANNER
+           STOP CAMERA
         ================================================= */
 
         async function stopScanner() {
@@ -2249,7 +2703,9 @@
 
             catch (error) {
 
-                console.log(error);
+                console.log(
+                    error
+                );
 
             }
 
@@ -2261,7 +2717,7 @@
 
 
         /* =================================================
-           RESTART
+           RESTART CAMERA
         ================================================= */
 
         async function restartScanner() {
@@ -2271,26 +2727,6 @@
             await stopScanner();
 
             await startScanner();
-
-        }
-
-
-
-        /* =================================================
-           FINISH SCAN
-        ================================================= */
-
-        async function finishScan() {
-
-            scanBusy = false;
-
-            document
-                .getElementById(
-                    "userCard"
-                )
-                .classList.remove(
-                    "hidden"
-                );
 
         }
 
@@ -2347,7 +2783,8 @@
 
                     try {
 
-                        await galleryQrCode.clear();
+                        await galleryQrCode
+                            .clear();
 
                     }
 
@@ -2363,10 +2800,11 @@
 
 
                 const result =
-                    await galleryQrCode.scanFile(
-                        file,
-                        true
-                    );
+                    await galleryQrCode
+                        .scanFile(
+                            file,
+                            true
+                        );
 
 
                 log(
@@ -2393,7 +2831,7 @@
 
 
         /* =================================================
-           FLASH
+           FLASHLIGHT
         ================================================= */
 
         function getVideoTrack() {
@@ -2418,7 +2856,10 @@
                 stream.getVideoTracks();
 
 
-            return tracks[0] || null;
+            return (
+                tracks[0] ||
+                null
+            );
 
         }
 
@@ -2456,7 +2897,8 @@
             }
 
 
-            flashOn = !flashOn;
+            flashOn =
+                !flashOn;
 
 
             try {
@@ -2464,18 +2906,23 @@
                 await track.applyConstraints({
 
                     advanced: [
+
                         {
-                            torch: flashOn
+                            torch:
+                                flashOn
                         }
+
                     ]
 
                 });
 
 
                 log(
+
                     flashOn
                         ? "Flash ON"
                         : "Flash OFF"
+
                 );
 
             }
@@ -2494,7 +2941,7 @@
 
 
         /* =================================================
-           PLAN LOADING
+           PLAN JSON
         ================================================= */
 
         async function loadPlans() {
@@ -2505,7 +2952,8 @@
                     await fetch(
                         "plan.json",
                         {
-                            cache: "no-store"
+                            cache:
+                                "no-store"
                         }
                     );
 
@@ -2583,7 +3031,8 @@
 
                             <div class="plan-description">
                                 ${escapeHtml(
-                                    plan.description || ""
+                                    plan.description ||
+                                    ""
                                 )}
                             </div>
 
@@ -2625,22 +3074,27 @@
         ) {
 
             return String(value)
+
                 .replace(
                     /&/g,
                     "&amp;"
                 )
+
                 .replace(
                     /</g,
                     "&lt;"
                 )
+
                 .replace(
                     />/g,
                     "&gt;"
                 )
+
                 .replace(
                     /"/g,
                     "&quot;"
                 )
+
                 .replace(
                     /'/g,
                     "&#039;"
@@ -2697,12 +3151,15 @@
             document.getElementById(
                 "newTotal"
             ).textContent =
-                formatDuration(total);
+                formatDuration(
+                    total
+                );
 
 
             const expiration =
                 new Date(
-                    Date.now() + total
+                    Date.now() +
+                    total
                 );
 
 
@@ -2715,13 +3172,14 @@
 
 
             log(
-                `Selected plan: ${plan.name}`
+                "Selected plan: " +
+                plan.name
             );
 
 
             /*
-             * Uncomment if your RouterOS
-             * processing should happen here.
+             * Enable this when you want
+             * to execute script3.
              */
 
             // await runScript3();
@@ -2729,6 +3187,10 @@
         }
 
 
+
+        /* =================================================
+           PLAN MODAL
+        ================================================= */
 
         function openPlanModal() {
 
@@ -2759,7 +3221,7 @@
 
 
         /* =================================================
-           PROCESS USER
+           FIND HOTSPOT USER
         ================================================= */
 
         async function processUser(
@@ -2777,6 +3239,8 @@
                     "Empty QR value."
                 );
 
+                scanBusy = false;
+
                 return;
 
             }
@@ -2786,8 +3250,11 @@
 
                 /*
                  * IMPORTANT:
-                 * Only request the specific
-                 * hotspot user.
+                 * Do NOT download the entire
+                 * hotspot user list.
+                 *
+                 * Only request the
+                 * scanned username.
                  */
 
                 const queryName =
@@ -2824,6 +3291,8 @@
                         "User not found: " +
                         username
                     );
+
+                    scanBusy = false;
 
                     return;
 
@@ -2911,13 +3380,16 @@
 
                         method: "PUT",
 
-                        body: JSON.stringify({
+                        body:
+                            JSON.stringify({
 
-                            name: username,
+                                name:
+                                    username,
 
-                            password: password
+                                password:
+                                    password
 
-                        })
+                            })
 
                     }
                 );
@@ -2939,7 +3411,7 @@
 
 
         /* =================================================
-           SCRIPT 3
+           RUN SCRIPT3
         ================================================= */
 
         async function runScript3() {
@@ -2948,8 +3420,17 @@
 
                 const response =
                     await mtFetch(
-                        "/system/script",
+                        "/system/script"
                     );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        `HTTP ${response.status}`
+                    );
+
+                }
 
 
                 const scripts =
@@ -2984,11 +3465,12 @@
 
                             method: "POST",
 
-                            body: JSON.stringify({
+                            body:
+                                JSON.stringify({
 
-                                ".id": id
+                                    ".id": id
 
-                            })
+                                })
 
                         }
                     );
@@ -3023,14 +3505,18 @@
 
 
         /* =================================================
-           VALIDITY PARSER
+           VALIDITY CONVERTER
         ================================================= */
 
         function validityToMilliseconds(
             value
         ) {
 
-            if (!value) return 0;
+            if (!value) {
+
+                return 0;
+
+            }
 
 
             if (
@@ -3075,6 +3561,7 @@
                 ) {
 
                     case "w":
+
                         total +=
                             number *
                             7 *
@@ -3082,36 +3569,49 @@
                             60 *
                             60 *
                             1000;
+
                         break;
 
+
                     case "d":
+
                         total +=
                             number *
                             24 *
                             60 *
                             60 *
                             1000;
+
                         break;
+
 
                     case "h":
+
                         total +=
                             number *
                             60 *
                             60 *
                             1000;
+
                         break;
+
 
                     case "m":
+
                         total +=
                             number *
                             60 *
                             1000;
+
                         break;
 
+
                     case "s":
+
                         total +=
                             number *
                             1000;
+
                         break;
 
                 }
@@ -3133,7 +3633,11 @@
             value
         ) {
 
-            if (!value) return null;
+            if (!value) {
+
+                return null;
+
+            }
 
 
             const date =
@@ -3157,23 +3661,39 @@
 
 
 
+        /* =================================================
+           FORMAT DATE
+        ================================================= */
+
         function formatDate(
             date
         ) {
 
-            if (!date) return "—";
+            if (!date) {
+
+                return "—";
+
+            }
 
 
             return date.toLocaleString(
                 undefined,
                 {
 
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
+                    year:
+                        "numeric",
 
-                    hour: "numeric",
-                    minute: "2-digit"
+                    month:
+                        "short",
+
+                    day:
+                        "numeric",
+
+                    hour:
+                        "numeric",
+
+                    minute:
+                        "2-digit"
 
                 }
             );
@@ -3181,6 +3701,10 @@
         }
 
 
+
+        /* =================================================
+           FORMAT DURATION
+        ================================================= */
 
         function formatDuration(
             ms
@@ -3209,7 +3733,8 @@
                 );
 
 
-            seconds %= 86400;
+            seconds %=
+                86400;
 
 
             const hours =
@@ -3219,7 +3744,8 @@
                 );
 
 
-            seconds %= 3600;
+            seconds %=
+                3600;
 
 
             const minutes =
@@ -3232,22 +3758,31 @@
             const parts = [];
 
 
-            if (days)
+            if (days) {
+
                 parts.push(
                     `${days}d`
                 );
 
+            }
 
-            if (hours)
+
+            if (hours) {
+
                 parts.push(
                     `${hours}h`
                 );
 
+            }
 
-            if (minutes)
+
+            if (minutes) {
+
                 parts.push(
                     `${minutes}m`
                 );
+
+            }
 
 
             if (
@@ -3261,14 +3796,16 @@
             }
 
 
-            return parts.join(" ");
+            return parts.join(
+                " "
+            );
 
         }
 
 
 
         /* =================================================
-           INIT
+           INITIALIZE
         ================================================= */
 
         async function init() {
