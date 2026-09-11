@@ -284,7 +284,7 @@
         #log {
 
             width: 100%;
-            height: 250px;
+            height: 300px;
 
             overflow-y: auto;
 
@@ -330,6 +330,84 @@
         .warning {
 
             color: #ffaa00;
+
+        }
+
+
+        .info {
+
+            color: #66b3ff;
+
+        }
+
+
+        /* =====================================================
+           USER TIME CARD
+        ====================================================== */
+
+        #userInfo {
+
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 15px;
+
+            background: #111;
+
+            border:
+                1px solid #333;
+
+            border-radius: 12px;
+
+        }
+
+
+        .user-info-title {
+
+            margin-bottom: 10px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+        }
+
+
+        .time-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            padding: 7px 0;
+
+            border-bottom:
+                1px solid #222;
+
+        }
+
+
+        .time-row:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .time-label {
+
+            color: #aaa;
+
+        }
+
+
+        .time-value {
+
+            text-align: right;
+
+            font-weight: bold;
 
         }
 
@@ -650,16 +728,12 @@
 <div class="container">
 
 
-    <!-- =====================================================
-         CAMERA QR SCANNER
-    ====================================================== -->
+    <!-- CAMERA -->
 
     <div id="qr-reader"></div>
 
 
-    <!-- =====================================================
-         BUTTONS
-    ====================================================== -->
+    <!-- BUTTONS -->
 
     <div class="buttons">
 
@@ -682,7 +756,7 @@
     </div>
 
 
-    <!-- Hidden file input -->
+    <!-- HIDDEN GALLERY INPUT -->
 
     <input
         id="galleryInput"
@@ -692,9 +766,7 @@
     >
 
 
-    <!-- =====================================================
-         STATUS
-    ====================================================== -->
+    <!-- STATUS -->
 
     <div
         id="status"
@@ -705,8 +777,99 @@
 
 
     <!-- =====================================================
-         LOG
+         USER INFORMATION
     ====================================================== -->
+
+    <div id="userInfo">
+
+        <div class="user-info-title">
+            👤 User Information
+        </div>
+
+
+        <div class="time-row">
+
+            <span class="time-label">
+                Username
+            </span>
+
+            <span
+                class="time-value"
+                id="infoUsername"
+            >
+                -
+            </span>
+
+        </div>
+
+
+        <div class="time-row">
+
+            <span class="time-label">
+                Current Time Left
+            </span>
+
+            <span
+                class="time-value"
+                id="infoCurrentTime"
+            >
+                -
+            </span>
+
+        </div>
+
+
+        <div class="time-row">
+
+            <span class="time-label">
+                Plan to Add
+            </span>
+
+            <span
+                class="time-value"
+                id="infoAddTime"
+            >
+                -
+            </span>
+
+        </div>
+
+
+        <div class="time-row">
+
+            <span class="time-label">
+                New Total Time
+            </span>
+
+            <span
+                class="time-value"
+                id="infoNewTime"
+            >
+                -
+            </span>
+
+        </div>
+
+
+        <div class="time-row">
+
+            <span class="time-label">
+                New Expiration
+            </span>
+
+            <span
+                class="time-value"
+                id="infoExpiration"
+            >
+                -
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- LOG -->
 
     <div class="log-title">
         Activity Log
@@ -725,7 +888,7 @@
 
 
 <!-- =========================================================
-     MIKROTIK SETTINGS MODAL
+     SETTINGS MODAL
 ========================================================== -->
 
 <div
@@ -740,10 +903,6 @@
             MikroTik API Settings
         </div>
 
-
-        <!-- =================================================
-             API URL
-        ================================================== -->
 
         <div class="form-group">
 
@@ -762,10 +921,6 @@
         </div>
 
 
-        <!-- =================================================
-             USERNAME
-        ================================================== -->
-
         <div class="form-group">
 
             <label>
@@ -782,10 +937,6 @@
 
         </div>
 
-
-        <!-- =================================================
-             PASSWORD
-        ================================================== -->
 
         <div class="form-group">
 
@@ -816,10 +967,6 @@
 
         </div>
 
-
-        <!-- =================================================
-             BUTTONS
-        ================================================== -->
 
         <div class="modal-buttons">
 
@@ -871,8 +1018,6 @@
         </div>
 
 
-        <!-- 1 HOUR -->
-
         <div
             class="plan"
             data-value="1h"
@@ -884,13 +1029,11 @@
             </div>
 
             <div class="plan-info">
-                Unli Internet — 1 hour
+                Add 1 hour
             </div>
 
         </div>
 
-
-        <!-- 3 DAYS -->
 
         <div
             class="plan"
@@ -903,13 +1046,11 @@
             </div>
 
             <div class="plan-info">
-                Unli Internet — 3 days
+                Add 3 days
             </div>
 
         </div>
 
-
-        <!-- 7 DAYS -->
 
         <div
             class="plan"
@@ -922,13 +1063,11 @@
             </div>
 
             <div class="plan-info">
-                Unli Internet — 7 days
+                Add 7 days
             </div>
 
         </div>
 
-
-        <!-- 15 DAYS -->
 
         <div
             class="plan"
@@ -941,13 +1080,11 @@
             </div>
 
             <div class="plan-info">
-                Unli Internet — 15 days
+                Add 15 days
             </div>
 
         </div>
 
-
-        <!-- 30 DAYS -->
 
         <div
             class="plan"
@@ -960,7 +1097,7 @@
             </div>
 
             <div class="plan-info">
-                Unli Internet — 30 days
+                Add 30 days
             </div>
 
         </div>
@@ -1273,20 +1410,10 @@ function togglePassword() {
         );
 
 
-    if (
-        input.type ===
-        "password"
-    ) {
-
-        input.type =
-            "text";
-
-    } else {
-
-        input.type =
-            "password";
-
-    }
+    input.type =
+        input.type === "password"
+            ? "text"
+            : "password";
 
 }
 
@@ -1552,7 +1679,7 @@ async function onScanSuccess(
 
 
 /* =========================================================
-   PROCESS QR CONTENT
+   PROCESS QR
 ========================================================= */
 
 async function processQrContent(
@@ -1560,10 +1687,6 @@ async function processQrContent(
 ) {
 
     try {
-
-        /*
-           Extract parameters
-        */
 
         const username =
             getParams(
@@ -1609,44 +1732,9 @@ async function processQrContent(
         );
 
 
-        /*
-           Select plan
-        */
-
-        const validity =
-            await selectValidity();
-
-
-        if (!validity) {
-
-            log(
-                "Plan selection cancelled.",
-                "warning"
-            );
-
-
-            scanBusy = false;
-
-            return;
-
-        }
-
-
-        log(
-            "Selected Plan: " +
-            validity,
-            "success"
-        );
-
-
-        /*
-           Update MikroTik
-        */
-
         await updateHotspotUser(
             username,
-            password,
-            validity
+            password
         );
 
 
@@ -1658,17 +1746,9 @@ async function processQrContent(
             "error"
         );
 
+        scanBusy = false;
+
     }
-
-
-    setTimeout(
-        () => {
-
-            scanBusy = false;
-
-        },
-        1500
-    );
 
 }
 
@@ -1679,8 +1759,7 @@ async function processQrContent(
 
 async function updateHotspotUser(
     username,
-    password,
-    validity
+    password
 ) {
 
     if (!mikrotik) {
@@ -1701,6 +1780,10 @@ async function updateHotspotUser(
 
 
     try {
+
+        /*
+           Get all hotspot users
+        */
 
         log(
             "GET /ip/hotspot/user"
@@ -1728,47 +1811,268 @@ async function updateHotspotUser(
 
 
         /* =================================================
-           NEW USER
+           EXISTING USER
         ================================================== */
 
-        if (!existing) {
+        if (existing) {
 
             log(
-                "User does not exist."
+                "================================"
             );
 
 
             log(
-                "Creating hotspot user..."
+                "USER FOUND",
+                "success"
             );
 
 
-            const expire =
-                addTime(
-                    new Date(),
+            log(
+                "================================"
+            );
+
+
+            log(
+                "Username: " +
+                username
+            );
+
+
+            const oldComment =
+                existing.comment ||
+                "";
+
+
+            log(
+                "Current Expiration: " +
+                (
+                    oldComment ||
+                    "NONE"
+                )
+            );
+
+
+            /*
+               Calculate current remaining
+            */
+
+            const expirationDate =
+                parseExpiration(
+                    oldComment
+                );
+
+
+            const currentMilliseconds =
+                expirationDate
+                    ? Math.max(
+                        0,
+                        expirationDate.getTime()
+                        -
+                        Date.now()
+                    )
+                    : 0;
+
+
+            const currentTimeText =
+                expirationDate
+                    ? formatDuration(
+                        currentMilliseconds
+                    )
+                    : "NO EXPIRATION";
+
+
+            log(
+                "Current Time Left: " +
+                currentTimeText,
+                currentMilliseconds > 0
+                    ? "info"
+                    : "warning"
+            );
+
+
+            /*
+               Show current info
+            */
+
+            showUserInfo(
+
+                username,
+
+                currentTimeText,
+
+                "-",
+
+                "-",
+
+                oldComment || "-"
+
+            );
+
+
+            /*
+               Select plan
+            */
+
+            const validity =
+                await selectValidity();
+
+
+            if (!validity) {
+
+                log(
+                    "Plan selection cancelled.",
+                    "warning"
+                );
+
+
+                hideUserInfo();
+
+                scanBusy = false;
+
+                return;
+
+            }
+
+
+            /*
+               Calculate added time
+            */
+
+            const addMilliseconds =
+                validityToMilliseconds(
                     validity
                 );
 
 
+            const addTimeText =
+                formatDuration(
+                    addMilliseconds
+                );
+
+
+            /*
+               Calculate NEW total
+            */
+
+            let newExpiration;
+
+
+            if (
+                expirationDate &&
+                expirationDate.getTime() >
+                Date.now()
+            ) {
+
+                newExpiration =
+                    new Date(
+                        expirationDate.getTime() +
+                        addMilliseconds
+                    );
+
+            } else {
+
+                newExpiration =
+                    new Date(
+                        Date.now() +
+                        addMilliseconds
+                    );
+
+            }
+
+
+            const newTotalMilliseconds =
+                Math.max(
+                    0,
+                    newExpiration.getTime()
+                    -
+                    Date.now()
+                );
+
+
+            const newTotalText =
+                formatDuration(
+                    newTotalMilliseconds
+                );
+
+
+            const newExpirationText =
+                formatDate(
+                    newExpiration
+                );
+
+
+            /*
+               Display complete information
+            */
+
+            showUserInfo(
+
+                username,
+
+                currentTimeText,
+
+                addTimeText,
+
+                newTotalText,
+
+                newExpirationText
+
+            );
+
+
+            log(
+                "Plan Selected: " +
+                validity,
+                "success"
+            );
+
+
+            log(
+                "Time to Add: " +
+                addTimeText,
+                "success"
+            );
+
+
+            log(
+                "New Total Time Left: " +
+                newTotalText,
+                "success"
+            );
+
+
+            log(
+                "New Expiration: " +
+                newExpirationText,
+                "success"
+            );
+
+
+            log(
+                "Updating MikroTik..."
+            );
+
+
+            /*
+               Update user
+            */
+
             await apiRequest(
 
-                "/ip/hotspot/user",
+                "/ip/hotspot/user/" +
+                encodeURIComponent(
+                    existing[".id"]
+                ),
 
-                "PUT",
+                "PATCH",
 
                 {
 
-                    name:
-                        username,
+                    comment:
+                        newExpirationText,
 
                     password:
-                        password,
-
-                    comment:
-                        expire,
-
-                    profile:
-                        "General"
+                        password
 
                 }
 
@@ -1776,14 +2080,21 @@ async function updateHotspotUser(
 
 
             log(
-                "User created successfully.",
+                "User updated successfully.",
                 "success"
             );
 
 
             log(
-                "Expiration: " +
-                expire,
+                "Added: " +
+                addTimeText,
+                "success"
+            );
+
+
+            log(
+                "Total remaining: " +
+                newTotalText,
                 "success"
             );
 
@@ -1797,53 +2108,157 @@ async function updateHotspotUser(
 
 
         /* =================================================
-           EXISTING USER
+           NEW USER
         ================================================== */
 
         log(
-            "Existing user found.",
-            "success"
+            "================================"
         );
-
-
-        const oldComment =
-            existing.comment ||
-            "";
 
 
         log(
-            "Current expiration: " +
-            (
-                oldComment ||
-                "none"
-            )
+            "NEW USER",
+            "info"
         );
 
 
-        const newExpire =
-            addTime(
-                oldComment ||
-                new Date(),
+        log(
+            "================================"
+        );
+
+
+        log(
+            "Username: " +
+            username
+        );
+
+
+        log(
+            "Current Time Left: 0"
+        );
+
+
+        /*
+           Select plan
+        */
+
+        const validity =
+            await selectValidity();
+
+
+        if (!validity) {
+
+            log(
+                "Plan selection cancelled.",
+                "warning"
+            );
+
+
+            scanBusy = false;
+
+            return;
+
+        }
+
+
+        const addMilliseconds =
+            validityToMilliseconds(
                 validity
             );
 
 
+        const addTimeText =
+            formatDuration(
+                addMilliseconds
+            );
+
+
+        const newExpiration =
+            new Date(
+                Date.now() +
+                addMilliseconds
+            );
+
+
+        const newExpirationText =
+            formatDate(
+                newExpiration
+            );
+
+
+        const newTotalText =
+            formatDuration(
+                addMilliseconds
+            );
+
+
+        showUserInfo(
+
+            username,
+
+            "0 minutes",
+
+            addTimeText,
+
+            newTotalText,
+
+            newExpirationText
+
+        );
+
+
+        log(
+            "Plan Selected: " +
+            validity,
+            "success"
+        );
+
+
+        log(
+            "Time to Add: " +
+            addTimeText,
+            "success"
+        );
+
+
+        log(
+            "New Total Time Left: " +
+            newTotalText,
+            "success"
+        );
+
+
+        log(
+            "New Expiration: " +
+            newExpirationText,
+            "success"
+        );
+
+
+        log(
+            "Creating hotspot user..."
+        );
+
+
         await apiRequest(
 
-            "/ip/hotspot/user/" +
-            encodeURIComponent(
-                existing[".id"]
-            ),
+            "/ip/hotspot/user",
 
-            "PATCH",
+            "PUT",
 
             {
 
-                comment:
-                    newExpire,
+                name:
+                    username,
 
                 password:
-                    password
+                    password,
+
+                comment:
+                    newExpirationText,
+
+                profile:
+                    "General"
 
             }
 
@@ -1851,14 +2266,7 @@ async function updateHotspotUser(
 
 
         log(
-            "User updated successfully.",
-            "success"
-        );
-
-
-        log(
-            "New expiration: " +
-            newExpire,
+            "User created successfully.",
             "success"
         );
 
@@ -1875,6 +2283,292 @@ async function updateHotspotUser(
         );
 
     }
+
+
+    setTimeout(
+        () => {
+
+            scanBusy = false;
+
+        },
+        1500
+    );
+
+}
+
+
+/* =========================================================
+   USER INFO DISPLAY
+========================================================= */
+
+function showUserInfo(
+    username,
+    currentTime,
+    addTime,
+    newTotal,
+    expiration
+) {
+
+    const box =
+        document.getElementById(
+            "userInfo"
+        );
+
+
+    box.style.display =
+        "block";
+
+
+    document
+        .getElementById(
+            "infoUsername"
+        )
+        .textContent =
+            username;
+
+
+    document
+        .getElementById(
+            "infoCurrentTime"
+        )
+        .textContent =
+            currentTime;
+
+
+    document
+        .getElementById(
+            "infoAddTime"
+        )
+        .textContent =
+            addTime;
+
+
+    document
+        .getElementById(
+            "infoNewTime"
+        )
+        .textContent =
+            newTotal;
+
+
+    document
+        .getElementById(
+            "infoExpiration"
+        )
+        .textContent =
+            expiration;
+
+}
+
+
+/* =========================================================
+   HIDE USER INFO
+========================================================= */
+
+function hideUserInfo() {
+
+    document
+        .getElementById(
+            "userInfo"
+        )
+        .style.display =
+            "none";
+
+}
+
+
+/* =========================================================
+   VALIDITY → MILLISECONDS
+========================================================= */
+
+function validityToMilliseconds(
+    validity
+) {
+
+    const units = {
+
+        h:
+            60 *
+            60 *
+            1000,
+
+        d:
+            24 *
+            60 *
+            60 *
+            1000
+
+    };
+
+
+    const regex =
+        /(\d+)([hd])/g;
+
+
+    let total = 0;
+
+    let match;
+
+
+    while (
+        (
+            match =
+            regex.exec(
+                validity
+            )
+        ) !== null
+    ) {
+
+        total +=
+            Number(
+                match[1]
+            ) *
+            units[
+                match[2]
+            ];
+
+    }
+
+
+    return total;
+
+}
+
+
+/* =========================================================
+   FORMAT DURATION
+========================================================= */
+
+function formatDuration(
+    milliseconds
+) {
+
+    milliseconds =
+        Math.max(
+            0,
+            milliseconds
+        );
+
+
+    let totalSeconds =
+        Math.floor(
+            milliseconds /
+            1000
+        );
+
+
+    const days =
+        Math.floor(
+            totalSeconds /
+            86400
+        );
+
+
+    totalSeconds %=
+        86400;
+
+
+    const hours =
+        Math.floor(
+            totalSeconds /
+            3600
+        );
+
+
+    totalSeconds %=
+        3600;
+
+
+    const minutes =
+        Math.floor(
+            totalSeconds /
+            60
+        );
+
+
+    const seconds =
+        totalSeconds %
+        60;
+
+
+    const parts = [];
+
+
+    if (days > 0) {
+
+        parts.push(
+            days +
+            (
+                days === 1
+                    ? " day"
+                    : " days"
+            )
+        );
+
+    }
+
+
+    if (hours > 0) {
+
+        parts.push(
+            hours +
+            (
+                hours === 1
+                    ? " hour"
+                    : " hours"
+            )
+        );
+
+    }
+
+
+    if (minutes > 0) {
+
+        parts.push(
+            minutes +
+            (
+                minutes === 1
+                    ? " minute"
+                    : " minutes"
+            )
+        );
+
+    }
+
+
+    /*
+       Show seconds only if
+       remaining time is less
+       than one minute.
+    */
+
+    if (
+        seconds > 0 &&
+        parts.length === 0
+    ) {
+
+        parts.push(
+            seconds +
+            (
+                seconds === 1
+                    ? " second"
+                    : " seconds"
+            )
+        );
+
+    }
+
+
+    if (parts.length === 0) {
+
+        return "EXPIRED";
+
+    }
+
+
+    return parts.join(
+        " "
+    );
 
 }
 
@@ -2120,6 +2814,9 @@ async function scanGallery(
     scanBusy = true;
 
 
+    hideUserInfo();
+
+
     log(
         "Gallery image selected."
     );
@@ -2131,12 +2828,9 @@ async function scanGallery(
 
 
     /*
-       Create a temporary
-       invisible scanner.
-
-       The selected image will
-       NOT appear in the visible
-       #qr-reader.
+       Temporary invisible scanner.
+       Hindi ipapakita ang image
+       sa visible QR camera area.
     */
 
     const tempContainer =
@@ -2199,8 +2893,7 @@ async function scanGallery(
 
         /*
            IMPORTANT:
-           Log decoded content
-           immediately.
+           Log QR content immediately.
         */
 
         log(
@@ -2225,10 +2918,6 @@ async function scanGallery(
         );
 
 
-        /*
-           Process QR.
-        */
-
         await processQrContent(
             decodedText
         );
@@ -2246,10 +2935,6 @@ async function scanGallery(
 
     } finally {
 
-        /*
-           Clear temporary scanner.
-        */
-
         try {
 
             await imageScanner.clear();
@@ -2259,17 +2944,8 @@ async function scanGallery(
         }
 
 
-        /*
-           Remove temporary
-           scanner container.
-        */
-
         tempContainer.remove();
 
-
-        /*
-           Reset file input.
-        */
 
         event.target.value = "";
 
@@ -2339,21 +3015,18 @@ async function toggleFlash() {
             false;
 
 
-        await videoTrack
-            .applyConstraints({
+        await videoTrack.applyConstraints({
 
-                advanced: [
+            advanced: [
 
-                    {
+                {
+                    torch:
+                        !current
+                }
 
-                        torch:
-                            !current
+            ]
 
-                    }
-
-                ]
-
-            });
+        });
 
 
         document
@@ -2387,148 +3060,19 @@ async function toggleFlash() {
 
 
 /* =========================================================
-   ADD TIME
-========================================================= */
-
-function addTime(
-    target,
-    validity
-) {
-
-    let date;
-
-
-    /*
-       Existing Date object
-    */
-
-    if (
-        target instanceof Date
-    ) {
-
-        date =
-            new Date(
-                target
-            );
-
-    } else {
-
-        date =
-            parseExpiration(
-                String(
-                    target
-                )
-            );
-
-
-        /*
-           Invalid expiration
-           = start from NOW
-        */
-
-        if (!date) {
-
-            date =
-                new Date();
-
-        }
-
-    }
-
-
-    /*
-       Expired user
-       = start from NOW
-    */
-
-    if (
-        date.getTime() <
-        Date.now()
-    ) {
-
-        date =
-            new Date();
-
-    }
-
-
-    const units = {
-
-        d:
-            24 *
-            60 *
-            60 *
-            1000,
-
-        h:
-            60 *
-            60 *
-            1000,
-
-        m:
-            60 *
-            1000,
-
-        s:
-            1000
-
-    };
-
-
-    const regex =
-        /(\d+)([dhms])/g;
-
-
-    let match;
-
-
-    while (
-        (
-            match =
-            regex.exec(
-                validity
-            )
-        ) !== null
-    ) {
-
-        const value =
-            parseInt(
-                match[1],
-                10
-            );
-
-
-        const unit =
-            match[2];
-
-
-        date.setTime(
-
-            date.getTime() +
-            (
-                value *
-                units[unit]
-            )
-
-        );
-
-    }
-
-
-    return formatDate(
-        date
-    );
-
-}
-
-
-/* =========================================================
    PARSE EXPIRATION
 ========================================================= */
 
 function parseExpiration(
     value
 ) {
+
+    if (!value) {
+
+        return null;
+
+    }
+
 
     const regex =
         /^([a-zA-Z]{3})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})$/;
