@@ -2,59 +2,18 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    >
+    <title>BobotEditha.net - QR WiFi Manager</title>
 
-    <meta
-        name="description"
-        content="MikroTik Hotspot QR WiFi Manager"
-    >
-
-    <title>BobotEditha.net</title>
-
-
-    <!-- =====================================================
-         HTML5 QR CODE
-    ====================================================== -->
-
-    <script src="https://unpkg.com/html5-qrcode"></script>
-
-
-    <!-- =====================================================
-         LOAD THEME BEFORE PAGE RENDER
-    ====================================================== -->
-
-    <script>
-
-        (function () {
-
-            const theme =
-                localStorage.getItem(
-                    "mikrotik_theme"
-                ) || "auto";
-
-            document.documentElement.dataset.theme =
-                theme;
-
-        })();
-
-    </script>
-
-
-    <!-- =====================================================
-         CSS
-    ====================================================== -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
     <style>
 
-        /* =================================================
+        /* =====================================================
            RESET
-        ================================================= */
+        ===================================================== */
 
         * {
             box-sizing: border-box;
@@ -63,1190 +22,668 @@
         }
 
 
-        html,
-        body {
-
-            width: 100%;
-            min-width: 100%;
-
-        }
-
-
-        html {
-
-            min-height: 100%;
-
-        }
-
-
-        body {
-
-            width: 100%;
-            min-height: 100vh;
-
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Roboto,
-                Arial,
-                sans-serif;
-
-            font-size: 14px;
-
-            background: var(--bg);
-            color: var(--text);
-
-            overflow-x: hidden;
-
-            transition:
-                background .2s ease,
-                color .2s ease;
-
-        }
-
-
-        button,
-        input,
-        select {
-
-            font-family: inherit;
-
-        }
-
-
-        /* =================================================
-           LIGHT THEME
-        ================================================= */
+        /* =====================================================
+           THEME
+        ===================================================== */
 
         :root {
-
-            --bg: #f4f5f7;
-
+            --bg: #f4f6f8;
             --card: #ffffff;
+            --card2: #f0f3f6;
+            --border: #d9e0e7;
 
-            --border: #e1e4e8;
+            --text: #151a20;
+            --muted: #66717d;
 
-            --text: #17191c;
-
-            --muted: #70757d;
-
-            --button: #f0f1f3;
-
-            --button-hover: #e5e7ea;
-
-            --input: #ffffff;
-
-            --primary: #1677ff;
-
-            --success: #18a058;
+            --primary: #00b873;
+            --primary-dark: #00945e;
 
             --danger: #e53935;
+            --warning: #f5b800;
+            --info: #1689e8;
 
-            color-scheme: light;
+            --input-bg: #ffffff;
+            --log-bg: #101418;
+            --log-text: #c8d2dc;
 
+            --header-bg: rgba(255, 255, 255, 0.96);
+
+            --radius: 14px;
         }
 
 
-        /* =================================================
+        /* =====================================================
            DARK THEME
-        ================================================= */
+        ===================================================== */
 
         :root[data-theme="dark"] {
+            --bg: #0b0f14;
+            --card: #121820;
+            --card2: #18212b;
+            --border: #263341;
 
-            --bg: #101214;
+            --text: #f5f7fa;
+            --muted: #9aa7b5;
 
-            --card: #181b1f;
+            --primary: #00d084;
+            --primary-dark: #00a86b;
 
-            --border: #2a2f35;
+            --danger: #ff4d4d;
+            --warning: #ffc107;
+            --info: #3da5ff;
 
-            --text: #f1f3f5;
+            --input-bg: #0b1016;
+            --log-bg: #070a0e;
+            --log-text: #c8d2dc;
 
-            --muted: #9299a3;
-
-            --button: #22262b;
-
-            --button-hover: #2c3137;
-
-            --input: #20242a;
-
-            --primary: #4d9cff;
-
-            --success: #32c77a;
-
-            --danger: #ff5c57;
-
-            color-scheme: dark;
-
+            --header-bg: rgba(11, 15, 20, 0.96);
         }
 
 
-        /* =================================================
-           AUTO LIGHT
-        ================================================= */
-
-        @media (prefers-color-scheme: light) {
-
-            :root[data-theme="auto"] {
-
-                --bg: #f4f5f7;
-
-                --card: #ffffff;
-
-                --border: #e1e4e8;
-
-                --text: #17191c;
-
-                --muted: #70757d;
-
-                --button: #f0f1f3;
-
-                --button-hover: #e5e7ea;
-
-                --input: #ffffff;
-
-                --primary: #1677ff;
-
-                --success: #18a058;
-
-                --danger: #e53935;
-
-                color-scheme: light;
-
-            }
-
-        }
-
-
-        /* =================================================
-           AUTO DARK
-        ================================================= */
+        /* =====================================================
+           AUTO THEME
+        ===================================================== */
 
         @media (prefers-color-scheme: dark) {
 
             :root[data-theme="auto"] {
+                --bg: #0b0f14;
+                --card: #121820;
+                --card2: #18212b;
+                --border: #263341;
 
-                --bg: #101214;
+                --text: #f5f7fa;
+                --muted: #9aa7b5;
 
-                --card: #181b1f;
+                --primary: #00d084;
+                --primary-dark: #00a86b;
 
-                --border: #2a2f35;
+                --danger: #ff4d4d;
+                --warning: #ffc107;
+                --info: #3da5ff;
 
-                --text: #f1f3f5;
+                --input-bg: #0b1016;
+                --log-bg: #070a0e;
+                --log-text: #c8d2dc;
 
-                --muted: #9299a3;
-
-                --button: #22262b;
-
-                --button-hover: #2c3137;
-
-                --input: #20242a;
-
-                --primary: #4d9cff;
-
-                --success: #32c77a;
-
-                --danger: #ff5c57;
-
-                color-scheme: dark;
-
+                --header-bg: rgba(11, 15, 20, 0.96);
             }
 
         }
 
 
-        /* =================================================
+        @media (prefers-color-scheme: light) {
+
+            :root[data-theme="auto"] {
+                --bg: #f4f6f8;
+                --card: #ffffff;
+                --card2: #f0f3f6;
+                --border: #d9e0e7;
+
+                --text: #151a20;
+                --muted: #66717d;
+
+                --primary: #00b873;
+                --primary-dark: #00945e;
+
+                --danger: #e53935;
+                --warning: #f5b800;
+                --info: #1689e8;
+
+                --input-bg: #ffffff;
+                --log-bg: #101418;
+                --log-text: #c8d2dc;
+
+                --header-bg: rgba(255, 255, 255, 0.96);
+            }
+
+        }
+
+
+        /* =====================================================
+           BODY
+        ===================================================== */
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+
+        /* =====================================================
            HEADER
-        ================================================= */
+        ===================================================== */
 
         header {
-
-            width: 100%;
-
-            min-height: 62px;
-
-            padding-top:
-                env(safe-area-inset-top);
-
-            padding-left: 14px;
-
-            padding-right: 10px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            background: var(--card);
-
-            border-bottom:
-                1px solid var(--border);
-
             position: sticky;
-
             top: 0;
-
             z-index: 100;
 
-        }
-
-
-        .brand {
+            height: 60px;
 
             display: flex;
-
             align-items: center;
+            justify-content: space-between;
 
-            font-size: 17px;
+            padding: 0 15px;
 
-            font-weight: 700;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border);
 
-            white-space: nowrap;
-
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
+        .logo {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
 
-        .settings-button {
-
-            width: 46px;
-
-            height: 46px;
-
+        .header-right {
             display: flex;
-
             align-items: center;
-
-            justify-content: center;
-
-            border: 0;
-
-            border-radius: 11px;
-
-            background: transparent;
-
-            color: var(--text);
-
-            cursor: pointer;
-
-            touch-action: manipulation;
-
+            gap: 8px;
         }
 
+        .theme-select {
+            height: 40px;
 
-        .settings-button:active {
+            padding: 0 10px;
 
-            background: var(--button);
-
-        }
-
-
-        .settings-button svg {
-
-            width: 22px;
-
-            height: 22px;
-
-        }
-
-
-        /* =================================================
-           MAIN
-        ================================================= */
-
-        main {
-
-            width: 100%;
-
-            max-width: 900px;
-
-            margin: 0 auto;
-
-            padding:
-
-                12px
-                clamp(10px, 3vw, 20px)
-                calc(
-                    24px +
-                    env(safe-area-inset-bottom)
-                );
-
-        }
-
-
-        /* =================================================
-           CARD
-        ================================================= */
-
-        .card {
-
-            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
 
             background: var(--card);
-
-            border:
-                1px solid var(--border);
-
-            border-radius: 13px;
-
-            padding: 14px;
-
-            margin-bottom: 12px;
-
-        }
-
-
-        .card-title {
-
-            font-size: 14px;
-
-            font-weight: 700;
-
-            margin-bottom: 10px;
-
-        }
-
-
-        /* =================================================
-           QR READER
-        ================================================= */
-
-        #reader {
-
-            width: 100% !important;
-
-            overflow: hidden;
-
-            border:
-                1px solid var(--border) !important;
-
-            border-radius: 11px;
-
-            background: #000;
-
-        }
-
-
-        #reader video {
-
-            width: 100% !important;
-
-            height: auto !important;
-
-            display: block;
-
-            object-fit: cover;
-
-        }
-
-
-        #reader img {
-
-            max-width: 100%;
-
-        }
-
-
-        #reader__dashboard {
-
-            padding: 6px !important;
-
-        }
-
-
-        #reader__dashboard_section_csr {
-
-            display: none !important;
-
-        }
-
-
-        /* =================================================
-           ACTION BUTTONS
-        ================================================= */
-
-        .buttons {
-
-            width: 100%;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    3,
-                    minmax(0, 1fr)
-                );
-
-            gap: 9px;
-
-            margin-top: 10px;
-
-        }
-
-
-        .btn {
-
-            width: 100%;
-
-            min-height: 48px;
-
-            padding:
-                9px 10px;
-
-            border:
-                1px solid var(--border);
-
-            border-radius: 10px;
-
-            background: var(--button);
-
             color: var(--text);
 
-            display: flex;
+            font-size: 13px;
+            font-weight: 700;
 
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 7px;
-
+            outline: none;
             cursor: pointer;
-
-            font-size: 14px;
-
-            font-weight: 600;
-
-            touch-action: manipulation;
-
-            -webkit-tap-highlight-color:
-                transparent;
-
         }
 
-
-        .btn:hover {
-
-            background:
-                var(--button-hover);
-
+        .theme-select:focus {
+            border-color: var(--primary);
         }
 
+        .icon-btn {
+            width: 40px;
+            height: 40px;
 
-        .btn:active {
-
-            transform:
-                scale(.98);
-
-        }
-
-
-        .btn.primary {
-
-            background:
-                var(--primary);
-
-            border-color:
-                var(--primary);
-
-            color: #ffffff;
-
-        }
-
-
-        .btn.danger {
-
-            color:
-                var(--danger);
-
-        }
-
-
-        .btn svg {
-
-            width: 19px;
-
-            height: 19px;
-
-            flex-shrink: 0;
-
-        }
-
-
-        /* =================================================
-           STATUS
-        ================================================= */
-
-        .status-row {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 9px;
-
-            min-height: 30px;
-
-        }
-
-
-        .status-dot {
-
-            width: 10px;
-
-            height: 10px;
-
-            border-radius: 50%;
-
-            background:
-                var(--danger);
-
-            flex-shrink: 0;
-
-        }
-
-
-        .status-dot.online {
-
-            background:
-                var(--success);
-
-        }
-
-
-        #statusText {
-
-            font-size: 14px;
-
-            color: var(--muted);
-
-        }
-
-
-        /* =================================================
-           USER INFO
-        ================================================= */
-
-        .info-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    2,
-                    minmax(0, 1fr)
-                );
-
-            gap: 9px;
-
-        }
-
-
-        .info-item {
-
-            min-width: 0;
-
-            padding: 11px;
-
+            border: 1px solid var(--border);
             border-radius: 10px;
 
-            background:
-                var(--button);
+            background: var(--card);
+            color: var(--text);
 
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.95);
         }
 
 
-        .info-label {
+        /* =====================================================
+           MAIN
+        ===================================================== */
 
-            font-size: 12px;
+        main {
+            width: 100%;
+            max-width: 700px;
 
-            color: var(--muted);
-
-            margin-bottom: 4px;
-
+            margin: auto;
+            padding: 20px 15px 40px;
         }
 
 
-        .info-value {
+        /* =====================================================
+           CARD
+        ===================================================== */
 
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+
+            padding: 16px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+
+        /* =====================================================
+           QR SCANNER
+        ===================================================== */
+
+        #qr-reader {
+            width: 100%;
+            overflow: hidden;
+
+            border-radius: 12px;
+            background: #000;
+        }
+
+        #qr-reader video {
+            width: 100% !important;
+            border-radius: 12px;
+        }
+
+        #qr-reader__scan_region {
+            min-height: 260px;
+        }
+
+        #qr-reader__dashboard {
+            display: none !important;
+        }
+
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+
+            margin-top: 12px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 10px;
+
+            min-height: 45px;
+            padding: 10px 12px;
+
+            background: var(--card2);
+            border: 1px solid var(--border);
+
+            color: var(--text);
             font-size: 14px;
+            font-weight: 700;
 
-            font-weight: 600;
+            cursor: pointer;
+        }
 
-            overflow-wrap:
-                anywhere;
+        button:active {
+            transform: scale(0.97);
+        }
 
+        .primary {
+            background: var(--primary);
+            color: #00150d;
+            border-color: var(--primary);
+        }
+
+        .danger {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        .warning {
+            background: var(--warning);
+            color: #111;
+            border-color: var(--warning);
+        }
+
+        .info {
+            background: var(--info);
+            color: white;
+            border-color: var(--info);
         }
 
 
-        /* =================================================
-           LOG
-        ================================================= */
+        /* =====================================================
+           STATUS
+        ===================================================== */
 
-        #log {
-
-            font-family:
-                ui-monospace,
-                SFMono-Regular,
-                Menlo,
-                Monaco,
-                Consolas,
-                monospace;
-
-            font-size: 11px;
-
-            line-height: 1.5;
-
-            color: var(--muted);
-
-            white-space: pre-wrap;
-
-            overflow-wrap: anywhere;
-
-            max-height: 180px;
-
-            overflow-y: auto;
-
-        }
-
-
-        /* =================================================
-           MODAL
-        ================================================= */
-
-        .modal {
-
-            position: fixed;
-
-            inset: 0;
-
-            display: none;
-
+        .status {
+            display: flex;
             align-items: center;
-
-            justify-content: center;
+            gap: 9px;
 
             padding: 12px;
 
-            background:
-                rgba(
-                    0,
-                    0,
-                    0,
-                    .45
-                );
+            border-radius: 10px;
+            background: var(--card2);
 
-            z-index: 1000;
+            font-size: 14px;
+        }
 
+        .status-dot {
+            width: 10px;
+            height: 10px;
+
+            border-radius: 50%;
+            background: var(--muted);
+
+            flex-shrink: 0;
+        }
+
+        .status-dot.online {
+            background: var(--primary);
+        }
+
+        .status-dot.error {
+            background: var(--danger);
+        }
+
+        .status-dot.warning {
+            background: var(--warning);
         }
 
 
-        .modal.show {
+        /* =====================================================
+           USER INFO
+        ===================================================== */
 
-            display: flex;
+        #userInfo {
+            display: none;
+        }
 
+        .user-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .info-box {
+            padding: 12px;
+
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .info-label {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 15px;
+            font-weight: 700;
+            word-break: break-word;
         }
 
 
-        .modal-box {
+        /* =====================================================
+           LOG
+        ===================================================== */
 
-            width: min(
-                100%,
-                460px
-            );
+        #log {
+            white-space: pre-wrap;
+            word-break: break-word;
 
-            max-height: 92vh;
+            min-height: 100px;
+            max-height: 400px;
 
             overflow-y: auto;
 
-            padding: 16px;
+            padding: 12px;
 
-            background:
-                var(--card);
-
-            border:
-                1px solid var(--border);
-
-            border-radius: 14px;
-
-        }
-
-
-        .modal-header {
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            margin-bottom: 14px;
-
-        }
-
-
-        .modal-title {
-
-            font-size: 16px;
-
-            font-weight: 700;
-
-        }
-
-
-        .close {
-
-            width: 38px;
-
-            height: 38px;
-
-            border: 0;
-
-            border-radius: 9px;
-
-            background:
-                var(--button);
-
-            color:
-                var(--text);
-
-            font-size: 21px;
-
-            cursor: pointer;
-
-        }
-
-
-        /* =================================================
-           FORM
-        ================================================= */
-
-        .field {
-
-            margin-bottom: 13px;
-
-        }
-
-
-        .field label {
-
-            display: block;
-
-            font-size: 13px;
-
-            font-weight: 600;
-
-            margin-bottom: 6px;
-
-        }
-
-
-        .field input,
-        .field select {
-
-            width: 100%;
-
-            min-height: 46px;
-
-            padding:
-                10px 11px;
-
-            border:
-                1px solid var(--border);
-
+            background: var(--log-bg);
+            border: 1px solid var(--border);
             border-radius: 10px;
 
-            background:
-                var(--input);
+            color: var(--log-text);
 
-            color:
-                var(--text);
+            font-family: monospace;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+
+            padding: 15px;
+
+            background: rgba(0, 0, 0, 0.75);
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 450px;
+
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+
+            padding: 20px;
+        }
+
+        .modal-title {
+            font-size: 19px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+
+        /* =====================================================
+           INPUT
+        ===================================================== */
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+        .field label {
+            display: block;
+
+            color: var(--muted);
+            font-size: 13px;
+
+            margin-bottom: 6px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 5px;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 12px;
+
+            background: var(--input-bg);
+            color: var(--text);
+
+            border: 1px solid var(--border);
+            border-radius: 9px;
 
             outline: none;
 
             font-size: 14px;
+        }
 
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        .eye {
+            width: 48px;
+            flex-shrink: 0;
         }
 
 
-        .field input:focus,
-        .field select:focus {
-
-            border-color:
-                var(--primary);
-
-        }
-
-
-        /* =================================================
-           PASSWORD
-        ================================================= */
-
-        .password-box {
-
-            position: relative;
-
-        }
-
-
-        .password-box input {
-
-            padding-right: 48px;
-
-        }
-
-
-        .eye-button {
-
-            position: absolute;
-
-            right: 5px;
-
-            top: 5px;
-
-            width: 36px;
-
-            height: 36px;
-
-            border: 0;
-
-            background:
-                transparent;
-
-            color:
-                var(--muted);
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            cursor: pointer;
-
-        }
-
-
-        .eye-button svg {
-
-            width: 20px;
-
-            height: 20px;
-
-        }
-
-
-        /* =================================================
-           REMEMBER ME
-        ================================================= */
+        /* =====================================================
+           CHECKBOX
+        ===================================================== */
 
         .remember {
-
             display: flex;
-
             align-items: center;
-
             gap: 8px;
 
-            margin:
-                8px 0 14px;
+            margin-bottom: 15px;
 
+            color: var(--muted);
             font-size: 13px;
-
-            color:
-                var(--muted);
-
         }
-
 
         .remember input {
-
-            width: 17px;
-
-            height: 17px;
-
+            width: auto;
         }
 
 
-        /* =================================================
+        /* =====================================================
            MODAL BUTTONS
-        ================================================= */
+        ===================================================== */
 
         .modal-buttons {
-
             display: grid;
-
-            grid-template-columns:
-                repeat(
-                    2,
-                    minmax(0, 1fr)
-                );
-
+            grid-template-columns: 1fr 1fr;
             gap: 8px;
+        }
 
+        .modal-buttons .full {
+            grid-column: 1 / -1;
         }
 
 
-        .modal-buttons .btn {
+        /* =====================================================
+           PLAN MODAL
+        ===================================================== */
 
-            min-height: 46px;
-
+        #planModal .modal-box {
+            max-width: 500px;
         }
 
-
-        /* =================================================
-           PLANS
-        ================================================= */
-
-        .plans {
-
+        #plans {
             display: grid;
-
-            gap: 9px;
-
+            gap: 10px;
         }
-
 
         .plan {
-
-            width: 100%;
-
-            padding: 13px;
-
-            border:
-                1px solid var(--border);
-
-            border-radius: 11px;
-
-            background:
-                var(--button);
-
-            color:
-                var(--text);
-
             text-align: left;
 
-            cursor: pointer;
+            padding: 14px;
 
-            touch-action: manipulation;
+            background: var(--card2);
+            border: 1px solid var(--border);
 
+            border-radius: 12px;
         }
-
-
-        .plan:active {
-
-            transform:
-                scale(.99);
-
-        }
-
 
         .plan-name {
-
-            font-size: 14px;
-
-            font-weight: 700;
-
+            font-size: 16px;
+            font-weight: 800;
         }
-
 
         .plan-description {
+            margin-top: 5px;
 
-            font-size: 12px;
-
-            color:
-                var(--muted);
-
-            margin-top: 4px;
-
+            color: var(--muted);
+            font-size: 13px;
         }
 
+        .plan-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-top: 10px;
+        }
+
+        .plan-duration {
+            color: var(--primary);
+            font-weight: 700;
+        }
 
         .plan-price {
-
-            font-size: 13px;
-
-            color:
-                var(--primary);
-
-            margin-top: 6px;
-
-            font-weight: 700;
-
+            font-weight: 800;
         }
 
 
-        /* =================================================
-           HIDDEN
-        ================================================= */
+        /* =====================================================
+           HIDDEN GALLERY SCANNER
+        ===================================================== */
 
-        .hidden {
-
-            display: none !important;
-
-        }
-
-
-        #galleryScanner {
-
+        #temporaryQrScanner {
             position: fixed;
 
-            left: -99999px;
-
-            top: -99999px;
-
             width: 1px;
-
             height: 1px;
 
+            left: -10000px;
+            top: -10000px;
+
+            opacity: 0;
+            pointer-events: none;
+
             overflow: hidden;
-
         }
 
 
-        /* =================================================
-           TABLET / DESKTOP
-        ================================================= */
+        /* =====================================================
+           MOBILE
+        ===================================================== */
 
-        @media (min-width: 600px) {
-
-            main {
-
-                padding-left: 20px;
-
-                padding-right: 20px;
-
-            }
-
-
-            .card {
-
-                padding: 16px;
-
-            }
-
-
-            .buttons {
-
-                gap: 10px;
-
-            }
-
-
-            .btn {
-
-                min-height: 50px;
-
-            }
-
-        }
-
-
-        /* =================================================
-           SMALL PHONE
-        ================================================= */
-
-        @media (max-width: 380px) {
+        @media (max-width: 500px) {
 
             header {
-
-                min-height: 58px;
-
-                padding-left: 11px;
-
-                padding-right: 7px;
-
+                padding: 0 10px;
             }
-
-
-            .brand {
-
-                font-size: 16px;
-
-            }
-
-
-            .settings-button {
-
-                width: 43px;
-
-                height: 43px;
-
-            }
-
 
             main {
-
-                padding-left: 8px;
-
-                padding-right: 8px;
-
+                padding: 12px 10px 30px;
             }
-
-
-            .card {
-
-                padding: 11px;
-
-            }
-
 
             .buttons {
-
-                gap: 6px;
-
+                grid-template-columns: 1fr 1fr 1fr;
             }
 
+            .user-grid {
+                grid-template-columns: 1fr;
+            }
 
-            .btn {
+            .logo {
+                font-size: 16px;
+            }
 
-                min-height: 46px;
-
-                padding-left: 5px;
-
-                padding-right: 5px;
-
+            .theme-select {
+                height: 38px;
+                padding: 0 7px;
                 font-size: 12px;
-
             }
 
-
-            .btn svg {
-
-                width: 17px;
-
-                height: 17px;
-
-            }
-
-        }
-
-
-        /* =================================================
-           VERY SMALL PHONE
-        ================================================= */
-
-        @media (max-width: 320px) {
-
-            .brand {
-
-                font-size: 15px;
-
-            }
-
-
-            .btn {
-
-                font-size: 11px;
-
-            }
-
-
-            .btn svg {
-
-                width: 16px;
-
-                height: 16px;
-
+            .icon-btn {
+                width: 38px;
+                height: 38px;
             }
 
         }
@@ -1259,2573 +696,2509 @@
 <body>
 
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
+<!-- =========================================================
+     HEADER
+========================================================= -->
 
-    <header>
+<header>
 
+    <div class="logo">
+        BobotEditha.net
+    </div>
 
-        <div class="brand">
+    <div class="header-right">
 
-            BobotEditha.net
+        <!-- THEME SELECTOR -->
 
-        </div>
+        <select
+            id="themeSelect"
+            class="theme-select"
+            onchange="setTheme(this.value)"
+            title="Theme"
+        >
+
+            <option value="auto">
+                Auto
+            </option>
+
+            <option value="light">
+                Light
+            </option>
+
+            <option value="dark">
+                Dark
+            </option>
+
+        </select>
 
 
         <button
-            class="settings-button"
+            class="icon-btn"
             onclick="openSettings()"
-            aria-label="Settings"
+            title="MikroTik Settings"
         >
-
-            <!-- GEAR SVG -->
-
-            <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            >
-
-                <circle
-                    cx="12"
-                    cy="12"
-                    r="3"
-                ></circle>
-
-                <path
-                    d="
-                    M19.4 15
-                    a1.7 1.7 0 0 0 .34 1.88
-                    l.06.06
-                    -1.7 1.7
-                    -.06-.06
-                    a1.7 1.7 0 0 0-1.88-.34
-                    1.7 1.7 0 0 0-1.03 1.56
-                    V20
-                    h-2.4
-                    v-.2
-                    a1.7 1.7 0 0 0-1.03-1.56
-                    1.7 1.7 0 0 0-1.88.34
-                    l-.06.06
-                    -1.7-1.7
-                    .06-.06
-                    A1.7 1.7 0 0 0 8.4 15
-                    1.7 1.7 0 0 0 6.84 14
-                    H6.6
-                    v-2.4
-                    h.24
-                    A1.7 1.7 0 0 0 8.4 10
-                    a1.7 1.7 0 0 0-.34-1.88
-                    L8 8.06
-                    l1.7-1.7
-                    .06.06
-                    a1.7 1.7 0 0 0 1.88.34
-                    A1.7 1.7 0 0 0 12.67 5.2
-                    V5
-                    h2.4
-                    v.2
-                    a1.7 1.7 0 0 0 1.03 1.56
-                    1.7 1.7 0 0 0 1.88-.34
-                    l.06-.06
-                    1.7 1.7
-                    -.06.06
-                    A1.7 1.7 0 0 0 19.4 10
-                    c.28.66.93 1.09 1.64 1.09
-                    H21.2
-                    v2.4
-                    h-.16
-                    A1.7 1.7 0 0 0 19.4 15Z
-                    "
-                ></path>
-
-            </svg>
-
+            ⚙
         </button>
 
-    </header>
+    </div>
 
+</header>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main>
 
 
     <!-- =====================================================
-         MAIN
+         QR CARD
     ====================================================== -->
 
-    <main>
+    <div class="card">
 
+        <div class="card-title">
+            QR Scanner
+        </div>
 
-        <!-- =================================================
-             QR SCANNER CARD
-        ================================================== -->
+        <div id="qr-reader"></div>
 
-        <section class="card">
 
+        <div class="buttons">
 
-            <div class="card-title">
+            <button
+                class="info"
+                onclick="scanGallery()"
+            >
+                🖼 Gallery
+            </button>
 
-                Scan WiFi QR
+            <button
+                class="warning"
+                id="flashButton"
+                onclick="toggleFlash()"
+            >
+                🔦 Flash
+            </button>
 
-            </div>
+            <button
+                class="danger"
+                onclick="restartScanner()"
+            >
+                ↻ Restart
+            </button>
 
+        </div>
 
-            <div id="reader"></div>
-
-
-            <div class="buttons">
-
-
-                <!-- GALLERY -->
-
-                <button
-                    class="btn"
-                    onclick="scanGallery()"
-                >
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-
-                        <rect
-                            x="3"
-                            y="3"
-                            width="18"
-                            height="18"
-                            rx="2"
-                        ></rect>
-
-                        <circle
-                            cx="8.5"
-                            cy="8.5"
-                            r="1.5"
-                        ></circle>
-
-                        <path
-                            d="m21 15-5-5L5 21"
-                        ></path>
-
-                    </svg>
-
-                    Gallery
-
-                </button>
-
-
-                <!-- FLASH -->
-
-                <button
-                    class="btn"
-                    onclick="toggleFlash()"
-                >
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-
-                        <path
-                            d="
-                            M13 2
-                            3 14
-                            h9
-                            l-1 8
-                            10-12
-                            h-9
-                            z
-                            "
-                        ></path>
-
-                    </svg>
-
-                    Flash
-
-                </button>
-
-
-                <!-- RESTART -->
-
-                <button
-                    class="btn"
-                    onclick="restartScanner()"
-                >
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-
-                        <path
-                            d="M3 12a9 9 0 1 0 3-6.7"
-                        ></path>
-
-                        <path
-                            d="M3 4v5h5"
-                        ></path>
-
-                    </svg>
-
-                    Restart
-
-                </button>
-
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             MIKROTIK STATUS
-        ================================================== -->
-
-        <section class="card">
-
-
-            <div class="card-title">
-
-                MikroTik Status
-
-            </div>
-
-
-            <div class="status-row">
-
-
-                <span
-                    id="statusDot"
-                    class="status-dot"
-                ></span>
-
-
-                <span id="statusText">
-
-                    Not connected
-
-                </span>
-
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             USER INFORMATION
-        ================================================== -->
-
-        <section
-            id="userCard"
-            class="card hidden"
-        >
-
-
-            <div class="card-title">
-
-                User Information
-
-            </div>
-
-
-            <div class="info-grid">
-
-
-                <div class="info-item">
-
-                    <div class="info-label">
-
-                        Username
-
-                    </div>
-
-
-                    <div
-                        id="username"
-                        class="info-value"
-                    >
-
-                        —
-
-                    </div>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <div class="info-label">
-
-                        Current Time Left
-
-                    </div>
-
-
-                    <div
-                        id="currentTime"
-                        class="info-value"
-                    >
-
-                        —
-
-                    </div>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <div class="info-label">
-
-                        Plan to Add
-
-                    </div>
-
-
-                    <div
-                        id="planToAdd"
-                        class="info-value"
-                    >
-
-                        —
-
-                    </div>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <div class="info-label">
-
-                        New Total Time
-
-                    </div>
-
-
-                    <div
-                        id="newTotal"
-                        class="info-value"
-                    >
-
-                        —
-
-                    </div>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <div class="info-label">
-
-                        New Expiration
-
-                    </div>
-
-
-                    <div
-                        id="newExpiration"
-                        class="info-value"
-                    >
-
-                        —
-
-                    </div>
-
-                </div>
-
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             ACTIVITY LOG
-        ================================================== -->
-
-        <section class="card">
-
-
-            <div class="card-title">
-
-                Activity Log
-
-            </div>
-
-
-            <div id="log">
-
-                Ready.
-
-            </div>
-
-
-        </section>
-
-
-    </main>
-
+    </div>
 
 
     <!-- =====================================================
-         HIDDEN GALLERY SCANNER
+         STATUS
     ====================================================== -->
 
-    <div id="galleryScanner"></div>
+    <div class="card">
 
+        <div class="card-title">
+            MikroTik Status
+        </div>
+
+        <div class="status">
+
+            <span
+                id="statusDot"
+                class="status-dot"
+            ></span>
+
+            <span id="statusText">
+                Not connected
+            </span>
+
+        </div>
+
+    </div>
 
 
     <!-- =====================================================
-         SETTINGS MODAL
+         USER INFORMATION
     ====================================================== -->
 
     <div
-        id="settingsModal"
-        class="modal"
-        onclick="
-            if(event.target===this)
-            closeSettings()
-        "
+        class="card"
+        id="userInfo"
     >
 
+        <div class="card-title">
+            User Information
+        </div>
 
-        <div class="modal-box">
+        <div class="user-grid">
 
+            <div class="info-box">
 
-            <div class="modal-header">
-
-
-                <div class="modal-title">
-
-                    Settings
-
-                </div>
-
-
-                <button
-                    class="close"
-                    onclick="closeSettings()"
-                >
-
-                    ×
-
-                </button>
-
-
-            </div>
-
-
-
-            <!-- API URL -->
-
-            <div class="field">
-
-
-                <label>
-
-                    MikroTik API URL
-
-                </label>
-
-
-                <input
-                    id="apiUrl"
-                    type="text"
-                    placeholder="https://192.168.88.1/rest"
-                    autocomplete="off"
-                >
-
-
-            </div>
-
-
-
-            <!-- USERNAME -->
-
-            <div class="field">
-
-
-                <label>
-
+                <div class="info-label">
                     Username
-
-                </label>
-
-
-                <input
-                    id="apiUser"
-                    type="text"
-                    placeholder="admin"
-                    autocomplete="username"
-                >
-
-
-            </div>
-
-
-
-            <!-- PASSWORD -->
-
-            <div class="field">
-
-
-                <label>
-
-                    Password
-
-                </label>
-
-
-                <div class="password-box">
-
-
-                    <input
-                        id="apiPassword"
-                        type="password"
-                        placeholder="Password"
-                        autocomplete="current-password"
-                    >
-
-
-                    <button
-                        class="eye-button"
-                        onclick="togglePassword()"
-                        aria-label="Show password"
-                    >
-
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-
-                            <path
-                                d="
-                                M2 12
-                                s3.5-7 10-7
-                                10 7 10 7
-                                -3.5 7-10 7
-                                S2 12 2 12Z
-                                "
-                            ></path>
-
-                            <circle
-                                cx="12"
-                                cy="12"
-                                r="3"
-                            ></circle>
-
-                        </svg>
-
-
-                    </button>
-
-
                 </div>
 
+                <div
+                    class="info-value"
+                    id="infoUsername"
+                >
+                    -
+                </div>
 
             </div>
 
 
+            <div class="info-box">
 
-            <!-- THEME -->
+                <div class="info-label">
+                    Current Time Left
+                </div>
 
-            <div class="field">
-
-
-                <label>
-
-                    Theme
-
-                </label>
-
-
-                <select
-                    id="themeSelect"
-                    onchange="setTheme(this.value)"
+                <div
+                    class="info-value"
+                    id="infoCurrentTime"
                 >
-
-                    <option value="auto">
-
-                        Auto
-
-                    </option>
-
-
-                    <option value="light">
-
-                        Light
-
-                    </option>
-
-
-                    <option value="dark">
-
-                        Dark
-
-                    </option>
-
-
-                </select>
-
+                    -
+                </div>
 
             </div>
 
 
+            <div class="info-box">
 
-            <!-- REMEMBER -->
+                <div class="info-label">
+                    Plan to Add
+                </div>
 
-            <label class="remember">
-
-
-                <input
-                    id="rememberMe"
-                    type="checkbox"
+                <div
+                    class="info-value"
+                    id="infoPlan"
                 >
+                    -
+                </div>
+
+            </div>
 
 
-                <span>
+            <div class="info-box">
 
-                    Remember settings
+                <div class="info-label">
+                    New Total Time
+                </div>
 
-                </span>
+                <div
+                    class="info-value"
+                    id="infoTotal"
+                >
+                    -
+                </div>
+
+            </div>
 
 
+            <div class="info-box">
+
+                <div class="info-label">
+                    New Expiration
+                </div>
+
+                <div
+                    class="info-value"
+                    id="infoExpiration"
+                >
+                    -
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACTIVITY LOG
+    ====================================================== -->
+
+    <div class="card">
+
+        <div class="card-title">
+            Activity Log
+        </div>
+
+        <div id="log"></div>
+
+    </div>
+
+
+</main>
+
+
+<!-- =========================================================
+     TEMPORARY QR SCANNER
+========================================================= -->
+
+<div id="temporaryQrScanner"></div>
+
+
+<!-- =========================================================
+     SETTINGS MODAL
+========================================================= -->
+
+<div
+    class="modal"
+    id="settingsModal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-title">
+            MikroTik Settings
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                API URL
             </label>
 
-
-
-            <!-- MODAL BUTTONS -->
-
-            <div class="modal-buttons">
-
-
-                <button
-                    class="btn primary"
-                    onclick="connectMikrotik()"
-                >
-
-                    Connect
-
-                </button>
-
-
-                <button
-                    class="btn danger"
-                    onclick="clearSavedSettings()"
-                >
-
-                    Clear
-
-                </button>
-
-
-                <button
-                    class="btn"
-                    onclick="closeSettings()"
-                >
-
-                    Cancel
-
-                </button>
-
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-
-    <!-- =====================================================
-         PLAN MODAL
-    ====================================================== -->
-
-    <div
-        id="planModal"
-        class="modal"
-        onclick="
-            if(event.target===this)
-            closePlanModal()
-        "
-    >
-
-
-        <div class="modal-box">
-
-
-            <div class="modal-header">
-
-
-                <div class="modal-title">
-
-                    Select Plan
-
-                </div>
-
-
-                <button
-                    class="close"
-                    onclick="closePlanModal()"
-                >
-
-                    ×
-
-                </button>
-
-
-            </div>
-
-
-            <div
-                id="plans"
-                class="plans"
+            <input
+                type="text"
+                id="apiUrl"
+                placeholder="https://10.0.0.1/rest"
             >
 
-                Loading...
+        </div>
 
-            </div>
 
+        <div class="field">
+
+            <label>
+                Username
+            </label>
+
+            <input
+                type="text"
+                id="mtUsername"
+                placeholder="admin"
+                autocomplete="username"
+            >
 
         </div>
 
 
+        <div class="field">
+
+            <label>
+                Password
+            </label>
+
+            <div class="input-row">
+
+                <input
+                    type="password"
+                    id="mtPassword"
+                    placeholder="Password"
+                    autocomplete="current-password"
+                >
+
+                <button
+                    class="eye"
+                    onclick="togglePassword()"
+                    type="button"
+                >
+                    👁
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <label class="remember">
+
+            <input
+                type="checkbox"
+                id="rememberMe"
+            >
+
+            Remember Me
+
+        </label>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="primary"
+                onclick="connectMikrotik()"
+            >
+                Connect
+            </button>
+
+            <button
+                class="danger"
+                onclick="clearSavedSettings()"
+            >
+                Clear
+            </button>
+
+            <button
+                class="full"
+                onclick="closeSettings()"
+            >
+                Cancel
+            </button>
+
+        </div>
+
     </div>
 
+</div>
 
 
-    <!-- =====================================================
-         JAVASCRIPT
-    ====================================================== -->
+<!-- =========================================================
+     PLAN MODAL
+========================================================= -->
 
-    <script>
+<div
+    class="modal"
+    id="planModal"
+>
 
+    <div class="modal-box">
 
-        /* =================================================
-           GLOBAL VARIABLES
-        ================================================= */
+        <div class="modal-title">
+            Select WiFi Plan
+        </div>
 
-        let html5QrCode = null;
+        <div id="plans">
+            Loading plans...
+        </div>
 
-        let galleryQrCode = null;
+        <div style="margin-top:15px">
 
-        let scannerRunning = false;
+            <button
+                class="full"
+                onclick="closePlanModal()"
+            >
+                Cancel
+            </button>
 
-        let scanBusy = false;
+        </div>
 
-        let currentUser = null;
+    </div>
 
-        let plans = [];
+</div>
 
-        let flashOn = false;
 
+<script>
 
 
-        /* =================================================
-           LOG
-        ================================================= */
+/* =========================================================
+   THEME
+========================================================= */
 
-        function log(message) {
+function setTheme(theme) {
 
-            const el =
-                document.getElementById(
-                    "log"
-                );
+    if (
+        theme !== "light" &&
+        theme !== "dark" &&
+        theme !== "auto"
+    ) {
 
+        theme = "auto";
 
-            const time =
-                new Date()
-                    .toLocaleTimeString();
+    }
 
+    document.documentElement.dataset.theme =
+        theme;
 
-            el.textContent +=
-                `\n[${time}] ${message}`;
+    localStorage.setItem(
+        "bobot_theme",
+        theme
+    );
 
+    const select =
+        document.getElementById(
+            "themeSelect"
+        );
 
-            el.scrollTop =
-                el.scrollHeight;
+    if (select) {
 
-        }
+        select.value = theme;
 
+    }
 
+}
 
-        /* =================================================
-           STATUS
-        ================================================= */
 
-        function setStatus(
-            text,
-            online = false
-        ) {
+/* =========================================================
+   LOAD THEME
+========================================================= */
 
-            document.getElementById(
-                "statusText"
-            ).textContent = text;
+function loadTheme() {
 
+    const saved =
+        localStorage.getItem(
+            "bobot_theme"
+        ) || "auto";
 
-            document.getElementById(
-                "statusDot"
-            ).classList.toggle(
-                "online",
-                online
-            );
+    setTheme(saved);
 
-        }
+}
 
 
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
 
-        /* =================================================
-           THEME
-        ================================================= */
+let mikrotik = {
 
-        function setTheme(theme) {
+    apiUrl: "",
+    username: "",
+    password: ""
 
-            if (
-                theme !== "light" &&
-                theme !== "dark" &&
-                theme !== "auto"
-            ) {
+};
 
-                theme = "auto";
+let plans = [];
 
-            }
+let currentQR = null;
 
+let currentFlashTrack = null;
 
-            document.documentElement
-                .dataset.theme =
-                theme;
+let scanner = null;
 
+let scanBusy = false;
 
-            localStorage.setItem(
-                "mikrotik_theme",
-                theme
-            );
 
+/* =========================================================
+   LOG
+========================================================= */
 
-            const select =
-                document.getElementById(
-                    "themeSelect"
-                );
+function log(message) {
 
+    const logBox = document.getElementById("log");
 
-            if (select) {
+    const time = new Date().toLocaleTimeString();
 
-                select.value = theme;
+    logBox.textContent +=
+        `[${time}] ${message}\n`;
 
-            }
+    logBox.scrollTop = logBox.scrollHeight;
 
+}
 
-            log(
-                "Theme: " + theme
-            );
 
-        }
+/* =========================================================
+   STATUS
+========================================================= */
 
+function setStatus(
+    text,
+    type = ""
+) {
 
+    document.getElementById("statusText").textContent = text;
 
-        function loadTheme() {
+    const dot =
+        document.getElementById("statusDot");
 
-            const theme =
-                localStorage.getItem(
-                    "mikrotik_theme"
-                ) || "auto";
+    dot.className = "status-dot";
 
+    if (type) {
 
-            setTheme(theme);
+        dot.classList.add(type);
 
-        }
+    }
 
+}
 
 
-        /* =================================================
-           SETTINGS
-        ================================================= */
+/* =========================================================
+   LOAD PLANS
+========================================================= */
 
-        function openSettings() {
+async function loadPlans() {
 
-            document
-                .getElementById(
-                    "settingsModal"
-                )
-                .classList.add(
-                    "show"
-                );
+    try {
 
-        }
-
-
-
-        function closeSettings() {
-
-            document
-                .getElementById(
-                    "settingsModal"
-                )
-                .classList.remove(
-                    "show"
-                );
-
-        }
-
-
-
-        /* =================================================
-           PASSWORD
-        ================================================= */
-
-        function togglePassword() {
-
-            const input =
-                document.getElementById(
-                    "apiPassword"
-                );
-
-
-            input.type =
-                input.type === "password"
-                    ? "text"
-                    : "password";
-
-        }
-
-
-
-        /* =================================================
-           SAVE SETTINGS
-        ================================================= */
-
-        function saveSettings() {
-
-            const remember =
-                document.getElementById(
-                    "rememberMe"
-                ).checked;
-
-
-            if (!remember) {
-
-                localStorage.removeItem(
-                    "mikrotik_qr_config"
-                );
-
-                return;
-
-            }
-
-
-            const config = {
-
-                apiUrl:
-                    document.getElementById(
-                        "apiUrl"
-                    ).value.trim(),
-
-                username:
-                    document.getElementById(
-                        "apiUser"
-                    ).value.trim(),
-
-                password:
-                    document.getElementById(
-                        "apiPassword"
-                    ).value,
-
-                remember: true
-
-            };
-
-
-            localStorage.setItem(
-                "mikrotik_qr_config",
-                JSON.stringify(config)
-            );
-
-        }
-
-
-
-        /* =================================================
-           LOAD SETTINGS
-        ================================================= */
-
-        function loadSavedSettings() {
-
-            try {
-
-                const saved =
-                    localStorage.getItem(
-                        "mikrotik_qr_config"
-                    );
-
-
-                if (!saved) return;
-
-
-                const config =
-                    JSON.parse(saved);
-
-
-                document.getElementById(
-                    "apiUrl"
-                ).value =
-                    config.apiUrl || "";
-
-
-                document.getElementById(
-                    "apiUser"
-                ).value =
-                    config.username || "";
-
-
-                document.getElementById(
-                    "apiPassword"
-                ).value =
-                    config.password || "";
-
-
-                document.getElementById(
-                    "rememberMe"
-                ).checked =
-                    !!config.remember;
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    error
-                );
-
-            }
-
-        }
-
-
-
-        /* =================================================
-           CLEAR SETTINGS
-        ================================================= */
-
-        function clearSavedSettings() {
-
-            localStorage.removeItem(
-                "mikrotik_qr_config"
-            );
-
-
-            document.getElementById(
-                "apiUrl"
-            ).value = "";
-
-
-            document.getElementById(
-                "apiUser"
-            ).value = "";
-
-
-            document.getElementById(
-                "apiPassword"
-            ).value = "";
-
-
-            document.getElementById(
-                "rememberMe"
-            ).checked = false;
-
-
-            setStatus(
-                "Settings cleared"
-            );
-
-
-            log(
-                "Saved settings cleared."
-            );
-
-        }
-
-
-
-        /* =================================================
-           CONNECT MIKROTIK
-        ================================================= */
-
-        async function connectMikrotik() {
-
-            const url =
-                document.getElementById(
-                    "apiUrl"
-                ).value.trim();
-
-
-            const user =
-                document.getElementById(
-                    "apiUser"
-                ).value.trim();
-
-
-            const password =
-                document.getElementById(
-                    "apiPassword"
-                ).value;
-
-
-            if (!url || !user) {
-
-                setStatus(
-                    "Enter API URL and username"
-                );
-
-                return;
-
-            }
-
-
-            saveSettings();
-
-
-            setStatus(
-                "Connecting..."
-            );
-
-
-            try {
-
-                const response =
-                    await fetch(
-                        url +
-                        "/system/resource",
-                        {
-
-                            method: "GET",
-
-                            headers: {
-
-                                "Authorization":
-                                    "Basic " +
-                                    btoa(
-                                        user +
-                                        ":" +
-                                        password
-                                    )
-
-                            }
-
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        `HTTP ${response.status}`
-                    );
-
-                }
-
-
-                setStatus(
-                    "Connected",
-                    true
-                );
-
-
-                log(
-                    "MikroTik connection successful."
-                );
-
-
-                closeSettings();
-
-            }
-
-            catch (error) {
-
-                setStatus(
-                    "Connection failed"
-                );
-
-
-                log(
-                    "Connection error: " +
-                    error.message
-                );
-
-            }
-
-        }
-
-
-
-        /* =================================================
-           MIKROTIK FETCH
-        ================================================= */
-
-        async function mtFetch(
-            endpoint,
-            options = {}
-        ) {
-
-            const base =
-                document.getElementById(
-                    "apiUrl"
-                ).value.trim();
-
-
-            const user =
-                document.getElementById(
-                    "apiUser"
-                ).value.trim();
-
-
-            const password =
-                document.getElementById(
-                    "apiPassword"
-                ).value;
-
-
-            if (!base || !user) {
-
-                throw new Error(
-                    "MikroTik settings are incomplete."
-                );
-
-            }
-
-
-            const headers =
-                options.headers || {};
-
-
-            headers.Authorization =
-                "Basic " +
-                btoa(
-                    user +
-                    ":" +
-                    password
-                );
-
-
-            headers["Content-Type"] =
-                "application/json";
-
-
-            return fetch(
-                base + endpoint,
+        const response =
+            await fetch(
+                "plan.json",
                 {
-
-                    ...options,
-
-                    headers
-
+                    cache: "no-store"
                 }
             );
 
-        }
+        if (!response.ok) {
 
-
-
-        /* =================================================
-           QR SUCCESS
-        ================================================= */
-
-        async function onScanSuccess(
-            decodedText
-        ) {
-
-            if (scanBusy) return;
-
-
-            scanBusy = true;
-
-
-            log(
-                "QR detected: " +
-                decodedText
-            );
-
-
-            await stopScanner();
-
-
-            await processUser(
-                decodedText
+            throw new Error(
+                "Cannot load plan.json"
             );
 
         }
 
+        const data =
+            await response.json();
 
+        plans =
+            Array.isArray(data)
+                ? data
+                : data.plans || [];
 
-        function onScanFailure() {
+        plans =
+            plans.filter(
+                plan =>
+                    plan.enabled !== false
+            );
 
-            /* QR scanning continuously
-               tries again */
+        renderPlans();
 
-        }
+        log(
+            `Loaded ${plans.length} active plans.`
+        );
 
+    } catch (error) {
 
+        console.error(error);
 
-        /* =================================================
-           START CAMERA
-        ================================================= */
+        document.getElementById("plans").innerHTML =
+            `<div style="color:#ff4d4d">
+                Failed to load plan.json
+             </div>`;
 
-        async function startScanner() {
+        log(
+            "ERROR loading plan.json: " +
+            error.message
+        );
 
-            if (scannerRunning) return;
+    }
 
+}
 
-            try {
 
-                html5QrCode =
-                    new Html5Qrcode(
-                        "reader"
-                    );
+/* =========================================================
+   RENDER PLANS
+========================================================= */
 
+function renderPlans() {
 
-                await html5QrCode.start(
+    const container =
+        document.getElementById("plans");
 
-                    {
-                        facingMode:
-                            "environment"
-                    },
+    container.innerHTML = "";
 
-                    {
+    if (!plans.length) {
 
-                        fps: 10,
+        container.innerHTML =
+            "No active plans.";
 
-                        qrbox:
-                            function (
-                                width,
-                                height
-                            ) {
+        return;
 
-                                const size =
-                                    Math.min(
-                                        width,
-                                        height
-                                    ) * .70;
+    }
 
+    plans.forEach(
+        plan => {
 
-                                return {
+            const button =
+                document.createElement("button");
 
-                                    width:
-                                        size,
+            button.className = "plan";
 
-                                    height:
-                                        size
+            button.innerHTML = `
 
-                                };
+                <div class="plan-name">
+                    ${escapeHtml(plan.name || "Plan")}
+                </div>
 
-                            }
+                <div class="plan-description">
+                    ${escapeHtml(
+                        plan.description || ""
+                    )}
+                </div>
 
-                    },
+                <div class="plan-bottom">
 
-                    onScanSuccess,
+                    <span class="plan-duration">
+                        ${escapeHtml(
+                            plan.duration || ""
+                        )}
+                    </span>
 
-                    onScanFailure
+                    <span class="plan-price">
+                        ₱${Number(
+                            plan.price || 0
+                        ).toFixed(2)}
+                    </span>
 
-                );
+                </div>
+            `;
 
+            button.onclick =
+                () => {
 
-                scannerRunning = true;
+                    closePlanModal();
 
-                scanBusy = false;
-
-
-                log(
-                    "Camera scanner started."
-                );
-
-            }
-
-            catch (error) {
-
-                scannerRunning = false;
-
-
-                log(
-                    "Camera error: " +
-                    error
-                );
-
-            }
-
-        }
-
-
-
-        /* =================================================
-           STOP CAMERA
-        ================================================= */
-
-        async function stopScanner() {
-
-            if (
-                !html5QrCode ||
-                !scannerRunning
-            ) {
-
-                return;
-
-            }
-
-
-            try {
-
-                await html5QrCode.stop();
-
-            }
-
-            catch (error) {
-
-                console.log(
-                    error
-                );
-
-            }
-
-
-            scannerRunning = false;
-
-        }
-
-
-
-        /* =================================================
-           RESTART CAMERA
-        ================================================= */
-
-        async function restartScanner() {
-
-            scanBusy = false;
-
-            await stopScanner();
-
-            await startScanner();
-
-        }
-
-
-
-        /* =================================================
-           GALLERY
-        ================================================= */
-
-        async function scanGallery() {
-
-            const input =
-                document.createElement(
-                    "input"
-                );
-
-
-            input.type = "file";
-
-            input.accept =
-                "image/*";
-
-
-            input.onchange =
-                async function () {
-
-                    const file =
-                        input.files[0];
-
-
-                    if (!file) return;
-
-
-                    await processGalleryQR(
-                        file
+                    processUser(
+                        currentQR.username,
+                        currentQR.password,
+                        plan
                     );
 
                 };
 
-
-            input.click();
-
-        }
-
-
-
-        async function processGalleryQR(
-            file
-        ) {
-
-            try {
-
-                if (galleryQrCode) {
-
-                    try {
-
-                        await galleryQrCode
-                            .clear();
-
-                    }
-
-                    catch (_) {}
-
-                }
-
-
-                galleryQrCode =
-                    new Html5Qrcode(
-                        "galleryScanner"
-                    );
-
-
-                const result =
-                    await galleryQrCode
-                        .scanFile(
-                            file,
-                            true
-                        );
-
-
-                log(
-                    "Gallery QR detected."
-                );
-
-
-                await processUser(
-                    result
-                );
-
-            }
-
-            catch (error) {
-
-                log(
-                    "Gallery QR scan failed."
-                );
-
-            }
+            container.appendChild(button);
 
         }
+    );
+
+}
 
 
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
 
-        /* =================================================
-           FLASHLIGHT
-        ================================================= */
+function escapeHtml(value) {
 
-        function getVideoTrack() {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 
-            const video =
-                document.querySelector(
-                    "#reader video"
-                );
-
-
-            if (!video) return null;
-
-
-            const stream =
-                video.srcObject;
+}
 
 
-            if (!stream) return null;
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function openSettings() {
+
+    document.getElementById(
+        "settingsModal"
+    ).classList.add("show");
+
+}
+
+function closeSettings() {
+
+    document.getElementById(
+        "settingsModal"
+    ).classList.remove("show");
+
+}
 
 
-            const tracks =
-                stream.getVideoTracks();
+/* =========================================================
+   PASSWORD SHOW/HIDE
+========================================================= */
+
+function togglePassword() {
+
+    const input =
+        document.getElementById(
+            "mtPassword"
+        );
+
+    input.type =
+        input.type === "password"
+            ? "text"
+            : "password";
+
+}
 
 
-            return (
-                tracks[0] ||
-                null
+/* =========================================================
+   SAVE SETTINGS
+========================================================= */
+
+function saveSettings() {
+
+    const remember =
+        document.getElementById(
+            "rememberMe"
+        ).checked;
+
+    if (!remember) {
+
+        localStorage.removeItem(
+            "mikrotik_qr_config"
+        );
+
+        return;
+
+    }
+
+    const config = {
+
+        apiUrl:
+            document.getElementById(
+                "apiUrl"
+            ).value.trim(),
+
+        username:
+            document.getElementById(
+                "mtUsername"
+            ).value.trim(),
+
+        password:
+            document.getElementById(
+                "mtPassword"
+            ).value,
+
+        remember: true
+
+    };
+
+    localStorage.setItem(
+        "mikrotik_qr_config",
+        JSON.stringify(config)
+    );
+
+}
+
+
+/* =========================================================
+   LOAD SAVED SETTINGS
+========================================================= */
+
+function loadSavedSettings() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                "mikrotik_qr_config"
             );
 
-        }
+        if (!saved) return;
 
+        const config =
+            JSON.parse(saved);
 
+        document.getElementById(
+            "apiUrl"
+        ).value =
+            config.apiUrl || "";
 
-        async function toggleFlash() {
+        document.getElementById(
+            "mtUsername"
+        ).value =
+            config.username || "";
 
-            const track =
-                getVideoTrack();
+        document.getElementById(
+            "mtPassword"
+        ).value =
+            config.password || "";
 
+        document.getElementById(
+            "rememberMe"
+        ).checked =
+            config.remember === true;
 
-            if (!track) {
+        mikrotik.apiUrl =
+            config.apiUrl || "";
 
-                log(
-                    "Flashlight not available."
-                );
+        mikrotik.username =
+            config.username || "";
 
-                return;
+        mikrotik.password =
+            config.password || "";
 
-            }
-
-
-            const capabilities =
-                track.getCapabilities();
-
-
-            if (!capabilities.torch) {
-
-                log(
-                    "Torch is not supported."
-                );
-
-                return;
-
-            }
-
-
-            flashOn =
-                !flashOn;
-
-
-            try {
-
-                await track.applyConstraints({
-
-                    advanced: [
-
-                        {
-                            torch:
-                                flashOn
-                        }
-
-                    ]
-
-                });
-
-
-                log(
-
-                    flashOn
-                        ? "Flash ON"
-                        : "Flash OFF"
-
-                );
-
-            }
-
-            catch (error) {
-
-                log(
-                    "Flash error: " +
-                    error.message
-                );
-
-            }
-
-        }
-
-
-
-        /* =================================================
-           PLAN JSON
-        ================================================= */
-
-        async function loadPlans() {
-
-            try {
-
-                const response =
-                    await fetch(
-                        "plan.json",
-                        {
-                            cache:
-                                "no-store"
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "plan.json not found"
-                    );
-
-                }
-
-
-                const data =
-                    await response.json();
-
-
-                plans =
-                    data.plans || [];
-
-
-                renderPlans();
-
-            }
-
-            catch (error) {
-
-                document.getElementById(
-                    "plans"
-                ).textContent =
-                    "Unable to load plans.";
-
-            }
-
-        }
-
-
-
-        function renderPlans() {
-
-            const container =
-                document.getElementById(
-                    "plans"
-                );
-
-
-            container.innerHTML = "";
-
-
-            plans
-                .filter(
-                    plan =>
-                        plan.enabled !== false
-                )
-                .forEach(
-                    plan => {
-
-                        const button =
-                            document.createElement(
-                                "button"
-                            );
-
-
-                        button.className =
-                            "plan";
-
-
-                        button.innerHTML = `
-
-                            <div class="plan-name">
-                                ${escapeHtml(
-                                    plan.name
-                                )}
-                            </div>
-
-                            <div class="plan-description">
-                                ${escapeHtml(
-                                    plan.description ||
-                                    ""
-                                )}
-                            </div>
-
-                            <div class="plan-price">
-                                ${
-                                    plan.price === 0
-                                        ? "FREE"
-                                        : "₱" +
-                                          plan.price
-                                }
-                            </div>
-
-                        `;
-
-
-                        button.onclick =
-                            () => {
-
-                                selectPlan(
-                                    plan
-                                );
-
-                            };
-
-
-                        container.appendChild(
-                            button
-                        );
-
-                    }
-                );
-
-        }
-
-
-
-        function escapeHtml(
-            value = ""
-        ) {
-
-            return String(value)
-
-                .replace(
-                    /&/g,
-                    "&amp;"
-                )
-
-                .replace(
-                    /</g,
-                    "&lt;"
-                )
-
-                .replace(
-                    />/g,
-                    "&gt;"
-                )
-
-                .replace(
-                    /"/g,
-                    "&quot;"
-                )
-
-                .replace(
-                    /'/g,
-                    "&#039;"
-                );
-
-        }
-
-
-
-        /* =================================================
-           SELECT PLAN
-        ================================================= */
-
-        async function selectPlan(
-            plan
-        ) {
-
-            closePlanModal();
-
-
-            if (!currentUser) {
-
-                log(
-                    "No user selected."
-                );
-
-                return;
-
-            }
-
-
-            document.getElementById(
-                "planToAdd"
-            ).textContent =
-                plan.name;
-
-
-            const current =
-                validityToMilliseconds(
-                    currentUser.limitUptime
-                );
-
-
-            const added =
-                validityToMilliseconds(
-                    plan.duration
-                );
-
-
-            const total =
-                current + added;
-
-
-            document.getElementById(
-                "newTotal"
-            ).textContent =
-                formatDuration(
-                    total
-                );
-
-
-            const expiration =
-                new Date(
-                    Date.now() +
-                    total
-                );
-
-
-            document.getElementById(
-                "newExpiration"
-            ).textContent =
-                formatDate(
-                    expiration
-                );
-
+        if (mikrotik.apiUrl) {
 
             log(
-                "Selected plan: " +
-                plan.name
+                "Saved MikroTik configuration loaded."
             );
 
+        }
 
-            /*
-             * Enable this when you want
-             * to execute script3.
-             */
+    } catch (error) {
 
-            // await runScript3();
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================================
+   CLEAR SETTINGS
+========================================================= */
+
+function clearSavedSettings() {
+
+    localStorage.removeItem(
+        "mikrotik_qr_config"
+    );
+
+    document.getElementById(
+        "apiUrl"
+    ).value = "";
+
+    document.getElementById(
+        "mtUsername"
+    ).value = "";
+
+    document.getElementById(
+        "mtPassword"
+    ).value = "";
+
+    document.getElementById(
+        "rememberMe"
+    ).checked = false;
+
+    mikrotik = {
+
+        apiUrl: "",
+        username: "",
+        password: ""
+
+    };
+
+    setStatus(
+        "Configuration cleared.",
+        "warning"
+    );
+
+    log(
+        "Saved MikroTik configuration cleared."
+    );
+
+}
+
+
+/* =========================================================
+   CONNECT MIKROTIK
+========================================================= */
+
+async function connectMikrotik() {
+
+    const apiUrl =
+        document.getElementById(
+            "apiUrl"
+        ).value.trim();
+
+    const username =
+        document.getElementById(
+            "mtUsername"
+        ).value.trim();
+
+    const password =
+        document.getElementById(
+            "mtPassword"
+        ).value;
+
+    if (!apiUrl) {
+
+        alert("Enter MikroTik API URL.");
+
+        return;
+
+    }
+
+    if (!username) {
+
+        alert("Enter MikroTik username.");
+
+        return;
+
+    }
+
+    mikrotik = {
+
+        apiUrl:
+            apiUrl.replace(/\/+$/, ""),
+
+        username,
+        password
+
+    };
+
+    saveSettings();
+
+    setStatus(
+        "Testing MikroTik connection...",
+        "warning"
+    );
+
+    log(
+        "Testing MikroTik REST API..."
+    );
+
+    try {
+
+        const response =
+            await mtFetch(
+                "/system/identity"
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
 
         }
 
+        const data =
+            await response.json();
+
+        const identity =
+            data[0]?.name || "MikroTik";
+
+        setStatus(
+            `Connected: ${identity}`,
+            "online"
+        );
+
+        log(
+            `Connected to MikroTik: ${identity}`
+        );
+
+        closeSettings();
+
+    } catch (error) {
+
+        setStatus(
+            "Connection failed",
+            "error"
+        );
+
+        log(
+            "Connection ERROR: " +
+            error.message
+        );
+
+        alert(
+            "MikroTik connection failed.\n\n" +
+            error.message
+        );
+
+    }
+
+}
 
 
-        /* =================================================
-           PLAN MODAL
-        ================================================= */
+/* =========================================================
+   MIKROTIK FETCH
+========================================================= */
 
-        function openPlanModal() {
+async function mtFetch(
+    endpoint,
+    options = {}
+) {
 
-            document
-                .getElementById(
-                    "planModal"
-                )
-                .classList.add(
-                    "show"
-                );
+    if (!mikrotik.apiUrl) {
+
+        throw new Error(
+            "MikroTik API is not configured."
+        );
+
+    }
+
+    const url =
+        mikrotik.apiUrl +
+        "/" +
+        endpoint.replace(/^\/+/, "");
+
+    const headers = {
+
+        "Content-Type":
+            "application/json",
+
+        "Authorization":
+            "Basic " +
+            btoa(
+                mikrotik.username +
+                ":" +
+                mikrotik.password
+            )
+
+    };
+
+    return fetch(
+        url,
+        {
+            ...options,
+            headers: {
+                ...headers,
+                ...(options.headers || {})
+            }
+        }
+    );
+
+}
+
+
+/* =========================================================
+   QR SUCCESS
+========================================================= */
+
+function onScanSuccess(decodedText) {
+
+    if (scanBusy) return;
+
+    scanBusy = true;
+
+    log("");
+    log("=================================");
+    log("QR CODE SCANNED");
+    log("=================================");
+    log(decodedText);
+    log("=================================");
+
+    try {
+
+        const url =
+            new URL(decodedText);
+
+        const username =
+            url.searchParams.get(
+                "username"
+            );
+
+        const password =
+            url.searchParams.get(
+                "password"
+            );
+
+        if (!username) {
+
+            throw new Error(
+                "QR does not contain username."
+            );
 
         }
 
+        if (!password) {
 
-
-        function closePlanModal() {
-
-            document
-                .getElementById(
-                    "planModal"
-                )
-                .classList.remove(
-                    "show"
-                );
+            throw new Error(
+                "QR does not contain password."
+            );
 
         }
 
+        currentQR = {
+
+            username,
+            password
+
+        };
+
+        log(
+            `Username: ${username}`
+        );
+
+        stopScanner();
+
+        document.getElementById(
+            "planModal"
+        ).classList.add("show");
+
+    } catch (error) {
+
+        log(
+            "Invalid QR: " +
+            error.message
+        );
+
+        alert(
+            "Invalid QR code.\n\n" +
+            error.message
+        );
+
+        finishScan();
+
+    }
+
+}
 
 
-        /* =================================================
-           FIND HOTSPOT USER
-        ================================================= */
+/* =========================================================
+   QR ERROR
+========================================================= */
 
-        async function processUser(
-            username
+function onScanFailure(errorMessage) {
+
+}
+
+
+/* =========================================================
+   START SCANNER
+========================================================= */
+
+async function startScanner() {
+
+    if (scanner) return;
+
+    scanner =
+        new Html5Qrcode(
+            "qr-reader"
+        );
+
+    try {
+
+        const cameras =
+            await Html5Qrcode.getCameras();
+
+        if (!cameras.length) {
+
+            throw new Error(
+                "No camera found."
+            );
+
+        }
+
+        let cameraId =
+            cameras[0].id;
+
+        const backCamera =
+            cameras.find(
+                camera =>
+                    /back|rear|environment/i
+                        .test(camera.label)
+            );
+
+        if (backCamera) {
+
+            cameraId =
+                backCamera.id;
+
+        }
+
+        await scanner.start(
+
+            cameraId,
+
+            {
+                fps: 10,
+
+                qrbox: function(
+                    width,
+                    height
+                ) {
+
+                    const size =
+                        Math.min(
+                            width,
+                            height
+                        ) * 0.70;
+
+                    return {
+
+                        width: size,
+                        height: size
+
+                    };
+
+                }
+
+            },
+
+            onScanSuccess,
+
+            onScanFailure
+
+        );
+
+        log(
+            "Camera scanner started."
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        log(
+            "Camera ERROR: " +
+            error.message
+        );
+
+        setStatus(
+            "Camera unavailable",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   STOP SCANNER
+========================================================= */
+
+async function stopScanner() {
+
+    if (!scanner) return;
+
+    try {
+
+        if (
+            scanner.getState() ===
+            Html5QrcodeScannerState.SCANNING
         ) {
 
-            username =
-                String(username)
-                    .trim();
+            await scanner.stop();
+
+        }
+
+    } catch (error) {
+
+        console.warn(error);
+
+    }
+
+    try {
+
+        scanner.clear();
+
+    } catch (error) {
+
+        console.warn(error);
+
+    }
+
+    scanner = null;
+
+}
 
 
-            if (!username) {
+/* =========================================================
+   RESTART SCANNER
+========================================================= */
 
-                log(
-                    "Empty QR value."
-                );
+async function restartScanner() {
 
-                scanBusy = false;
+    scanBusy = false;
+
+    currentQR = null;
+
+    closePlanModal();
+
+    document.getElementById(
+        "userInfo"
+    ).style.display = "none";
+
+    await stopScanner();
+
+    await startScanner();
+
+}
+
+
+/* =========================================================
+   FINISH SCAN
+========================================================= */
+
+function finishScan() {
+
+    setTimeout(
+        () => {
+
+            scanBusy = false;
+
+            startScanner();
+
+        },
+        1500
+    );
+
+}
+
+
+/* =========================================================
+   GALLERY QR SCANNER
+========================================================= */
+
+async function scanGallery() {
+
+    if (scanBusy) return;
+
+    const input =
+        document.createElement(
+            "input"
+        );
+
+    input.type = "file";
+
+    input.accept =
+        "image/*";
+
+    input.style.display =
+        "none";
+
+    document.body.appendChild(
+        input
+    );
+
+    input.onchange =
+        async function() {
+
+            const file =
+                input.files[0];
+
+            if (!file) {
+
+                input.remove();
 
                 return;
 
             }
 
+            scanBusy = true;
+
+            log("");
+            log("=================================");
+            log("QR CODE FROM GALLERY");
+            log("=================================");
 
             try {
 
-                /*
-                 * IMPORTANT:
-                 * Do NOT download the entire
-                 * hotspot user list.
-                 *
-                 * Only request the
-                 * scanned username.
-                 */
+                const tempId =
+                    "temporaryQrScanner";
 
-                const queryName =
-                    encodeURIComponent(
-                        username
+                const tempScanner =
+                    new Html5Qrcode(
+                        tempId
                     );
 
-
-                const response =
-                    await mtFetch(
-                        `/ip/hotspot/user?name=${queryName}`
+                const decodedText =
+                    await tempScanner.scanFile(
+                        file,
+                        false
                     );
 
+                try {
 
-                if (!response.ok) {
+                    await tempScanner.clear();
 
-                    throw new Error(
-                        `HTTP ${response.status}`
-                    );
-
-                }
-
-
-                const data =
-                    await response.json();
-
-
-                if (
-                    !Array.isArray(data) ||
-                    data.length === 0
-                ) {
-
-                    log(
-                        "User not found: " +
-                        username
-                    );
-
-                    scanBusy = false;
-
-                    return;
-
-                }
-
-
-                currentUser =
-                    data[0];
-
-
-                document.getElementById(
-                    "username"
-                ).textContent =
-                    currentUser.name ||
-                    username;
-
-
-                document.getElementById(
-                    "currentTime"
-                ).textContent =
-                    formatDuration(
-                        validityToMilliseconds(
-                            currentUser.limitUptime
-                        )
-                    );
-
-
-                document
-                    .getElementById(
-                        "userCard"
-                    )
-                    .classList.remove(
-                        "hidden"
-                    );
-
-
-                setStatus(
-                    "Connected",
-                    true
-                );
-
+                } catch (e) {}
 
                 log(
-                    "User loaded: " +
-                    username
+                    decodedText
                 );
 
+                log("=================================");
 
-                openPlanModal();
+                processGalleryQR(
+                    decodedText
+                );
 
-            }
-
-            catch (error) {
+            } catch (error) {
 
                 log(
-                    "User lookup error: " +
+                    "Gallery QR ERROR: " +
                     error.message
                 );
 
+                log("=================================");
+
+                alert(
+                    "No valid QR code found in the image."
+                );
+
+                finishScan();
+
             }
 
-            finally {
+            input.remove();
 
-                scanBusy = false;
+        };
 
-            }
+    input.click();
+
+}
+
+
+/* =========================================================
+   PROCESS GALLERY QR
+========================================================= */
+
+function processGalleryQR(
+    decodedText
+) {
+
+    try {
+
+        const url =
+            new URL(decodedText);
+
+        const username =
+            url.searchParams.get(
+                "username"
+            );
+
+        const password =
+            url.searchParams.get(
+                "password"
+            );
+
+        if (!username) {
+
+            throw new Error(
+                "QR does not contain username."
+            );
 
         }
 
+        if (!password) {
 
+            throw new Error(
+                "QR does not contain password."
+            );
 
-        /* =================================================
-           CREATE USER
-        ================================================= */
+        }
 
-        async function createUser(
+        currentQR = {
+
             username,
             password
-        ) {
 
-            const response =
-                await mtFetch(
-                    "/ip/hotspot/user",
-                    {
+        };
 
-                        method: "PUT",
+        log(
+            `Username: ${username}`
+        );
 
-                        body:
-                            JSON.stringify({
+        document.getElementById(
+            "planModal"
+        ).classList.add("show");
 
-                                name:
-                                    username,
+    } catch (error) {
 
-                                password:
-                                    password
+        log(
+            "Invalid QR: " +
+            error.message
+        );
 
-                            })
+        alert(
+            "Invalid QR code.\n\n" +
+            error.message
+        );
 
-                    }
-                );
+        finishScan();
 
+    }
 
-            if (!response.ok) {
-
-                throw new Error(
-                    `HTTP ${response.status}`
-                );
-
-            }
+}
 
 
-            return response.json();
+/* =========================================================
+   PLAN MODAL
+========================================================= */
+
+function closePlanModal() {
+
+    document.getElementById(
+        "planModal"
+    ).classList.remove("show");
+
+}
+
+
+/* =========================================================
+   PROCESS USER
+========================================================= */
+
+async function processUser(
+    username,
+    password,
+    plan
+) {
+
+    if (!mikrotik.apiUrl) {
+
+        alert(
+            "Configure MikroTik first."
+        );
+
+        openSettings();
+
+        finishScan();
+
+        return;
+
+    }
+
+    if (!plan) {
+
+        finishScan();
+
+        return;
+
+    }
+
+    document.getElementById(
+        "userInfo"
+    ).style.display = "block";
+
+    document.getElementById(
+        "infoUsername"
+    ).textContent = username;
+
+    document.getElementById(
+        "infoPlan"
+    ).textContent =
+        `${plan.name} (${plan.duration})`;
+
+    setStatus(
+        "Looking up user...",
+        "warning"
+    );
+
+    log("");
+    log("=================================");
+    log("USER LOOKUP");
+    log("=================================");
+
+    log(
+        `Searching only for username: ${username}`
+    );
+
+    try {
+
+        const queryName =
+            encodeURIComponent(username);
+
+        const response =
+            await mtFetch(
+                `/ip/hotspot/user?name=${queryName}`
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                `User lookup HTTP ${response.status}`
+            );
+
+        }
+
+        const users =
+            await response.json();
+
+        const user =
+            Array.isArray(users) &&
+            users.length
+                ? users[0]
+                : null;
+
+
+        if (!user) {
+
+            log(
+                "USER NOT FOUND"
+            );
+
+            log(
+                "Creating new hotspot user..."
+            );
+
+            await createUser(
+                username,
+                password,
+                plan
+            );
+
+            return;
 
         }
 
 
+        log(
+            "USER FOUND"
+        );
 
-        /* =================================================
-           RUN SCRIPT3
-        ================================================= */
+        log(
+            `Username: ${user.name || username}`
+        );
 
-        async function runScript3() {
+        const currentExpiration =
+            user.comment || "";
 
-            try {
+        const currentMs =
+            parseExpiration(
+                currentExpiration
+            );
 
-                const response =
-                    await mtFetch(
-                        "/system/script"
-                    );
+        const now =
+            Date.now();
 
+        let currentTimeLeft = 0;
 
-                if (!response.ok) {
+        if (
+            currentMs !== null &&
+            currentMs > now
+        ) {
 
-                    throw new Error(
-                        `HTTP ${response.status}`
-                    );
-
-                }
-
-
-                const scripts =
-                    await response.json();
-
-
-                const script =
-                    scripts.find(
-                        item =>
-                            item.name ===
-                            "script3"
-                    );
-
-
-                if (!script) {
-
-                    throw new Error(
-                        "script3 not found"
-                    );
-
-                }
-
-
-                const id =
-                    script[".id"];
-
-
-                const run =
-                    await mtFetch(
-                        "/system/script/run",
-                        {
-
-                            method: "POST",
-
-                            body:
-                                JSON.stringify({
-
-                                    ".id": id
-
-                                })
-
-                        }
-                    );
-
-
-                if (!run.ok) {
-
-                    throw new Error(
-                        `HTTP ${run.status}`
-                    );
-
-                }
-
-
-                log(
-                    "script3 executed."
-                );
-
-            }
-
-            catch (error) {
-
-                log(
-                    "script3 error: " +
-                    error.message
-                );
-
-            }
+            currentTimeLeft =
+                currentMs - now;
 
         }
 
+        log(
+            "Current Expiration: " +
+            (
+                currentExpiration ||
+                "NONE"
+            )
+        );
+
+        log(
+            "Current Time Left: " +
+            formatDuration(
+                currentTimeLeft
+            )
+        );
 
 
-        /* =================================================
-           VALIDITY CONVERTER
-        ================================================= */
+        const addMs =
+            validityToMilliseconds(
+                plan.duration
+            );
 
-        function validityToMilliseconds(
-            value
-        ) {
+        if (!addMs) {
 
-            if (!value) {
-
-                return 0;
-
-            }
-
-
-            if (
-                typeof value ===
-                "number"
-            ) {
-
-                return value * 1000;
-
-            }
-
-
-            const text =
-                String(value)
-                    .trim()
-                    .toLowerCase();
-
-
-            let total = 0;
-
-
-            const regex =
-                /(\d+)\s*(w|d|h|m|s)/g;
-
-
-            let match;
-
-
-            while (
-                (match =
-                    regex.exec(text))
-            ) {
-
-                const number =
-                    Number(
-                        match[1]
-                    );
-
-
-                switch (
-                    match[2]
-                ) {
-
-                    case "w":
-
-                        total +=
-                            number *
-                            7 *
-                            24 *
-                            60 *
-                            60 *
-                            1000;
-
-                        break;
-
-
-                    case "d":
-
-                        total +=
-                            number *
-                            24 *
-                            60 *
-                            60 *
-                            1000;
-
-                        break;
-
-
-                    case "h":
-
-                        total +=
-                            number *
-                            60 *
-                            60 *
-                            1000;
-
-                        break;
-
-
-                    case "m":
-
-                        total +=
-                            number *
-                            60 *
-                            1000;
-
-                        break;
-
-
-                    case "s":
-
-                        total +=
-                            number *
-                            1000;
-
-                        break;
-
-                }
-
-            }
-
-
-            return total;
+            throw new Error(
+                `Invalid plan duration: ${plan.duration}`
+            );
 
         }
 
+        let newExpirationMs;
 
-
-        /* =================================================
-           EXPIRATION
-        ================================================= */
-
-        function parseExpiration(
-            value
+        if (
+            currentMs !== null &&
+            currentMs > now
         ) {
 
-            if (!value) {
+            newExpirationMs =
+                currentMs + addMs;
 
-                return null;
+        } else {
 
-            }
-
-
-            const date =
-                new Date(value);
-
-
-            if (
-                !isNaN(
-                    date.getTime()
-                )
-            ) {
-
-                return date;
-
-            }
-
-
-            return null;
+            newExpirationMs =
+                now + addMs;
 
         }
 
+        const newTimeLeft =
+            Math.max(
+                0,
+                newExpirationMs - now
+            );
+
+        const newExpirationText =
+            formatDate(
+                newExpirationMs
+            );
 
 
-        /* =================================================
-           FORMAT DATE
-        ================================================= */
+        document.getElementById(
+            "infoCurrentTime"
+        ).textContent =
+            formatDuration(
+                currentTimeLeft
+            );
 
-        function formatDate(
-            date
-        ) {
+        document.getElementById(
+            "infoTotal"
+        ).textContent =
+            formatDuration(
+                newTimeLeft
+            );
 
-            if (!date) {
+        document.getElementById(
+            "infoExpiration"
+        ).textContent =
+            newExpirationText;
 
-                return "—";
 
-            }
+        log(
+            `Plan Selected: ${plan.name}`
+        );
+
+        log(
+            `Duration: ${plan.duration}`
+        );
+
+        log(
+            `Price: ₱${Number(
+                plan.price || 0
+            ).toFixed(2)}`
+        );
+
+        log(
+            "Time to Add: " +
+            formatDuration(addMs)
+        );
+
+        log(
+            "New Total Time Left: " +
+            formatDuration(newTimeLeft)
+        );
+
+        log(
+            "New Expiration: " +
+            newExpirationText
+        );
 
 
-            return date.toLocaleString(
-                undefined,
+        setStatus(
+            "Updating MikroTik...",
+            "warning"
+        );
+
+        log(
+            "Updating MikroTik..."
+        );
+
+        const userId =
+            user[".id"];
+
+        if (!userId) {
+
+            throw new Error(
+                "MikroTik user ID (.id) not found."
+            );
+
+        }
+
+        const updateResponse =
+            await mtFetch(
+                `/ip/hotspot/user/${encodeURIComponent(userId)}`,
                 {
+                    method: "PATCH",
 
-                    year:
-                        "numeric",
+                    body: JSON.stringify({
 
-                    month:
-                        "short",
+                        comment:
+                            newExpirationText,
 
-                    day:
-                        "numeric",
+                        password:
+                            password
 
-                    hour:
-                        "numeric",
-
-                    minute:
-                        "2-digit"
+                    })
 
                 }
             );
 
-        }
+        if (!updateResponse.ok) {
 
-
-
-        /* =================================================
-           FORMAT DURATION
-        ================================================= */
-
-        function formatDuration(
-            ms
-        ) {
-
-            if (
-                !ms ||
-                ms <= 0
-            ) {
-
-                return "0m";
-
-            }
-
-
-            let seconds =
-                Math.floor(
-                    ms / 1000
-                );
-
-
-            const days =
-                Math.floor(
-                    seconds /
-                    86400
-                );
-
-
-            seconds %=
-                86400;
-
-
-            const hours =
-                Math.floor(
-                    seconds /
-                    3600
-                );
-
-
-            seconds %=
-                3600;
-
-
-            const minutes =
-                Math.floor(
-                    seconds /
-                    60
-                );
-
-
-            const parts = [];
-
-
-            if (days) {
-
-                parts.push(
-                    `${days}d`
-                );
-
-            }
-
-
-            if (hours) {
-
-                parts.push(
-                    `${hours}h`
-                );
-
-            }
-
-
-            if (minutes) {
-
-                parts.push(
-                    `${minutes}m`
-                );
-
-            }
-
-
-            if (
-                parts.length === 0
-            ) {
-
-                parts.push(
-                    `${seconds}s`
-                );
-
-            }
-
-
-            return parts.join(
-                " "
+            throw new Error(
+                `Update HTTP ${updateResponse.status}`
             );
 
         }
 
+        log(
+            "User updated successfully."
+        );
+
+        log(
+            "Added: " +
+            formatDuration(addMs)
+        );
+
+        log(
+            "Total remaining: " +
+            formatDuration(newTimeLeft)
+        );
 
 
-        /* =================================================
-           INITIALIZE
-        ================================================= */
+        await runScript3();
 
-        async function init() {
 
-            loadTheme();
+        setStatus(
+            "User updated successfully.",
+            "online"
+        );
 
-            loadSavedSettings();
+        finishScan();
 
-            await loadPlans();
+    } catch (error) {
 
-            await startScanner();
+        console.error(error);
+
+        log(
+            "ERROR: " +
+            error.message
+        );
+
+        setStatus(
+            "Operation failed",
+            "error"
+        );
+
+        alert(
+            "Operation failed.\n\n" +
+            error.message
+        );
+
+        finishScan();
+
+    }
+
+}
+
+
+/* =========================================================
+   CREATE USER
+========================================================= */
+
+async function createUser(
+    username,
+    password,
+    plan
+) {
+
+    const addMs =
+        validityToMilliseconds(
+            plan.duration
+        );
+
+    if (!addMs) {
+
+        throw new Error(
+            `Invalid plan duration: ${plan.duration}`
+        );
+
+    }
+
+    const expirationMs =
+        Date.now() + addMs;
+
+    const expirationText =
+        formatDate(
+            expirationMs
+        );
+
+
+    document.getElementById(
+        "infoCurrentTime"
+    ).textContent =
+        "0 minutes";
+
+    document.getElementById(
+        "infoTotal"
+    ).textContent =
+        formatDuration(addMs);
+
+    document.getElementById(
+        "infoExpiration"
+    ).textContent =
+        expirationText;
+
+
+    log(
+        `Plan Selected: ${plan.name}`
+    );
+
+    log(
+        `Duration: ${plan.duration}`
+    );
+
+    log(
+        `Price: ₱${Number(
+            plan.price || 0
+        ).toFixed(2)}`
+    );
+
+    log(
+        "Time to Add: " +
+        formatDuration(addMs)
+    );
+
+    log(
+        "New Expiration: " +
+        expirationText
+    );
+
+    log(
+        "Creating MikroTik user..."
+    );
+
+    setStatus(
+        "Creating user...",
+        "warning"
+    );
+
+
+    const response =
+        await mtFetch(
+            "/ip/hotspot/user",
+            {
+                method: "PUT",
+
+                body: JSON.stringify({
+
+                    name:
+                        username,
+
+                    password:
+                        password,
+
+                    comment:
+                        expirationText,
+
+                    profile:
+                        "General"
+
+                })
+
+            }
+        );
+
+
+    if (!response.ok) {
+
+        let errorText =
+            "";
+
+        try {
+
+            errorText =
+                await response.text();
+
+        } catch (e) {}
+
+        throw new Error(
+            `Create HTTP ${response.status}` +
+            (
+                errorText
+                    ? `: ${errorText}`
+                    : ""
+            )
+        );
+
+    }
+
+
+    log(
+        "New user created successfully."
+    );
+
+    log(
+        "Expiration: " +
+        expirationText
+    );
+
+
+    await runScript3();
+
+
+    setStatus(
+        "New user created successfully.",
+        "online"
+    );
+
+    finishScan();
+
+}
+
+
+/* =========================================================
+   RUN SCRIPT 3
+========================================================= */
+
+async function runScript3() {
+
+    try {
+
+        log(
+            "Running script3..."
+        );
+
+        const response =
+            await mtFetch(
+                "/system/script/run",
+                {
+                    method: "POST",
+
+                    body: JSON.stringify({
+
+                        ".id":
+                            "*script3"
+
+                    })
+
+                }
+            );
+
+        if (!response.ok) {
+
+            log(
+                `script3 HTTP ${response.status}`
+            );
+
+            return;
 
         }
 
+        log(
+            "script3 executed."
+        );
 
-        init();
+    } catch (error) {
+
+        log(
+            "script3 ERROR: " +
+            error.message
+        );
+
+    }
+
+}
 
 
-    </script>
+/* =========================================================
+   VALIDITY TO MILLISECONDS
+========================================================= */
 
+function validityToMilliseconds(
+    value
+) {
+
+    if (!value) return 0;
+
+    const text =
+        String(value)
+            .trim()
+            .toLowerCase();
+
+    const match =
+        text.match(
+            /^(\d+(?:\.\d+)?)\s*(m|h|d)$/
+        );
+
+    if (!match) {
+
+        return 0;
+
+    }
+
+    const amount =
+        Number(match[1]);
+
+    const unit =
+        match[2];
+
+    if (unit === "m") {
+
+        return amount *
+            60 *
+            1000;
+
+    }
+
+    if (unit === "h") {
+
+        return amount *
+            60 *
+            60 *
+            1000;
+
+    }
+
+    if (unit === "d") {
+
+        return amount *
+            24 *
+            60 *
+            60 *
+            1000;
+
+    }
+
+    return 0;
+
+}
+
+
+/* =========================================================
+   PARSE MIKROTIK EXPIRATION
+========================================================= */
+
+function parseExpiration(
+    value
+) {
+
+    if (!value) return null;
+
+    const match =
+        String(value)
+            .trim()
+            .match(
+                /^([a-z]{3})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):(\d{2})$/i
+            );
+
+    if (!match) {
+
+        return null;
+
+    }
+
+    const months = {
+
+        jan: 0,
+        feb: 1,
+        mar: 2,
+        apr: 3,
+        may: 4,
+        jun: 5,
+        jul: 6,
+        aug: 7,
+        sep: 8,
+        oct: 9,
+        nov: 10,
+        dec: 11
+
+    };
+
+    const month =
+        months[
+            match[1].toLowerCase()
+        ];
+
+    if (
+        month === undefined
+    ) {
+
+        return null;
+
+    }
+
+    const date =
+        new Date(
+
+            Number(match[3]),
+
+            month,
+
+            Number(match[2]),
+
+            Number(match[4]),
+
+            Number(match[5]),
+
+            Number(match[6])
+
+        );
+
+    const timestamp =
+        date.getTime();
+
+    return Number.isNaN(timestamp)
+        ? null
+        : timestamp;
+
+}
+
+
+/* =========================================================
+   FORMAT DATE
+========================================================= */
+
+function formatDate(
+    timestamp
+) {
+
+    const date =
+        new Date(timestamp);
+
+    const months = [
+
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "may",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "oct",
+        "nov",
+        "dec"
+
+    ];
+
+    const month =
+        months[
+            date.getMonth()
+        ];
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(2, "0");
+
+    const year =
+        date.getFullYear();
+
+    const hours =
+        String(
+            date.getHours()
+        ).padStart(2, "0");
+
+    const minutes =
+        String(
+            date.getMinutes()
+        ).padStart(2, "0");
+
+    const seconds =
+        String(
+            date.getSeconds()
+        ).padStart(2, "0");
+
+    return (
+        `${month}/${day}/${year} ` +
+        `${hours}:${minutes}:${seconds}`
+    );
+
+}
+
+
+/* =========================================================
+   FORMAT DURATION
+========================================================= */
+
+function formatDuration(
+    milliseconds
+) {
+
+    if (
+        !milliseconds ||
+        milliseconds <= 0
+    ) {
+
+        return "EXPIRED";
+
+    }
+
+    let totalSeconds =
+        Math.floor(
+            milliseconds / 1000
+        );
+
+    const days =
+        Math.floor(
+            totalSeconds / 86400
+        );
+
+    totalSeconds %= 86400;
+
+    const hours =
+        Math.floor(
+            totalSeconds / 3600
+        );
+
+    totalSeconds %= 3600;
+
+    const minutes =
+        Math.floor(
+            totalSeconds / 60
+        );
+
+    const parts = [];
+
+    if (days) {
+
+        parts.push(
+            `${days} day${days !== 1 ? "s" : ""}`
+        );
+
+    }
+
+    if (hours) {
+
+        parts.push(
+            `${hours} hour${hours !== 1 ? "s" : ""}`
+        );
+
+    }
+
+    if (minutes) {
+
+        parts.push(
+            `${minutes} minute${minutes !== 1 ? "s" : ""}`
+        );
+
+    }
+
+    if (!parts.length) {
+
+        return "less than 1 minute";
+
+    }
+
+    return parts.join(" ");
+
+}
+
+
+/* =========================================================
+   FLASHLIGHT
+========================================================= */
+
+async function toggleFlash() {
+
+    try {
+
+        if (!scanner) {
+
+            alert(
+                "Camera scanner is not running."
+            );
+
+            return;
+
+        }
+
+        const videoTrack =
+            getVideoTrack();
+
+        if (!videoTrack) {
+
+            alert(
+                "Camera track not available."
+            );
+
+            return;
+
+        }
+
+        const capabilities =
+            videoTrack.getCapabilities();
+
+        if (
+            !capabilities.torch
+        ) {
+
+            alert(
+                "Flashlight is not supported by this camera."
+            );
+
+            return;
+
+        }
+
+        currentFlashTrack =
+            videoTrack;
+
+        const settings =
+            videoTrack.getSettings();
+
+        const enabled =
+            settings.torch === true;
+
+        await videoTrack.applyConstraints({
+
+            advanced: [
+
+                {
+                    torch: !enabled
+                }
+
+            ]
+
+        });
+
+        document.getElementById(
+            "flashButton"
+        ).textContent =
+            !enabled
+                ? "🔦 Flash ON"
+                : "🔦 Flash";
+
+    } catch (error) {
+
+        console.error(error);
+
+        log(
+            "Flashlight ERROR: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   GET VIDEO TRACK
+========================================================= */
+
+function getVideoTrack() {
+
+    const video =
+        document.querySelector(
+            "#qr-reader video"
+        );
+
+    if (
+        !video ||
+        !video.srcObject
+    ) {
+
+        return null;
+
+    }
+
+    const tracks =
+        video.srcObject.getVideoTracks();
+
+    return tracks.length
+        ? tracks[0]
+        : null;
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+async function init() {
+
+    /*
+     * Theme is loaded first
+     * so the page starts with the
+     * selected appearance.
+     */
+
+    loadTheme();
+
+    log(
+        "Initializing QR WiFi Manager..."
+    );
+
+    loadSavedSettings();
+
+    await loadPlans();
+
+    await startScanner();
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+init();
+
+
+</script>
 
 </body>
 
