@@ -1030,6 +1030,124 @@
 
         }
 
+
+
+
+
+
+
+
+/* =====================================================
+   QR SCAN CORNER MARKERS
+===================================================== */
+
+#qr-reader {
+    position: relative;
+}
+
+/* Scanner frame */
+#qr-reader::before {
+    content: "";
+    position: absolute;
+
+    width: 210px;
+    height: 210px;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    pointer-events: none;
+
+    z-index: 20;
+
+    background:
+        linear-gradient(var(--primary), var(--primary)) top left,
+        linear-gradient(var(--primary), var(--primary)) top right,
+        linear-gradient(var(--primary), var(--primary)) bottom left,
+        linear-gradient(var(--primary), var(--primary)) bottom right;
+
+    background-size:
+        35px 4px,
+        35px 4px,
+        35px 4px,
+        35px 4px;
+
+    background-repeat: no-repeat;
+}
+
+/* Optional scanning line */
+#qr-reader::after {
+    content: "";
+
+    position: absolute;
+
+    width: 210px;
+    height: 2px;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    background: var(--primary);
+
+    opacity: 0.7;
+
+    box-shadow:
+        0 0 8px var(--primary);
+
+    pointer-events: none;
+
+    z-index: 21;
+
+    animation: qrScanLine 2s ease-in-out infinite;
+}
+
+@keyframes qrScanLine {
+
+    0% {
+        transform:
+            translate(-50%, -105px);
+    }
+
+    50% {
+        transform:
+            translate(-50%, 105px);
+    }
+
+    100% {
+        transform:
+            translate(-50%, -105px);
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 500px) {
+
+    #qr-reader::before {
+        width: 190px;
+        height: 190px;
+
+        background-size:
+            32px 4px,
+            32px 4px,
+            32px 4px,
+            32px 4px;
+    }
+
+    #qr-reader::after {
+        width: 190px;
+    }
+
+}
+
     </style>
 
 </head>
