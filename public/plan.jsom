@@ -1,0 +1,44 @@
+{
+  "plans": [
+    {
+      "id": "1h",
+      "name": "FREE 1 HOUR",
+      "description": "Unli Internet — 1 hour",
+      "duration": "1h",
+      "price": 0,
+      "enabled": true
+    },
+    {
+      "id": "3d",
+      "name": "3 DAYS",
+      "description": "Unli Internet — 3 days",
+      "duration": "3d",
+      "price": 50,
+      "enabled": true
+    },
+    {
+      "id": "7d",
+      "name": "7 DAYS",
+      "description": "Unli Internet — 7 days",
+      "duration": "7d",
+      "price": 100,
+      "enabled": true
+    },
+    {
+      "id": "15d",
+      "name": "15 DAYS",
+      "description": "Unli Internet — 15 days",
+      "duration": "15d",
+      "price": 180,
+      "enabled": true
+    },
+    {
+      "id": "30d",
+      "name": "30 DAYS",
+      "description": "Unli Internet — 30 days",
+      "duration": "30d",
+      "price": 300,
+      "enabled": true
+    }
+  ]
+}
