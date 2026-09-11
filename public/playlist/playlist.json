@@ -1,24 +1,31 @@
 {
-  "title": "Karaoke Jukebox",
+  "title": "Karaoke Jukebox2",
   "videos": [
     {
       "title": "214",
       "artist": "Rivermaya",
-      "video": "karaoke/214.mp4",
+      "video": "videos/214.mp4",
       "thumbnail": "thumbnails/214.jpg",
       "description": "Rivermaya - 214"
     },
     {
       "title": "Beer",
       "artist": "Itchyworms",
-      "video": "karaoke/beer.mp4",
+      "video": "videos/beer.mp4",
       "description": "Itchyworms - Beer"
     },
     {
       "title": "Harana",
       "artist": "Parokya ni Edgar",
-      "video": "karaoke/harana.mp4",
+      "video": "videos/harana.mp4",
+      "thumbnail": "thumbnails/harana.jpg",
       "description": "Parokya ni Edgar - Harana"
+    },
+    {
+      "title": "Huling Sayaw",
+      "artist": "Kamikazee",
+      "video": "videos/huling-sayaw.mp4",
+      "description": "Kamikazee - Huling Sayaw"
     }
   ]
 }
