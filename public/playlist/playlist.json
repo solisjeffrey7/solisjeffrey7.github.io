@@ -2,22 +2,16 @@
   "title": "My Video Playlist",
   "videos": [
     {
-      "title": "Welcome Video",
-      "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "title": "Big Buck Bunny",
+      "video": "https://media.w3.org/2010/05/sintel/trailer.mp4",
       "thumbnail": "thumbnails/video1.jpg",
-      "description": "Welcome to my video playlist."
+      "description": "Sample HTML5 video."
     },
     {
-      "title": "Episode 2i - Introduction",
-      "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "title": "Sintel Trailer",
+      "video": "https://media.w3.org/2010/05/bunny/trailer.mp4",
       "thumbnail": "thumbnails/video2.jpg",
-      "description": "Introduction and basic information."
-    },
-    {
-      "title": "Episode 3 - Tutorial",
-      "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-      "thumbnail": "thumbnails/video3.jpg",
-      "description": "Step-by-step tutorial."
+      "description": "Second sample video."
     }
   ]
 }
