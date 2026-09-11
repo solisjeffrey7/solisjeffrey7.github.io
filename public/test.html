@@ -342,7 +342,7 @@
 
 
         /* =====================================================
-           USER TIME CARD
+           USER INFO
         ====================================================== */
 
         #userInfo {
@@ -408,6 +408,8 @@
             text-align: right;
 
             font-weight: bold;
+
+            word-break: break-word;
 
         }
 
@@ -553,6 +555,43 @@
             color: #aaa;
 
             font-size: 18px;
+
+            cursor: pointer;
+
+        }
+
+
+        /* =====================================================
+           REMEMBER ME
+        ====================================================== */
+
+        .remember-row {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            margin-top: 5px;
+
+            color: #ccc;
+
+            font-size: 13px;
+
+            cursor: pointer;
+
+            user-select: none;
+
+        }
+
+
+        .remember-row input {
+
+            width: 18px;
+            height: 18px;
+
+            accent-color: #008cff;
 
             cursor: pointer;
 
@@ -728,12 +767,16 @@
 <div class="container">
 
 
-    <!-- CAMERA -->
+    <!-- =====================================================
+         CAMERA
+    ====================================================== -->
 
     <div id="qr-reader"></div>
 
 
-    <!-- BUTTONS -->
+    <!-- =====================================================
+         BUTTONS
+    ====================================================== -->
 
     <div class="buttons">
 
@@ -756,7 +799,9 @@
     </div>
 
 
-    <!-- HIDDEN GALLERY INPUT -->
+    <!-- =====================================================
+         GALLERY INPUT
+    ====================================================== -->
 
     <input
         id="galleryInput"
@@ -766,7 +811,9 @@
     >
 
 
-    <!-- STATUS -->
+    <!-- =====================================================
+         STATUS
+    ====================================================== -->
 
     <div
         id="status"
@@ -777,7 +824,7 @@
 
 
     <!-- =====================================================
-         USER INFORMATION
+         USER INFO
     ====================================================== -->
 
     <div id="userInfo">
@@ -869,7 +916,9 @@
     </div>
 
 
-    <!-- LOG -->
+    <!-- =====================================================
+         LOG
+    ====================================================== -->
 
     <div class="log-title">
         Activity Log
@@ -904,6 +953,8 @@
         </div>
 
 
+        <!-- API URL -->
+
         <div class="form-group">
 
             <label>
@@ -921,6 +972,8 @@
         </div>
 
 
+        <!-- USERNAME -->
+
         <div class="form-group">
 
             <label>
@@ -937,6 +990,8 @@
 
         </div>
 
+
+        <!-- PASSWORD -->
 
         <div class="form-group">
 
@@ -967,6 +1022,26 @@
 
         </div>
 
+
+        <!-- =================================================
+             REMEMBER ME
+        ================================================== -->
+
+        <label class="remember-row">
+
+            <input
+                id="rememberMe"
+                type="checkbox"
+            >
+
+            <span>
+                Remember Me
+            </span>
+
+        </label>
+
+
+        <!-- BUTTONS -->
 
         <div class="modal-buttons">
 
@@ -1148,6 +1223,14 @@ let planResolver = null;
 
 
 /* =========================================================
+   STORAGE KEY
+========================================================= */
+
+const CONFIG_KEY =
+    "mikrotik_qr_config";
+
+
+/* =========================================================
    LOG
 ========================================================= */
 
@@ -1251,6 +1334,14 @@ function saveSettings() {
             .value;
 
 
+    const remember =
+        document
+            .getElementById(
+                "rememberMe"
+            )
+            .checked;
+
+
     if (!apiUrl) {
 
         alert(
@@ -1305,15 +1396,77 @@ function saveSettings() {
     };
 
 
+    /*
+       Save configuration
+       only if Remember Me
+       is checked.
+    */
+
+    if (remember) {
+
+        try {
+
+            localStorage.setItem(
+
+                CONFIG_KEY,
+
+                JSON.stringify({
+
+                    apiUrl:
+                        apiUrl,
+
+                    username:
+                        username,
+
+                    password:
+                        password,
+
+                    remember:
+                        true
+
+                })
+
+            );
+
+
+            log(
+                "Configuration saved. Remember Me is ON.",
+                "success"
+            );
+
+
+        } catch (error) {
+
+            log(
+                "Could not save configuration: " +
+                error.message,
+                "warning"
+            );
+
+        }
+
+    } else {
+
+        /*
+           Remove previously
+           saved configuration.
+        */
+
+        localStorage.removeItem(
+            CONFIG_KEY
+        );
+
+
+        log(
+            "Remember Me is OFF. Configuration will not be saved."
+        );
+
+    }
+
+
     updateStatus();
 
     closeSettings();
-
-
-    log(
-        "MikroTik API configuration loaded.",
-        "success"
-    );
 
 
     testConnection();
@@ -1328,6 +1481,15 @@ function saveSettings() {
 function clearSettings() {
 
     mikrotik = null;
+
+
+    /*
+       Remove saved config.
+    */
+
+    localStorage.removeItem(
+        CONFIG_KEY
+    );
 
 
     document
@@ -1351,13 +1513,150 @@ function clearSettings() {
         .value = "";
 
 
+    document
+        .getElementById(
+            "rememberMe"
+        )
+        .checked = false;
+
+
     updateStatus();
 
 
     log(
-        "MikroTik API configuration cleared.",
+        "Configuration and saved credentials cleared.",
         "warning"
     );
+
+}
+
+
+/* =========================================================
+   LOAD SAVED SETTINGS
+========================================================= */
+
+function loadSavedSettings() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                CONFIG_KEY
+            );
+
+
+        if (!saved) {
+
+            return;
+
+        }
+
+
+        const config =
+            JSON.parse(
+                saved
+            );
+
+
+        if (
+            !config.apiUrl ||
+            !config.username ||
+            !config.password
+        ) {
+
+            localStorage.removeItem(
+                CONFIG_KEY
+            );
+
+            return;
+
+        }
+
+
+        /*
+           Restore fields.
+        */
+
+        document
+            .getElementById(
+                "apiUrl"
+            )
+            .value =
+                config.apiUrl;
+
+
+        document
+            .getElementById(
+                "apiUser"
+            )
+            .value =
+                config.username;
+
+
+        document
+            .getElementById(
+                "apiPassword"
+            )
+            .value =
+                config.password;
+
+
+        document
+            .getElementById(
+                "rememberMe"
+            )
+            .checked =
+                true;
+
+
+        /*
+           Restore active
+           MikroTik config.
+        */
+
+        mikrotik = {
+
+            apiUrl:
+                config.apiUrl,
+
+            username:
+                config.username,
+
+            password:
+                config.password
+
+        };
+
+
+        updateStatus();
+
+
+        log(
+            "Saved MikroTik configuration restored.",
+            "success"
+        );
+
+
+        /*
+           Test automatically.
+        */
+
+        testConnection();
+
+
+    } catch (error) {
+
+        localStorage.removeItem(
+            CONFIG_KEY
+        );
+
+
+        log(
+            "Saved configuration could not be restored.",
+            "warning"
+        );
+
+    }
 
 }
 
@@ -1552,6 +1851,13 @@ async function apiRequest(
 
 async function testConnection() {
 
+    if (!mikrotik) {
+
+        return;
+
+    }
+
+
     log(
         "Testing MikroTik REST API..."
     );
@@ -1649,6 +1955,9 @@ async function onScanSuccess(
     scanBusy = true;
 
 
+    hideUserInfo();
+
+
     log(
         "================================"
     );
@@ -1679,7 +1988,7 @@ async function onScanSuccess(
 
 
 /* =========================================================
-   PROCESS QR
+   PROCESS QR CONTENT
 ========================================================= */
 
 async function processQrContent(
@@ -1781,10 +2090,6 @@ async function updateHotspotUser(
 
     try {
 
-        /*
-           Get all hotspot users
-        */
-
         log(
             "GET /ip/hotspot/user"
         );
@@ -1852,10 +2157,6 @@ async function updateHotspotUser(
             );
 
 
-            /*
-               Calculate current remaining
-            */
-
             const expirationDate =
                 parseExpiration(
                     oldComment
@@ -1890,10 +2191,6 @@ async function updateHotspotUser(
             );
 
 
-            /*
-               Show current info
-            */
-
             showUserInfo(
 
                 username,
@@ -1910,7 +2207,7 @@ async function updateHotspotUser(
 
 
             /*
-               Select plan
+               Select plan.
             */
 
             const validity =
@@ -1934,10 +2231,6 @@ async function updateHotspotUser(
             }
 
 
-            /*
-               Calculate added time
-            */
-
             const addMilliseconds =
                 validityToMilliseconds(
                     validity
@@ -1951,7 +2244,7 @@ async function updateHotspotUser(
 
 
             /*
-               Calculate NEW total
+               New expiration.
             */
 
             let newExpiration;
@@ -1965,16 +2258,22 @@ async function updateHotspotUser(
 
                 newExpiration =
                     new Date(
-                        expirationDate.getTime() +
+
+                        expirationDate.getTime()
+                        +
                         addMilliseconds
+
                     );
 
             } else {
 
                 newExpiration =
                     new Date(
-                        Date.now() +
+
+                        Date.now()
+                        +
                         addMilliseconds
+
                     );
 
             }
@@ -1982,10 +2281,13 @@ async function updateHotspotUser(
 
             const newTotalMilliseconds =
                 Math.max(
+
                     0,
+
                     newExpiration.getTime()
                     -
                     Date.now()
+
                 );
 
 
@@ -2002,7 +2304,7 @@ async function updateHotspotUser(
 
 
             /*
-               Display complete information
+               Update display.
             */
 
             showUserInfo(
@@ -2052,10 +2354,6 @@ async function updateHotspotUser(
                 "Updating MikroTik..."
             );
 
-
-            /*
-               Update user
-            */
 
             await apiRequest(
 
@@ -2138,10 +2436,6 @@ async function updateHotspotUser(
         );
 
 
-        /*
-           Select plan
-        */
-
         const validity =
             await selectValidity();
 
@@ -2175,8 +2469,11 @@ async function updateHotspotUser(
 
         const newExpiration =
             new Date(
-                Date.now() +
+
+                Date.now()
+                +
                 addMilliseconds
+
             );
 
 
@@ -2298,7 +2595,7 @@ async function updateHotspotUser(
 
 
 /* =========================================================
-   USER INFO DISPLAY
+   USER INFO
 ========================================================= */
 
 function showUserInfo(
@@ -2361,10 +2658,6 @@ function showUserInfo(
 }
 
 
-/* =========================================================
-   HIDE USER INFO
-========================================================= */
-
 function hideUserInfo() {
 
     document
@@ -2420,9 +2713,11 @@ function validityToMilliseconds(
     ) {
 
         total +=
+
             Number(
                 match[1]
             ) *
+
             units[
                 match[2]
             ];
@@ -2497,12 +2792,15 @@ function formatDuration(
     if (days > 0) {
 
         parts.push(
+
             days +
+
             (
                 days === 1
                     ? " day"
                     : " days"
             )
+
         );
 
     }
@@ -2511,12 +2809,15 @@ function formatDuration(
     if (hours > 0) {
 
         parts.push(
+
             hours +
+
             (
                 hours === 1
                     ? " hour"
                     : " hours"
             )
+
         );
 
     }
@@ -2525,22 +2826,19 @@ function formatDuration(
     if (minutes > 0) {
 
         parts.push(
+
             minutes +
+
             (
                 minutes === 1
                     ? " minute"
                     : " minutes"
             )
+
         );
 
     }
 
-
-    /*
-       Show seconds only if
-       remaining time is less
-       than one minute.
-    */
 
     if (
         seconds > 0 &&
@@ -2548,12 +2846,15 @@ function formatDuration(
     ) {
 
         parts.push(
+
             seconds +
+
             (
                 seconds === 1
                     ? " second"
                     : " seconds"
             )
+
         );
 
     }
@@ -2829,8 +3130,8 @@ async function scanGallery(
 
     /*
        Temporary invisible scanner.
-       Hindi ipapakita ang image
-       sa visible QR camera area.
+       Hindi lalabas ang image
+       sa camera preview.
     */
 
     const tempContainer =
@@ -2880,10 +3181,6 @@ async function scanGallery(
 
     try {
 
-        /*
-           Scan image directly.
-        */
-
         const decodedText =
             await imageScanner.scanFile(
                 file,
@@ -2892,8 +3189,7 @@ async function scanGallery(
 
 
         /*
-           IMPORTANT:
-           Log QR content immediately.
+           Log immediately.
         */
 
         log(
@@ -3020,8 +3316,10 @@ async function toggleFlash() {
             advanced: [
 
                 {
+
                     torch:
                         !current
+
                 }
 
             ]
@@ -3040,9 +3338,11 @@ async function toggleFlash() {
 
 
         log(
+
             current
                 ? "Flashlight OFF."
                 : "Flashlight ON."
+
         );
 
 
@@ -3380,6 +3680,18 @@ log(
     "Open ⚙️ to configure MikroTik."
 );
 
+
+/*
+   Restore Remember Me
+   configuration first.
+*/
+
+loadSavedSettings();
+
+
+/*
+   Start camera.
+*/
 
 startScanner();
 
