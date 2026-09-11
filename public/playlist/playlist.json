@@ -3,19 +3,19 @@
   "videos": [
     {
       "title": "Welcome Video",
-      "video": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
       "thumbnail": "thumbnails/video1.jpg",
       "description": "Welcome to my video playlist."
     },
     {
       "title": "Episode 2i - Introduction",
-      "video": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
       "thumbnail": "thumbnails/video2.jpg",
       "description": "Introduction and basic information."
     },
     {
       "title": "Episode 3 - Tutorial",
-      "video": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
       "thumbnail": "thumbnails/video3.jpg",
       "description": "Step-by-step tutorial."
     }
