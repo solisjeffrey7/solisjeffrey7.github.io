@@ -1,0 +1,23 @@
+{
+  "title": "My Video Playlist",
+  "videos": [
+    {
+      "title": "Welcome Video",
+      "video": "videos/video1.mp4",
+      "thumbnail": "thumbnails/video1.jpg",
+      "description": "Welcome to my video playlist."
+    },
+    {
+      "title": "Episode 2 - Introduction",
+      "video": "videos/video2.mp4",
+      "thumbnail": "thumbnails/video2.jpg",
+      "description": "Introduction and basic information."
+    },
+    {
+      "title": "Episode 3 - Tutorial",
+      "video": "videos/video3.mp4",
+      "thumbnail": "thumbnails/video3.jpg",
+      "description": "Step-by-step tutorial."
+    }
+  ]
+}
