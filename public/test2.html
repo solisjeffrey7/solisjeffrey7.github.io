@@ -371,7 +371,26 @@
 
 
         /* =====================================================
-           QR SCANNER
+           QR CAMERA CONTAINER
+        ===================================================== */
+
+        .qr-camera {
+
+            position: relative;
+
+            width: 100%;
+
+            overflow: hidden;
+
+            border-radius: 12px;
+
+            background: #000;
+
+        }
+
+
+        /* =====================================================
+           ACTUAL QR READER
         ===================================================== */
 
         #qr-reader {
@@ -391,6 +410,10 @@
 
             width: 100% !important;
 
+            height: auto !important;
+
+            display: block;
+
             border-radius: 12px;
 
         }
@@ -406,6 +429,168 @@
         #qr-reader__dashboard {
 
             display: none !important;
+
+        }
+
+
+        /* =====================================================
+           DARK TRANSPARENT OVERLAY
+           
+           The area outside the QR square becomes darker.
+        ===================================================== */
+
+        .qr-overlay {
+
+            position: absolute;
+
+            inset: 0;
+
+            z-index: 10;
+
+            pointer-events: none;
+
+            background: rgba(0, 0, 0, 0.48);
+
+            /*
+                Cut out the center area.
+                The QR area stays transparent.
+            */
+
+            -webkit-mask:
+                linear-gradient(#000 0 0) content-box,
+                linear-gradient(#000 0 0);
+
+            -webkit-mask-composite: xor;
+
+            mask:
+                linear-gradient(#000 0 0) content-box,
+                linear-gradient(#000 0 0);
+
+            mask-composite: exclude;
+
+            padding:
+                calc(50% - 110px);
+
+        }
+
+
+        /* =====================================================
+           QR FRAME
+        ===================================================== */
+
+        .qr-frame {
+
+            position: absolute;
+
+            z-index: 20;
+
+            width: 220px;
+            height: 220px;
+
+            top: 50%;
+            left: 50%;
+
+            transform:
+                translate(-50%, -50%);
+
+            pointer-events: none;
+
+        }
+
+
+        /* =====================================================
+           L-SHAPED CORNERS
+        ===================================================== */
+
+        .corner {
+
+            position: absolute;
+
+            width: 40px;
+            height: 40px;
+
+            border-color:
+                var(--primary);
+
+            border-style: solid;
+
+            filter:
+                drop-shadow(
+                    0 0 5px
+                    rgba(0, 208, 132, 0.65)
+                );
+
+        }
+
+
+        /* =====================================================
+           TOP LEFT
+        ===================================================== */
+
+        .top-left {
+
+            top: 0;
+            left: 0;
+
+            border-width:
+                4px 0 0 4px;
+
+            border-radius:
+                6px 0 0 0;
+
+        }
+
+
+        /* =====================================================
+           TOP RIGHT
+        ===================================================== */
+
+        .top-right {
+
+            top: 0;
+            right: 0;
+
+            border-width:
+                4px 4px 0 0;
+
+            border-radius:
+                0 6px 0 0;
+
+        }
+
+
+        /* =====================================================
+           BOTTOM LEFT
+        ===================================================== */
+
+        .bottom-left {
+
+            bottom: 0;
+            left: 0;
+
+            border-width:
+                0 0 4px 4px;
+
+            border-radius:
+                0 0 0 6px;
+
+        }
+
+
+        /* =====================================================
+           BOTTOM RIGHT
+        ===================================================== */
+
+        .bottom-right {
+
+            bottom: 0;
+            right: 0;
+
+            border-width:
+                0 4px 4px 0;
+
+            border-radius:
+                0 0 6px 0;
 
         }
 
@@ -848,7 +1033,8 @@
 
         .modal-buttons .full {
 
-            grid-column: 1 / -1;
+            grid-column:
+                1 / -1;
 
         }
 
@@ -1028,266 +1214,40 @@
 
             }
 
+
+            /* QR FRAME MOBILE */
+
+            .qr-frame {
+
+                width: 190px;
+                height: 190px;
+
+            }
+
+
+            .corner {
+
+                width: 34px;
+                height: 34px;
+
+                border-width: 4px;
+
+            }
+
+
+            .qr-overlay {
+
+                /*
+                   Match the 190px mobile frame
+                */
+
+                padding:
+                    calc(50% - 95px);
+
+            }
+
         }
 
-
-
-/* =====================================================
-   QR SCANNER
-===================================================== */
-
-#qr-reader {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    border-radius: 12px;
-    background: #000;
-}
-
-#qr-reader video {
-    width: 100% !important;
-    border-radius: 12px;
-}
-
-#qr-reader__scan_region {
-    min-height: 260px;
-}
-
-#qr-reader__dashboard {
-    display: none !important;
-}
-
-
-/* =====================================================
-   QR SCANNER OVERLAY
-===================================================== */
-
-#qr-reader::before {
-    content: "";
-
-    position: absolute;
-    z-index: 20;
-
-    width: 220px;
-    height: 220px;
-
-    top: 50%;
-    left: 50%;
-
-    transform: translate(-50%, -50%);
-
-    pointer-events: none;
-
-    /* Dark transparent area outside the square */
-    background:
-        linear-gradient(
-            rgba(0, 0, 0, 0.48),
-            rgba(0, 0, 0, 0.48)
-        );
-
-    box-shadow:
-        0 0 0 100vmax rgba(0, 0, 0, 0.48);
-}
-
-
-/* =====================================================
-   L-SHAPED CORNERS
-===================================================== */
-
-#qr-reader::after {
-    content: "";
-
-    position: absolute;
-    z-index: 22;
-
-    width: 220px;
-    height: 220px;
-
-    top: 50%;
-    left: 50%;
-
-    transform: translate(-50%, -50%);
-
-    pointer-events: none;
-
-    background:
-
-        /* TOP LEFT */
-        linear-gradient(
-            var(--primary),
-            var(--primary)
-        ) left top / 38px 4px no-repeat,
-
-        linear-gradient(
-            var(--primary),
-            var(--primary)
-        ) left top / 4px 38px no-repeat,
-
-
-        /* TOP RIGHT */
-        linear-gradient(
-            var(--primary),
-            var(--primary)
-        ) right top / 38px 4px no-repeat,
-
-        linear-gradient(
-            var(--primary),
-            var(--primary)
-        ) right top / 4px 38px no-repeat,
-
-
-        /* BOTTOM LEFT */
-        linear-gradient(
-            var(--primary),
-            var(--primary)
-        ) left bottom / 38px 4px no-repeat,
-
-        linear-gradient(
-            var(--primary),
-            var(--primary)
-        ) left bottom / 4px 38px no-repeat,
-
-
-        /* BOTTOM RIGHT */
-        linear-gradient(
-            var(--primary),
-            var(--primary)
-        ) right bottom / 38px 4px no-repeat,
-
-        linear-gradient(
-            var(--primary),
-            var(--primary)
-        ) right bottom / 4px 38px no-repeat;
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 500px) {
-
-    #qr-reader::before {
-        width: 190px;
-        height: 190px;
-    }
-
-    #qr-reader::after {
-        width: 190px;
-        height: 190px;
-    }
-
-}
-/* =====================================================
-   QR SCAN CORNER MARKERS
-===================================================== */
-
-#qr-reader {
-    position: relative;
-}
-
-/* Scanner frame */
-#qr-reader::before {
-    content: "";
-    position: absolute;
-
-    width: 210px;
-    height: 210px;
-
-    top: 50%;
-    left: 50%;
-
-    transform: translate(-50%, -50%);
-
-    pointer-events: none;
-
-    z-index: 20;
-
-    background:
-        linear-gradient(var(--primary), var(--primary)) top left,
-        linear-gradient(var(--primary), var(--primary)) top right,
-        linear-gradient(var(--primary), var(--primary)) bottom left,
-        linear-gradient(var(--primary), var(--primary)) bottom right;
-
-    background-size:
-        35px 4px,
-        35px 4px,
-        35px 4px,
-        35px 4px;
-
-    background-repeat: no-repeat;
-}
-
-/* Optional scanning line */
-#qr-reader::after {
-    content: "";
-
-    position: absolute;
-
-    width: 210px;
-    height: 2px;
-
-    top: 50%;
-    left: 50%;
-
-    transform: translate(-50%, -50%);
-
-    background: var(--primary);
-
-    opacity: 0.7;
-
-    box-shadow:
-        0 0 8px var(--primary);
-
-    pointer-events: none;
-
-    z-index: 21;
-
-    animation: qrScanLine 2s ease-in-out infinite;
-}
-
-@keyframes qrScanLine {
-
-    0% {
-        transform:
-            translate(-50%, -105px);
-    }
-
-    50% {
-        transform:
-            translate(-50%, 105px);
-    }
-
-    100% {
-        transform:
-            translate(-50%, -105px);
-    }
-
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 500px) {
-
-    #qr-reader::before {
-        width: 190px;
-        height: 190px;
-
-        background-size:
-            32px 4px,
-            32px 4px,
-            32px 4px,
-            32px 4px;
-    }
-
-    #qr-reader::after {
-        width: 190px;
-    }
-
-}
     </style>
 
 </head>
@@ -1350,23 +1310,47 @@
         </div>
 
 
+        <!-- =================================================
+             CAMERA + SCANNER FRAME
+        ================================================== -->
+
         <div class="qr-camera">
 
-    <div id="qr-reader"></div>
+            <!-- Actual camera -->
+            <div id="qr-reader"></div>
 
-    <div class="qr-overlay"></div>
 
-    <div class="qr-frame">
+            <!-- Dark transparent overlay -->
+            <div class="qr-overlay"></div>
 
-        <span class="corner top-left"></span>
-        <span class="corner top-right"></span>
-        <span class="corner bottom-left"></span>
-        <span class="corner bottom-right"></span>
 
-    </div>
+            <!-- Four L-shaped corners -->
+            <div class="qr-frame">
 
-</div>
+                <span
+                    class="corner top-left"
+                ></span>
 
+                <span
+                    class="corner top-right"
+                ></span>
+
+                <span
+                    class="corner bottom-left"
+                ></span>
+
+                <span
+                    class="corner bottom-right"
+                ></span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CAMERA BUTTONS
+        ================================================== -->
 
         <div class="buttons">
 
@@ -1429,7 +1413,7 @@
 
     <!-- =====================================================
          USER INFORMATION
-    ===================================================== -->
+    ====================================================== -->
 
     <div
         class="card"
